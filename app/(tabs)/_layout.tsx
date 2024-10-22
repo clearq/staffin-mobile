@@ -1,10 +1,16 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from 'expo-router';
+import Colors from '@/constants/Colors';
+
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+    <Tabs 
+      screenOptions={{ 
+        tabBarActiveTintColor: Colors.primary 
+      }}    
+    >
       <Tabs.Screen
         name="home"
         options={{

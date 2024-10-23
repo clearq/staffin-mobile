@@ -12,7 +12,7 @@ const App = () => {
   return (
     <View className='flex-1'>   
     
-      <SafeAreaView className='flex-1 mx-5 my-12 justify-between'>
+      <SafeAreaView className='flex-1 mx-5 my-12 justify-end'>
         <View>
          <CustomButton onPress={() => router.push("/home")} title="Get Started" />
         </View>

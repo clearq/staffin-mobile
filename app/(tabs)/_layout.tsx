@@ -2,17 +2,20 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
+import { useState } from 'react';
 
 
 export default function TabLayout() {
+  const [ isAdmin, setIsAdmin ] = useState(false)
   return (
-    <Tabs 
+
+    <Tabs
       screenOptions={{ 
-        tabBarActiveTintColor: Colors.primary 
-      }}    
+      tabBarActiveTintColor: Colors.primary 
+    }} 
     >
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="home" color={color} />,
@@ -47,6 +50,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+     
   );
 }
 

@@ -11,11 +11,18 @@ export default function TabLayout() {
 
     <Tabs
       screenOptions={{ 
-      tabBarActiveTintColor: Colors.primary 
-    }} 
+        tabBarActiveTintColor: "#ED8F59",
+        tabBarInactiveTintColor: "#B4BEC0",
+        tabBarStyle: {
+          backgroundColor: "#FCFCFC",
+          borderTopWidth: 1,
+          borderTopColor: "B4BEC0",
+          height: 84,
+        }
+      }} 
     >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="home" color={color} />,

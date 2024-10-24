@@ -27,21 +27,20 @@ const App = () => {
           />
           
           <View className='mt-4 w-full'>
+          
             <CustomButton
               onPress={() => router.push("/(auth)/sign-in")}
               title="Log In"
+              containerStyles='bg-primary mb-4'
+              textStyles='text-white'
             />
 
-            <View className='mt-4 justify-center'>
-              <Text className='text-center text-white'>
-                Don't have any account?                     
-              </Text>
-              <Text className='text-center text-secondary mt-2 font-semibold underline'>
-                <Link href={"/(auth)/sign-up"}>
-                  Sign up here
-                </Link>
-              </Text>
-            </View>
+            <CustomButton
+              onPress={() => router.push("/(auth)/sign-up")}
+              title="Sign Up"
+              containerStyles='border-2 border-bgWhite'
+              textStyles='text-bgWhite'
+            />           
 
           </View>
           <Text></Text>

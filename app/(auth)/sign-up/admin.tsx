@@ -13,16 +13,35 @@ const AdminPage = () => {
       <ScrollView>
         <View className={`flex justify-center ${globalStyles.container}`}>       
 
-          <Text className="text-2xl font-semibold text-d mt-10 font-psemibold">
+          <Text className="text-2xl font-semibold text-d mt-10">
             Sign up as Admin
           </Text>
+
+          <View className='my-4 flex flex-col space-y-2 mb-8'>
+            <Text>Company name:</Text>
+            <Text>Org.nr.:</Text>
+            <Text>Email:</Text>
+            <Text>Password:</Text>        
+          </View>
 
           <CustomButton 
             onPress={() => router.push("/(tabs)/home")}
             title="Confirm"
+            containerStyles='bg-primary'
+            textStyles='text-white'
           />
 
-                 
+          <View className='mt-4 justify-center flex-row items-baseline space-x-2'>
+            <Text className='text-center text-gray'>
+              Already have an account?                     
+            </Text>
+            <Text className='text-center text-secondary font-semibold underline'>
+              <Link href={"/(auth)/sign-in"}>
+                Sign in here
+              </Link>
+            </Text>
+          </View>
+                
         </View>
       </ScrollView>
     </SafeAreaView>

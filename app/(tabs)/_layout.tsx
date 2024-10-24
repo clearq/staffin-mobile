@@ -8,7 +8,6 @@ import { useState } from 'react';
 export default function TabLayout() {
   const [ isAdmin, setIsAdmin ] = useState(false)
   return (
-
     <Tabs
       screenOptions={{ 
         tabBarActiveTintColor: "#ED8F59",
@@ -16,7 +15,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: "#FCFCFC",
           borderTopWidth: 1,
-          borderTopColor: "B4BEC0",
+          borderTopColor: "#B4BEC0",
           height: 84,
         }
       }} 
@@ -24,7 +23,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Home',
+          title: 'home',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="home" color={color} />,
         }}
       />
@@ -36,28 +35,36 @@ export default function TabLayout() {
         }}
       />   
       <Tabs.Screen
-        name="profile"
+        name="tab1"
         options={{
-          title: 'My Profile',
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="account-circle-outline" color={color} />,
+          title: (isAdmin ? 'About' : 'My Profile'),
+          tabBarIcon: (
+            { color }) => (
+            isAdmin ? <MaterialCommunityIcons size={28} name="office-building-outline" color={color} /> 
+            : <MaterialCommunityIcons size={28} name="account-circle-outline" color={color} /> 
+          ),
+        }}
+      />   
+      
+      <Tabs.Screen
+        name="tab2"
+        options={{
+          title: (isAdmin ? 'Dashboard' : 'Jobs'),
+          tabBarIcon: (
+            { color }) => (
+            isAdmin ? <MaterialCommunityIcons size={28} name="view-dashboard-outline" color={color} /> 
+            : <MaterialCommunityIcons size={28} name="briefcase-outline" color={color} /> 
+          ),
         }}
       />   
       <Tabs.Screen
-        name="jobs"
-        options={{
-          title: 'Jobbs',
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="briefcase-outline" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="network"
         options={{
-          title: 'My Network',
+          title: 'Network',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="account-group-outline" color={color} />,
         }}
-      />
-    </Tabs>
-     
+      />  
+    </Tabs>    
   );
 }
 

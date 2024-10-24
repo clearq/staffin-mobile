@@ -6,7 +6,8 @@ import { useState } from 'react';
 
 
 export default function TabLayout() {
-  const [ isAdmin, setIsAdmin ] = useState(false)
+  const [ isAdmin, setIsAdmin ] = useState(true)
+  
   return (
     <Tabs
       screenOptions={{ 

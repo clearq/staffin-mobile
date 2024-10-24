@@ -1,11 +1,6 @@
-import { StyleSheet } from "react-native";
+export const globalStyles = {
+  // screen
+  container: "w-full h-full px-4 my-6"
+  
 
-const gStyle = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default gStyle
+}

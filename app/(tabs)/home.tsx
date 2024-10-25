@@ -1,37 +1,28 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, LogBox } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useState } from 'react';
 import axios from "axios";
-import { useState } from 'react';
 
+const BASE_URL = "https://staffin.clearq.se/api";
 
-const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
-const api = axios.create({
-  baseURL,
-  timeout: 30000,
-});
-
-
+const Staffin_API = {
+  BASE_URL,
+}
 
 export default function Tab() {
-  const [data, setData] = useState('')
-
-  axios.get('https://staffin.clearq.se/api/User/GetUser-id?userId=1', { 
-    
-}) 
-    .then(function (response) { 
-        console.log(response); 
-        setData(response.data.firstName)
-    }) 
-    .catch(function (error) { 
-        console.log(error) ; 
-    }) 
-    
 
 
-  
+  const [user, setuser] = useState('')
+  const userId = 1
+
+  const data = axios(`${Staffin_API.BASE_URL}/User/GetUser-id?userId=${userId}`)
+  .then((res) => setuser(res.data.firstName) )
+
+  console.log(data)
+
   return (
     <View>
-      <Text>{data}</Text>
+      <Text>Hello {user}!</Text>
     </View>
   );
 }

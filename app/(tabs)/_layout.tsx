@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 
 export default function TabLayout() {
-  const [ isAdmin, setIsAdmin ] = useState(true)
+  const [ isAdmin, setIsAdmin ] = useState(false)
   
   return (
     <Tabs

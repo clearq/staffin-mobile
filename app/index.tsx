@@ -9,9 +9,10 @@ import CustomButton from "@/components/CustomButton";
 
 import logo from '@/assets/images/main-logo.png'
 
+
 const App = () => {
   const router = useRouter();
-  
+
   return (
    
     <SafeAreaView className='bg-black h-full'> 

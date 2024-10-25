@@ -2,8 +2,7 @@ import { Stack } from 'expo-router/stack';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { SplashScreen } from 'expo-router';
-import { Provider } from 'react-redux';
-import { store } from '../store/store';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,7 +28,7 @@ export default function RootLayout() {
   if(!fontsLoaded && !error) return null;
 
   return (
-    <Provider store={ store }>
+  
       <Stack>      
         <Stack.Screen name="(tabs)" 
           options={{ headerShown: false }}
@@ -39,6 +38,6 @@ export default function RootLayout() {
         />
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
-    </Provider>
+  
   );
 }

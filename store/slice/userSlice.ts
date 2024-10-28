@@ -1,9 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from './store'
-import { User, Education, Skills, Languages, Experience } from '@/constants/types/Usertype'
+import type { RootState } from '../store'
+import { User } from '@/constants/types/UserType'
 
-// Define a type for the slice state
+
+// Define a type for the slice state => constants/types/User 
 
 
 // Define the initial state using that type
@@ -32,16 +33,13 @@ export const userSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setIsAdmin : (state, action:PayloadAction<{isAdmin:boolean }>) => {
-      state.roleId === 1 ? action.payload.isAdmin === true 
-        : action.payload.isAdmin === false
-    },
+    
     
   },
 })
 
 export const { 
-  setIsAdmin,
+  
  } = userSlice.actions
 
 

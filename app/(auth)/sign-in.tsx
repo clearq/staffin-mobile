@@ -1,12 +1,16 @@
 import { View, Text, Image, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter, Link } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
 import { globalStyles } from '@/constants/GlobalStyle';
+import CustomForm from '@/components/CustomForm';
 
 export default function SignIn() {
   const router = useRouter();
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
+  
 
   return (
     <SafeAreaView className="h-full">
@@ -18,8 +22,23 @@ export default function SignIn() {
           </Text>
 
           <View className='my-4 flex flex-col space-y-2 mb-8'>
+            
             <Text>UserName:</Text>
+            <CustomForm 
+              inputMode='text'
+              onChangeText={() => {}}
+              placeholder='UserName'
+              showIcon = {false}
+            />
+
             <Text>Password:</Text>
+            <CustomForm 
+              inputMode='text'
+              onChangeText={() => {}}
+              placeholder='Password'
+              showIcon = {true}
+            />
+
             <Text className='text- text-secondary font-semibold underline text-right'>
               <Link href={"/"}>
                 Forgot password?

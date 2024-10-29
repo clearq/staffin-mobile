@@ -1,11 +1,17 @@
 import { View, Text, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Link } from 'expo-router';
 import CustomButton from '@/components/CustomButton'
 import { globalStyles } from '@/constants/GlobalStyle';
+import CustomForm from '@/components/CustomForm';
 
 const AdminPage = () => {
+  const [companyName, setCompanyName] = useState('')
+  const [orgNr, setOrgNr] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   const router = useRouter();
 
   return (
@@ -18,10 +24,39 @@ const AdminPage = () => {
           </Text>
 
           <View className='my-4 flex flex-col space-y-2 mb-8'>
+
             <Text>Company name:</Text>
-            <Text>Org.nr.:</Text>
+            <CustomForm 
+              inputMode='text'
+              onChangeText={() => setCompanyName}
+              placeholder='Company name'
+              showIcon = {false}
+            />
+
+            <Text>Organization number:</Text>
+            <CustomForm 
+              inputMode='text'
+              onChangeText={() => setOrgNr}
+              placeholder='Organization number'
+              showIcon = {false}
+            />
+
             <Text>Email:</Text>
-            <Text>Password:</Text>        
+            <CustomForm 
+              inputMode='email'
+              onChangeText={() => setEmail}
+              placeholder='E-mail'
+              showIcon = {false}
+            />
+
+            <Text>Password:</Text>  
+            <CustomForm 
+              inputMode='text'
+              onChangeText={() => setPassword}
+              placeholder='Password'
+              showIcon = {true}
+            />
+
           </View>
 
           <CustomButton 

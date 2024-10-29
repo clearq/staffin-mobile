@@ -1,12 +1,36 @@
 import { View, Text, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useRouter, Link } from 'expo-router';
-import CustomButton from '@/components/CustomButton'
+
 import { globalStyles } from '@/constants/GlobalStyle';
 
+import CustomButton from '@/components/CustomButton'
+import CustomForm from '@/components/CustomForm';
+import { useAppSelector, useAppDispatch } from '@/store/reduxHooks';
+import { setSignUpAsStaff } from '@/store/slice/authSlice';
+
+
+
 const StaffPage = () => {
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
   const router = useRouter();
+  const data = useAppSelector((state) => state.auth)
+  const dispatch = useAppDispatch();
+
+  console.log(data)
+
+  // useEffect(() => {
+  //   dispatch(setSignUpAsStaff({
+  //     username:'chikage',
+  //     email: 'test@mail.com',
+  //     password: 'password',
+  //   }))
+  // },[])
 
   return (
     <SafeAreaView className=" h-full">
@@ -19,8 +43,29 @@ const StaffPage = () => {
 
         <View className='my-4 flex flex-col space-y-2 mb-8'>
           <Text>Username:</Text>
+          <CustomForm 
+              inputMode='text'
+              onChangeText={() => setUsername}
+              placeholder='Username'
+              showIcon = {false}
+            />
+
           <Text>Email:</Text>
-          <Text>Password:</Text>        
+          <CustomForm 
+              inputMode='email'
+              onChangeText={() => setEmail}
+              placeholder='E-mail'
+              showIcon = {false}
+            />
+
+          <Text>Password:</Text>     
+          <CustomForm 
+              inputMode='text'
+              onChangeText={() => setPassword}
+              placeholder='Password'
+              showIcon = {true}
+            />
+
         </View>
 
         <CustomButton 

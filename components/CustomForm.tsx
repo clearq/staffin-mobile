@@ -1,25 +1,27 @@
 import Colors from '@/constants/Colors'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { TextInput, View, Text } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface CustomFormProps {
+  value: string
   inputMode: 'email' | 'none' | 'text' | 'tel' 
   formStyles?: string
-  onChangeText: () => void
+  onChangeText: (text:string) => void
   placeholder?: string
-  label?:'string'
+  label?: string
   showIcon: boolean
 }
 
 function CustomForm({
+  value,
   inputMode,
   formStyles,
   onChangeText,
   placeholder,
   showIcon,
 }: CustomFormProps) {
-    const [showPassword, setShowPassword] = useState(true)
+    const [showPassword, setShowPassword] = useState(false)
 
     showIcon === false
 
@@ -27,14 +29,16 @@ function CustomForm({
     <View
       className='h-12 px-2 my-1 border-2 border-borderColor flex flex-row justify-between items-center'
     >
-    
+
     <TextInput
+      value={`${value}`}
       inputMode={inputMode}
       className={`grow ${formStyles}`}
       onChangeText={onChangeText}
       placeholder = {`${placeholder}`}
-      secureTextEntry = {!showPassword ? true : false }
+      secureTextEntry = {!showIcon? false: (showPassword? true : false)}
       placeholderTextColor ={`${Colors.borderColor}`}
+
     />
     { showIcon &&
       <MaterialCommunityIcons

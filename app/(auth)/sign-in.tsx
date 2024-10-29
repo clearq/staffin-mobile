@@ -1,16 +1,35 @@
 import { View, Text, Image, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter, Link } from 'expo-router';
+
 import CustomButton from '@/components/CustomButton';
-import { globalStyles } from '@/constants/GlobalStyle';
 import CustomForm from '@/components/CustomForm';
+import { globalStyles } from '@/constants/GlobalStyle';
+
+import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
+import { signin } from '@/store/slice/authSlice';
+
 
 export default function SignIn() {
+  const [email, setEmail] = useState(''); 
+  const [password, setPassword] = useState('');
+ 
   const router = useRouter();
-  const [userName, setUserName] = useState('')
-  const [password, setPassword] = useState('')
   
+  const dispatch = useAppDispatch();
+
+
+  const handleSignin = () => {
+    console.log('push')
+    const params = {
+      email: email,
+      password: password
+    }
+    console.log('handleSignin',params)
+    dispatch(signin(params))
+  };
+
 
   return (
     <SafeAreaView className="h-full">
@@ -23,18 +42,20 @@ export default function SignIn() {
 
           <View className='my-4 flex flex-col space-y-2 mb-8'>
             
-            <Text>UserName:</Text>
+            <Text>E-mail:</Text>
             <CustomForm 
-              inputMode='text'
-              onChangeText={() => {}}
-              placeholder='UserName'
-              showIcon = {false}
+              value={email}
+              inputMode='email'
+              onChangeText={(text) => setEmail(text)}
+              placeholder='E-mail'
+              showIcon={false}           
             />
 
             <Text>Password:</Text>
             <CustomForm 
+              value={password}
               inputMode='text'
-              onChangeText={() => {}}
+              onChangeText={(text) => setPassword(text)}
               placeholder='Password'
               showIcon = {true}
             />
@@ -47,7 +68,7 @@ export default function SignIn() {
           </View>
 
           <CustomButton 
-            onPress={() => router.push("/(tabs)/home")}
+            onPress={handleSignin}
             title="Log In"
             containerStyles='bg-primary'
             textStyles='text-white'

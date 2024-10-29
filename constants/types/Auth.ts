@@ -1,9 +1,8 @@
 export interface Auth {
-  userName: string;
-  email: string;
-  password: string;
+  isLoggedIn: boolean;
+  username: string;
   companyName: string;
   organisationNumber: string;
-  isLogin: boolean;
-  isAdmin: boolean;
-}
+  email: string;
+  password: string;
+} 

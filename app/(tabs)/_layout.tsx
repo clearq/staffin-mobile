@@ -3,10 +3,15 @@ import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 
 export default function TabLayout() {
-  const [ isAdmin, setIsAdmin ] = useState(false)
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
+
+  // if userData.role !== 1  isAdmin=false
+  // if userData.role === 1  isAdmin=true
   
   return (
     <Tabs

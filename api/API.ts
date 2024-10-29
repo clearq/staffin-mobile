@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const Staffin_API = axios.create({
-  baseURL:  "https://staffin.clearq.se/api/",
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
 })
 

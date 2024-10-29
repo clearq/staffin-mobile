@@ -9,6 +9,8 @@ import { globalStyles } from '@/constants/GlobalStyle';
 
 import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
 import { signin } from '@/store/slice/authSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 
 export default function SignIn() {
@@ -18,18 +20,24 @@ export default function SignIn() {
   const router = useRouter();
   
   const dispatch = useAppDispatch();
+  const { userData, isLoading, isError } = useSelector((state:RootState) => state.auth);
+ 
 
 
   const handleSignin = () => {
-    console.log('push')
     const params = {
       email: email,
       password: password
     }
-    console.log('handleSignin',params)
+    console.log('handleSignin is fire!',params)
     dispatch(signin(params))
   };
-
+  
+  useEffect(() => {
+    if (userData && !isError) {
+      router.push('/(tabs)/home');
+    }
+  },[userData])
 
   return (
     <SafeAreaView className="h-full">
@@ -68,6 +76,7 @@ export default function SignIn() {
           </View>
 
           <CustomButton 
+            isLoading={isLoading}
             onPress={handleSignin}
             title="Log In"
             containerStyles='bg-primary'

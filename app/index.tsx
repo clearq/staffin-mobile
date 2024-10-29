@@ -30,6 +30,7 @@ const App = () => {
           <View className='mt-4 w-full'>
           
             <CustomButton
+              isLoading={false}
               onPress={() => router.push("/(auth)/sign-in")}
               title="Log In"
               containerStyles='bg-primary mb-4'
@@ -37,6 +38,7 @@ const App = () => {
             />
 
             <CustomButton
+            isLoading={false}
               onPress={() => router.push("/(auth)/sign-up")}
               title="Sign Up"
               containerStyles='border-2 border-bgWhite'

@@ -1,19 +1,33 @@
 import { Staffin_API } from "@/api/API"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
-const initialState = {
+interface UserData {
+  token: string;
+  id: number;
+  role: number;
+}
+
+interface AuthState {
+  userData: UserData | null;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  isAdmin: boolean;
+}
+
+const initialState: AuthState = {
   userData: null,
   isLoading: false,
   isSuccess: false,
   isError: false,
-}
+  isAdmin: false,
+};
 
-// Sign in
+// Sign-in
 export const signin = createAsyncThunk('signin', async (params:object, thunkAPI) => {
   console.log('file: AuthSlice signin params', params)
   try{
     const response = await Staffin_API.post('Auth/login', params)
-    console.log('file: AuthSlice signin response', response);
     return response.data;
     
   } catch(error){
@@ -21,6 +35,8 @@ export const signin = createAsyncThunk('signin', async (params:object, thunkAPI)
     return thunkAPI.rejectWithValue(error)
   }
 })
+
+// Sign-up
 
 const AuthSlice = createSlice({
   name: 'authSlice',
@@ -35,6 +51,7 @@ const AuthSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       state.userData = action.payload;
+      state.isAdmin = action.payload.role === 1;
     });
     builder.addCase(signin.rejected, (state, action) => {
       state.isLoading = false;

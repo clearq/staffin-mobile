@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView } from 'react-native'
+import { View, Text, Image, ScrollView, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react'
 import { useRouter, Link } from 'expo-router';
@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
 import { signin } from '@/store/slice/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import Colors from '@/constants/Colors';
 
 
 export default function SignIn() {
@@ -76,12 +77,13 @@ export default function SignIn() {
           </View>
 
           <CustomButton 
-            isLoading={isLoading}
             onPress={handleSignin}
             title="Log In"
             containerStyles='bg-primary'
             textStyles='text-white'
           />
+
+          {isLoading && <ActivityIndicator size="small" color={Colors.secondary} />} 
 
           <View className='mt-4 justify-center flex-row items-baseline space-x-2'>
             <Text className='text-center text-gray'>

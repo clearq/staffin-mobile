@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,8 +9,9 @@ import { globalStyles } from '@/constants/GlobalStyle';
 import CustomButton from '@/components/CustomButton'
 import CustomForm from '@/components/CustomForm';
 import { useAppSelector, useAppDispatch } from '@/store/reduxHooks';
-import { setSignUpAsStaff } from '@/store/slice/authSlice';
 
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 
 const StaffPage = () => {
@@ -19,18 +20,11 @@ const StaffPage = () => {
   const [password, setPassword] = useState('')
   
   const router = useRouter();
-  const data = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch();
 
-  console.log(data)
 
-  // useEffect(() => {
-  //   dispatch(setSignUpAsStaff({
-  //     username:'chikage',
-  //     email: 'test@mail.com',
-  //     password: 'password',
-  //   }))
-  // },[])
+  const { isLoading, isError } = useSelector((state:RootState) => state.auth);
+
 
   return (
     <SafeAreaView className=" h-full">
@@ -44,27 +38,30 @@ const StaffPage = () => {
         <View className='my-4 flex flex-col space-y-2 mb-8'>
           <Text>Username:</Text>
           <CustomForm 
-              inputMode='text'
-              onChangeText={() => setUsername}
-              placeholder='Username'
-              showIcon = {false}
-            />
+            value={username}
+            inputMode='text'
+            onChangeText={(text) => setUsername(text)}
+            placeholder='Username'
+            showIcon = {false}
+          />
 
           <Text>Email:</Text>
           <CustomForm 
-              inputMode='email'
-              onChangeText={() => setEmail}
-              placeholder='E-mail'
-              showIcon = {false}
-            />
+            value={email}
+            inputMode='email'
+            onChangeText={(text) => setEmail(email)}
+            placeholder='E-mail'
+            showIcon = {false}
+          />
 
           <Text>Password:</Text>     
-          <CustomForm 
-              inputMode='text'
-              onChangeText={() => setPassword}
-              placeholder='Password'
-              showIcon = {true}
-            />
+          <CustomForm
+            value={password} 
+            inputMode='text'
+            onChangeText={(text) => setPassword(text)}
+            placeholder='Password'
+            showIcon = {true}
+          />
 
         </View>
 
@@ -74,6 +71,8 @@ const StaffPage = () => {
           containerStyles='bg-primary'
           textStyles='text-white'
         />
+
+        {isLoading && <ActivityIndicator size="small" color={'white'} />}
 
         <View className='mt-4 justify-center flex-row items-baseline space-x-2'>
           <Text className='text-center text-gray'>

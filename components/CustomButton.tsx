@@ -6,7 +6,6 @@ interface CustomButtonProps {
     title: string;
     textStyles?: string;
     containerStyles?: string;
-    isLoading: boolean
 }
 
 const CustomButton = ({
@@ -14,7 +13,6 @@ const CustomButton = ({
     title,
     textStyles,
     containerStyles ,
-    isLoading,
 }: CustomButtonProps) => {
 
     return (
@@ -23,12 +21,10 @@ const CustomButton = ({
             className={`rounded-xl min-h-[62px] justify-center items-center outline-2  ${containerStyles} `}
             onPress={onPress}          
         >
-            <Text
-                className={`font-semibold text-lg ${textStyles}`}
-            >
+            <Text className={`font-semibold text-lg ${textStyles}`}>
                 {title}
             </Text>
-            {isLoading && <ActivityIndicator size="small" color={'white'} />}
+            
         </TouchableOpacity>
     );
 };

@@ -41,7 +41,7 @@ export default function TabLayout() {
         }}
       />   
       <Tabs.Screen
-        name="tab1"
+        name="profile"
         options={{
           title: (isAdmin ? 'About' : 'My Profile'),
           tabBarIcon: (

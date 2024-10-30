@@ -1,46 +1,50 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../store'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from '@/constants/types/UserType'
-
+import { Staffin_API } from "@/api/API";
 
 // Define a type for the slice state => constants/types/User 
 
-
-// Define the initial state using that type
-const initialState: User = {
-  id: null,
-  title : '',
-  firstName : '',
-  lastName : '',
-  phoneNumber : '',
-  email : '',
-  country : '',
-  city : '',
-  street : '',
-  postalCode : '',
-  about : '',
-  profileImage : '',
-  roleId : 3,
-  educations : [],
-  skills : [],
-  languages : [],
-  experience : [],
+interface UserState {
+  userData: User | null;
+  isLoading: boolean;
+  isError: boolean;
 }
 
-export const userSlice = createSlice({
+// Define the initial state using that type
+const initialState: UserState = {
+  userData: null,
+  isLoading: false,
+  isError: false,
+};
+
+// Get user by id
+export const fetchUser = createAsyncThunk('user', async (userId: number, thunkAPI) => {
+  try {
+    const response = await Staffin_API.get(`User/GetUser-id?userId=${userId}`);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const UserSlice = createSlice({
   name: 'user',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {
-    
-    
-  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchUser.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.userData = action.payload;
+    });
+    builder.addCase(fetchUser.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+  }
 })
 
-export const { 
-  
- } = userSlice.actions
-
-
-export default userSlice.reducer
+export default UserSlice.reducer

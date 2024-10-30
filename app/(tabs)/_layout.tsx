@@ -31,6 +31,7 @@ export default function TabLayout() {
         options={{
           title: 'home',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="home" color={color} />,
+          headerShown: false
         }}
       />
       <Tabs.Screen
@@ -38,6 +39,7 @@ export default function TabLayout() {
         options={{
           title: 'Chat',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="chat-processing-outline" color={color} />,
+          headerShown: false
         }}
       />   
       <Tabs.Screen
@@ -49,6 +51,7 @@ export default function TabLayout() {
             isAdmin ? <MaterialCommunityIcons size={28} name="office-building-outline" color={color} /> 
             : <MaterialCommunityIcons size={28} name="account-circle-outline" color={color} /> 
           ),
+          headerShown: false
         }}
       />   
       
@@ -61,6 +64,7 @@ export default function TabLayout() {
             isAdmin ? <MaterialCommunityIcons size={28} name="view-dashboard-outline" color={color} /> 
             : <MaterialCommunityIcons size={28} name="briefcase-outline" color={color} /> 
           ),
+          headerShown: false
         }}
       />   
       <Tabs.Screen
@@ -68,6 +72,7 @@ export default function TabLayout() {
         options={{
           title: 'Network',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="account-group-outline" color={color} />,
+          headerShown: false
         }}
       />  
     </Tabs>    

@@ -3,8 +3,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import StaffProfile from '../user/staffProfile';
-import AdminProfile from '../user/adminProfile';
+import StaffProfile from '../user/staff/staffProfile';
+import AdminProfile from '../user/admin/adminProfile';
 
 
 export default function Tab() {
@@ -12,7 +12,7 @@ export default function Tab() {
 
   return (
     <View>
-      <Text>Hello!</Text>
+      <Text>User Profile</Text>
 
       { isAdmin ? (
         <AdminProfile />

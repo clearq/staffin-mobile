@@ -8,6 +8,7 @@ import { useRouter, Link } from 'expo-router';
 import CustomButton from "@/components/CustomButton";
 
 import logo from '@/assets/images/main-logo.png'
+import Start from './(app)';
 
 
 const App = () => {
@@ -20,32 +21,7 @@ const App = () => {
           height: "100%",
         }}
       >
-        <View className='w-full h-full justify-center items-center px-4'>
-          <Image 
-            source={logo} 
-            className="max-w-[380px] w-full h-[298px]"
-            resizeMode="contain" 
-          />
-          
-          <View className='mt-4 w-full'>
-          
-            <CustomButton
-              onPress={() => router.push("/(auth)/sign-in")}
-              title="Log In"
-              containerStyles='bg-primary mb-4'
-              textStyles='text-white'
-            />
-
-            <CustomButton
-              onPress={() => router.push("/(auth)/sign-up")}
-              title="Sign Up"
-              containerStyles='border-2 border-bgWhite'
-              textStyles='text-bgWhite'
-            />  
-
-          </View>
-          <Text></Text>
-        </View>
+       <Start />
       </ScrollView>  
     </SafeAreaView>
   )

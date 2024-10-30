@@ -1,10 +1,12 @@
 import { Stack } from 'expo-router/stack';
 import { useFonts } from 'expo-font';
-import { useEffect } from 'react';
-import { SplashScreen } from 'expo-router';
+import React, { useEffect } from 'react';
+import { Slot, SplashScreen } from 'expo-router';
 
 import { Provider, useSelector } from 'react-redux';
 import { store, RootState } from '@/store/store';
+import Layout from './(app)/_layout';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,28 +32,8 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <Layout />
+      <Slot />
     </Provider>
   );
 }
 
-function Layout() {
-  const { userData } = useSelector((state: RootState) => state.auth);
-  console.log('userData:', userData)
-  
-
-  return (
-    <Stack>
-      {userData ? (
-        
-        <Stack.Screen name="(tabs)/" options={{ headerShown: false }} />
-          
-        ) : (
-        <>
-          <Stack.Screen name="(auth)" options={{ headerShown: true }} />
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-        </>
-      )}
-    </Stack>
-  );
-}

@@ -12,6 +12,7 @@ import { useAppSelector, useAppDispatch } from '@/store/reduxHooks';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { signupAdmin } from '@/store/slice/authSlice';
 
 
 const AdminPage = () => {
@@ -19,14 +20,51 @@ const AdminPage = () => {
   const [orgNo, setOrgNo] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const router = useRouter();
-  const { isLoading, isError } = useSelector((state:RootState) => state.auth);
+  const dispatch = useAppDispatch();
+
+  const { isLoading, isError, isSuccess } = useSelector((state:RootState) => state.auth);
+
+    //test
+    //companyName:testCo
+    //orgNo:12345
+    //mail:admin@mail.com
+    //pass:admin1
+    //"roleId": 1, Id:"20002"
+
+  const handleSignup = () => {
+    if (!companyName ||!orgNo || !email || !password) {
+      setErrorMessage("Please fill in all fields.");
+      isError === true
+      return;
+    }
+
+    setErrorMessage(null);
+    const params = {
+      companyName,
+      organisationNumber: orgNo,
+      email,
+      password,
+    };
+    console.log('handleSignin is fire!',params)
+    dispatch(signupAdmin(params));
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/(tabs)/home");
+    }
+  }, [isSuccess]);
 
   return (
     <SafeAreaView className=" h-full">
       <ScrollView>
-        <View className={`flex justify-center ${globalStyles.container}`}>       
+        <View className={`flex justify-center ${globalStyles.container}`}>   
+        { errorMessage && (         
+          <Text className='text-red-500'>{errorMessage}</Text>         
+        )}    
 
           <Text className="text-2xl font-semibold text-d mt-10">
             Sign up as Admin
@@ -38,7 +76,7 @@ const AdminPage = () => {
             <CustomForm
               value={companyName} 
               inputMode='text'
-              onChangeText={() => setCompanyName}
+              onChangeText={(text) => setCompanyName(text)}
               placeholder='Company name'
               showIcon = {false}
             />
@@ -73,7 +111,7 @@ const AdminPage = () => {
           </View>
 
           <CustomButton 
-            onPress={() => router.push("/(tabs)/home")}
+            onPress={handleSignup}
             title="Confirm"
             containerStyles='bg-primary'
             textStyles='text-white'

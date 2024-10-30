@@ -9,27 +9,59 @@ import { globalStyles } from '@/constants/GlobalStyle';
 import CustomButton from '@/components/CustomButton'
 import CustomForm from '@/components/CustomForm';
 import { useAppSelector, useAppDispatch } from '@/store/reduxHooks';
-
-import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { signupStaff } from '@/store/slice/authSlice';
 
 
 const StaffPage = () => {
-  const [username, setUsername] = useState('')
+  const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  const { isLoading, isSuccess, isError } = useAppSelector((state:RootState) => state.auth);
 
-  const { isLoading, isError } = useSelector((state:RootState) => state.auth);
+  //test
+  //username:signupAsStaff
+  //mail:test@mail.com
+  //pass:staff
+  //"roleId": 3, Id:"20000"
+
+  const handleSignup = () => {
+    if (!userName || !email || !password) {
+      setErrorMessage("Please fill in all fields.");
+      isError === true
+      return;
+    }
+
+    setErrorMessage(null);
+    const params = {
+      userName,
+      email,
+      password,
+    };
+    console.log('handleSignin is fire!',params)
+    dispatch(signupStaff(params));
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/(tabs)/home");
+    }
+  }, [isSuccess]);
 
 
   return (
     <SafeAreaView className=" h-full">
     <ScrollView>
       <View className={`flex justify-center ${globalStyles.container}`}>       
+        { errorMessage && (         
+          <Text className='text-red-500'>{errorMessage}</Text>         
+        )}
 
         <Text className="text-2xl font-semibold text-d mt-10">
           Sign up as Staff
@@ -38,9 +70,9 @@ const StaffPage = () => {
         <View className='my-4 flex flex-col space-y-2 mb-8'>
           <Text>Username:</Text>
           <CustomForm 
-            value={username}
+            value={userName}
             inputMode='text'
-            onChangeText={(text) => setUsername(text)}
+            onChangeText={(text) => setUserName(text)}
             placeholder='Username'
             showIcon = {false}
           />
@@ -49,7 +81,7 @@ const StaffPage = () => {
           <CustomForm 
             value={email}
             inputMode='email'
-            onChangeText={(text) => setEmail(email)}
+            onChangeText={(text) => setEmail(text)}
             placeholder='E-mail'
             showIcon = {false}
           />
@@ -66,7 +98,7 @@ const StaffPage = () => {
         </View>
 
         <CustomButton 
-          onPress={() => router.push("/(tabs)/home")}
+          onPress={handleSignup}
           title="Confirm"
           containerStyles='bg-primary'
           textStyles='text-white'

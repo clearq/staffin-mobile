@@ -36,7 +36,25 @@ export const signin = createAsyncThunk('signin', async (params:object, thunkAPI)
   }
 })
 
-// Sign-up
+// Sign-up as staff
+export const signupStaff = createAsyncThunk('signupStaff', async (params: { userName: string, email: string, password: string }, thunkAPI) => {
+  try {
+    const response = await Staffin_API.post('Auth/register/staff', params);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+// Sign-up as admin
+export const signupAdmin = createAsyncThunk('signupAdmin', async (params: { companyName: string, organisationNumber: string, email: string, password: string }, thunkAPI) => {
+  try {
+    const response = await Staffin_API.post('Auth/register/admin', params);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
 
 const AuthSlice = createSlice({
   name: 'authSlice',
@@ -56,7 +74,34 @@ const AuthSlice = createSlice({
     builder.addCase(signin.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
-    })
+    });
+    // sign up as staff cases
+    builder.addCase(signupStaff.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(signupStaff.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.userData = action.payload;state.isAdmin = state.isAdmin = action.payload.role === 1;
+    });
+    builder.addCase(signupStaff.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    // sign up as admin cases
+    builder.addCase(signupAdmin.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(signupAdmin.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.userData = action.payload;
+      state.isAdmin = action.payload.role === 1;
+    });
+    builder.addCase(signupAdmin.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
   },
 });
 

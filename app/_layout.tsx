@@ -37,21 +37,15 @@ export default function RootLayout() {
 
 function Layout() {
   const { userData } = useSelector((state: RootState) => state.auth);
-  console.log('userData in from signin-page', userData)
- 
+  console.log('userData:', userData)
+  
 
   return (
     <Stack>
       {userData ? (
-        <>
+        
         <Stack.Screen name="(tabs)/" options={{ headerShown: false }} />
-          {/* {userData.role === 1 && (
-            <Stack.Screen name="(auth)/staff" options={{ headerShown: false }} />
-          )}
-          {userData.role === 2 && (
-            <Stack.Screen name="(auth)/admin" options={{ headerShown: false }} />
-          )} */}
-        </>
+          
         ) : (
         <>
           <Stack.Screen name="(auth)" options={{ headerShown: true }} />

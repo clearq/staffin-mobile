@@ -42,7 +42,7 @@ const AuthLayout = () => {
       <Stack.Screen
         name="sign-up/admin"
         options={{
-          headerShown: false,
+          headerShown: true,
           title: 'Sign Up/Admin'
         }}
       />

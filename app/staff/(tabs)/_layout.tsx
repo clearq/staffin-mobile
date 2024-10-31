@@ -8,7 +8,7 @@ import { RootState } from '@/store/store';
 
 
 export default function TabLayout() {
-  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
+  // const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
   // if userData.role !== 1  isAdmin=false
   // if userData.role === 1  isAdmin=true
@@ -45,25 +45,18 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: (isAdmin ? 'About' : 'My Profile'),
+          title: 'My Profile',
           tabBarIcon: (
-            { color }) => (
-            isAdmin ? <MaterialCommunityIcons size={28} name="office-building-outline" color={color} /> 
-            : <MaterialCommunityIcons size={28} name="account-circle-outline" color={color} /> 
-          ),
+            { color }) => <MaterialCommunityIcons size={28} name="account-circle-outline" color={color} />,
           headerShown: false
         }}
       />   
       
       <Tabs.Screen
-        name="tab2"
+        name="jobs"
         options={{
-          title: (isAdmin ? 'Dashboard' : 'Jobs'),
-          tabBarIcon: (
-            { color }) => (
-            isAdmin ? <MaterialCommunityIcons size={28} name="view-dashboard-outline" color={color} /> 
-            : <MaterialCommunityIcons size={28} name="briefcase-outline" color={color} /> 
-          ),
+          title:'Jobs',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="briefcase-outline" color={color} />,
           headerShown: false
         }}
       />   

@@ -9,18 +9,24 @@ import { store, RootState } from '@/store/store';
 export default function Layout() {
   const { userData } = useSelector((state: RootState) => state.auth);
   console.log('userData:', userData)
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
   
 
   return (
     <>
-      {userData ? (      
-        <Stack.Screen name="(tabs)/" options={{ headerShown: false }} />         
-        ) : (
+      {userData && !isAdmin &&
+        <Stack.Screen name="staff/(tabs)/" options={{ headerShown: false }} /> 
+      } 
+
+      {userData && isAdmin && 
+        <Stack.Screen name="admin/(tabs)/" options={{ headerShown: false }} />
+      }    
+       
         <>
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
         </>
-      )}
+      
     </>
 
   );

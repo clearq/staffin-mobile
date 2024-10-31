@@ -53,9 +53,8 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) {
-      router.push("/(tabs)/home");
-    }
+    if (isSuccess && !isError)  router.push("/admin/(tabs)/home");
+    
   }, [isSuccess]);
 
   return (

@@ -21,7 +21,7 @@ export default function SignIn() {
   const router = useRouter();
   
   const dispatch = useAppDispatch();
-  const { userData, isLoading, isError } = useSelector((state:RootState) => state.auth);
+  const { userData, isLoading, isError, isAdmin } = useSelector((state:RootState) => state.auth);
 
 
   const handleSignin = () => {
@@ -34,8 +34,9 @@ export default function SignIn() {
   };
   
   useEffect(() => {
-    if (userData && !isError) {
-      router.push('/(tabs)/home');
+    if (userData && !isError) { isAdmin 
+      ? router.push('/admin/(tabs)/home')
+      : router.push('/staff/(tabs)/home')
     }
   },[userData])
 

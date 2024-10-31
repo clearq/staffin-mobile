@@ -23,7 +23,7 @@ const StaffPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { isLoading, isSuccess, isError } = useAppSelector((state:RootState) => state.auth);
+  const { isLoading, isSuccess, isError} = useAppSelector((state:RootState) => state.auth);
 
   //test
   //username:signupAsStaff
@@ -49,9 +49,8 @@ const StaffPage = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) {
-      router.push("/(tabs)/home");
-    }
+    if (isSuccess && !isError) router.push('/staff/(tabs)/home')
+
   }, [isSuccess]);
 
 

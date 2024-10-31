@@ -13,13 +13,11 @@ export default function Layout() {
 
   return (
     <Stack>
-      {userData ? (
-        
-        <Stack.Screen name="(tabs)/" options={{ headerShown: false }} />
-          
+      {userData ? (      
+        <Stack.Screen name="(tabs)/" options={{ headerShown: false }} />         
         ) : (
         <>
-          <Stack.Screen name="(auth)" options={{ headerShown: true }} />
+          <Stack.Screen name="(auth)" />
           <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
         </>
       )}

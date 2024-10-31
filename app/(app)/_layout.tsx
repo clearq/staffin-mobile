@@ -12,7 +12,7 @@ export default function Layout() {
   
 
   return (
-    <Stack>
+    <>
       {userData ? (      
         <Stack.Screen name="(tabs)/" options={{ headerShown: false }} />         
         ) : (
@@ -21,7 +21,7 @@ export default function Layout() {
           <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
         </>
       )}
-    </Stack>
+    </>
 
   );
 }

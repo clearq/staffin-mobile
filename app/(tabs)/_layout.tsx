@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -75,7 +75,7 @@ export default function TabLayout() {
           headerShown: false
         }}
       />  
-    </Tabs>    
+    </Tabs>  
   );
 }
 

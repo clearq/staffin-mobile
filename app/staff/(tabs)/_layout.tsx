@@ -7,9 +7,6 @@ import CustomHeader from '@/components/CustomHeader';
 
 import { logout } from '@/store/slice/authSlice';
 import { useAppDispatch } from '@/store/reduxHooks';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { useEffect } from 'react';
 
 
 export default function TabLayout() {

@@ -17,14 +17,14 @@ export default function Tab() {
   
 
   return (
-    <SafeAreaView className={`${globalStyles.container}`}>  
-      <ScrollView>
+    <ScrollView className={`${globalStyles.container}`}>  
                      
-        <Text>Hello Staff ID:{userData?.id}</Text>
-        <Feed />
-       
-      </ScrollView>
-    </SafeAreaView>
+      <Text>Hello Staff ID:{userData?.id}</Text>
+      <Feed />
+      
+    </ScrollView>
+   
+   
   );
 }
 

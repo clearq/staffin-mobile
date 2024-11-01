@@ -1,5 +1,6 @@
-import { View, Text, Image, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -18,6 +19,7 @@ interface props {
   color: string
 }
 
+// ActionButtonComponent
 function ActionButton ({title, icon, size, color}: props) {
   return(
     <>
@@ -33,20 +35,48 @@ function ActionButton ({title, icon, size, color}: props) {
   )
 }
 
+// Time format function
+function formatTime(date: string): string {
+  const postDate = dayjs(date);
+  const now = dayjs();
 
+  const diffInMinutes = now.diff(postDate, 'minute');
+  const diffInHours = now.diff(postDate, 'hour');
+  const diffInDays = now.diff(postDate, 'day');
+  const diffInWeeks = now.diff(postDate, 'week');
+
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes}m`;
+  } else if (diffInHours < 24) {
+    return `${diffInHours}h`;
+  } else if (diffInDays < 7) {
+    return `${diffInDays}d`;
+  } else if (diffInWeeks < 4) {
+    return `${diffInWeeks}w`;
+  } else {
+    return postDate.format('YYYY-MM-DD');
+  }
+}
+
+// Feed page
 export default function Feed() {
 
   const dispatch = useAppDispatch();
   const userData = useSelector((state: RootState) => state.auth.userData);
   const { posts } = useAppSelector((state) => state.feed);
-
-
+  const [_, setTimer] = useState(0);
 
   useEffect(() => {
     if (userData?.token) {
       dispatch(fetchFeed());
     }
   }, [userData]);
+
+  // Effects for periodic re-rendering
+  useEffect(() => {
+    const intervalId = setInterval(() => setTimer(timer => timer + 1), 60000); // Updated every minute
+    return () => clearInterval(intervalId); // Clear when component is unmounted
+  }, []);
 
   return (
     <View >  
@@ -55,7 +85,7 @@ export default function Feed() {
         posts.map((post) => (
           <View 
             key={post.postId}
-            className='bg-bgWhite p-4 drop-shadow-md mb-2 '
+            className='bg-bgWhite p-4 mb-2 '
           > 
             {/* Card header */}
             <View className='flex flex-row'>
@@ -73,7 +103,9 @@ export default function Feed() {
                 >
                   {post.authorName} 
                 </Text>
-                <Text className='text-xs text-gray-500'>{post.createdAt}</Text>
+                <Text className='text-xs text-gray-500'>
+                {formatTime(post.createdAt)}
+                </Text>
 
               </View>
             </View>

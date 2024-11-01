@@ -1,17 +1,29 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Button } from 'react-native';
+import { Tabs, useRouter } from 'expo-router';
+
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Stack, Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import CustomHeader from '@/components/CustomHeader';
+
+import { logout } from '@/store/slice/authSlice';
+import { useAppDispatch } from '@/store/reduxHooks';
 
 
 export default function TabLayout() {
-  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
+  
+  //Logout
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  // if userData.role !== 1  isAdmin=false
-  // if userData.role === 1  isAdmin=true
+  const handleLogout = async() => {
+    try {
+      await dispatch(logout()).unwrap(); 
+      router.push('/(auth)/sign-in');
+      console.log('logout')
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  }
   
   return (
     <Tabs
@@ -26,11 +38,13 @@ export default function TabLayout() {
         },
         headerStyle:{
           backgroundColor:`${Colors.dark}`,
-          height: 120
+          height: 120,
         }, headerTintColor: `${Colors.white}`,
         headerTitleStyle: {
           fontWeight: 'bold',
         },
+        headerRight: () => <Button onPress={handleLogout } title="Log Out" />,
+        headerLeft: () => <CustomHeader />
       }} 
     >
       <Tabs.Screen

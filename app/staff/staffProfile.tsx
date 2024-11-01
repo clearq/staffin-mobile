@@ -11,8 +11,8 @@ const StaffProfile = () => {
   const dispatch = useAppDispatch();
   const { userData, isLoading, isError } = useSelector((state: RootState) => state.user);
   const authData = useSelector((state: RootState) => state.auth); 
-  const isAdmin = authData.isAdmin;
-
+ 
+  
   useEffect(() => {
     if (authData.userData?.id) {
       dispatch(fetchUser(authData.userData.id));

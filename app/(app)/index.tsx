@@ -15,7 +15,7 @@ const Start = () => {
 
   return (
    
-    <SafeAreaView className='bg-black h-full'> 
+    <View className='bg-black h-full'> 
       <ScrollView contentContainerStyle={{
           height: "100%",
         }}
@@ -44,10 +44,9 @@ const Start = () => {
             />  
 
           </View>
-          <Text></Text>
         </View>
       </ScrollView>  
-    </SafeAreaView>
+    </View>
   )
 }
 

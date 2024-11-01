@@ -7,6 +7,7 @@ import { fetchUser } from '@/store/slice/userSlice';
 import { useAppDispatch } from '@/store/reduxHooks';
 import { Stack } from 'expo-router';
 import CustomHeader from '@/components/CustomHeader';
+import Colors from '@/constants/Colors';
 
 
 
@@ -31,24 +32,9 @@ export default function Tab() {
   return (
     <SafeAreaView>
       <ScrollView>
-        { isAdmin ? (
-          <>
-            <Stack.Screen
-              options={{
-                title: 'My home',
-                headerStyle: { backgroundColor: '#f4511e' },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-               headerTitle: () => <CustomHeader />,
-              }}
-            />
-            <Text>Hello Admin ID:{userData?.id}</Text>
-          </>
-        ):(
-          <Text>Hello Staff ID:{userData?.id}</Text>
-        )} 
+       
+        <Text>Hello Admin ID:{userData?.id}</Text>
+        
       </ScrollView>
     </SafeAreaView>
   );

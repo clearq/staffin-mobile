@@ -1,5 +1,8 @@
 import { Staffin_API } from "@/api/API"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { fetchFeed } from "./communitySlice";
+import { ActionSheetIOS } from "react-native";
+
 
 interface UserData {
   token: string;
@@ -13,6 +16,7 @@ interface AuthState {
   isSuccess: boolean;
   isError: boolean;
   isAdmin: boolean;
+  message: string;
 }
 
 const initialState: AuthState = {
@@ -21,6 +25,7 @@ const initialState: AuthState = {
   isSuccess: false,
   isError: false,
   isAdmin: false,
+  message: '',
 };
 
 // Sign-in
@@ -30,9 +35,9 @@ export const signin = createAsyncThunk('signin', async (params:object, thunkAPI)
     const response = await Staffin_API.post('Auth/login', params)
     return response.data;
     
-  } catch(error){
+  } catch(error:any){
     console.log('file: AuthSlice signin error', error);
-    return thunkAPI.rejectWithValue(error)
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Login failed')
   }
 })
 
@@ -56,24 +61,40 @@ export const signupAdmin = createAsyncThunk('signupAdmin', async (params: { comp
   }
 });
 
+// Sign-out
+export const logout = createAsyncThunk('logout', async (_, thunkAPI) => {
+  try {
+    const response = await Staffin_API.post('Auth/logout'); 
+    return response.data.message; // Success case
+  } catch (error:any) {
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Logout failed');
+  }
+});
+
 const AuthSlice = createSlice({
   name: 'authSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    
+  },
   extraReducers: (builder) => {
     // sign in cases
     builder.addCase(signin.pending, (state)=>{
       state.isLoading = true;
+      state.isError = false;
+      state.message = '';
     });
     builder.addCase(signin.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isSuccess = true;
       state.userData = action.payload;
       state.isAdmin = action.payload.role === 1;
+
     });
     builder.addCase(signin.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
+      state.message = action.payload as string
     });
     // sign up as staff cases
     builder.addCase(signupStaff.pending, (state) => {
@@ -101,6 +122,23 @@ const AuthSlice = createSlice({
     builder.addCase(signupAdmin.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
+    });
+    //Sign out
+    builder.addCase(logout.pending, (state) => {
+      state.isLoading = true;
+    })
+    builder.addCase(logout.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = false;
+      state.userData = null;
+      state.isAdmin = false;
+      state.message = action.payload as string; 
+    })
+    builder.addCase(logout.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action.payload as string;
     });
   },
 });

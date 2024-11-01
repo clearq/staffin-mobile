@@ -21,9 +21,7 @@ function CustomForm({
   placeholder,
   showIcon,
 }: CustomFormProps) {
-    const [showPassword, setShowPassword] = useState(false)
-
-    showIcon === false
+    const [showPassword, setShowPassword]= useState(false)
 
   return (
     <View
@@ -36,7 +34,7 @@ function CustomForm({
       className={`grow ${formStyles}`}
       onChangeText={onChangeText}
       placeholder = {`${placeholder}`}
-      secureTextEntry = {!showIcon? false: (showPassword? true : false)}
+      secureTextEntry = {showPassword}
       placeholderTextColor ={`${Colors.borderColor}`}
 
     />

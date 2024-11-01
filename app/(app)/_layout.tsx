@@ -5,6 +5,7 @@ import { SplashScreen } from 'expo-router';
 
 import { Provider, useSelector } from 'react-redux';
 import { store, RootState } from '@/store/store';
+import Colors from '@/constants/Colors';
 
 export default function Layout() {
   const { userData } = useSelector((state: RootState) => state.auth);
@@ -14,12 +15,14 @@ export default function Layout() {
 
   return (
     <>
-      {userData && !isAdmin &&
-        <Stack.Screen name="staff/(tabs)/" options={{ headerShown: false }} /> 
+      {/* Call Staff Page */}
+      {userData && !isAdmin &&              
+        <Stack.Screen name="staff/(tabs)/" options={{ headerShown: true }} />   
       } 
 
+      {/* Call Admin Page */}
       {userData && isAdmin && 
-        <Stack.Screen name="admin/(tabs)/" options={{ headerShown: false }} />
+        <Stack.Screen name="admin/(tabs)/" options={{ headerShown: true }} />
       }    
        
         <>

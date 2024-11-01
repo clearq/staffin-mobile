@@ -23,15 +23,22 @@ export default function TabLayout() {
           borderTopWidth: 1,
           borderTopColor: "#B4BEC0",
           height: 84,
-        }
+        },
+        headerStyle:{
+          backgroundColor:`${Colors.dark}`,
+          height: 120
+        }, headerTintColor: `${Colors.white}`,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
       }} 
     >
       <Tabs.Screen
         name="home"
         options={{
-          title: 'home',
+          title: 'Home',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="home" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />
       <Tabs.Screen
@@ -39,7 +46,7 @@ export default function TabLayout() {
         options={{
           title: 'Chat',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="chat-processing-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />   
       <Tabs.Screen
@@ -47,7 +54,7 @@ export default function TabLayout() {
         options={{
           title: 'About',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="office-building-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />   
       
@@ -57,7 +64,7 @@ export default function TabLayout() {
           title:'Dashboard',
           tabBarIcon: (
             { color }) => <MaterialCommunityIcons size={28} name="view-dashboard-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />   
       <Tabs.Screen
@@ -65,7 +72,7 @@ export default function TabLayout() {
         options={{
           title: 'Network',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="account-group-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />  
     </Tabs>  

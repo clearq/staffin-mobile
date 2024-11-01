@@ -1,13 +1,12 @@
-import { Image } from 'react-native';
-import logo from '@/assets/images/main-logo.png'
+import { Image, View } from 'react-native';
+import logo from '@/assets/images/staffin-circle.svg'
 
 function CustomHeader(){
   return(
-    <Image 
-      source={logo} 
-      className="max-h-[40px]"
-      resizeMode="contain" 
-    />
+      <Image 
+        source={logo} 
+        className="object-cover h-[40px] w-[40px]"
+      />
   )
 }
 

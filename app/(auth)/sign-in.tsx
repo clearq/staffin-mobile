@@ -57,7 +57,7 @@ export default function SignIn() {
               inputMode='email'
               onChangeText={(text) => setEmail(text)}
               placeholder='E-mail'
-              showIcon={false}           
+              showIcon={false}        
             />
 
             <Text>Password:</Text>

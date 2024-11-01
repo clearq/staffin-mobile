@@ -1,18 +1,33 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Button } from 'react-native';
+import { Tabs, useRouter } from 'expo-router';
+
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Stack, Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
-import { useState } from 'react';
+import CustomHeader from '@/components/CustomHeader';
+
+import { logout } from '@/store/slice/authSlice';
+import { useAppDispatch } from '@/store/reduxHooks';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { useEffect } from 'react';
 
 
 export default function TabLayout() {
-  // const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
-  // if userData.role !== 1  isAdmin=false
-  // if userData.role === 1  isAdmin=true
-  
+  //Logout
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const handleLogout = async() => {
+    try {
+      await dispatch(logout()).unwrap(); 
+      router.push('/(auth)/sign-in');
+      console.log('logout')
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  }
+
   return (
     <Tabs
       screenOptions={{ 
@@ -23,15 +38,24 @@ export default function TabLayout() {
           borderTopWidth: 1,
           borderTopColor: "#B4BEC0",
           height: 84,
-        }
+        },
+        headerStyle:{
+          backgroundColor:`${Colors.dark}`,
+          height: 120,
+        }, headerTintColor: `${Colors.white}`,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        headerRight: () => <Button onPress={handleLogout } title="Log Out" />,
+        headerLeft: () => <CustomHeader />
       }} 
     >
       <Tabs.Screen
         name="home"
         options={{
-          title: 'home',
+          title: 'Home',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="home" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />
       <Tabs.Screen
@@ -39,7 +63,7 @@ export default function TabLayout() {
         options={{
           title: 'Chat',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="chat-processing-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />   
       <Tabs.Screen
@@ -48,7 +72,7 @@ export default function TabLayout() {
           title: 'My Profile',
           tabBarIcon: (
             { color }) => <MaterialCommunityIcons size={28} name="account-circle-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />   
       
@@ -57,7 +81,7 @@ export default function TabLayout() {
         options={{
           title:'Jobs',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="briefcase-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />   
       <Tabs.Screen
@@ -65,10 +89,11 @@ export default function TabLayout() {
         options={{
           title: 'Network',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="account-group-outline" color={color} />,
-          headerShown: false
+          headerShown: true
         }}
       />  
     </Tabs>  
   );
 }
+
 

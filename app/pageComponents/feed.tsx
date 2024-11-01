@@ -1,6 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -10,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { globalStyles } from '@/constants/GlobalStyle';
-import Colors from '@/constants/Colors';
+import formatTime from '@/lib/formatTime';
 
 interface props {
   title: string
@@ -35,28 +34,7 @@ function ActionButton ({title, icon, size, color}: props) {
   )
 }
 
-// Time format function
-function formatTime(date: string): string {
-  const postDate = dayjs(date);
-  const now = dayjs();
 
-  const diffInMinutes = now.diff(postDate, 'minute');
-  const diffInHours = now.diff(postDate, 'hour');
-  const diffInDays = now.diff(postDate, 'day');
-  const diffInWeeks = now.diff(postDate, 'week');
-
-  if (diffInMinutes < 60) {
-    return `${diffInMinutes}m`;
-  } else if (diffInHours < 24) {
-    return `${diffInHours}h`;
-  } else if (diffInDays < 7) {
-    return `${diffInDays}d`;
-  } else if (diffInWeeks < 4) {
-    return `${diffInWeeks}w`;
-  } else {
-    return postDate.format('YYYY-MM-DD');
-  }
-}
 
 // Feed page
 export default function Feed() {

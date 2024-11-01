@@ -8,7 +8,6 @@ import CustomHeader from '@/components/CustomHeader';
 import { logout } from '@/store/slice/authSlice';
 import { useAppDispatch } from '@/store/reduxHooks';
 
-
 export default function TabLayout() {
 
   //Logout

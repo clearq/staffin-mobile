@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchUser } from '@/store/slice/userSlice';
-import { fetchFeed } from '@/store/slice/communitySlice';
+import { fetchComments, fetchFeed } from '@/store/slice/communitySlice';
 import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -41,8 +41,8 @@ export default function Feed() {
 
   const dispatch = useAppDispatch();
   const userData = useSelector((state: RootState) => state.auth.userData);
-  const { posts } = useAppSelector((state) => state.feed);
-  const [_, setTimer] = useState(0);
+  const { posts, comments } = useAppSelector((state) => state.feed);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
   useEffect(() => {
     if (userData?.token) {
@@ -50,11 +50,16 @@ export default function Feed() {
     }
   }, [userData]);
 
-  // Effects for periodic re-rendering
-  useEffect(() => {
-    const intervalId = setInterval(() => setTimer(timer => timer + 1), 60000); // Updated every minute
-    return () => clearInterval(intervalId); // Clear when component is unmounted
-  }, []);
+  const handleToggleComments = (postId: number) => {
+    if (selectedPostId === postId) {
+      setSelectedPostId(null);
+    } else {
+      setSelectedPostId(postId);
+      if (!comments[postId]) {
+        dispatch(fetchComments(postId));
+      }
+    }
+  };
 
   return (
     <View >  
@@ -108,11 +113,18 @@ export default function Feed() {
               <Text className='text-gray-500 text-sm'>
                 {post.likeCount} likes
               </Text>
-           
-              <Text className='text-gray-500 text-sm'>
-                {post.commentCount} comments · {post.sharedCount} reposts
-              </Text>
-             
+
+              <View className='flex flex-row'>
+                <TouchableOpacity onPress={() => handleToggleComments(post.postId)}>
+                  <Text className='text-gray-500 text-sm'>
+                    {post.commentCount} comments
+                  </Text>                
+                </TouchableOpacity>
+
+                <Text className='text-gray-500 text-sm'> · </Text>
+                <Text className='text-gray-500 text-sm'>{post.sharedCount} reposts</Text>
+              
+              </View>           
             </View>
 
             {/* Card footer -- User actions */}
@@ -151,8 +163,21 @@ export default function Feed() {
                 size = {16}
                 color ={'gray'}
               />
-
             </View>
+
+            {selectedPostId === post.postId && comments[post.postId] && (
+            <View className='mt-2'>
+              {comments[post.postId].map((comment) => (
+                <View key={comment.commentId} className='mt-2 border-t border-gray-200 pt-2'>
+                  <Text className='text-xs font-semibold'>
+                    {comment.firstName} {comment.lastName}
+                  </Text>
+                  <Text className='text-xs text-gray-500'>{formatTime(comment.createdAt)}</Text>
+                  <Text className='text-xs'>{comment.content}</Text>
+                </View>
+              ))}
+            </View>
+          )}
 
           </View>
         ))

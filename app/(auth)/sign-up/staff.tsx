@@ -80,7 +80,10 @@ const StaffPage = () => {
           <CustomForm 
             value={email}
             inputMode='email'
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={(text) => {
+              const sanitizedText = text.replace(/\s/g, '').toLowerCase()
+              setEmail(sanitizedText)
+            }}
             placeholder='E-mail'
             showIcon = {false}
           />
@@ -89,7 +92,9 @@ const StaffPage = () => {
           <CustomForm
             value={password} 
             inputMode='text'
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={(text) => {
+              const sanitizedText = text.replace(/\s/g, '')
+              setPassword(sanitizedText)}}
             placeholder='Password'
             showIcon = {true}
           />

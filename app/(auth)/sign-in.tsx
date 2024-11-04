@@ -23,6 +23,10 @@ export default function SignIn() {
   const dispatch = useAppDispatch();
   const { userData, isLoading, isError, isAdmin } = useSelector((state:RootState) => state.auth);
 
+  const handlePasswordChange = (text: string) => {
+    const sanitizedText = text.replace(/\s/g, '');
+    setPassword(sanitizedText);
+  };
 
   const handleSignin = () => {
     const params = {
@@ -55,7 +59,10 @@ export default function SignIn() {
             <CustomForm 
               value={email}
               inputMode='email'
-              onChangeText={(text) => setEmail(text)}
+              onChangeText={(text) => {
+                const sanitizedText = text.replace(/\s/g, '').toLowerCase()
+                setEmail(sanitizedText)
+              }}
               placeholder='E-mail'
               showIcon={false}        
             />
@@ -64,7 +71,10 @@ export default function SignIn() {
             <CustomForm 
               value={password}
               inputMode='text'
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text) => {
+                const sanitizedText = text.replace(/\s/g, '')
+                setPassword(sanitizedText)
+              }}
               placeholder='Password'
               showIcon = {true}
             />

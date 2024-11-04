@@ -76,6 +76,20 @@ const StaffProfile = () => {
               <Text>{dayjs(exp.startDate).format('YYYY-MM-DD')} - {dayjs(exp.endDate).format('YYYY-MM-DD')}</Text>
             </View>
           )}
+
+          {/* Activity */}
+          <View>
+            <Text>Activity</Text>
+            <View>
+              <Text>Fetch the newest post </Text>
+            </View>
+
+            <View className='flex flex-row items-center'>
+              <Text className='align-middle'>Show All posts </Text>
+              <MaterialCommunityIcons name="arrow-right" size={24} color="black" />             
+            </View>
+          </View>
+
         </>
       }
     </>

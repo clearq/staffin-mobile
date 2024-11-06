@@ -4,5 +4,7 @@ export const globalStyles = {
 
   pText: "text-sm text-black",
 
+  alertBox: "p-4 w-full rounded-md"
+
 
 }

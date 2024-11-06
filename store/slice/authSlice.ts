@@ -75,7 +75,9 @@ const AuthSlice = createSlice({
   name: 'authSlice',
   initialState,
   reducers: {
-    
+    setError: (state, action) => {
+      state.isError = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // sign in cases
@@ -143,4 +145,5 @@ const AuthSlice = createSlice({
   },
 });
 
+export const { setError } = AuthSlice.actions;
 export default AuthSlice.reducer

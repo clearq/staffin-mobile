@@ -8,10 +8,11 @@ import CustomForm from '@/components/CustomForm';
 import { globalStyles } from '@/constants/GlobalStyle';
 
 import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
-import { signin } from '@/store/slice/authSlice';
+import { setError, signin } from '@/store/slice/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import Colors from '@/constants/Colors';
+import { ErrorAlert } from '@/components/CustomAlert';
 
 
 export default function SignIn() {
@@ -33,8 +34,20 @@ export default function SignIn() {
       email: email,
       password: password
     }
+    if (email === '' || password === '') {
+      dispatch(setError(true));
+      console.log('email or password is blank');
+    } else {
+      dispatch(setError(false)); 
+      dispatch(signin(params)); 
 
-    dispatch(signin(params))
+      if (isLoading && !isError){
+        console.log('is Loading?:', isLoading);
+      }
+      if(!isLoading && isError){
+        console.log('is Errror?:', isError);
+      }
+    }
   };
   
   useEffect(() => {
@@ -54,6 +67,15 @@ export default function SignIn() {
           </Text>
 
           <View className='my-4 flex flex-col space-y-2 mb-8'>
+
+          {isError && (
+            <>
+            <ErrorAlert 
+              title = {'Invalid login credentials'}
+              msg = {'Please check your e-mail and password'}
+            />          
+            </>        
+          )}
             
             <Text>E-mail:</Text>
             <CustomForm 
@@ -93,7 +115,9 @@ export default function SignIn() {
             textStyles='text-white'
           />
 
+          
           {isLoading && <ActivityIndicator size="small" color={Colors.secondary} />} 
+          
 
           <View className='mt-4 justify-center flex-row items-baseline space-x-2'>
             <Text className='text-center text-gray'>

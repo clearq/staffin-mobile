@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,  } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -206,10 +206,12 @@ export default function Feed() {
             </View>
 
             {openModal && selectedPostId === post.postId && (
-              <InputMessage 
-                onPress={() => {handleAddComment(post.postId)}}
-                onChangeText={(text:string) => setComment(text)}
-              />           
+              <KeyboardAvoidingView>
+                <InputMessage 
+                  onPress={() => {handleAddComment(post.postId)}}
+                  onChangeText={(text:string) => setComment(text)}
+                />           
+              </KeyboardAvoidingView>
             )}
     
             {selectedPostId === post.postId && comments[post.postId] && (

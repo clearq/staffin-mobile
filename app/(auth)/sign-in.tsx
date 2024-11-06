@@ -33,7 +33,7 @@ export default function SignIn() {
       email: email,
       password: password
     }
-    console.log('handleSignin is fire!',params)
+
     dispatch(signin(params))
   };
   

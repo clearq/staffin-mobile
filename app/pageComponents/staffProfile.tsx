@@ -20,6 +20,7 @@ const StaffProfile = () => {
       dispatch(fetchUser(authData.userData.id));
     }
   }, [authData.userData]);
+  
   return (
     <>
       <Text>Staff Profile</Text> 

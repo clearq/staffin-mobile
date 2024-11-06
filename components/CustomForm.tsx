@@ -42,7 +42,7 @@ function CustomForm({
       <MaterialCommunityIcons
         name={showPassword ? 'eye-off' : 'eye'}
         size={24}
-        color={Colors.gray}
+        color={Colors.textGray}
         onPress={()=> (showPassword? setShowPassword(false): setShowPassword(true))}
       />
     }

@@ -1,31 +1,34 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { fetchUser } from '@/store/slice/userSlice';
-import { fetchComments, fetchFeed } from '@/store/slice/communitySlice';
+
+import { addPostComment, fetchComments, fetchFeed } from '@/store/slice/communitySlice';
 import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
+import { fetchUser } from '@/store/slice/userSlice';
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { globalStyles } from '@/constants/GlobalStyle';
 import formatTime from '@/lib/formatTime';
+import InputMessage from '@/components/InputMessage';
+
 
 interface props {
-  title: string
-  icon: 'cards-heart-outline'| 'cards-heart' | 'comment-text-outline' | 'repeat' | 'share-variant-outline'
-  size: number
-  color: string
+  title: string;
+  icon: 'cards-heart-outline'| 'cards-heart' | 'comment-text-outline' | 'repeat' | 'share-variant-outline';
+  size: number;
+  color: string;
+  onPress: () => void;
 }
 
 // ActionButtonComponent
-function ActionButton ({title, icon, size, color}: props) {
+function ActionButton ({title, icon, size, color, onPress}: props) {
   return(
     <>
       <TouchableOpacity
         className='flex flex-col justify-center items-center'
-        onPress={()=> {console.log(`action: ${title}`);
-        }}
+        onPress={onPress}
       >
         <MaterialCommunityIcons name={icon} size={size} color={color} /> 
         <Text className={'text-xs text-gray-500 text-center'}>{title}</Text>
@@ -34,32 +37,62 @@ function ActionButton ({title, icon, size, color}: props) {
   )
 }
 
-
-
 // Feed page
 export default function Feed() {
-
   const dispatch = useAppDispatch();
-  const userData = useSelector((state: RootState) => state.auth.userData);
+  const { userData, isLoading, isError } = useSelector((state: RootState) => state.user);
+  const authData = useSelector((state: RootState) => state.auth); 
   const { posts, comments } = useAppSelector((state) => state.feed);
+
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [comment, setComment] = useState('');
+  const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
-    if (userData?.token) {
+    if (authData.userData?.token) {
       dispatch(fetchFeed());
+    }
+    if (authData.userData?.id) {
+      dispatch(fetchUser(authData.userData.id));
     }
   }, [userData]);
 
+ 
   const handleToggleComments = (postId: number) => {
     if (selectedPostId === postId) {
       setSelectedPostId(null);
     } else {
       setSelectedPostId(postId);
       if (!comments[postId]) {
-        dispatch(fetchComments(postId));
+        dispatch(fetchComments({
+          postId, comment}));
       }
     }
   };
+
+  const handleAddComment = async(selectedPostId:number) => {
+
+    if (!comment) {
+      isError === true
+      console.log('The comment box is blank')
+    };
+    const params = {
+      postId: selectedPostId,
+      comment,
+    };
+    const resultAction = await dispatch(addPostComment(params));
+
+      if (addPostComment.fulfilled.match(resultAction)) {
+        dispatch(fetchComments({
+          postId: selectedPostId,
+          comment
+        }));
+      }
+
+  setOpenModal(false);
+  };
+
+  
 
   return (
     <View >  
@@ -138,6 +171,7 @@ export default function Feed() {
                 icon = {'cards-heart-outline'}
                 size = {16}
                 color ={'gray'}
+                onPress={() => {}}
               />
 
               {/* Comment action */}
@@ -146,14 +180,19 @@ export default function Feed() {
                 icon = {'comment-text-outline'}
                 size = {16}
                 color ={'gray'}
+                onPress={() => {
+                  setOpenModal(true)
+                  setSelectedPostId(post.postId)             
+                }}
               />
-    
+              
               {/* Repost action */}
               <ActionButton 
                 title = {'Repost'}
                 icon = {'repeat'}
                 size = {16}
                 color ={'gray'}
+                onPress={() => {}}
               />
             
               {/* Share action */}
@@ -162,9 +201,17 @@ export default function Feed() {
                 icon = {'share-variant-outline'}
                 size = {16}
                 color ={'gray'}
+                onPress={() => {}}
               />
             </View>
 
+            {openModal && selectedPostId === post.postId && (
+              <InputMessage 
+                onPress={() => {handleAddComment(post.postId)}}
+                onChangeText={(text:string) => setComment(text)}
+              />           
+            )}
+    
             {selectedPostId === post.postId && comments[post.postId] && (
             <View className='mt-2'>
               {comments[post.postId].map((comment) => (
@@ -178,10 +225,10 @@ export default function Feed() {
               ))}
             </View>
           )}
-
           </View>
         ))
       )}
+    
     </View>
   );
 }

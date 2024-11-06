@@ -1,14 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Staffin_API } from "@/api/API";
 import { RootState } from "../store";
+import { act } from "react-test-renderer";
 
 interface Comment {
-  commentId: number;
-  userId: number;
+  commentId: number | null;
+  userId: number | null;
   firstName: string;
   lastName: string;
   content: string;
-  createdAt: string;
+  createdAt: string
 }
 
 interface Post {
@@ -27,6 +28,7 @@ interface FeedState {
   comments: {[postId: number]: Comment[]}
   isLoading: boolean;
   isError: boolean;
+  comment:Comment
 }
 
 const initialState: FeedState = {
@@ -34,9 +36,17 @@ const initialState: FeedState = {
   comments: {},
   isLoading: false,
   isError: false,
+  comment: {
+    commentId: null,
+    userId: null,
+    firstName: "",
+    lastName: "",
+    content: "",
+    createdAt: ""
+  }
 };
 
-// Action to retrieve data from feeds
+// Action to retrieve data from the feeds of all users you follow
 export const fetchFeed = createAsyncThunk('feed/fetchFeed', async (_, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
   const token = state.auth.userData?.token;
@@ -54,22 +64,54 @@ export const fetchFeed = createAsyncThunk('feed/fetchFeed', async (_, thunkAPI) 
 });
 
 // Action to retrieve comments for a specific post
-export const fetchComments = createAsyncThunk('feed/fetchComments', async (postId: number, thunkAPI) => {
+export const fetchComments = createAsyncThunk('feed/fetchComments', async ( params: {postId: number, comment:{}} , thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
   const token = state.auth.userData?.token;
 
   try {
-    const response = await Staffin_API.get(`/Community/GetComment-Post?postId=${postId}`, {
+    const response = await Staffin_API.get(`/Community/GetComment-Post?postId=${params.postId}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-    return {postId, comments: response.data};
+    return {postId: params.postId, comments: response.data};
   } catch(error) {
     return thunkAPI.rejectWithValue(error);
   };
 });
 
+// Action to add a comment to a post
+export const addPostComment = createAsyncThunk('feed/addComment', async (
+  params:{
+    postId:number, 
+    comment:string
+  }, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const token = state.auth.userData?.token;
+  console.log('Token:', token);
+
+  try{
+    const response = await Staffin_API.post(`/Community/AddComment?postId=${params.postId}`,
+      { content: params.comment,
+        firstName: "",
+        lastName: "",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+      }     
+    });
+    return response.data;
+  } catch(error:any) {
+    console.error('Error adding comment:', error.message);
+    console.error('Error details:', error.response?.data || error);
+    return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+  };
+})
+
+
+
+// Slice
 const CommunitySlice = createSlice({
   name: "feed",
   initialState,
@@ -77,19 +119,39 @@ const CommunitySlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchFeed.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
       })
       builder.addCase(fetchFeed.fulfilled, (state, action) => {
         state.isLoading = false;
         state.posts = action.payload;
+        state.isError = false
       })
       builder.addCase(fetchFeed.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
       })
-      .addCase(fetchComments.fulfilled, (state, action) => {
+      builder.addCase(fetchComments.fulfilled, (state, action) => {
         const { postId, comments } = action.payload;
         state.comments[postId] = comments;
       })
+      .addCase(addPostComment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addPostComment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const newComment = action.payload;
+        const postId = newComment.postId; 
+        if (!state.comments[postId]) {
+          state.comments[postId] = [];
+        }
+
+        state.comments[postId].push(newComment);
+      })
+      .addCase(addPostComment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        console.log('Error adding comment:', action.payload); 
+      });
   },
 });
 

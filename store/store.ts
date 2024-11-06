@@ -3,7 +3,7 @@ import UserSlice from './slice/userSlice'
 import AuthSlice from './slice/authSlice'
 import CommunitySlice from './slice/communitySlice'
 
-import messageReducer from './message'
+
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +11,12 @@ export const store = configureStore({
     user: UserSlice,
     feed: CommunitySlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActionPaths: ['meta.arg', 'payload'], 
+      },
+    }),
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

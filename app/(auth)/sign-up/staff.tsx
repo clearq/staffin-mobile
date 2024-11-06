@@ -34,8 +34,8 @@ const StaffPage = () => {
   const handleSignup = () => {
     if (!userName || !email || !password) {
       setErrorMessage("Please fill in all fields.");
-      isError === true
-      return;
+      
+      return isError
     }
 
     setErrorMessage(null);

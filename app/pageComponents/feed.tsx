@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,  } from 'react-native';
+import { View, Text, Image, TouchableOpacity,  KeyboardAvoidingView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -47,6 +47,7 @@ export default function Feed() {
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false)
+  
 
   useEffect(() => {
     if (authData.userData?.token) {
@@ -93,7 +94,7 @@ export default function Feed() {
 
 
   return (
-    <View >  
+    <View>  
       <Text className='text-lg font-pbold mb-4'>Feed:</Text>                    
       { posts && (
         [...posts]

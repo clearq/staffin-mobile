@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
-import { addPostComment, fetchComments, fetchFeed } from '@/store/slice/communitySlice';
+import { addPostComment, fetchComments, fetchFeed, likePost, unlikePost } from '@/store/slice/communitySlice';
 import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
 import { fetchUser } from '@/store/slice/userSlice';
 
@@ -79,18 +79,18 @@ export default function Feed() {
       postId: selectedPostId,
       comment,
     };
+
     const resultAction = await dispatch(addPostComment(params));
 
-      if (addPostComment.fulfilled.match(resultAction)) {
-        dispatch(fetchComments({
-          postId: selectedPostId,
-          comment
-        }));
-      }
-  setOpenModal(false);
+    if (addPostComment.fulfilled.match(resultAction)) {
+      dispatch(fetchComments({
+        postId: selectedPostId,
+        comment
+      }));
+    }
+    setOpenModal(false);
   };
 
-  
 
   return (
     <View >  
@@ -169,7 +169,13 @@ export default function Feed() {
                 icon = {post.isLiked ? 'cards-heart' : 'cards-heart-outline'}
                 size = {16}
                 color ={post.isLiked ? 'red' : 'gray'}
-                onPress={() => {}}
+                onPress={() => {
+                  if (post.isLiked) {
+                    dispatch(unlikePost(post.postId));
+                  } else {
+                    dispatch(likePost(post.postId));
+                  }
+                }}
               />
 
               {/* Comment action */}

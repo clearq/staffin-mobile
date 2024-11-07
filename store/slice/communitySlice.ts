@@ -54,6 +54,7 @@ const initialState: FeedState = {
   }
 };
 
+
 // Action to retrieve data from the feeds of all users you follow
 export const fetchFeed = createAsyncThunk('feed/fetchFeed', async (_, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
@@ -124,6 +125,39 @@ export const addPostComment = createAsyncThunk('feed/addComment', async (
   };
 })
 
+// Like a post
+export const likePost = createAsyncThunk('feed/likePost', async (postId: number, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const token = state.auth.userData?.token;
+
+  try {
+    await Staffin_API.post(`/Community/LikePost?postId=${postId}`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return postId;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+// Unlike a post
+export const unlikePost = createAsyncThunk('feed/unlikePost', async (postId: number, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const token = state.auth.userData?.token;
+
+  try {
+    await Staffin_API.post(`/Community/UnlikePost?postId=${postId}`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return postId;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
 
 
 // Slice
@@ -133,40 +167,57 @@ const CommunitySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchFeed.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
-      builder.addCase(fetchFeed.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.posts = action.payload;
-        state.isError = false
-      })
-      builder.addCase(fetchFeed.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      })
-      builder.addCase(fetchComments.fulfilled, (state, action) => {
-        const { postId, comments } = action.payload;
-        state.comments[postId] = comments;
-      })
-      .addCase(addPostComment.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addPostComment.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const newComment = action.payload;
-        const postId = newComment.postId; 
-        if (!state.comments[postId]) {
-          state.comments[postId] = [];
-        }
-
-        state.comments[postId].push(newComment);
-      })
-      .addCase(addPostComment.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        console.log('Error adding comment:', action.payload); 
-      });
+      state.isLoading = true;
+      state.isError = false;
+    })
+    builder.addCase(fetchFeed.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.posts = action.payload;
+      state.isError = false
+    })
+    builder.addCase(fetchFeed.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    })
+    builder.addCase(fetchComments.fulfilled, (state, action) => {
+      const { postId, comments } = action.payload;
+      state.comments[postId] = comments;
+    })
+    .addCase(addPostComment.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(addPostComment.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const newComment = action.payload;
+      const postId = newComment.postId; 
+      if (!state.comments[postId]) {
+        state.comments[postId] = [];
+      }
+      state.comments[postId].push(newComment);
+    })
+    .addCase(addPostComment.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      console.log('Error adding comment:', action.payload); 
+    })
+    // Like Post
+    .addCase(likePost.fulfilled, (state, action) => {
+      const postId = action.payload;
+      const post = state.posts.find(p => p.postId === postId);
+      if (post) {
+        post.isLiked = true;
+        post.likeCount += 1;
+      }
+    })
+    // Unlike Post
+    .addCase(unlikePost.fulfilled, (state, action) => {
+      const postId = action.payload;
+      const post = state.posts.find(p => p.postId === postId);
+      if (post) {
+        post.isLiked = false;
+        post.likeCount -= 1;
+      }
+    });
   },
 });
 

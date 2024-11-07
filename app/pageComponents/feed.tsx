@@ -71,7 +71,6 @@ export default function Feed() {
   };
 
   const handleAddComment = async(selectedPostId:number) => {
-
     if (!comment) {
       isError === true
       console.log('The comment box is blank')
@@ -88,7 +87,6 @@ export default function Feed() {
           comment
         }));
       }
-
   setOpenModal(false);
   };
 
@@ -167,10 +165,10 @@ export default function Feed() {
 
               {/* Like action */}
               <ActionButton 
-                title = {'Like'}
-                icon = {'cards-heart-outline'}
+                title = {post.isLiked ? 'Liked' :'Like'}
+                icon = {post.isLiked ? 'cards-heart' : 'cards-heart-outline'}
                 size = {16}
-                color ={'gray'}
+                color ={post.isLiked ? 'red' : 'gray'}
                 onPress={() => {}}
               />
 

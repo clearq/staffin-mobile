@@ -12,6 +12,12 @@ interface Comment {
   createdAt: string
 }
 
+interface likesUser {
+  userId: number;
+  firstName: string;
+  lastName: null;
+}
+
 interface Post {
   postId: number;
   content: string;
@@ -21,6 +27,8 @@ interface Post {
   likeCount: number;
   commentCount: number;
   sharedCount: number;
+  likes: likesUser[];
+  isLiked: boolean;
 }
 
 interface FeedState {
@@ -50,6 +58,7 @@ const initialState: FeedState = {
 export const fetchFeed = createAsyncThunk('feed/fetchFeed', async (_, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
   const token = state.auth.userData?.token;
+  const userId = state.auth.userData?.id;
 
   try {
     const response = await Staffin_API.get('/Community/Feed', {
@@ -57,7 +66,13 @@ export const fetchFeed = createAsyncThunk('feed/fetchFeed', async (_, thunkAPI) 
         Authorization: `Bearer ${token}`
       }
     });
-    return response.data;
+    const posts = response.data;
+    const likedPost = posts.map((post: Post) => ({
+      ...post,
+      isLiked: post.likes.some((like: likesUser) => like.userId === userId)
+    }));
+    return likedPost;
+
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }

@@ -96,7 +96,9 @@ export default function Feed() {
     <View >  
       <Text className='text-lg font-pbold mb-4'>Feed:</Text>                    
       { posts && (
-        posts.map((post) => (
+        [...posts]
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .map((post) => (
           <View 
             key={post.postId}
             className='bg-bgWhite p-4 mb-2 '

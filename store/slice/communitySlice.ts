@@ -3,7 +3,7 @@ import { Staffin_API } from "@/api/API";
 import { RootState } from "../store";
 import { act } from "react-test-renderer";
 
-interface Comment {
+export interface Comment {
   commentId: number | null;
   userId: number | null;
   firstName: string;
@@ -18,7 +18,7 @@ interface likesUser {
   lastName: null;
 }
 
-interface Post {
+export interface Post {
   postId: number;
   content: string;
   authorName: string;

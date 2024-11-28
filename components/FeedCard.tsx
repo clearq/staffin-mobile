@@ -93,7 +93,7 @@ const FeedCard = ({post}: props) => {
 
       {/* Card body */}
       <View className='mt-2'>
-        <Text className={globalStyles.pText}>
+        <Text style={globalStyles.pText}>
           {post.content}
         </Text>            
 

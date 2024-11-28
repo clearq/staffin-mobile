@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
     width: '100%',
-    height: 56,
+    height: 48,
     borderRadius: 8,
     borderWidth: 1,
   },
@@ -27,14 +27,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
     width: '100%',
-    height: 56,
+    height: 48,
     borderRadius: 8,
     borderWidth: 1,
     position:'relative',
   },
   btnTextLg:{
     fontFamily: 'Inter-Medium',
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
     textAlignVertical: 'bottom',
   },

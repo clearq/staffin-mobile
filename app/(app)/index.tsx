@@ -1,13 +1,14 @@
 // Start page
-import { View, Text, Image, ScrollView } from 'react-native'
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 
-import { StatusBar } from 'expo-status-bar'
-import { useRouter, Link } from 'expo-router';
-import CustomButton from "@/components/CustomButton";
+import { useRouter } from 'expo-router';
 
 import logo from '@/assets/images/main-logo.png'
+import { globalStyles } from '@/constants/GlobalStyle';
+import { FilledButtonLg } from '@/components/CustomButtons';
+import Colors from '@/constants/Colors';
 
 
 const Start = () => {
@@ -15,38 +16,36 @@ const Start = () => {
 
   return (
    
-    <View className='bg-black h-full'> 
-      <ScrollView contentContainerStyle={{
-          height: "100%",
-        }}
-      >
-        <View className='w-full h-full justify-center items-center px-4'>
+    <SafeAreaView style={[globalStyles.container, {backgroundColor: 'black'}]}> 
+      <View style={{flexDirection:'column', height: "100%", justifyContent:'center',}}>
+
+        <View style={{flexDirection:'column'}}>
           <Image 
             source={logo} 
-            className="max-w-[380px] w-full h-[298px]"
+            style={globalStyles.logoFullSize}
             resizeMode="contain" 
           />
           
-          <View className='mt-4 w-full'>
-          
-            <CustomButton
+          <View style={globalStyles.btnGroup}>
+
+            <FilledButtonLg 
+              title='Sign in'
+              color={Colors.textWhite}
               onPress={() => router.push("/(auth)/sign-in")}
-              title="Log In"
-              containerStyles='bg-primary mb-4'
-              textStyles='text-white'
+              textColor='black'
             />
 
-            <CustomButton
+            <FilledButtonLg 
+              title='Sign up'
+              color={Colors.secondary}
               onPress={() => router.push("/(auth)/sign-up")}
-              title="Sign Up"
-              containerStyles='border-2 border-bgWhite'
-              textStyles='text-bgWhite'
-            />  
-
+              textColor='black'
+            />
+          
           </View>
         </View>
-      </ScrollView>  
-    </View>
+      </View>  
+    </SafeAreaView>
   )
 }
 

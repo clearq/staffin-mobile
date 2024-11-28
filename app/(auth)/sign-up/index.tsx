@@ -1,41 +1,71 @@
-import { View, Text, Image, ScrollView } from 'react-native'
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { useRouter, Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 import { globalStyles } from '@/constants/GlobalStyle';
-import CustomButton from '@/components/CustomButton';
+
+import CardGradient from '@/components/CardGradient';
+import logo from '@/assets/images/main-logo.png'
+import { FilledButtonLg } from '@/components/CustomButtons';
+import Colors from '@/constants/Colors';
+ 
 
 export default function SignUp() {
   const router = useRouter();
   
   return (
-    <SafeAreaView className=" h-full">
-      <ScrollView>
-        <View className={`flex justify-center ${globalStyles.container}`}>       
+    <SafeAreaView style={globalStyles.authContainerThema}>
+      <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
+        {/* Card */}
+        <View style={globalStyles.authCardContainer}> 
+          
+          <CardGradient /> 
 
-          <Text className="text-2xl font-semibold text-d mt-10 font-psemibold">
+          <Image 
+            source={logo} 
+            style={[globalStyles.logo]}
+            resizeMode="contain" 
+          /> 
+
+          <Text style={[globalStyles.titleText, globalStyles.textWhite, globalStyles.centerText]}>
             Sign up to Staffin as...
           </Text>
 
-          <View className='flex-row justify-between mt-8'>
+          <View style={[globalStyles.formContainer]}>
 
-            <CustomButton 
-              onPress={() => router.push("/(auth)/sign-up/staff")}
-              title="Staff"
-              containerStyles='bg-primary w-40'
-              textStyles='text-white'
-            />
-            <CustomButton 
-              onPress={() => router.push("/(auth)/sign-up/admin")}
-              title="Admin"
-              containerStyles='bg-primary w-40'
-              textStyles='text-white'
-            />        
+            <View style={globalStyles.btnGroup}>
+              {/* Sign up as a staff */}
+              <FilledButtonLg 
+                title='Staff'
+                color={Colors.textWhite}
+                onPress={() => router.push("/(auth)/sign-up/staff")}
+                textColor='black'
+              />
+
+              <FilledButtonLg 
+                title='Admin'
+                color={Colors.secondary}
+                onPress={() => router.push("/(auth)/sign-up/admin")}
+                textColor='black'
+              />
+
+            </View>
+
+            <Text className='text-base mt-4 justify-center flex-row items-baseline'>
+              <Text className='text-center text-white'>
+              Already have an account?{" "}                   
+              </Text>
+              <Text className='text-center text-secondary font-semibold underline'>
+                <Link href={"/(auth)/sign-in"}>
+                  Sign In
+                </Link>
+              </Text>
+            </Text> 
+        
           </View>
-
                  
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }

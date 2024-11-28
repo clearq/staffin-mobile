@@ -10,9 +10,9 @@ const AuthLayout = () => {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: `${Colors.dark}`,
+          backgroundColor: `${Colors.primaryDark}`,
         },
-        headerTintColor: `${Colors.white}`,
+        headerTintColor: `${Colors.textWhite}`,
         headerTitleStyle: {
           fontWeight: 'bold',
         },
@@ -21,14 +21,14 @@ const AuthLayout = () => {
       <Stack.Screen
         name="sign-in"
         options={{
-          headerShown: true,
+          headerShown: false,
           title:'Sign In'
         }}
       />
       <Stack.Screen
         name="sign-up/index"
         options={{
-          headerShown: true,
+          headerShown: false,
           title:'Sign Up'
         }}
       />

@@ -37,9 +37,9 @@ export default function TabLayout() {
           height: 84,
         },
         headerStyle:{
-          backgroundColor:`${Colors.dark}`,
+          backgroundColor:`${Colors.primaryDark}`,
           height: 120,
-        }, headerTintColor: `${Colors.white}`,
+        }, headerTintColor: `${Colors.textWhite}`,
         headerTitleStyle: {
           fontWeight: 'bold',
         },

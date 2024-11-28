@@ -5,7 +5,6 @@ import React from 'react'
 
 import { StatusBar } from 'expo-status-bar'
 import { useRouter, Link } from 'expo-router';
-import CustomButton from "@/components/CustomButton";
 
 import logo from '@/assets/images/main-logo.png'
 import Start from './(app)';

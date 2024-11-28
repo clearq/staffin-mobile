@@ -1,7 +1,5 @@
 import { Staffin_API } from "@/api/API"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { fetchFeed } from "./communitySlice";
-import { ActionSheetIOS } from "react-native";
 
 
 interface UserData {

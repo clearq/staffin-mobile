@@ -1,42 +1,50 @@
-import { View, Text, Image, ScrollView, ActivityIndicator } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react'
+import { View, Text, Image, ScrollView, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Link } from 'expo-router';
 
-import CustomButton from '@/components/CustomButton';
-import CustomForm from '@/components/CustomForm';
-import { globalStyles } from '@/constants/GlobalStyle';
-
-import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
+import { useAppDispatch } from '@/store/reduxHooks';
 import { setError, signin } from '@/store/slice/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+
+import { globalStyles } from '@/constants/GlobalStyle';
 import Colors from '@/constants/Colors';
+
 import { ErrorAlert } from '@/components/CustomAlert';
+import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/CustomButtons';
+import { CheckBox } from '@rneui/themed';
+import CardGradient from '@/components/CardGradient';
+
+import logo from '@/assets/images/main-logo.png'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 
 export default function SignIn() {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
+  const [checked, setChecked] = React.useState(true);
+  const toggleCheckbox = () => setChecked(!checked);
  
   const router = useRouter();
   
   const dispatch = useAppDispatch();
   const { userData, isLoading, isError, isAdmin } = useSelector((state:RootState) => state.auth);
 
-  const handlePasswordChange = (text: string) => {
-    const sanitizedText = text.replace(/\s/g, '');
-    setPassword(sanitizedText);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
+
 
   const handleSignin = () => {
     const params = {
       email: email,
       password: password
-    }
+    };
     if (email === '' || password === '') {
       dispatch(setError(true));
-      console.log('email or password is blank');
     } else {
       dispatch(setError(false)); 
       dispatch(signin(params)); 
@@ -58,80 +66,147 @@ export default function SignIn() {
   },[userData])
 
   return (
-    <SafeAreaView className="h-full">
-      <ScrollView>
-        <View className={`flex justify-center ${globalStyles.container}`}>       
+    <SafeAreaView style={globalStyles.authContainerThema}>
+      <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
+        {/* Card */}
+        <View style={[globalStyles.authCardContainer,]}>  
 
-          <Text className="text-2xl font-semibold text-dark mt-10">
-            Sign in to Staffin
-          </Text>
+          <CardGradient /> 
 
-          <View className='my-4 flex flex-col space-y-2 mb-8'>
+            <Image 
+              source={logo} 
+              style={[globalStyles.logo]}
+              resizeMode="contain" 
+            />
+      
+            <Text style={[globalStyles.titleText, globalStyles.textWhite, globalStyles.centerText]}>
+              Sign In
+            </Text>
 
-          {isError && (
-            <>
-            <ErrorAlert 
-              title = {'Invalid login credentials'}
-              msg = {'Please check your e-mail and password'}
-            />          
-            </>        
-          )}
+            <View style={[globalStyles.formContainer]}>
+
+              {isError && (
+                <ErrorAlert 
+                  title = {'Invalid sign-in credentials'}
+                  msg = {'Please fill in all fields.'}
+                />              
+              )}
+
+              {/* Form: Email*/}
+              <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
+                <TextInput
+                  value={email} 
+                  style={[globalStyles.inputText, globalStyles.textWhite]}               
+                  keyboardType='email-address'
+                  inputMode='email'
+                  placeholder='Email'
+                  placeholderTextColor={Colors.white70}
+                  onChangeText={(text) => {
+                    const sanitizedText = text.replace(/\s/g, '').toLowerCase()
+                    setEmail(sanitizedText)
+                  }}
+                />
+              </View>
+
+              {/* Form: Password */}
+              <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
+                <TextInput
+                  value={password}                   
+                  style={[globalStyles.inputText, globalStyles.textWhite, {flex: 6}]} 
+                  keyboardType='default'
+                  placeholder= 'Password'
+                  placeholderTextColor={Colors.white70}
+                  onChangeText={(text) => {
+                    const sanitizedText = text.replace(/\s/g, '')
+                    setPassword(sanitizedText)
+                  }}
+                  onPress={() => dispatch(setError(false))}
+                  secureTextEntry={!showPassword}               
+                />
+                <TouchableOpacity 
+                  onPress={togglePasswordVisibility}
+                >
+                  <MaterialCommunityIcons 
+                    name={showPassword ? 'eye-off' : 'eye' }
+                    size={24} 
+                    color={Colors.white70} 
+                  />
+                </TouchableOpacity>
+              </View>
+              
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                <CheckBox
+                  checked={checked}
+                  onPress={toggleCheckbox}
+                  iconType="material-community"
+                  checkedIcon="checkbox-outline"
+                  uncheckedIcon={'checkbox-blank-outline'}
+                  checkedColor={Colors.success} 
+                  title={'Remember me'} 
+                  containerStyle={{
+                    backgroundColor: 'none',
+                    paddingLeft: 0,
+                    marginLeft: 0,
+                    marginTop:0,
+                    paddingTop:0,
+                  }}
+                  textStyle={{
+                    color:`${Colors.textWhite}`,
+                    fontSize: 16,
+                    fontWeight: 'regular',
+                    marginLeft: 4,
+                  }} 
+                />
+                
+                <Text 
+                  style={[globalStyles.pText, globalStyles.textSecondary, globalStyles.textUnderline,]}
+                >
+                  <Link href={"/"}>
+                    Forgot password?
+                  </Link>
+                </Text>
+              </View>
+
+            </View>
+
+            {/* Sign in button */}
+            <FilledButtonLg
+              title='Sign in'
+              color='black'
+              onPress={handleSignin}
+              textColor={Colors.textWhite}
+            />
+
+            {/* divider */}
+            <View style={[globalStyles.divider,]} /> 
+
+            {/* Sign in with LinkedIn button */}
+            <OutlineButtonIconLLg
+              title='Sign in With LinkedIn'
+              color={Colors.textWhite}
+              onPress={()=> console.log('hello Linked')}
+              textColor={Colors.textWhite}
+              icon='linkedin'
+            />
+          
+            {isLoading && <ActivityIndicator size="small" color={Colors.secondary} />} 
             
-            <Text>E-mail:</Text>
-            <CustomForm 
-              value={email}
-              inputMode='email'
-              onChangeText={(text) => {
-                const sanitizedText = text.replace(/\s/g, '').toLowerCase()
-                setEmail(sanitizedText)
-              }}
-              placeholder='E-mail'
-              showIcon={false}        
-            />
 
-            <Text>Password:</Text>
-            <CustomForm 
-              value={password}
-              inputMode='text'
-              onChangeText={(text) => {
-                const sanitizedText = text.replace(/\s/g, '')
-                setPassword(sanitizedText)
-              }}
-              placeholder='Password'
-              showIcon = {true}
-            />
-
-            <Text className='text- text-secondary font-semibold underline text-right'>
-              <Link href={"/"}>
-                Forgot password?
-              </Link>
-            </Text>
-          </View>
-
-          <CustomButton 
-            onPress={handleSignin}
-            title="Log In"
-            containerStyles='bg-primary'
-            textStyles='text-white'
-          />
-
-          
-          {isLoading && <ActivityIndicator size="small" color={Colors.secondary} />} 
-          
-
-          <View className='mt-4 justify-center flex-row items-baseline space-x-2'>
-            <Text className='text-center text-gray'>
-              Don't have any account?                     
-            </Text>
-            <Text className='text-center text-secondary font-semibold underline'>
-              <Link href={"/(auth)/sign-up"}>
-                Sign up here
-              </Link>
-            </Text>
-          </View>
-                 
+            <Text style={{textAlign: 'center', marginTop: 16}}>
+              <Text style={[globalStyles.pText, globalStyles.textWhite]}>
+                Don't have any account?{" "}                   
+              </Text>
+              <Text style={[globalStyles.pText, globalStyles.textSecondary, globalStyles.textUnderline]}>
+                <Link href={"/(auth)/sign-up"}>
+                  Sign up
+                </Link>
+              </Text>
+            </Text> 
+                  
         </View>
-      </ScrollView>
+    
+      </View>
     </SafeAreaView>
   )
 }
+

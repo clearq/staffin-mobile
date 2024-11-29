@@ -10,12 +10,13 @@ import { signupAdmin, setError } from '@/store/slice/authSlice';
 import { globalStyles } from '@/constants/GlobalStyle';
 import Colors from '@/constants/Colors';
 
-import { ErrorAlert } from '@/components/CustomAlert';
-import CardGradient from '@/components/CardGradient';
+import { ErrorAlert } from '@/components/UI/CustomAlert';
+import CardGradient from '@/components/UI/CardGradient';
 
 import logo from '@/assets/images/main-logo.png'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/CustomButtons';
+import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/UI/CustomButtons';
+import { PaasswordTextForm, ValidateTextForm } from '@/components/UI/CustomForm';
 
 
 const AdminPage = () => {
@@ -24,6 +25,10 @@ const AdminPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [companyNameError, setCompanyNameError] = useState(false);
+  const [organisationNumberError, setOrganisationNumberError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -35,6 +40,16 @@ const AdminPage = () => {
   };
 
   const handleSignup = () => {
+    const companyNameIsValid = companyName.trim() !== '';
+    const organisationNumberIsValid = organisationNumber.trim() !== '';
+    const emailIsValid = email.trim() !== '';
+    const passwordIsValid = password.trim() !== '';
+
+    setCompanyNameError(!companyNameIsValid);
+    setOrganisationNumberError(!organisationNumberIsValid);
+    setEmailError(!emailIsValid);
+    setPasswordError(!passwordIsValid);
+
     const params = {
       companyName,
       organisationNumber,
@@ -63,7 +78,7 @@ const AdminPage = () => {
 
   return (
     <SafeAreaView style={globalStyles.authContainerThema}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{flex:1, justifyContent:'center', alignItems:'center',}}>
         {/* Card */}
         <View style={globalStyles.authCardContainer}>
 
@@ -83,84 +98,70 @@ const AdminPage = () => {
 
             {isError && (
               <ErrorAlert 
-                title = {'Invalid sign-up credentials'}
-                msg = {'Please fill in all fields.'}
+                title={'Invalid Input'}
+                msg={'Please check your input and try again. Make sure all fields are filled out correctly.'}
               />              
             )} 
 
             {/* Form: Company name */}
-            <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-              <TextInput
-                value={companyName}
-                style={[globalStyles.inputText, globalStyles.textWhite]} 
-                keyboardType='default'
-                inputMode='text'
-                placeholder='Company name'
-                placeholderTextColor={Colors.white70}
-                onChangeText={(text) => {
-                  setCompanyName(text)
-                }}
-              />
-            </View>
+            <ValidateTextForm 
+              value={companyName} 
+              Placeholder='Company name' 
+              color={Colors.white70} 
+              onChangeText={(text) => {
+                setCompanyName(text)
+              }} 
+              textColor={Colors.textWhite} 
+              placeholderTextColor={Colors.white40} 
+              inputError={companyNameError} 
+              inputMode={'text'} 
+            />
+            
 
             {/* Form: Organisation number */}
-            <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-              <TextInput
-                value={organisationNumber}
-                style={[globalStyles.inputText, globalStyles.textWhite]}       
-                keyboardType='default'
-                inputMode='text'
-                placeholder='Organisation number'
-                placeholderTextColor={Colors.white70}
-                onChangeText={(text) => {
-                  setOrganisationNumber(text)
-                }}
-              />
-            </View>
-
+            <ValidateTextForm 
+              value={organisationNumber} 
+              Placeholder='Organisation number' 
+              color={Colors.white70} 
+              onChangeText={(text) => {
+                setOrganisationNumber(text)
+              }} 
+              textColor={Colors.textWhite} 
+              placeholderTextColor={Colors.white40} 
+              inputError={organisationNumberError} 
+              inputMode={'text'} 
+            />
+            
             
             {/* Form: Email*/}
-            <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-              <TextInput
-                value={email}
-                style={[globalStyles.inputText, globalStyles.textWhite]}
-                keyboardType='email-address'
-                inputMode='email'
-                placeholder='Email'
-                placeholderTextColor={Colors.white70}
-                onChangeText={(text) => {
-                  const sanitizedText = text.replace(/\s/g, '').toLowerCase()
-                  setEmail(sanitizedText)
-                }}
-              />
-            </View>
+            <ValidateTextForm
+              value={email}
+              textColor={Colors.textWhite}
+              inputMode='email'
+              Placeholder='Email'
+              placeholderTextColor={Colors.white40}
+              onChangeText={(text:string) => {
+                const sanitizedText = text.replace(/\s/g, '').toLowerCase()
+                setEmail(sanitizedText) 
+              }}
+              color={Colors.white70}
+              inputError={emailError}
+            />
 
             {/* Form: Password */}
-            <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-              <TextInput
-                className='w-5/6'
-                value={password}
-                style={[globalStyles.inputText, globalStyles.textWhite]} 
-                keyboardType='default'
-                placeholder= 'Password'
-                placeholderTextColor={Colors.white70}
-                onChangeText={(text) => {
-                  const sanitizedText = text.replace(/\s/g, '')
-                  setPassword(sanitizedText)
-                }}
-                secureTextEntry={!showPassword}               
-              />
-              <TouchableOpacity 
-                onPress={togglePasswordVisibility}
-              >
-                <MaterialCommunityIcons 
-                  name={showPassword ? 'eye-off' : 'eye' }
-                  size={24} 
-                  color={Colors.white70} 
-                />
-              </TouchableOpacity>
-            </View>        
-          </View>
+            <PaasswordTextForm 
+              value={password}
+              textColor={Colors.textWhite}
+              inputMode='text'
+              Placeholder='Password'
+              placeholderTextColor={Colors.white40}
+              onChangeText={(text:string) => {
+                const sanitizedText = text.replace(/\s/g, '')
+                setPassword(sanitizedText)
+              }}
+              color={Colors.white70}
+              inputError={passwordError}
+            />
 
           <View style={globalStyles.btnGroup}>
             {/* Sign up button */}
@@ -172,16 +173,16 @@ const AdminPage = () => {
             />
 
             {/* divider */}
-            <View style={[globalStyles.divider,]} /> 
+            {/* <View style={[globalStyles.divider,]} />  */}
 
             {/* Sign up with LinkedIn button */}
-            <OutlineButtonIconLLg
+            {/* <OutlineButtonIconLLg
               title='Sign up With LinkedIn'
               color={Colors.textWhite}
               onPress={()=> console.log('hello Linkedin')}
               textColor={Colors.textWhite}
               icon='linkedin'
-            />
+            /> */}
 
           </View>
 
@@ -199,6 +200,7 @@ const AdminPage = () => {
           </Text>
 
         </View>
+      </View>
       </ScrollView>
     </SafeAreaView>
   )

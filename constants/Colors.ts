@@ -24,5 +24,7 @@ export default {
   warning: "#facc15",
   warningBg: "#fefce8",
   //Opacity70
-  white70: "rgba(252, 252, 252, 0.7)"
+  white70: "rgba(252, 252, 252, 0.7)",
+  //Opacity40
+  white40: "rgba(252, 252, 252, 0.4)"
 };

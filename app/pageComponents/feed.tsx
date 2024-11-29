@@ -11,8 +11,8 @@ import { fetchUser } from '@/store/slice/userSlice';
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { globalStyles } from '@/constants/GlobalStyle';
 import formatTime from '@/lib/formatTime';
-import InputMessage from '@/components/InputMessage';
-import FeedCard from '@/components/FeedCard';
+import InputMessage from '@/components/UI/InputMessage';
+import FeedCard from '@/components/UI/FeedCard';
 
 
 interface props {

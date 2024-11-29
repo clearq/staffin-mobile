@@ -3,7 +3,7 @@ import { Tabs, useRouter } from 'expo-router';
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from '@/constants/Colors';
-import CustomHeader from '@/components/CustomHeader';
+import CustomHeader from '@/components/UI/CustomHeader';
 
 import { logout } from '@/store/slice/authSlice';
 import { useAppDispatch } from '@/store/reduxHooks';

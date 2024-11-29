@@ -11,12 +11,13 @@ import { globalStyles } from '@/constants/GlobalStyle';
 import Colors from '@/constants/Colors';
 
 
-import { ErrorAlert } from '@/components/CustomAlert';
-import CardGradient from '@/components/CardGradient';
+import { ErrorAlert } from '@/components/UI/CustomAlert';
+import CardGradient from '@/components/UI/CardGradient';
 
 import logo from '@/assets/images/main-logo.png'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/CustomButtons';
+import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/UI/CustomButtons';
+import { PaasswordTextForm, ValidateTextForm } from '@/components/UI/CustomForm';
 
 
 const StaffPage = () => {
@@ -24,6 +25,9 @@ const StaffPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [userNameError, setUserNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   
   const router = useRouter();
@@ -36,6 +40,14 @@ const StaffPage = () => {
   };
 
   const handleSignup = () => {
+    const userNameIsValid = userName.trim() !== '';
+    const emailIsValid = email.trim() !== '';
+    const passwordIsValid = password.trim() !== '';
+
+    setUserNameError(!userNameIsValid);
+    setEmailError(!emailIsValid);
+    setPasswordError(!passwordIsValid);
+
     const params = {
       userName,
       email,
@@ -64,7 +76,7 @@ const StaffPage = () => {
 
   return (
     <SafeAreaView style={globalStyles.authContainerThema}>
-      <View>
+      <ScrollView contentContainerStyle={{flex:1, justifyContent:'center', alignItems:'center',}}>
         {/* Card */}
         <View style={globalStyles.authCardContainer}> 
             
@@ -84,70 +96,58 @@ const StaffPage = () => {
 
             {isError && (
               <ErrorAlert 
-                title = {'Invalid sign-up credentials'}
-                msg = {'Please fill in all fields.'}
+                title={'Invalid Input'}
+                msg={'Please check your input and try again. Make sure all fields are filled out correctly.'}
               />              
             )} 
 
 
             {/* Form: User name */}
-            <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-              <TextInput
-                value={userName}
-                style={[globalStyles.inputText, globalStyles.textWhite]} 
-                keyboardType='default'
-                inputMode='text'
-                placeholder='User name'
-                placeholderTextColor={Colors.white70}
-                onChangeText={(text) => {
-                  setUserName(text)
-                }}
-              />
-            </View>
+            <ValidateTextForm 
+              value={userName} 
+              Placeholder='User name' 
+              color={Colors.white70} 
+              onChangeText={(text) => {
+                setUserName(text)
+              }} 
+              textColor={Colors.textWhite} 
+              placeholderTextColor={Colors.white40} 
+              inputError={userNameError} 
+              inputMode={'text'} 
+            />
+
 
             {/* Form: Email*/}
-            <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-              <TextInput
-                value={email}
-                style={[globalStyles.inputText, globalStyles.textWhite]}
-                keyboardType='email-address'
-                inputMode='email'
-                placeholder='Email'
-                placeholderTextColor={Colors.white70}
-                onChangeText={(text) => {
-                  dispatch(setError(false));
-                  const sanitizedText = text.replace(/\s/g, '').toLowerCase()
-                  setEmail(sanitizedText)
-                }}
-              />
-            </View>
+            <ValidateTextForm
+              value={email}
+              textColor={Colors.textWhite}
+              inputMode='email'
+              Placeholder='Email'
+              placeholderTextColor={Colors.white40}
+              onChangeText={(text:string) => {
+                const sanitizedText = text.replace(/\s/g, '').toLowerCase()
+                setEmail(sanitizedText) 
+              }}
+              color={Colors.white70}
+              inputError={emailError}
+            />
+            
 
             {/* Form: Password */}
-            <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-              <TextInput
-                className='w-5/6'
+            <PaasswordTextForm 
                 value={password}
-                style={[globalStyles.inputText, globalStyles.textWhite]} 
-                keyboardType='default'
-                placeholder= 'Password'
-                placeholderTextColor={Colors.white70}
-                onChangeText={(text) => {
-
+                textColor={Colors.textWhite}
+                inputMode='text'
+                Placeholder='Password'
+                placeholderTextColor={Colors.white40}
+                onChangeText={(text:string) => {
                   const sanitizedText = text.replace(/\s/g, '')
                   setPassword(sanitizedText)
                 }}
-                secureTextEntry={!showPassword}               
+                color={Colors.white70}
+                inputError={passwordError}
               />
-              <TouchableOpacity 
-                onPress={togglePasswordVisibility}
-              >
-                <MaterialCommunityIcons 
-                  name={showPassword ? 'eye-off' : 'eye' }
-                  size={24} 
-                  color={Colors.white70} 
-                />
-              </TouchableOpacity>
-            </View>
+           
           </View>
 
           <View style={globalStyles.btnGroup}>
@@ -161,16 +161,16 @@ const StaffPage = () => {
 
 
             {/* divider */}
-            <View style={[globalStyles.divider,]} /> 
+            {/* <View style={[globalStyles.divider,]} />  */}
 
             {/* Sign in with LinkedIn button */}
-            <OutlineButtonIconLLg
+            {/* <OutlineButtonIconLLg
               title='Sign up With LinkedIn'
               color={Colors.textWhite}
               onPress={()=> console.log('hello Linkedin')}
               textColor={Colors.textWhite}
               icon='linkedin'
-            />
+            /> */}
             
           </View>
 
@@ -188,7 +188,7 @@ const StaffPage = () => {
           </Text>
          
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }

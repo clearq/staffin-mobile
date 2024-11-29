@@ -4,9 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 import { globalStyles } from '@/constants/GlobalStyle';
 
-import CardGradient from '@/components/CardGradient';
+import CardGradient from '@/components/UI/CardGradient';
 import logo from '@/assets/images/main-logo.png'
-import { FilledButtonLg } from '@/components/CustomButtons';
+import { FilledButtonLg } from '@/components/UI/CustomButtons';
 import Colors from '@/constants/Colors';
  
 

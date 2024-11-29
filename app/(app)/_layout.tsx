@@ -26,7 +26,6 @@ export default function Layout() {
       }    
        
         <>
-          <Stack.Screen name="(auth)" />
           <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
         </>
       

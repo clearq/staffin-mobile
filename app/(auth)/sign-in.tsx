@@ -11,34 +11,38 @@ import { RootState } from '@/store/store';
 import { globalStyles } from '@/constants/GlobalStyle';
 import Colors from '@/constants/Colors';
 
-import { ErrorAlert } from '@/components/CustomAlert';
-import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/CustomButtons';
+import { ErrorAlert, SuccessAlert, WarningAlert } from '@/components/UI/CustomAlert';
+import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/UI/CustomButtons';
 import { CheckBox } from '@rneui/themed';
-import CardGradient from '@/components/CardGradient';
+import CardGradient from '@/components/UI/CardGradient';
 
 import logo from '@/assets/images/main-logo.png'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { PaasswordTextForm, ValidateTextForm } from '@/components/UI/CustomForm';
 
 
 
 export default function SignIn() {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false)
   const [checked, setChecked] = React.useState(true);
   const toggleCheckbox = () => setChecked(!checked);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
  
   const router = useRouter();
   
   const dispatch = useAppDispatch();
   const { userData, isLoading, isError, isAdmin } = useSelector((state:RootState) => state.auth);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
 
   const handleSignin = () => {
+    const emailIsValid = email.trim() !== '';
+    const passwordIsValid = password.trim() !== '';
+
+    setEmailError(!emailIsValid);
+    setPasswordError(!passwordIsValid);
+
     const params = {
       email: email,
       password: password
@@ -86,53 +90,45 @@ export default function SignIn() {
             <View style={[globalStyles.formContainer]}>
 
               {isError && (
-                <ErrorAlert 
-                  title = {'Invalid sign-in credentials'}
-                  msg = {'Please fill in all fields.'}
-                />              
+              
+                <ErrorAlert
+                  title={'Invalid Input'}
+                  msg={'Please check your input and try again. Make sure all fields are filled out correctly.'} 
+                />
+                     
               )}
 
               {/* Form: Email*/}
-              <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-                <TextInput
-                  value={email} 
-                  style={[globalStyles.inputText, globalStyles.textWhite]}               
-                  keyboardType='email-address'
-                  inputMode='email'
-                  placeholder='Email'
-                  placeholderTextColor={Colors.white70}
-                  onChangeText={(text) => {
-                    const sanitizedText = text.replace(/\s/g, '').toLowerCase()
-                    setEmail(sanitizedText)
-                  }}
-                />
-              </View>
+              <ValidateTextForm 
+                value={email}
+                textColor={Colors.textWhite}
+                inputMode='email'
+                Placeholder='Email'
+                placeholderTextColor={Colors.white40}
+                onChangeText={(text:string) => {
+                  const sanitizedText = text.replace(/\s/g, '').toLowerCase()
+                  setEmail(sanitizedText) 
+                }}
+                color={Colors.white70}
+                inputError={emailError}
+              />
 
               {/* Form: Password */}
-              <View style={[globalStyles.inputLine, globalStyles.borderWhite]}>
-                <TextInput
-                  value={password}                   
-                  style={[globalStyles.inputText, globalStyles.textWhite, {flex: 6}]} 
-                  keyboardType='default'
-                  placeholder= 'Password'
-                  placeholderTextColor={Colors.white70}
-                  onChangeText={(text) => {
-                    const sanitizedText = text.replace(/\s/g, '')
-                    setPassword(sanitizedText)
-                  }}
-                  onPress={() => dispatch(setError(false))}
-                  secureTextEntry={!showPassword}               
-                />
-                <TouchableOpacity 
-                  onPress={togglePasswordVisibility}
-                >
-                  <MaterialCommunityIcons 
-                    name={showPassword ? 'eye-off' : 'eye' }
-                    size={24} 
-                    color={Colors.white70} 
-                  />
-                </TouchableOpacity>
-              </View>
+              <PaasswordTextForm 
+                value={password}
+                textColor={Colors.textWhite}
+                inputMode='text'
+                Placeholder='Password'
+                placeholderTextColor={Colors.white40}
+                onChangeText={(text:string) => {
+                  const sanitizedText = text.replace(/\s/g, '')
+                  setPassword(sanitizedText)
+                }}
+                color={Colors.white70}
+                inputError={passwordError}
+              />
+
+             
               
               <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                 <CheckBox
@@ -184,7 +180,7 @@ export default function SignIn() {
             <OutlineButtonIconLLg
               title='Sign in With LinkedIn'
               color={Colors.textWhite}
-              onPress={()=> console.log('hello Linked')}
+              onPress={()=> console.log('hello Linkedin')}
               textColor={Colors.textWhite}
               icon='linkedin'
             />

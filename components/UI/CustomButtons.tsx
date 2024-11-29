@@ -3,11 +3,11 @@ import React from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface props {
-  title: string,
-  color: string,
-  onPress: ()=> void,
-  icon?: keyof typeof MaterialCommunityIcons.glyphMap,
-  textColor: string,
+  title: string
+  color: string
+  onPress: ()=> void
+  icon?: keyof typeof MaterialCommunityIcons.glyphMap
+  textColor: string
 }
 
 const styles = StyleSheet.create({

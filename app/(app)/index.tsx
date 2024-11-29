@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 
 import logo from '@/assets/images/main-logo.png'
 import { globalStyles } from '@/constants/GlobalStyle';
-import { FilledButtonLg } from '@/components/CustomButtons';
+import { FilledButtonLg } from '@/components/UI/CustomButtons';
 import Colors from '@/constants/Colors';
 
 

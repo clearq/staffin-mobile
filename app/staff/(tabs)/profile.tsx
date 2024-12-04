@@ -4,16 +4,16 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { globalStyles } from '@/constants/GlobalStyle';
-import StaffProfile from '@/app/pageComponents/staffProfile';
+import UserProfile from '@/app/pageComponents/profile/userProfile';
 
 
 export default function Tab() {
+  const userId = useSelector((state: RootState) => state.auth.userData?.id); 
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
   return (
     <ScrollView className={`${globalStyles.container}`}>
-      <Text>User Profile</Text>
-      <StaffProfile />
+      { userId && <UserProfile userId={userId}/> }
     </ScrollView>
   );
 }

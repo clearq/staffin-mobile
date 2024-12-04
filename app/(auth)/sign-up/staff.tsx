@@ -161,7 +161,7 @@ const StaffPage = () => {
 
 
             {/* divider */}
-            {/* <View style={[globalStyles.divider,]} />  */}
+            {/* <View style={[globalStyles.dividerDark,]} />  */}
 
             {/* Sign in with LinkedIn button */}
             {/* <OutlineButtonIconLLg

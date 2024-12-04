@@ -14,22 +14,22 @@ export default function Layout() {
   
 
   return (
-    <>
+    <Stack>
       {/* Call Staff Page */}
       {userData && !isAdmin &&              
-        <Stack.Screen name="staff/(tabs)/" options={{ headerShown: true }} />   
+        <Stack.Screen name="staff" options={{ headerShown: true }} />   
       } 
 
       {/* Call Admin Page */}
       {userData && isAdmin && 
-        <Stack.Screen name="admin/(tabs)/" options={{ headerShown: true }} />
+        <Stack.Screen name="admin" options={{ headerShown: true }} />
       }    
-       
-        <>
-          <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
-        </>
+            
+      <Stack.Screen name="(app)" options={{ headerShown: false }} />
+      <Stack.Screen name='(auth)' options={{ headerShown: false}} />
+        
       
-    </>
+    </Stack>
 
   );
 }

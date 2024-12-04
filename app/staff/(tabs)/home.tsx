@@ -1,4 +1,4 @@
-import { Text, ScrollView, ActivityIndicator, RefreshControl} from 'react-native';
+import { Text, ScrollView, ActivityIndicator, RefreshControl, View} from 'react-native';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -14,6 +14,7 @@ export default function Tab() {
   const [refreshing, setRefreshing] = React.useState(false);
   const { userData, isLoading, isError} = useSelector((state: RootState) => state.user);
 
+ 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -30,7 +31,7 @@ export default function Tab() {
       }
     >  
 
-      {isLoading &&
+      {!userData && isLoading &&
         <ActivityIndicator size="small" color={Colors.secondary} />
       } 
                     

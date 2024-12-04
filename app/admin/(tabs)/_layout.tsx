@@ -7,6 +7,7 @@ import CustomHeader from '@/components/UI/CustomHeader';
 
 import { logout } from '@/store/slice/authSlice';
 import { useAppDispatch } from '@/store/reduxHooks';
+import { UserIcon } from '@/components/UI/UserIcons';
 
 
 export default function TabLayout() {
@@ -67,7 +68,8 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'About',
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="office-building-outline" color={color} />,
+          tabBarIcon: (
+            { color }) => <UserIcon color= {color} />,
           headerShown: true
         }}
       />   

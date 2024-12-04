@@ -50,6 +50,10 @@ export const globalStyles = StyleSheet.create({
     fontFamily:'Inter-Regular',
     fontSize:16,
   },
+  textSm:{
+    fontFamily:'Inter-Regular',
+    fontSize:14,
+  },
   
   textWhite:{
     color: Colors.textWhite,
@@ -97,12 +101,18 @@ export const globalStyles = StyleSheet.create({
     gap: 16,
   },
 
-  // UI
-  divider:{
+  // UI: Auth
+  dividerDark:{
     width: '100%',
     marginVertical: 24,
     borderWidth: 0.5,
     borderColor: Colors.white70
+  },
+  divider:{
+    width: '100%',
+    marginVertical: 24,
+    borderWidth: 0.5,
+    borderColor: Colors.textGray
   },
   logoFullSize:{
     maxWidth: 380,

@@ -174,7 +174,7 @@ export default function SignIn() {
             />
 
             {/* divider */}
-            <View style={[globalStyles.divider,]} /> 
+            <View style={[globalStyles.dividerDark,]} /> 
 
             {/* Sign in with LinkedIn button */}
             <OutlineButtonIconLLg

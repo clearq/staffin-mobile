@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity,  KeyboardAvoidingView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -8,27 +8,68 @@ import { addPostComment, fetchComments, fetchFeed, likePost, Post, unlikePost } 
 import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
 import { fetchUser } from '@/store/slice/userSlice';
 
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { globalStyles } from '@/constants/GlobalStyle';
 import formatTime from '@/lib/formatTime';
 import InputMessage from '@/components/UI/InputMessage';
 import ActionButton from './ActionButton';
+import Colors from '@/constants/Colors';
+import { User } from '@/constants/types/UserType';
 
+const styles = StyleSheet.create({
+  cardContainer: {
+    flex:1,
+    flexDirection:'column',
+    columnGap:8,
+    backgroundColor: `${Colors.white70}`,
+    padding:16,
+    marginTop:16,
+  },
+  cardHeader:{
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    gap:8,
+  },
+  cardBody:{
+    marginTop:16,
+    flexDirection: 'column',
+  },
+  buttonGroup:{
+    flexDirection: 'row',
+    gap:16,
+  },
+  cardFooter:{
+    flex:1,
+    alignItems:'center',
+    position:'relative',
+  },
+})
 
 
 interface props {
   post : Post
 }
 
-const FeedCard = ({post}: props) => {
+const FeedCard = ({post, }: props) => {
   const dispatch = useAppDispatch();
   const { userData, isLoading, isError } = useSelector((state: RootState) => state.user);
-  const authData = useSelector((state: RootState) => state.auth); 
-  const { posts, comments } = useAppSelector((state) => state.feed);
-
+  const { comments } = useAppSelector((state) => state.feed);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false)
+  const [userProfile, setUserProfile] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (post.userId && (!userData || (userData && userData.id !== post.userId))) {
+      dispatch(fetchUser(post.userId)).then((action) => {
+        if (action.payload) {
+          setUserProfile(action.payload);
+        }
+      });
+    } else {
+      setUserProfile(userData);
+    }
+  }, [post.userId, userData]);
 
   const handleToggleComments = (postId: number) => {
     if (selectedPostId === postId) {
@@ -64,21 +105,19 @@ const FeedCard = ({post}: props) => {
   };
 
   return (
-    <View 
-      
-      className='bg-bgWhite p-4 mb-2 '
+    <View
+      style={[styles.cardContainer]}
     > 
       {/* Card header */}
-      <View className='flex flex-row'>
+      <View style={[styles.cardHeader]}>
 
-        {/* Avatar section */}
-        <View>
-          <View className='bg-slate-200 w-[40px] h-[40px] rounded-full flex justify-center items-center'>
-            <MaterialCommunityIcons name="account" size={24} color="gray" />
-          </View>
-        </View>
+        {/* Avatar */}
+        <UserIconPost 
+          authorId={post.userId} 
+          profileImage={userProfile?.profileImage}
+        />
 
-        {/* Texts section*/}
+        {/* User Info*/}
         <View className='ml-2'>
           <Text className='text-base font-bold'
           >
@@ -92,7 +131,8 @@ const FeedCard = ({post}: props) => {
       </View>
 
       {/* Card body */}
-      <View className='mt-2'>
+      <View style={[styles.cardBody]}>
+
         <Text style={globalStyles.pText}>
           {post.content}
         </Text>            
@@ -100,6 +140,7 @@ const FeedCard = ({post}: props) => {
         { post.image &&
           <Image 
             source={{ uri: post.image }}
+            style={{width:'100%', height:'auto'}}
           />
         }
       </View>
@@ -203,3 +244,56 @@ const FeedCard = ({post}: props) => {
 }
 
 export default FeedCard
+
+
+
+// User Icon for Post
+interface postProps{
+  authorId:number
+  profileImage?: string
+}
+
+const UserIconPost = ({authorId, profileImage}:postProps) => {
+  
+  return (
+    <View 
+      style={{
+        justifyContent:'center',
+        alignItems:'center',
+        width: 68,
+        height: 68,
+        backgroundColor: 'white',
+        borderRadius: '100%'
+      }}
+    >
+      { profileImage 
+        ? <Image 
+            source={{uri: profileImage}} 
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: '100%'
+            }}
+          />
+          
+        : (
+          <View
+            style={{
+              backgroundColor:`${Colors.primaryLight}`,
+              width: 60,
+              height: 60,
+              borderRadius: '100%',
+              justifyContent:'center',
+              alignItems:'center',
+            }}
+          >
+            <MaterialCommunityIcons name="account" size={36} color="gray" />
+          </View>
+        )
+      }
+    </View>
+  )
+}
+
+
+

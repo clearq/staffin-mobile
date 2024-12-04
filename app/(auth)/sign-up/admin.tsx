@@ -173,7 +173,7 @@ const AdminPage = () => {
             />
 
             {/* divider */}
-            {/* <View style={[globalStyles.divider,]} />  */}
+            {/* <View style={[globalStyles.dividerDark,]} />  */}
 
             {/* Sign up with LinkedIn button */}
             {/* <OutlineButtonIconLLg

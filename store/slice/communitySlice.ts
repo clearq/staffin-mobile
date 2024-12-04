@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Staffin_API } from "@/api/API";
 import { RootState } from "../store";
-import { act } from "react-test-renderer";
+import { User } from '@/constants/types/UserType'
 
 export interface Comment {
   commentId: number | null;
@@ -12,14 +12,16 @@ export interface Comment {
   createdAt: string
 }
 
-interface likesUser {
+export interface LikesUser {
   userId: number;
   firstName: string;
   lastName: null;
 }
 
 export interface Post {
+  author:User[]
   postId: number;
+  userId: number 
   content: string;
   authorName: string;
   image: string | null;
@@ -27,12 +29,13 @@ export interface Post {
   likeCount: number;
   commentCount: number;
   sharedCount: number;
-  likes: likesUser[];
+  likes: LikesUser[];
   isLiked: boolean;
 }
 
-interface FeedState {
+export interface FeedState {
   posts: Post[];
+  userPosts: Post[];
   comments: {[postId: number]: Comment[]}
   isLoading: boolean;
   isError: boolean;
@@ -41,6 +44,7 @@ interface FeedState {
 
 const initialState: FeedState = {
   posts: [],
+  userPosts:[],
   comments: {},
   isLoading: false,
   isError: false,
@@ -67,10 +71,12 @@ export const fetchFeed = createAsyncThunk('feed/fetchFeed', async (_, thunkAPI) 
         Authorization: `Bearer ${token}`
       }
     });
+   
     const posts = response.data;
     const likedPost = posts.map((post: Post) => ({
       ...post,
-      isLiked: post.likes.some((like: likesUser) => like.userId === userId)
+      userId: post.authorName ? post.userId : null,
+      isLiked: post.likes.some((like: LikesUser) => like.userId === userId),
     }));
     return likedPost;
 
@@ -78,6 +84,27 @@ export const fetchFeed = createAsyncThunk('feed/fetchFeed', async (_, thunkAPI) 
     return thunkAPI.rejectWithValue(error);
   }
 });
+
+// Action to fetch posts by user ID
+export const fetchUserPosts = createAsyncThunk(
+  'feed/fetchUserPosts',
+  async (userId: number, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const token = state.auth.userData?.token;
+
+    try {
+      const response = await Staffin_API.get(`/Community/GetUserPosts?userId=${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data; 
+    } catch (error: any) {
+      console.error('Error fetching user posts:', error.response?.data || error.message);
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
 // Action to retrieve comments for a specific post
 export const fetchComments = createAsyncThunk('feed/fetchComments', async ( params: {postId: number, comment:{}} , thunkAPI) => {
@@ -179,6 +206,21 @@ const CommunitySlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     })
+    // User posts
+    builder.addCase(fetchUserPosts.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(fetchUserPosts.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.userPosts = action.payload;
+      state.isError = false;      
+    });
+    builder.addCase(fetchUserPosts.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+    // Comments
     builder.addCase(fetchComments.fulfilled, (state, action) => {
       const { postId, comments } = action.payload;
       state.comments[postId] = comments;

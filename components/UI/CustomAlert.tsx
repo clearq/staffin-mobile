@@ -1,12 +1,12 @@
-import { View, Text,StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from '@/constants/Colors';
 import { globalStyles } from '@/constants/GlobalStyle';
 
 interface props {
-  title: string,
-  msg: string | null,
+  title: string
+  msg: string | null
 }
 
 const styles = StyleSheet.create({

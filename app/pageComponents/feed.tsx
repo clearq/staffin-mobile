@@ -23,10 +23,13 @@ export default function Feed() {
     if (authData.userData?.token) {
       dispatch(fetchFeed());
     }
+  }, [userData]);
+
+  useEffect(() => {
     if (authData.userData?.id) {
       dispatch(fetchUser(authData.userData.id));
     }
-  }, [userData]);
+  },[authData])
 
 
   return (

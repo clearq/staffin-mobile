@@ -15,20 +15,20 @@ export default function Tab() {
   const { userData, isLoading, isError} = useSelector((state: RootState) => state.user);
 
  
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+  // const onRefresh = React.useCallback(() => {
+  //   setRefreshing(true);
+  //   setTimeout(() => {
+  //     setRefreshing(false);
+  //   }, 2000);
+  // }, []);
   
   
 
   return (
-    <ScrollView className={`${globalStyles.container}`}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+    <ScrollView style={globalStyles.container}
+      // refreshControl={
+      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      // }
     >  
 
       {!userData && isLoading &&

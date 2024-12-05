@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
 })
 
 
-const UserProfile = ({data, posts}: UserProfileProps) => {
+const AdminProfile = ({data, posts}: UserProfileProps) => {
   const [expanded, setExpanded] = useState(false);
   
   return (
@@ -168,110 +168,10 @@ const UserProfile = ({data, posts}: UserProfileProps) => {
           />
 
 
-          {/* Experience */}
-          <ProfileCardAdd
-            title='Experience'
-            cardBody={(
-              <View style={styles.col}>
-                {data.experience.map(exp => 
-                  <View key={exp.id} style={styles.col}>
-
-                    <View style={{flexDirection:'column', gap:0,}}>
-                      <Text style={[globalStyles.fontSemibold, {fontSize:16}]}>
-                        {exp.position}
-                      </Text>
-                  
-                      <Text style={[globalStyles.textSm,]}>
-                        {exp.companyName}
-                      </Text>
-
-                      <Text style={[globalStyles.textSm, {color:`${Colors.textGray}`}]}>
-                        {exp.location}
-                      </Text> 
-
-                    </View>
-
-                    <Text>{exp.description}</Text>
-                    <Text style={[globalStyles.textSm, {color:`${Colors.textGray}`}]}>
-                      {dayjs(exp.startDate).format('YYYY-MM-DD')} - {dayjs(exp.endDate).format('YYYY-MM-DD')}
-                    </Text>
-
-                    <View style={[globalStyles.divider]} />
-                  </View>
-                )}
-
-              </View>
-            )}
-            handleEdit={() => {console.log('edit Experience');
-            }}
-            handleAdd={() => {console.log('add Experience');
-            }}
-          />
-
-          {/* Education */}
-          <ProfileCardAdd
-            title='Education'
-            cardBody={(
-              <View>
-                 {data.educations.map(education => 
-                    <View key={education.id}>
-                      <Text>Institution: {education.institution}</Text>
-                      <Text>Name:{education.name}</Text>
-                      <Text>Date: {dayjs(education.startDate).format('YYYY-MM-DD')} - {dayjs(education.endDate).format('YYYY-MM-DD')}</Text>
-                    </View>
-                  )}
-
-              </View>
-            )}
-            handleEdit={() => {console.log('edit Education');
-            }}
-            handleAdd={() => {console.log('add Education');
-            }}
-          />
-        
-          {/* Skills */}
-          <ProfileCardAdd
-            title='Skills'
-            cardBody={(
-              <View style={styles.rowWrap}>
-                {data.skills.map(skill => 
-                  <View key={skill.id} style={styles.skillButton}>
-                    <Text>{skill.name}</Text>
-                  </View>
-                )}
-              </View>
-            )}
-            handleEdit={() => {console.log('edit Skills');
-            }}
-            handleAdd={() => {console.log('add Skills');
-            }}
-          />
-
-          {/* Languages */}
-          <ProfileCardAdd
-            title='Languages'
-            cardBody={(
-              <View style={styles.col}>
-                {data.languages
-                .slice() 
-                .sort((a, b) => b.rating - a.rating)
-                .map((language) => (
-                  <View key={language.id} style={[styles.row, { justifyContent: 'space-between' }]}>
-                    <Text>{language.name}</Text>
-                    <StarRatingReadOnly rating={language.rating} />
-                  </View>
-                ))}
-              </View>
-            )}
-            handleEdit={() => {console.log('edit Skills');
-            }}
-            handleAdd={() => {console.log('add Skills');
-            }}
-          />
         </>
       }
     </>
   )
 }
 
-export default UserProfile
+export default AdminProfile

@@ -44,7 +44,7 @@ export interface FeedState {
 
 const initialState: FeedState = {
   posts: [],
-  userPosts:[],
+  userPosts: [],
   comments: {},
   isLoading: false,
   isError: false,
@@ -55,7 +55,7 @@ const initialState: FeedState = {
     lastName: "",
     content: "",
     createdAt: ""
-  }
+  },
 };
 
 
@@ -90,6 +90,8 @@ export const fetchUserPosts = createAsyncThunk(
   'feed/fetchUserPosts',
   async (userId: number, thunkAPI) => {
     const state = thunkAPI.getState() as RootState;
+
+    console.log('state', state)
     const token = state.auth.userData?.token;
 
     try {

@@ -8,9 +8,12 @@ import CustomHeader from '@/components/UI/CustomHeader';
 import { logout } from '@/store/slice/authSlice';
 import { useAppDispatch } from '@/store/reduxHooks';
 import { UserIcon } from '@/components/UI/UserIcons';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 
 export default function TabLayout() {
+  const { userData, isLoading, isError } = useSelector((state: RootState) => state.user);
   
   //Logout
   const dispatch = useAppDispatch();
@@ -69,7 +72,7 @@ export default function TabLayout() {
         options={{
           title: 'About',
           tabBarIcon: (
-            { color }) => <UserIcon color= {color} />,
+            { color }) => <UserIcon color= {color} data={userData} />,
           headerShown: true
         }}
       />   

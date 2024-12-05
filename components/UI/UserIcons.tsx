@@ -5,25 +5,16 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import Colors from '@/constants/Colors';
-import { fetchUser } from '@/store/slice/userSlice';
-import { useAppDispatch, useAppSelector } from '@/store/reduxHooks';
-import { Post } from '@/store/slice/communitySlice';
+
+import { User } from '@/constants/types/UserType';
 
 interface UserIconProfileProps {
-  userId: number
+  data:User
 }
 
 
 // User Icon for Header in profile-page
-const UserIconProfile = ({userId}:UserIconProfileProps) => {
-  const dispatch = useAppDispatch();
-  const { userData } = useSelector((state: RootState) => state.user);
-
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchUser(userId));    
-    }
-  }, [userId]);
+const UserIconProfile = ({data}:UserIconProfileProps) => {
 
   return (
     <View 
@@ -36,9 +27,9 @@ const UserIconProfile = ({userId}:UserIconProfileProps) => {
         borderRadius: '100%'
       }}
     >
-      { userData?.profileImage 
+      { data?.profileImage 
         ? <Image 
-            source={{uri :userData.profileImage}} 
+            source={{uri :data.profileImage}} 
             style={{
               width: 76,
               height: 76,
@@ -71,10 +62,10 @@ const UserIconProfile = ({userId}:UserIconProfileProps) => {
 // User Icon for Menu-button
 interface props {
   color: string
+  data:User | null
 }
 
-const UserIcon = ({color}:props) => {
-  const { userData, isLoading, isError } = useSelector((state: RootState) => state.user);
+const UserIcon = ({color, data}:props) => {
 
   return (
     <View 
@@ -87,9 +78,9 @@ const UserIcon = ({color}:props) => {
         borderRadius: '100%'
       }}
     >
-      { userData?.profileImage 
+      { data && data?.profileImage 
         ? <Image 
-            source={{uri :userData.profileImage}} 
+            source={{uri :data.profileImage}} 
             style={{
               width: 28,
               height: 28,

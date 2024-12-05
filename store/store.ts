@@ -11,7 +11,7 @@ export const store = configureStore({
     user: UserSlice,
     feed: CommunitySlice,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActionPaths: ['meta.arg', 'payload'], 

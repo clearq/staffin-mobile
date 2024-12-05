@@ -50,75 +50,75 @@ interface props {
   post : Post
 }
 
-const FeedCard = ({post, }: props) => {
-  const dispatch = useAppDispatch();
-  const { userData, isLoading, isError } = useSelector((state: RootState) => state.user);
-  const { comments } = useAppSelector((state) => state.feed);
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
-  const [comment, setComment] = useState('');
-  const [openModal, setOpenModal] = useState(false)
-  const [userProfile, setUserProfile] = useState<User | null>(null);
+const FeedCard = ({post,}: props) => {
+  // const dispatch = useAppDispatch();
+  // const { userData, isLoading, isError } = useSelector((state: RootState) => state.user);
+  // const { comments } = useAppSelector((state) => state.feed);
+  // const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  // const [comment, setComment] = useState('');
+  // const [openModal, setOpenModal] = useState(false)
+  // const [userProfile, setUserProfile] = useState<User | null>(null);
 
-  useEffect(() => {
-    if (post.userId && (!userData || (userData && userData.id !== post.userId))) {
-      dispatch(fetchUser(post.userId)).then((action) => {
-        if (action.payload) {
-          setUserProfile(action.payload);
-        }
-      });
-    } else {
-      setUserProfile(userData);
-    }
-  }, [post.userId, userData]);
+  // useEffect(() => {
+  //   if (post.userId) {
+  //     dispatch(fetchUser(post.userId)).then((action) => {
+  //       if (action.payload) {
+  //         setUserProfile(action.payload);
+  //       }
+  //     });
+  //   } else {
+  //     setUserProfile(userData);
+  //   }
+  // }, [post.userId]);
 
-  const handleToggleComments = (postId: number) => {
-    if (selectedPostId === postId) {
-      setSelectedPostId(null);
-    } else {
-      setSelectedPostId(postId);
-      if (!comments[postId]) {
-        dispatch(fetchComments({
-          postId, comment}));
-      }
-    }
-  };
+  // const handleToggleComments = (postId: number) => {
+  //   if (selectedPostId === postId) {
+  //     setSelectedPostId(null);
+  //   } else {
+  //     setSelectedPostId(postId);
+  //     if (!comments[postId]) {
+  //       dispatch(fetchComments({
+  //         postId, comment}));
+  //     }
+  //   }
+  // };
 
-  const handleAddComment = async(selectedPostId:number) => {
-    if (!comment) {
-      isError === true
-      console.log('The comment box is blank')
-    };
-    const params = {
-      postId: selectedPostId,
-      comment,
-    };
+  // const handleAddComment = async(selectedPostId:number) => {
+  //   if (!comment) {
+  //     isError === true
+  //     console.log('The comment box is blank')
+  //   };
+  //   const params = {
+  //     postId: selectedPostId,
+  //     comment,
+  //   };
 
-    const resultAction = await dispatch(addPostComment(params));
+  //   const resultAction = await dispatch(addPostComment(params));
 
-    if (addPostComment.fulfilled.match(resultAction)) {
-      dispatch(fetchComments({
-        postId: selectedPostId,
-        comment
-      }));
-    }
-    setOpenModal(false);
-  };
+  //   if (addPostComment.fulfilled.match(resultAction)) {
+  //     dispatch(fetchComments({
+  //       postId: selectedPostId,
+  //       comment
+  //     }));
+  //   }
+  //   setOpenModal(false);
+  // };
 
   return (
     <View
       style={[styles.cardContainer]}
     > 
       {/* Card header */}
-      <View style={[styles.cardHeader]}>
+      {/* <View style={[styles.cardHeader]}> */}
 
         {/* Avatar */}
-        <UserIconPost 
+        {/* <UserIconPost 
           authorId={post.userId} 
           profileImage={userProfile?.profileImage}
-        />
+        /> */}
 
         {/* User Info*/}
-        <View className='ml-2'>
+        {/* <View className='ml-2'>
           <Text className='text-base font-bold'
           >
             {post.authorName} 
@@ -128,10 +128,10 @@ const FeedCard = ({post, }: props) => {
           </Text>
 
         </View>
-      </View>
+      </View> */}
 
       {/* Card body */}
-      <View style={[styles.cardBody]}>
+      {/* <View style={[styles.cardBody]}>
 
         <Text style={globalStyles.pText}>
           {post.content}
@@ -143,9 +143,9 @@ const FeedCard = ({post, }: props) => {
             style={{width:'100%', height:'auto'}}
           />
         }
-      </View>
+      </View> */}
 
-      {/* User action results */}
+      {/* User action results
       <View
         className='flex flex-row justify-between'
       >
@@ -164,15 +164,15 @@ const FeedCard = ({post, }: props) => {
           <Text className='text-gray-500 text-sm'>{post.sharedCount} reposts</Text>
         
         </View>           
-      </View>
+      </View> */}
 
       {/* Card footer -- User actions */}
-      <View
+      {/* <View
         className='flex flex-row justify-between pt-2 border-t border-borderColor'
-      >
+      > */}
 
         {/* Like action */}
-        <ActionButton 
+        {/* <ActionButton 
           title = {post.isLiked ? 'Liked' :'Like'}
           icon = {post.isLiked ? 'cards-heart' : 'cards-heart-outline'}
           size = {16}
@@ -184,10 +184,10 @@ const FeedCard = ({post, }: props) => {
               dispatch(likePost(post.postId));
             }
           }}
-        />
+        /> */}
 
         {/* Comment action */}
-        <ActionButton 
+        {/* <ActionButton 
           title = {'Comment'}
           icon = {'comment-text-outline'}
           size = {16}
@@ -196,19 +196,19 @@ const FeedCard = ({post, }: props) => {
             setOpenModal(true)
             setSelectedPostId(post.postId)             
           }}
-        />
+        /> */}
         
         {/* Repost action */}
-        <ActionButton 
+        {/* <ActionButton 
           title = {'Repost'}
           icon = {'repeat'}
           size = {16}
           color ={'gray'}
           onPress={() => {}}
-        />
+        /> */}
       
         {/* Share action */}
-        <ActionButton 
+        {/* <ActionButton 
           title = {'Share'}
           icon = {'share-variant-outline'}
           size = {16}
@@ -224,9 +224,9 @@ const FeedCard = ({post, }: props) => {
             onChangeText={(text:string) => setComment(text)}
           />           
         </KeyboardAvoidingView>
-      )}
+      )} */}
 
-      {selectedPostId === post.postId && comments[post.postId] && (
+      {/* {selectedPostId === post.postId && comments[post.postId] && (
         <View className='mt-2'>
           {comments[post.postId].map((comment) => (
             <View key={comment.commentId} className='mt-2 border-t border-gray-200 pt-2'>
@@ -238,7 +238,7 @@ const FeedCard = ({post, }: props) => {
             </View>
           ))}
         </View>
-      )}
+      )} */}
     </View>
   )
 }
@@ -253,7 +253,7 @@ interface postProps{
   profileImage?: string
 }
 
-const UserIconPost = ({authorId, profileImage}:postProps) => {
+const UserIconPost = ({profileImage}:postProps) => {
   
   return (
     <View 

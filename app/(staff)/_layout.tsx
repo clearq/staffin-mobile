@@ -1,11 +1,10 @@
 import { View, Text } from 'react-native'
-import React from 'react'
 import { Slot } from 'expo-router'
 
-const AuthLayout = () => {
+const StaffLayout = () => {
   return (
     <Slot />
   )
 }
 
-export default AuthLayout
+export default StaffLayout

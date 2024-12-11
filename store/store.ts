@@ -1,22 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import UserSlice from './slice/userSlice'
-import AuthSlice from './slice/authSlice'
-import CommunitySlice from './slice/communitySlice'
-
-
+import authReducer from "./Slice/authSlice";
 
 export const store = configureStore({
   reducer: {
-    auth: AuthSlice,
-    user: UserSlice,
-    feed: CommunitySlice,
+    auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) => 
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActionPaths: ['meta.arg', 'payload'], 
-      },
-    }),
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

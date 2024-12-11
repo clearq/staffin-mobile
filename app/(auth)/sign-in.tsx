@@ -1,208 +1,105 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, Image, ScrollView, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, Link } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { Link, useRouter } from "expo-router"; 
 
-import { useAppDispatch } from '@/store/reduxHooks';
-import { setError, signin } from '@/store/slice/authSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from "@/store/reduxHooks";
+import { login, getCurrentUser } from "@/store/Slice/authSlice";
 
-import { globalStyles } from '@/constants/GlobalStyle';
-import Colors from '@/constants/Colors';
-
-import { ErrorAlert, SuccessAlert, WarningAlert } from '@/components/UI/CustomAlert';
-import { FilledButtonLg, OutlineButtonIconLLg } from '@/components/UI/CustomButtons';
-import { CheckBox } from '@rneui/themed';
-import CardGradient from '@/components/UI/CardGradient';
-
-import logo from '@/assets/images/main-logo.png'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { PaasswordTextForm, ValidateTextForm } from '@/components/UI/CustomForm';
-
-
-
-export default function SignIn() {
-  const [email, setEmail] = useState(''); 
-  const [password, setPassword] = useState('');
-  const [checked, setChecked] = React.useState(true);
-  const toggleCheckbox = () => setChecked(!checked);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
- 
+const SignIn = () => {
   const router = useRouter();
-  
-  const dispatch = useAppDispatch();
-  const { userData, isLoading, isError, isAdmin } = useSelector((state:RootState) => state.auth);
+  const dispatch = useAppDispatch(); 
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const { authUser, isLoading, error } = useAppSelector((state) => state.auth)
 
+  const handleLogin = async () => {
+    const result = await dispatch(login({ email, password }))
 
-  const handleSignin = () => {
-    const emailIsValid = email.trim() !== '';
-    const passwordIsValid = password.trim() !== '';
+    if(login.fulfilled.match(result)) {
+      console.log("Login successful:", result.payload);
+      
+      // Login successful: dispatch getCurrentUser
+      const userId = result.payload.id;
+      const currentUserResult = await dispatch(getCurrentUser(userId));
 
-    setEmailError(!emailIsValid);
-    setPasswordError(!passwordIsValid);
+      if (getCurrentUser.fulfilled.match(currentUserResult)) {
+        console.log("Fetched current user:", currentUserResult.payload);
+    
 
-    const params = {
-      email: email,
-      password: password
-    };
-    if (email === '' || password === '') {
-      dispatch(setError(true));
+      } else {
+        console.error("Failed to fetch current user:", currentUserResult.payload);
+      }
     } else {
-      dispatch(setError(false)); 
-      dispatch(signin(params)); 
-
-      if (isLoading && !isError){
-        console.log('is Loading?:', isLoading);
-      }
-      if(!isLoading && isError){
-        console.log('is Errror?:', isError);
-      }
+      console.error("Login failed:", error);
     }
   };
-  
+
   useEffect(() => {
-    if (userData && !isError) { isAdmin 
-      ? router.push('/admin/(tabs)/home')
-      : router.push('/staff/(tabs)/home')
+    if (!isLoading && authUser) {
+      if (authUser.role === 1) {       
+        router.push('/(admin)/(tabs)/dashboard');
+        console.log('role:', authUser.role);      
+      } else if (authUser.role === 3) {
+        router.push('/(staff)/(tabs)/home');
+        console.log('role:', authUser.role);
+      }
     }
-  },[userData])
+  }, [authUser, isLoading]);
 
   return (
-    <SafeAreaView style={globalStyles.authContainerThema}>
-      <View style={{flex:1, justifyContent:'center', alignItems:'center',}}>
-        {/* Card */}
-        <View style={[globalStyles.authCardContainer,]}>  
 
-          <CardGradient /> 
+    <View style={styles.container}>
+      <Text style={styles.title}>Sign In</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Button
+        title={isLoading ? "Logging in..." : "Sign In"}
+        onPress={handleLogin}
+        disabled={isLoading}
+      />
+      <Link href={"/(staff)/(tabs)/home"} style={styles.link}>
+        <Text>Staff</Text>
+      </Link>
+    </View>
+  );
+};
 
-            <Image 
-              source={logo} 
-              style={[globalStyles.logo]}
-              resizeMode="contain" 
-            />
-      
-            <Text style={[globalStyles.titleText, globalStyles.textWhite, globalStyles.centerText]}>
-              Sign In
-            </Text>
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
+  },
+  input: {
+    width: "80%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+  },
+  link: {
+    marginTop: 16,
+    color: "blue",
+  },
+});
 
-            <View style={[globalStyles.formContainer]}>
-
-              {isError && (
-              
-                <ErrorAlert
-                  title={'Invalid Input'}
-                  msg={'Please check your input and try again. Make sure all fields are filled out correctly.'} 
-                />
-                     
-              )}
-
-              {/* Form: Email*/}
-              <ValidateTextForm 
-                value={email}
-                textColor={Colors.textWhite}
-                inputMode='email'
-                Placeholder='Email'
-                placeholderTextColor={Colors.white40}
-                onChangeText={(text:string) => {
-                  const sanitizedText = text.replace(/\s/g, '').toLowerCase()
-                  setEmail(sanitizedText) 
-                }}
-                color={Colors.white70}
-                inputError={emailError}
-              />
-
-              {/* Form: Password */}
-              <PaasswordTextForm 
-                value={password}
-                textColor={Colors.textWhite}
-                inputMode='text'
-                Placeholder='Password'
-                placeholderTextColor={Colors.white40}
-                onChangeText={(text:string) => {
-                  const sanitizedText = text.replace(/\s/g, '')
-                  setPassword(sanitizedText)
-                }}
-                color={Colors.white70}
-                inputError={passwordError}
-              />
-
-             
-              
-              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                <CheckBox
-                  checked={checked}
-                  onPress={toggleCheckbox}
-                  iconType="material-community"
-                  checkedIcon="checkbox-outline"
-                  uncheckedIcon={'checkbox-blank-outline'}
-                  checkedColor={Colors.success} 
-                  title={'Remember me'} 
-                  containerStyle={{
-                    backgroundColor: 'none',
-                    paddingLeft: 0,
-                    marginLeft: 0,
-                    marginTop:0,
-                    paddingTop:0,
-                  }}
-                  textStyle={{
-                    color:`${Colors.textWhite}`,
-                    fontSize: 16,
-                    fontWeight: 'regular',
-                    marginLeft: 4,
-                  }} 
-                />
-                
-                <Text 
-                  style={[globalStyles.pText, globalStyles.textSecondary, globalStyles.textUnderline,]}
-                >
-                  <Link href={"/"}>
-                    Forgot password?
-                  </Link>
-                </Text>
-              </View>
-
-            </View>
-
-            {/* Sign in button */}
-            <FilledButtonLg
-              title='Sign in'
-              color='black'
-              onPress={handleSignin}
-              textColor={Colors.textWhite}
-            />
-
-            {/* divider */}
-            <View style={[globalStyles.dividerDark,]} /> 
-
-            {/* Sign in with LinkedIn button */}
-            <OutlineButtonIconLLg
-              title='Sign in With LinkedIn'
-              color={Colors.textWhite}
-              onPress={()=> console.log('hello Linkedin')}
-              textColor={Colors.textWhite}
-              icon='linkedin'
-            />
-          
-            {isLoading && <ActivityIndicator size="small" color={Colors.secondary} />} 
-            
-
-            <Text style={{textAlign: 'center', marginTop: 16}}>
-              <Text style={[globalStyles.pText, globalStyles.textWhite]}>
-                Don't have any account?{" "}                   
-              </Text>
-              <Text style={[globalStyles.pText, globalStyles.textSecondary, globalStyles.textUnderline]}>
-                <Link href={"/(auth)/sign-up"}>
-                  Sign up
-                </Link>
-              </Text>
-            </Text> 
-                  
-        </View>
-    
-      </View>
-    </SafeAreaView>
-  )
-}
-
+export default SignIn;

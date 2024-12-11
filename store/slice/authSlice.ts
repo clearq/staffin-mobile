@@ -1,147 +1,207 @@
-import { Staffin_API } from "@/api/API"
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { Staffin_API } from "../../api/API";
+import { User } from "../../api/user";
 
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface UserData {
+export interface AuthResponse {
   token: string;
   id: number;
   role: number;
 }
 
-interface AuthState {
-  userData: UserData | null;
+export interface AdminAuth {
+  auth: AuthResponse;
+  companyUserId: number;
+}
+
+
+export interface AuthState {
+  user: User | null
+  authUser : AuthResponse | null
+  isAuthenticated: boolean;
   isLoading: boolean;
-  isSuccess: boolean;
-  isError: boolean;
-  isAdmin: boolean;
-  message: string;
+  error: string | null;
 }
 
 const initialState: AuthState = {
-  userData: null,
+  user: null,
+  authUser: null,
+  isAuthenticated: false,
   isLoading: false,
-  isSuccess: false,
-  isError: false,
-  isAdmin: false,
-  message: '',
+  error: null,
 };
 
-// Sign-in
-export const signin = createAsyncThunk('signin', async (params:object, thunkAPI) => {
-  console.log('file: AuthSlice signin params', params)
-  try{
-    const response = await Staffin_API.post('Auth/login', params)
-    return response.data;
-    
-  } catch(error:any){
-    console.log('file: AuthSlice signin error', error);
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Login failed')
+// Thunks
+export const login = createAsyncThunk(
+  "auth/login",
+  async ({ email, password }: { email: string; password: string }, thunkAPI) => {
+    try {
+      const response = await Staffin_API.post<AuthResponse>("/Auth/login", { email, password });
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
+    }
   }
-})
+);
 
-// Sign-up as staff
-export const signupStaff = createAsyncThunk('signupStaff', async (params: { userName: string, email: string, password: string }, thunkAPI) => {
-  try {
-    const response = await Staffin_API.post('Auth/register/staff', params);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const signUpStaff = createAsyncThunk(
+  "auth/signUpStaff",
+  async (
+    { userName, email, password }: { userName: string; email: string; password: string },
+    thunkAPI
+  ) => {
+    try {
+      const response = await Staffin_API.post<AuthResponse>("/Auth/register/staff", {
+        userName,
+        email,
+        password,
+      });
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "SignUp failed");
+    }
   }
-});
+);
 
-// Sign-up as admin
-export const signupAdmin = createAsyncThunk('signupAdmin', async (params: { companyName: string, organisationNumber: string, email: string, password: string }, thunkAPI) => {
-  try {
-    const response = await Staffin_API.post('Auth/register/admin', params);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const signUpAdmin = createAsyncThunk(
+  "auth/signUpAdmin",
+  async (
+    {
+      companyName,
+      organisationNumber,
+      email,
+      password,
+    }: { companyName: string; organisationNumber: string; email: string; password: string },
+    thunkAPI
+  ) => {
+    try {
+      const response = await Staffin_API.post<AuthResponse>("/Auth/register/staff", {
+        companyName,
+        organisationNumber,
+        email,
+        password,
+      });
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "SignUp failed");
+    }
   }
-});
+);
 
-// Sign-out
-export const logout = createAsyncThunk('logout', async (_, thunkAPI) => {
+export const getCurrentUser = createAsyncThunk(
+  "auth/getCurrentUser",
+  async (userId: number, thunkAPI) => {
+    try {
+      const response = await Staffin_API.get<User>(`/User/GetUser-id?userId=${userId}`);
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch current user");
+    }
+  }
+);
+
+export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
     const response = await Staffin_API.post('Auth/logout'); 
     return response.data.message; // Success case
-  } catch (error:any) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Logout failed');
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to logout");
   }
 });
 
-const AuthSlice = createSlice({
-  name: 'authSlice',
+// Slice
+const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
-    setError: (state, action) => {
-      state.isError = action.payload;
-    },
   },
   extraReducers: (builder) => {
-    // sign in cases
-    builder.addCase(signin.pending, (state)=>{
+    // Login
+    builder.addCase(login.pending, (state) => {
       state.isLoading = true;
-      state.isError = false;
-      state.message = '';
+      state.error = null;
     });
-    builder.addCase(signin.fulfilled, (state, action) => {
+    builder.addCase(login.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.isSuccess = true;
-      state.userData = action.payload;
-      state.isAdmin = action.payload.role === 1;
+      state.authUser = {
+        id: action.payload.id,
+        token: action.payload.token,
+        role: action.payload.role,
+      };
+      state.isAuthenticated = true;
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
 
+    // Sign Up Staff
+    builder.addCase(signUpStaff.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
     });
-    builder.addCase(signin.rejected, (state, action) => {
+    builder.addCase(signUpStaff.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload as string
+      state.authUser = {
+        id: action.payload.id,
+        token: action.payload.token,
+        role: action.payload.role,
+      };
+      state.isAuthenticated = true;
     });
-    // sign up as staff cases
-    builder.addCase(signupStaff.pending, (state) => {
+    builder.addCase(signUpStaff.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
+
+    // Sign Up Admin
+    builder.addCase(signUpAdmin.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(signUpAdmin.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.authUser = {
+        id: action.payload.id,
+        token: action.payload.token,
+        role: action.payload.role,
+      };
+      state.isAuthenticated = true
+    });
+    builder.addCase(signUpAdmin.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    })
+
+    // Current User
+    builder.addCase(getCurrentUser.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(signupStaff.fulfilled, (state, action) => {
+    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.isSuccess = true;
-      state.userData = action.payload;state.isAdmin = state.isAdmin = action.payload.role === 1;
+      state.user = action.payload;
     });
-    builder.addCase(signupStaff.rejected, (state) => {
+    builder.addCase(getCurrentUser.rejected, (state, action) => {
       state.isLoading = false;
-      state.isError = true;
-    });
-    // sign up as admin cases
-    builder.addCase(signupAdmin.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(signupAdmin.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = true;
-      state.userData = action.payload;
-      state.isAdmin = action.payload.role === 1;
-    });
-    builder.addCase(signupAdmin.rejected, (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    });
-    //Sign out
+      state.error = action.payload as string;
+    })
+
+    // Logout
     builder.addCase(logout.pending, (state) => {
       state.isLoading = true;
-    })
-    builder.addCase(logout.fulfilled, (state, action) => {
+      state.error = null;
+    });
+    builder.addCase(logout.fulfilled, (state) => {
       state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.userData = null;
-      state.isAdmin = false;
-      state.message = action.payload as string; 
-    })
+      state.authUser = null;
+      state.user = null;
+      state.isAuthenticated = false;
+    });
     builder.addCase(logout.rejected, (state, action) => {
       state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload as string;
-    });
-  },
+      state.error = action.payload as string;
+    })
+  }
 });
 
-export const { setError } = AuthSlice.actions;
-export default AuthSlice.reducer
+export default authSlice.reducer;

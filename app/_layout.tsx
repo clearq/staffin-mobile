@@ -1,14 +1,29 @@
-import { Stack } from 'expo-router/stack';
+
+import { Stack, SplashScreen } from 'expo-router';
 import { useFonts } from 'expo-font';
-import React, { useEffect } from 'react';
-import { Slot, SplashScreen } from 'expo-router';
-
-import { Provider, useSelector } from 'react-redux';
-import { store, RootState } from '@/store/store';
-import Layout from './(app)/_layout';
-
+import { StatusBar } from "expo-status-bar";
+import { Provider, useSelector } from "react-redux";
+import { RootState, store } from "@/store/store";
+import { useEffect } from 'react';
+import { useRouter } from "expo-router"; 
+import React from 'react';
 
 SplashScreen.preventAutoHideAsync();
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+  useEffect(() => {
+    console.log('ProtectedRoute:', isAuthenticated);
+    
+    if (!isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated]);
+
+  return isAuthenticated ? <>{children}</> : null;
+};
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
@@ -16,28 +31,33 @@ export default function RootLayout() {
     "Inter-Medium": require("../assets/fonts/Inter_24pt-Medium.ttf"),
     "Inter-Regular":require("../assets/fonts/Inter_24pt-Regular.ttf"),
     "Inter-SemiBold":require("../assets/fonts/Inter_24pt-SemiBold.ttf"),
-    "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
-    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
-    "Poppins-ExtraLight": require("../assets/fonts/Poppins-ExtraLight.ttf"),
-    "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
-    "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
-    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
-    "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
 
+  // It loads custom fonts asynchronously during the app's startup.
   useEffect(() => {
     if (error) throw error;
+    // Indicates whether the fonts have been successfully loaded.
     if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error]);
 
   if (!fontsLoaded && !error) return null;
 
   return (
-    <Provider store={store}>
-      <Slot />
-    </Provider>
+    <>
+      <Provider store={store}>
+        <Stack>
+          <Stack.Screen name="index" options={{headerShown: false, title: "Onboarding"}} />
+          <Stack.Screen name="(auth)" options={{headerShown: false}} />
+
+          <ProtectedRoute>
+            <Stack.Screen name="(staff)" options={{headerShown: false}} />
+            <Stack.Screen name="(admin)" options={{headerShown: false}} />
+            <Stack.Screen name="(employer)" options={{headerShown: false}} />
+            {/* <Stack.Screen name="/search/[query]" options={{headerShown: false}} />
+            <Stack.Screen name="/user/[id]" options={{headerShown: false}} /> */}
+          </ProtectedRoute>
+        </Stack>
+      </Provider>
+    </>
   );
 }
-

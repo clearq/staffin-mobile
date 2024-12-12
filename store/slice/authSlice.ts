@@ -75,7 +75,7 @@ export const signUpAdmin = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const response = await Staffin_API.post<AuthResponse>("/Auth/register/staff", {
+      const response = await Staffin_API.post<AuthResponse>("/Auth/register/admin", {
         companyName,
         organisationNumber,
         email,

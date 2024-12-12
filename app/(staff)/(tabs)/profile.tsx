@@ -25,8 +25,9 @@ const StaffProfile = () => {
     { user !== null && !isLoading && (
       <View>
         <Text>Staff Profile</Text>
-        <Text>Name: {user.firstName}</Text>
-        <Text>Email: {user.lastName}</Text>
+        <Text>Firstnname: {user.firstName}</Text>
+        <Text>Lastname: {user.lastName}</Text>
+        <Text>E-mail: {user.email}</Text>
       </View>
     )}
     </View>

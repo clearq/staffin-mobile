@@ -18,6 +18,16 @@ export const globalStyles = StyleSheet.create({
     paddingHorizontal:16,
   },
 
+  //Text
+  titleText:{
+    fontFamily:'Inter-Bold',
+    fontSize:24,
+  },
+  subTitleText:{
+    fontFamily:'Inter-SemiBold',
+    fontSize:18,
+  },
+
   // logo-image
   logoFullSize:{
     maxWidth: 380,

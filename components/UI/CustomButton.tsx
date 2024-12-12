@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   btnTextLg:{
-    fontFamily: 'Inter-Medium',
+    fontFamily: 'Inter-SemiBold',
     fontSize: 18,
     textAlign: 'center',
     textAlignVertical: 'bottom',

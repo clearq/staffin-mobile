@@ -1,79 +1,78 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet, Alert, ImageBackground, Image, TouchableOpacity } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Link, useRouter } from "expo-router"; 
+import { View, Text, StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'expo-router';
 
-//Redux
+// Redux
 import { useAppDispatch, useAppSelector } from "@/store/reduxHooks";
-import { login, getCurrentUser } from "@/store/Slice/authSlice";
-//UI
+import { getCurrentUser, signUpStaff } from "@/store/Slice/authSlice"
+
+// UI
 import { TextInput } from 'react-native-paper';
-import { globalStyles } from "@/constants/globalStyles";
-import { colors } from "@/constants/colors";
-import { ButtonLg } from "@/components/UI/CustomButton";
-import  logo  from "../../assets/Images/icon.png"
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { colors } from '@/constants/colors';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { ButtonLg } from '@/components/UI/CustomButton';
 
 
-const SignIn = () => {
+const Staff = () => {
   const router = useRouter();
   const dispatch = useAppDispatch(); 
   const [showPassword, setShowPassword] = useState(false);
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { authUser, isLoading, error } = useAppSelector((state) => state.auth)
 
-  const handleLogin = async () => {
-    if (!email || !password) {
+  const handleSignUp = async () => {
+    if (!userName || !email || !password) {
       alert("All fields are required!");
       return;
     }
-    const result = await dispatch(login({ email, password }))
 
-    if(login.fulfilled.match(result)) {
-      console.log("Login successful:", result.payload);
-      
-      // Login successful: dispatch getCurrentUser
+    const result = await dispatch(signUpStaff({ userName, email, password }));
+
+    if (signUpStaff.fulfilled.match(result)) {
+      console.log("Sign-up successful:", result.payload);
+
       const userId = result.payload.id;
       const currentUserResult = await dispatch(getCurrentUser(userId));
 
       if (getCurrentUser.fulfilled.match(currentUserResult)) {
         console.log("Fetched current user:", currentUserResult.payload);
-    
-
       } else {
         console.error("Failed to fetch current user:", currentUserResult.payload);
       }
     } else {
-      console.error("Login failed:", error);
+      console.error("Sign-up failed:", error);
     }
   };
 
   useEffect(() => {
     if (!isLoading && authUser) {
-      if (authUser.role === 1) {       
-        router.push('/(admin)/(tabs)/dashboard');
-        console.log('role:', authUser.role);      
-      } else if (authUser.role === 3) {
-        router.push('/(staff)/(tabs)/home');
-        console.log('role:', authUser.role);
+      if (authUser.role === 3) {
+        router.push("/(staff)/(tabs)/home");
+        console.log("Navigating to staff home...");
       }
     }
   }, [authUser, isLoading]);
 
+  
   return (
-    <SafeAreaView style={[globalStyles.container, globalStyles.paddingX, {backgroundColor: colors.primaryDark}]}> 
-
-    <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Image source={logo} style={{width:80, height:80}}  />
-        <Text style={[globalStyles.titleText, {color:colors.white}]}>
-          Sign In
-        </Text>
-      </View>
-
+    <View style={[styles.container, {width:'100%'}]}>
 
       <View style={styles.formContainer}>
+        <TextInput
+          textColor={colors.white}
+          style={styles.textInputStyle}
+          label="User Name"
+          placeholder="User Name"
+          placeholderTextColor={colors.white70}
+          value={userName}
+          onChangeText={userName => setUserName(userName)}
+          mode="outlined"
+          autoCapitalize="none"
+          theme={theme}
+        />
+
         <TextInput
           textColor={colors.white}
           style={styles.textInputStyle}
@@ -113,41 +112,25 @@ const SignIn = () => {
           }
         />
 
-        <Text style={[styles.link, {alignSelf:'flex-end'}]}>Forget password?</Text>
-
+      
       </View>
 
-
       <ButtonLg
-        title={isLoading ? "Logging in..." : "Sign In"}
+        title={isLoading ? "Loading..." : "Sign Up"}
         containerStyles={styles.btnBlack}
         textColor={colors.white}
         isLoading={false} 
-        handlePress={handleLogin}      
+        handlePress={handleSignUp}      
       />
-
-      <View style={{flexDirection:'row', alignItems:'center'}}>
-        <Text style={{color:colors.white, fontFamily:'Inter-Regular', fontSize:16}}>Don't have an account? </Text>
-        <Link href={"/(auth)/sign-up"} style={styles.link}>
-          <Text>Sign Up</Text>
-        </Link>
-      </View>
-
     </View>
+  )
+}
 
-
-    </SafeAreaView>
-  );
-};
-
-export default SignIn;
+export default Staff
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    padding: 16,
     gap:24,
   },
   titleContainer:{

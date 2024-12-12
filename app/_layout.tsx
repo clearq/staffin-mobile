@@ -7,6 +7,9 @@ import { RootState, store } from "@/store/store";
 import { useEffect } from 'react';
 import { useRouter } from "expo-router"; 
 import React from 'react';
+import { MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { colors } from '@/constants/colors';
+
 
 SplashScreen.preventAutoHideAsync();
 

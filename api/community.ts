@@ -64,7 +64,26 @@ const getPostDetails = async (postId: number, token: string): Promise<PostDetail
   }
 };
 
+// Get users posts and shares
+const getUserPostsAndShares = async (userId: number, token: string): Promise<Post[]> => {
+  try {
+    const response = await Staffin_API.get<Post[]>(
+      `/Community/GetUserPostsAndShares?userId=${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user posts:", error);
+    throw error;
+  }
+};
+
 export {
   getFeed,
   getPostDetails,
+  getUserPostsAndShares,
 }

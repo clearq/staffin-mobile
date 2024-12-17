@@ -22,37 +22,40 @@ const SignIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { authUser, isLoading, error } = useAppSelector((state) => state.auth)
+  
 
   const handleLogin = async () => {
     if (!email || !password) {
       alert("All fields are required!");
       return;
     }
-    const result = await dispatch(login({ email, password }))
-
-    if(login.fulfilled.match(result)) {
-      console.log("Login successful:", result.payload);
-      
-      // Login successful: dispatch getCurrentUser
-      const userId = result.payload.id;
-      const currentUserResult = await dispatch(getCurrentUser(userId));
-
-      if (getCurrentUser.fulfilled.match(currentUserResult)) {
-        console.log("Fetched current user:", currentUserResult.payload);
-    
-
+    try {
+      const result = await dispatch(login({ email, password }));
+  
+      if (login.fulfilled.match(result)) {
+        console.log("Login successful:", result.payload);
+  
+        // Login successful: dispatch getCurrentUser
+        const userId = result.payload.id;
+        const currentUserResult = await dispatch(getCurrentUser(userId));
+  
+        if (getCurrentUser.fulfilled.match(currentUserResult)) {
+          console.log("Fetched current user:", currentUserResult.payload);
+        } else {
+          console.error("Failed to fetch current user:", currentUserResult.payload);
+        }
       } else {
-        console.error("Failed to fetch current user:", currentUserResult.payload);
+        console.error("Login failed:", result.payload || result.error);
       }
-    } else {
-      console.error("Login failed:", error);
+    } catch (err) {
+      console.error("Unexpected error during login:", err);
     }
   };
 
   useEffect(() => {
     if (!isLoading && authUser) {
       if (authUser.role === 1) {       
-        router.push('/(admin)/(tabs)/dashboard');
+         router.push('/(admin)/(tabs)/dashboard');
         console.log('role:', authUser.role);      
       } else if (authUser.role === 3) {
         router.push('/(staff)/(tabs)/home');

@@ -7,9 +7,12 @@ import logo from '../assets/Images/icon.png'
 import { ButtonLg } from '@/components/UI/CustomButton'
 import { colors } from '@/constants/colors'
 
+import { useAppSelector } from "@/store/reduxHooks";
+import { login, getCurrentUser } from "@/store/Slice/authSlice";
+
 const onboarding = () => {
   const router = useRouter();
-
+  const { user, authUser } = useAppSelector((state) => state.auth);
   
   return (
     <SafeAreaView style={[globalStyles.container, globalStyles.paddingX, {backgroundColor: 'black'}]}> 

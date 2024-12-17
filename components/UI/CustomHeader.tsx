@@ -1,37 +1,73 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
 
 import logo from '../../assets/Images/favicon.png'
 import { colors } from '@/constants/colors'
-import { useAppDispatch } from '@/store/reduxHooks'
-import { useRouter } from 'expo-router'
-import { logout } from '@/store/Slice/authSlice'
 
-const CustomHeader = () => {
-  const dispatch = useAppDispatch();
-  const router = useRouter();
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 
-  const handleLogout = async() => {
-    try {
-      await dispatch(logout()).unwrap(); 
-      router.push('/(auth)/sign-in');
-      console.log('logout')
-    } catch (error) {
-      console.error('Logout failed', error);
-    }
-  }
+type props={
+  handlePress: () => void
+}
+
+const CustomHeader = ({handlePress}:props) => {
 
   return (
-    <View style={{flexDirection:'row', justifyContent:'space-between', backgroundColor:colors.primaryLight, width:'100%', height:70, paddingHorizontal:16, alignItems:'center' }}>
-      <Image source={logo} width={40} height={40} resizeMode='cover'/>
+    <View style={[styles.container]}>
+      <View style={[styles.buttonGroup]}>
+        <Image source={logo} width={40} height={40} resizeMode='cover'/>
 
+        <TextInput
+          placeholder='Search'
+          
+          style={{
+            height:32,
+            backgroundColor:colors.white40,
+            borderRadius:4
+          }}
+        />
+          {/* <MaterialCommunityIcons name='magnify' />
+          <Text>Search</Text>
+        </TextInput> */}
+      </View>
+      
+
+     
+     <View style={[styles.buttonGroup]}>
       <TouchableOpacity
-        onPress={handleLogout}
-      >
-        <Text>Logout</Text>
-      </TouchableOpacity>
+          onPress={()=>{}}
+        >
+          <MaterialCommunityIcons name='bell-outline' size={24} color={colors.gray} />
+          {/* <Text>Logout</Text> */}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={handlePress}
+        >
+          <MaterialCommunityIcons name='cog-outline' size={24} color={colors.gray} />
+        </TouchableOpacity>
+     </View>
+
+      
     </View>
   )
 }
 
 export default CustomHeader
+
+const styles = StyleSheet.create({
+  container:{ 
+    flexDirection:'row', 
+    backgroundColor:colors.primaryLight, 
+    justifyContent:'space-between',
+    height:70, 
+    paddingHorizontal:16, 
+    alignItems:'center',  
+    position: 'relative'
+  },
+  buttonGroup: {
+    flexDirection:'row',
+    alignItems:'center',
+    gap:8,
+  }
+})

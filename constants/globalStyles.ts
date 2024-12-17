@@ -17,6 +17,9 @@ export const globalStyles = StyleSheet.create({
   paddingX:{
     paddingHorizontal:16,
   },
+  paddingY:{
+    paddingVertical:16,
+  },
 
   //Text
   titleText:{
@@ -26,6 +29,10 @@ export const globalStyles = StyleSheet.create({
   subTitleText:{
     fontFamily:'Inter-SemiBold',
     fontSize:18,
+  },
+  smText:{
+    fontFamily: 'Inter-Regular',
+    fontSize:12,
   },
 
   // logo-image

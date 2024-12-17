@@ -2,26 +2,9 @@ import { View, Image, Button } from 'react-native'
 import { Tabs, useRouter } from 'expo-router'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { colors } from '@/constants/colors';
-import logo from '../../../assets/Images/favicon.png'
-import { useAppDispatch } from '@/store/reduxHooks';
-import { logout } from '@/store/Slice/authSlice';
 
 
 const StaffTabsLayout = () => {
-
-  //Logout
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-
-  const handleLogout = async() => {
-    try {
-      await dispatch(logout()).unwrap(); 
-      router.push('/(auth)/sign-in');
-      console.log('logout')
-    } catch (error) {
-      console.error('Logout failed', error);
-    }
-  }
 
   return (
     <Tabs
@@ -41,7 +24,7 @@ const StaffTabsLayout = () => {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
-        headerRight: () =>  <Button onPress={handleLogout } title="Log Out" />,
+        // headerRight: () =>  <Button onPress={handleLogout } title="Log Out" />,
         // headerLeft:() => ;
       }} 
     >
@@ -50,7 +33,7 @@ const StaffTabsLayout = () => {
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="home-outline" color={color} />,
-            headerShown: true
+            headerShown: false
           }}
         />
         <Tabs.Screen 
@@ -58,7 +41,7 @@ const StaffTabsLayout = () => {
           options={{
             title: "Chat",
             tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="chat-outline" color={color} />,
-            headerShown: true
+            headerShown: false
           }}
         />
         <Tabs.Screen 
@@ -66,7 +49,7 @@ const StaffTabsLayout = () => {
           options={{
             title: "Profile",
             tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="account-circle-outline" color={color} />,
-            headerShown: true
+            headerShown: false
           }}
         />
         <Tabs.Screen 
@@ -74,7 +57,7 @@ const StaffTabsLayout = () => {
           options={{
             title: "Jobs",
             tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="briefcase-outline" color={color} />,
-            headerShown: true
+            headerShown: false
           }}
         />
         <Tabs.Screen 
@@ -82,7 +65,7 @@ const StaffTabsLayout = () => {
           options={{
             title: "Network",
             tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="account-group-outline" color={color} />,
-            headerShown: true
+            headerShown: false
           }}
         />
       </Tabs>

@@ -13,12 +13,12 @@ import { colors } from '@/constants/colors';
 
 SplashScreen.preventAutoHideAsync();
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   useEffect(() => {
-    console.log('ProtectedRoute:', isAuthenticated);
+    console.log('AuthProvider:', isAuthenticated);
     
     if (!isAuthenticated) {
       router.push("/");
@@ -52,13 +52,13 @@ export default function RootLayout() {
           <Stack.Screen name="index" options={{headerShown: false, title: "Onboarding"}} />
           <Stack.Screen name="(auth)" options={{headerShown: false}} />
 
-          <ProtectedRoute>
+          <AuthProvider>
             <Stack.Screen name="(staff)" options={{headerShown: false}} />
             <Stack.Screen name="(admin)" options={{headerShown: false}} />
             <Stack.Screen name="(employer)" options={{headerShown: false}} />
             {/* <Stack.Screen name="/search/[query]" options={{headerShown: false}} />
             <Stack.Screen name="/user/[id]" options={{headerShown: false}} /> */}
-          </ProtectedRoute>
+          </AuthProvider>
         </Stack>
       </Provider>
     </>

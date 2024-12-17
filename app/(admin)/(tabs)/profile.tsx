@@ -1,3 +1,4 @@
+
 import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useAppSelector } from "@/store/reduxHooks";
@@ -47,6 +48,7 @@ const AdminProfile = () => {
   
   return (
     <View>
+      <Text>Admin</Text>
     { user !== null && !isLoading && (
       <View>
         <Text>Staff Profile</Text>

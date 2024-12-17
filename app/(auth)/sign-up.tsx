@@ -112,10 +112,12 @@ const styles = StyleSheet.create({
     gap:8,
   },
   btnOrange:{
-    backgroundColor:colors.secondary
+    backgroundColor:colors.secondary,
+    borderColor:colors.secondary,
   },
   btnBlue:{
-    backgroundColor:colors.primary
+    backgroundColor:colors.primary,
+    borderColor:colors.primary
   },
   btnOutline:{
     borderColor:colors.white

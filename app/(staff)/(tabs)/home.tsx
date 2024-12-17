@@ -13,8 +13,9 @@ const Home = () => {
 
   useEffect(() => {
 
+    let isMounted = true; 
     console.log('fetch feed/token;', token);
-    
+
     const fetchFeed = async () => {
       if (!token) {
         setError("No authentication token found.");
@@ -24,16 +25,20 @@ const Home = () => {
 
       try {
         const feed = await getFeed(token);
-        setPosts(feed);
+        if (isMounted) setPosts(feed);
       } catch (err: any) {
-        setError(err.message || "Failed to fetch feed.");
+        if (isMounted) setError(err.message || "Failed to fetch feed.");
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
-    fetchFeed();
-  }, [token]);
+    if (token) fetchFeed();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   
   return (

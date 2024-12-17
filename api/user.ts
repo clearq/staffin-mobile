@@ -16,10 +16,40 @@ export interface User {
   roleId: number;
   companyId?: number;
   companyName?: string;
-  educations?: any[];
-  skills?: any[];
-  languages?: any[];
-  experience?: any[];
+  educations?: Education[];
+  skills?: Skill[];
+  languages?: Language[];
+  experience?: Experience[];
+}
+
+interface Experience {
+  id: number;
+  position: string;
+  description: string;
+  companyName: string;
+  location: string;
+  startDate: string; // ISO 8601 format
+  endDate: string; // ISO 8601 format
+}
+
+interface Skill {
+  id: number;
+  name: string;
+}
+
+interface Language {
+  id: number;
+  name: string;
+  rating: number;
+}
+
+interface Education {
+  id: number;
+  name: string;
+  institution: string;
+  startDate: string;
+  endDate: string; // ISO 8601 format
+  staffId: number // ISO 8601 format
 }
 
 // Get User Info

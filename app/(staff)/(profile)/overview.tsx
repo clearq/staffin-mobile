@@ -55,7 +55,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
           <View style={[styles.infoItem]}>
             <MaterialCommunityIcons name='email' size={16} color={colors.gray} />
             <Text style={[styles.itemTitle]}>Email:</Text>
-            <Text style={[styles.item]}>{user.email}</Text>
+            <Text style={[styles.item]}>{user?.email}</Text>
           </View>
         </CardBody>
       </View>
@@ -134,7 +134,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
         />
         <CardBody>
           <View style={[{flexDirection:'column', gap:8}]}>
-            {user.experience && user.experience.map(exp => (
+            {user?.experience && user?.experience.map(exp => (
               <View key={exp.id}>
                 <Text style={[globalStyles.subTitleText]}>
                   {exp.position}                 
@@ -174,7 +174,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
         />
         <CardBody>
           <View style={[{flexDirection:'column', gap:8}]}>
-            {user.educations && user.educations.map(edu => [
+            {user?.educations && user.educations.map(edu => [
               <View key={edu.id}>
                 <Text style={[globalStyles.subTitleText]}>
                   {edu.name}                 
@@ -204,7 +204,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
         />
         <CardBody>
           <View style={{flexDirection:'row', flexWrap:'wrap', gap:8}}>
-            {user.skills && user.skills.map(skill => (
+            {user?.skills && user.skills.map(skill => (
               <View key={skill.id} style={{padding:8, backgroundColor:colors.primary, borderRadius:8}}>
                 <Text style={[styles.item, {color:colors.white}]}>
                   {skill.name}
@@ -223,7 +223,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
         />
         <CardBody>
         <View style={[{flexDirection:'column', gap:8}]}>
-        {user.languages && user.languages.length > 0 ? (
+        {user?.languages && user.languages.length > 0 ? (
           user.languages
             .slice()  // Create a shallow copy of the array
             .sort((a, b) => b.rating - a.rating)  // Sort the copied array

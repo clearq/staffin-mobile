@@ -1,4 +1,5 @@
 import { Staffin_API } from "./API";
+import { User } from "./user";
 
 export interface CVResponse {
   name: string;
@@ -78,4 +79,18 @@ const getCV = async (token: string): Promise<CVResponse> => {
   }
 };
 
-export { generateCV, downloadCV, getCV };
+const updateStaff = async (userData: Partial<User>, token: string) => {
+  try {
+    const response = await Staffin_API.put("Staff/UpdateStaff", userData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error("UpdateUser error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Failed to update user profile");
+  }
+};
+
+export { generateCV, downloadCV, getCV, updateStaff };

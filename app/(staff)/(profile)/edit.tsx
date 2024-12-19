@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet,} from 'react-native'
 import React, { useState } from 'react'
 import { ButtonMd } from '@/components/UI/CustomButton';
 import { colors } from '@/constants/colors';
@@ -7,10 +7,13 @@ import { User } from '@/api/user';
 import StaffInformation from './(Edit)/information';
 import StaffExperience from './(Edit)/experience';
 import StaffEducations from './(Edit)/educations';
+import { useAppSelector } from '@/store/reduxHooks';
+import { useRouter } from 'expo-router';
 
 type StaffProfileEditProps = {
   user:User
   initialScreen: 'information' | 'experience' | 'education';
+  token:string
 };
 
 type Menu = {
@@ -37,21 +40,15 @@ const editMenu:Menu[] = [
   },
 ]
 
-const StaffProfileEdit = ({ initialScreen, user }: StaffProfileEditProps) => {
+const StaffProfileEdit = ({ initialScreen, user, token }: StaffProfileEditProps) => {
   const [screen, setScreen] = useState(initialScreen);
-  const [firstName, setFirstName] = useState(user.firstName)
-  const [lastName, setLastName] = useState(user.lastName)
-  const [street, setStreet] = useState(user.street)
-  const [city, setCity] = useState(user.city)
-  const [postalCode, setPostalCode] = useState(user.postalCode)
-  const [country, setCountry] = useState(user.country)
-  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber)
-  const [email, setEmail] = useState(user.email)
-  const [about, setAbout] = useState(user.about)
+  const [currentUser, setCurrentUser] = useState(user); 
+  const [isLoading, setIsLoading] = useState(false); 
+  const router = useRouter()
 
 
   return (
-    <View style={[globalStyles.container, globalStyles.paddingX, {gap:8}]}>
+    <View style={[globalStyles.container, globalStyles.paddingX, {gap:8,}]}>
 
       {/* Sub menu buttons */}
       <View style={styles.btnGroup}>
@@ -79,6 +76,7 @@ const StaffProfileEdit = ({ initialScreen, user }: StaffProfileEditProps) => {
       {screen === 'information' &&
         <StaffInformation
           user={user} 
+          token={token}
         />
       }
 
@@ -111,11 +109,8 @@ const styles = StyleSheet.create({
   btnGroup: {
     flexDirection:'row', 
     gap:8, 
-    justifyContent:'flex-end'
-  },
-  btnOrange:{
-    backgroundColor:colors.secondary,
-    borderColor:colors.secondary,
+    justifyContent:'flex-end',
+    flex:1,
   },
   iconButton: {
     justifyContent:'center',
@@ -124,6 +119,7 @@ const styles = StyleSheet.create({
     borderRadius:8,
     paddingHorizontal:8,
     height:32,
+    flexShrink:2,
   },
   iconButtonOutline: {
     justifyContent:'center',
@@ -133,5 +129,6 @@ const styles = StyleSheet.create({
     borderRadius:8,
     paddingHorizontal:8,
     height:32,
+    flexShrink:2,
   }
 })

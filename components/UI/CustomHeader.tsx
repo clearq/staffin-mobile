@@ -19,21 +19,21 @@ const CustomHeader = ({handlePress}:props) => {
 
         <TextInput
           placeholder='Search'
-          
+          placeholderTextColor={colors.gray}       
           style={{
             height:32,
             backgroundColor:colors.white40,
-            borderRadius:4
+            borderRadius:4,
+            minWidth:150,
+            padding:8
           }}
         />
           {/* <MaterialCommunityIcons name='magnify' />
           <Text>Search</Text>
         </TextInput> */}
-      </View>
-      
-
+      </View>     
      
-     <View style={[styles.buttonGroup]}>
+     <View style={[styles.buttonGroup,]}>
       <TouchableOpacity
           onPress={()=>{}}
         >

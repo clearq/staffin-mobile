@@ -16,7 +16,6 @@ const ProfileHeader = ({username, title, image, isCurrentUser}:props) => {
   return (
     <View style={[styles.container]}>
       <View style={styles.textAreaContainer}>
-
         
         <View style={[styles.avatar,]}>
           {image 

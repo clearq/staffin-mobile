@@ -16,6 +16,8 @@ import Admin from './signup-form/admin';
 
 const SignUp = () => {
   const [role, setRole] = useState<'staff'|'admin'|'none'>('none')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   return (
     <SafeAreaView style={[globalStyles.container, globalStyles.paddingX, {backgroundColor: colors.primaryDark}]}> 
 
@@ -41,7 +43,7 @@ const SignUp = () => {
               handlePress={() => setRole('staff')} 
               containerStyles={styles.btnOrange}
               textColor={colors.white} 
-              isLoading={false} 
+              isLoading={isLoading} 
             />
 
             <ButtonLg 
@@ -49,7 +51,7 @@ const SignUp = () => {
               handlePress={() => setRole('admin')} 
               containerStyles={styles.btnBlue}
               textColor={colors.white} 
-              isLoading={false} 
+              isLoading={isLoading} 
             />
           </View>
         }
@@ -62,7 +64,7 @@ const SignUp = () => {
             handlePress={() => setRole('none')} 
             containerStyles={styles.btnOutline}
             textColor={colors.white} 
-            isLoading={false} 
+            isLoading={isLoading} 
             />      
           </>
         }
@@ -75,7 +77,7 @@ const SignUp = () => {
             handlePress={() => setRole('none')} 
             containerStyles={styles.btnOutline}
             textColor={colors.white} 
-            isLoading={false} 
+            isLoading={isLoading} 
             />
           </>
         }

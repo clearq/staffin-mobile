@@ -122,11 +122,11 @@ const SignIn = () => {
 
 
       <ButtonLg
-        title={isLoading ? "Logging in..." : "Sign In"}
+        title={isLoading ? "Logging in... " : "Sign In"}
         containerStyles={styles.btnBlack}
         textColor={colors.white}
-        isLoading={false} 
-        handlePress={handleLogin}      
+        isLoading={isLoading} 
+        handlePress={handleLogin}         
       />
 
       <View style={{flexDirection:'row', alignItems:'center'}}>

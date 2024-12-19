@@ -119,7 +119,7 @@ const Staff = () => {
         title={isLoading ? "Loading..." : "Sign Up"}
         containerStyles={styles.btnBlack}
         textColor={colors.white}
-        isLoading={false} 
+        isLoading={isLoading} 
         handlePress={handleSignUp}      
       />
     </View>

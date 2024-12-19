@@ -48,7 +48,6 @@ const staffProfileMenu:Menu []= [
   },
 ]
 
-
 const StaffProfile = () => {
   const { authUser, user, isLoading:userLoading, error:userError } = useAppSelector((state) => state.auth);
 
@@ -76,8 +75,6 @@ const StaffProfile = () => {
   };
 
   const handleGenerateCV = async () => {
-    const token = authUser?.token;
-
     if (!token) {
       Alert.alert("Error", "No token found.");
       return;
@@ -93,21 +90,18 @@ const StaffProfile = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     console.log("Redux state - user Id:", user?.id)
   },[user, userLoading, userError])
 
   useEffect(() => {
-    console.log('user', user?.id);
-    
-    if(authUser && authUser.id) {
+    if (authUser && authUser.id && token) {
       const fetchPosts = async () => {
         try {
           setLoading(true);
           setError(null);
-          const token = authUser.token;
           const fetchedPosts = await getUserPostsAndShares(authUser.id, token);
           setPosts(fetchedPosts);
         } catch (err) {
@@ -119,8 +113,7 @@ const StaffProfile = () => {
       };
       fetchPosts();
     }
-  }, [authUser]);
-
+  }, [authUser, token]);
   
   if (userLoading || loading) {
     return <ActivityIndicator size="large" color={colors.primaryLight} />;
@@ -140,7 +133,7 @@ const StaffProfile = () => {
       
       { user !== null && !userLoading && !loading &&  (
   
-        <View style={{flex:1, gap:16,}}>
+        <View style={{flex:1}}>
 
           <ProfileHeader
             username={`${user.firstName} ${user.lastName}`}
@@ -150,15 +143,14 @@ const StaffProfile = () => {
           />
 
           {/* Menu */}
-          <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+          <View style={{flexDirection:'row', justifyContent:'space-between',marginTop:16, marginBottom:8 }}>
             {staffProfileMenu.map(menu => (
               <TouchableOpacity 
                 key={menu.id}
                 onPress={() => setScreen(menu.screen)}
                 style={{
                   flex:1/4,
-                  backgroundColor:colors.white,
-                  paddingHorizontal:16, 
+                  backgroundColor:colors.white, 
                   paddingTop:8,
                   justifyContent:'space-between',
                   flexDirection:'column',
@@ -170,7 +162,7 @@ const StaffProfile = () => {
                   color: menu.screen === screen 
                     ? colors.secondary
                     : colors.gray,
-                  fontSize:16,
+                  fontSize:14,
                   fontFamily: menu.screen === screen
                     ? 'Inter-Medium'
                     : 'Inter-Regular'
@@ -180,7 +172,7 @@ const StaffProfile = () => {
                 {menu.screen === screen &&
                   <View 
                     style={{
-                      borderWidth:4, 
+                      borderWidth:2, 
                       borderColor:colors.secondary,
                       width:'100%'
                     }}
@@ -190,7 +182,7 @@ const StaffProfile = () => {
             ))}
           </View>
 
-          <View style={{paddingVertical:16, flex:1}}>
+          <View style={{paddingVertical:8, flex:1}}>
             {screen === 'overview' &&
               <StaffOverview 
                 user={user}
@@ -210,10 +202,11 @@ const StaffProfile = () => {
                 token={token} 
               />
             }
-            {screen === 'edit' &&
+            {screen === 'edit' && token &&
               <StaffProfileEdit 
                 user={user}
                 initialScreen={editSubScreen} 
+                token={token}
               />
             }
           </View>

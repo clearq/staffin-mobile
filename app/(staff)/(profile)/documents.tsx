@@ -12,7 +12,7 @@ type prop = {
   token?:string
 }
 
-const StaffDocuments = ({token}:prop) => {
+const StaffDocuments = React.memo(({token}:prop) => {
   const [name, setName] = useState<string | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,7 +43,7 @@ const StaffDocuments = ({token}:prop) => {
         setLoading(false);
         return;
       }
-
+  
       try {
         const cvData = await getCV(token);
         setName(cvData.name);
@@ -55,7 +55,7 @@ const StaffDocuments = ({token}:prop) => {
       }
     };
     fetchCV();
-  }, [token]);
+  }, []);
 
 
   if (loading) {
@@ -139,7 +139,7 @@ const StaffDocuments = ({token}:prop) => {
       }
     </View>
   )
-}
+})
 
 export default StaffDocuments
 

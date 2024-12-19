@@ -6,7 +6,7 @@ type Props = {
   handlePress: ()=>void
   containerStyles: {}
   textColor: string
-  isLoading:boolean
+  isLoading: boolean
 }
 
 const ButtonLg = ({title, handlePress, containerStyles, textColor, isLoading}: Props) => {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     height: 32,
     borderRadius: 8,
     borderWidth: 1,

@@ -9,6 +9,7 @@ import CustomHeader from '@/components/UI/CustomHeader';
 import { colors } from '@/constants/colors';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import HeaderMenuModal from '@/components/UI/HeaderMenuModal';
+import React from 'react';
 
 const StaffLayout = () => {
 
@@ -35,10 +36,8 @@ const StaffLayout = () => {
         screenOptions={{
           header: () => <CustomHeader handlePress={() => {
             setOpenModal(true)
-            console.log(openModal);
-            
-          }} />,
-          
+            console.log(openModal);      
+          }} />,          
         }}
       >
         <Stack.Screen

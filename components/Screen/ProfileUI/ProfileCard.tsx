@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { colors } from '@/constants/colors'
 
+
 const styles = StyleSheet.create({
   cardContainer:{
     width:'100%',
@@ -50,8 +51,9 @@ type headerProps ={
   title: string
   isCurrentUser:boolean
   handlePress?:()=>void
+  children?:React.ReactNode
 }
-const CardHeader = ({title, isCurrentUser, handlePress}:headerProps) => {
+const CardHeader = ({title, isCurrentUser, handlePress, children}:headerProps) => {
 
   return(
     <View style={[styles.cardHeader]}>
@@ -63,6 +65,11 @@ const CardHeader = ({title, isCurrentUser, handlePress}:headerProps) => {
         >
           <MaterialCommunityIcons name='pencil-outline' size={20} color={colors.gray} />
         </TouchableOpacity>
+      )}
+      {title === 'Activity' && (
+        <View>
+          {children}
+        </View>
       )}
    </View>
   )

@@ -42,4 +42,49 @@ export const globalStyles = StyleSheet.create({
     height: 298,
     resizeMode: 'contain'
   },
+
+  // Button
+  btnBlack:{
+    backgroundColor:colors.black,
+    borderColor:colors.black
+  },
+  btnWhite:{
+    backgroundColor:colors.white,
+    borderColor:colors.white
+  },
+  btnOrange:{
+    backgroundColor:colors.secondary,
+    borderColor:colors.secondary,
+  },
+  btnBlue:{
+    backgroundColor:colors.primary,
+    borderColor:colors.primary
+  },
+  btnOutlineWhite:{
+    borderColor:colors.white,
+    borderWidth:1
+  },
+  btnOutlineBlue:{
+    borderColor:colors.primary,
+    borderWidth:1,
+  },
+  iconButtonBlack: {
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:colors.black, 
+    borderRadius:8,
+    paddingHorizontal:8,
+    height:32,
+    flexShrink:2,
+  },
+  iconButtonOutlineBlack: {
+    justifyContent:'center',
+    alignItems:'center',
+    borderColor:colors.black, 
+    borderWidth:1,
+    borderRadius:8,
+    paddingHorizontal:8,
+    height:32,
+    flexShrink:2,
+  },
 })

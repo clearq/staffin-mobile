@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet, Alert, ImageBackground, Image, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Link, useRouter } from "expo-router"; 
 
 //Redux
 import { useAppDispatch, useAppSelector } from "@/store/reduxHooks";
-import { login, getCurrentUser } from "@/store/Slice/authSlice";
+import { login } from "@/store/Slice/authSlice";
 //UI
 import { TextInput } from 'react-native-paper';
 import { globalStyles } from "@/constants/globalStyles";
@@ -33,16 +33,16 @@ const SignIn = () => {
       const result = await dispatch(login({ email, password }));
   
       if (login.fulfilled.match(result)) {
-        console.log("Login successful:", result.payload);
+        // console.log("Login successful:", result.payload);
+
+        const { role } = result.payload;
   
-        // Login successful: dispatch getCurrentUser
-        const userId = result.payload.id;
-        const currentUserResult = await dispatch(getCurrentUser(userId));
-  
-        if (getCurrentUser.fulfilled.match(currentUserResult)) {
-          console.log("Fetched current user:", currentUserResult.payload);
+        if (role === 1) {
+          router.push('/(admin)/(tabs)/dashboard');
+        } else if (role === 3) {
+          router.push('/(staff)/(tabs)/home');
         } else {
-          console.error("Failed to fetch current user:", currentUserResult.payload);
+          console.log("Role is not handled:", role);
         }
       } else {
         console.error("Login failed:", result.payload || result.error);
@@ -51,18 +51,6 @@ const SignIn = () => {
       console.error("Unexpected error during login:", err);
     }
   };
-
-  useEffect(() => {
-    if (!isLoading && authUser) {
-      if (authUser.role === 1) {       
-         router.push('/(admin)/(tabs)/dashboard');
-        console.log('role:', authUser.role);      
-      } else if (authUser.role === 3) {
-        router.push('/(staff)/(tabs)/home');
-        console.log('role:', authUser.role);
-      }
-    }
-  }, [authUser, isLoading]);
 
   return (
     <SafeAreaView style={[globalStyles.container, globalStyles.paddingX, {backgroundColor: colors.primaryDark}]}> 
@@ -123,7 +111,7 @@ const SignIn = () => {
 
       <ButtonLg
         title={isLoading ? "Logging in... " : "Sign In"}
-        containerStyles={styles.btnBlack}
+        containerStyles={globalStyles.btnBlack}
         textColor={colors.white}
         isLoading={isLoading} 
         handlePress={handleLogin}         
@@ -137,8 +125,6 @@ const SignIn = () => {
       </View>
 
     </View>
-
-
     </SafeAreaView>
   );
 };
@@ -161,12 +147,6 @@ const styles = StyleSheet.create({
   formContainer:{
     width:'100%',
     gap:8,
-  },
-  btnWhite:{
-    backgroundColor:colors.secondary
-  },
-  btnBlack:{
-    backgroundColor:colors.black
   },
   link:{
     fontFamily:'Inter-Regular',

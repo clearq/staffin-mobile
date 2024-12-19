@@ -1,12 +1,12 @@
 import { View, Text, ActivityIndicator, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-
+// API
 import { downloadCV, getCV } from '@/api/staff';
-
+// UI
 import { colors } from '@/constants/colors';
 import { globalStyles } from '@/constants/globalStyles';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { ButtonLg, ButtonMd } from '@/components/UI/CustomButton';
+import { ButtonMd } from '@/components/UI/CustomButton';
 
 type prop = {
   token?:string
@@ -78,8 +78,8 @@ const StaffDocuments = React.memo(({token}:prop) => {
 
         <TouchableOpacity 
           style={sortStyle === 'symbol' 
-            ? styles.iconButton 
-            : styles.iconButtonOutline
+            ? globalStyles.iconButtonBlack
+            : globalStyles.iconButtonOutlineBlack
           }
           onPress={() => setSortStyle('symbol')}
         >
@@ -95,8 +95,8 @@ const StaffDocuments = React.memo(({token}:prop) => {
         
         <TouchableOpacity 
           style={sortStyle === 'list' 
-            ? styles.iconButton 
-            : styles.iconButtonOutline
+            ? globalStyles.iconButtonBlack
+            : globalStyles.iconButtonOutlineBlack
           }
           onPress={() => setSortStyle('list')}
         >
@@ -113,7 +113,7 @@ const StaffDocuments = React.memo(({token}:prop) => {
         <ButtonMd 
           title='Download File'
           handlePress={handleDownloadCV}
-          containerStyles={styles.btnOrange}
+          containerStyles={globalStyles.btnOrange}
           textColor={colors.white}
           isLoading={loading}
         />
@@ -179,25 +179,4 @@ const styles = StyleSheet.create({
     justifyContent:'center', 
     alignItems:'center',
   },
-  btnOrange:{
-    backgroundColor:colors.secondary,
-    borderColor:colors.secondary,
-  },
-  iconButton: {
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:colors.black, 
-    borderRadius:8,
-    width:32,
-    height:32,
-  },
-  iconButtonOutline: {
-    justifyContent:'center',
-    alignItems:'center',
-    borderColor:colors.black, 
-    borderWidth:1,
-    borderRadius:8,
-    width:32,
-    height:32,
-  }
 })

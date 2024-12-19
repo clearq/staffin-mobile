@@ -2,12 +2,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Slot, Stack, useRouter, } from 'expo-router'
 import { useState } from 'react';
 
-import logo from '../../../assets/Images/favicon.png'
 import { useAppDispatch } from '@/store/reduxHooks';
 import { logout } from '@/store/Slice/authSlice';
 import CustomHeader from '@/components/UI/CustomHeader';
-import { colors } from '@/constants/colors';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import HeaderMenuModal from '@/components/UI/HeaderMenuModal';
 import React from 'react';
 

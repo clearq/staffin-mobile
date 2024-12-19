@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { getFeed, Post } from '@/api/community';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
+import { ActivityIndicator } from 'react-native-paper';
+import { colors } from '@/constants/colors';
 
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -14,7 +16,7 @@ const Home = () => {
   useEffect(() => {
 
     let isMounted = true; 
-    console.log('fetch feed/token;', token);
+    // console.log('fetch feed/token;', token);
 
     const fetchFeed = async () => {
       if (!token) {
@@ -43,6 +45,7 @@ const Home = () => {
   
   return (
     <View>
+      {loading && <ActivityIndicator size="large" color={colors.primaryLight} /> }
       {posts && posts.map(post => (
         <Text key={post.postId}>{post.content}</Text>
       ))}

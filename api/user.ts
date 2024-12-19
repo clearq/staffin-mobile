@@ -2,17 +2,17 @@ import { Staffin_API } from "./API";
 
 export interface User {
   id: number;
-  title: string | null;
-  firstName: string;
-  lastName: string;
+  title?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  street: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  profileImage: string | null;
-  phoneNumber: string;
-  about: string | null;
+  street?: string;
+  city?: string;
+  postalCode?: string;
+  country?: string;
+  profileImage?: string;
+  phoneNumber?: string;
+  about?: string;
   roleId: number;
   companyId?: number;
   companyName?: string;

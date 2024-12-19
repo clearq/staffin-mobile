@@ -29,7 +29,7 @@ const onboarding = () => {
 
             <ButtonLg 
               title='Sign in'
-              containerStyles={styles.btnWhite}
+              containerStyles={globalStyles.btnWhite}
               handlePress={() => router.push("/(auth)/sign-in")}
               textColor={colors.black}
               isLoading={false}
@@ -37,7 +37,7 @@ const onboarding = () => {
 
             <ButtonLg 
               title='Sign up'
-              containerStyles={styles.btnSecondary}
+              containerStyles={globalStyles.btnOrange}
               handlePress={() => router.push("/(auth)/sign-up")}
               textColor={colors.black}
               isLoading={false}
@@ -51,12 +51,3 @@ const onboarding = () => {
 }
 
 export default onboarding
-
-const styles = StyleSheet.create({
-  btnWhite:{
-    backgroundColor:colors.white
-  },
-  btnSecondary:{
-    backgroundColor:colors.secondary
-  },
-})

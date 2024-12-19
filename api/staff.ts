@@ -79,6 +79,7 @@ const getCV = async (token: string): Promise<CVResponse> => {
   }
 };
 
+// Update Staff
 const updateStaff = async (userData: Partial<User>, token: string) => {
   try {
     const response = await Staffin_API.put("Staff/UpdateStaff", userData, {
@@ -86,6 +87,7 @@ const updateStaff = async (userData: Partial<User>, token: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log("Full response data:", response.data); 
     return response.data;
   } catch (error: any) {
     console.error("UpdateUser error:", error.response?.data || error.message);

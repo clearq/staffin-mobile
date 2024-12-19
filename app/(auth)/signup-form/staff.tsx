@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
 import { useRouter } from 'expo-router';
 
 // Redux
 import { useAppDispatch, useAppSelector } from "@/store/reduxHooks";
-import { getCurrentUser, signUpStaff } from "@/store/Slice/authSlice"
+import { signUpStaff } from "@/store/Slice/authSlice"
 
 // UI
 import { TextInput } from 'react-native-paper';
 import { colors } from '@/constants/colors';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ButtonLg } from '@/components/UI/CustomButton';
+import { globalStyles } from '@/constants/globalStyles';
 
 
 const Staff = () => {
@@ -20,40 +21,35 @@ const Staff = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { authUser, isLoading, error } = useAppSelector((state) => state.auth)
+  const { isLoading } = useAppSelector((state) => state.auth)
 
   const handleSignUp = async () => {
     if (!userName || !email || !password) {
       alert("All fields are required!");
       return;
     }
-
-    const result = await dispatch(signUpStaff({ userName, email, password }));
-
-    if (signUpStaff.fulfilled.match(result)) {
-      console.log("Sign-up successful:", result.payload);
-
-      const userId = result.payload.id;
-      const currentUserResult = await dispatch(getCurrentUser(userId));
-
-      if (getCurrentUser.fulfilled.match(currentUserResult)) {
-        console.log("Fetched current user:", currentUserResult.payload);
+  
+    try {
+      const result = await dispatch(signUpStaff({ userName, email, password }));
+  
+      if (signUpStaff.fulfilled.match(result)) {
+        console.log("Sign-up successful:", result.payload);
+  
+        const { role } = result.payload;
+  
+        if (role === 3) {
+          router.push("/(staff)/(tabs)/home");
+          console.log("Navigating to staff home...");
+        } else {
+          console.log("Unhandled role:", role);
+        }
       } else {
-        console.error("Failed to fetch current user:", currentUserResult.payload);
+        console.error("Sign-up failed:", result.payload || result.error);
       }
-    } else {
-      console.error("Sign-up failed:", error);
+    } catch (error) {
+      console.error("Unexpected error during sign-up:", error);
     }
   };
-
-  useEffect(() => {
-    if (!isLoading && authUser) {
-      if (authUser.role === 3) {
-        router.push("/(staff)/(tabs)/home");
-        console.log("Navigating to staff home...");
-      }
-    }
-  }, [authUser, isLoading]);
 
   
   return (
@@ -117,7 +113,7 @@ const Staff = () => {
 
       <ButtonLg
         title={isLoading ? "Loading..." : "Sign Up"}
-        containerStyles={styles.btnBlack}
+        containerStyles={globalStyles.btnBlack}
         textColor={colors.white}
         isLoading={isLoading} 
         handlePress={handleSignUp}      
@@ -141,12 +137,6 @@ const styles = StyleSheet.create({
   formContainer:{
     width:'100%',
     gap:8,
-  },
-  btnWhite:{
-    backgroundColor:colors.secondary
-  },
-  btnBlack:{
-    backgroundColor:colors.black
   },
   link:{
     fontFamily:'Inter-Regular',

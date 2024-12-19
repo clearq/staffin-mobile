@@ -88,17 +88,17 @@ export const signUpAdmin = createAsyncThunk(
   }
 );
 
-export const getCurrentUser = createAsyncThunk(
-  "auth/getCurrentUser",
-  async (userId: number, thunkAPI) => {
-    try {
-      const response = await Staffin_API.get<User>(`/User/GetUser-id?userId=${userId}`);
-      return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch current user");
-    }
-  }
-);
+// export const getCurrentUser = createAsyncThunk(
+//   "auth/getCurrentUser",
+//   async (userId: number, thunkAPI) => {
+//     try {
+//       const response = await Staffin_API.get<User>(`/User/GetUser-id?userId=${userId}`);
+//       return response.data;
+//     } catch (error: any) {
+//       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch current user");
+//     }
+//   }
+// );
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
@@ -174,17 +174,17 @@ const authSlice = createSlice({
     })
 
     // Current User
-    builder.addCase(getCurrentUser.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.user = action.payload;
-    });
-    builder.addCase(getCurrentUser.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload as string;
-    })
+    // builder.addCase(getCurrentUser.pending, (state) => {
+    //   state.isLoading = true;
+    // });
+    // builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+    //   state.isLoading = false;
+    //   state.user = action.payload;
+    // });
+    // builder.addCase(getCurrentUser.rejected, (state, action) => {
+    //   state.isLoading = false;
+    //   state.error = action.payload as string;
+    // })
 
     // Logout
     builder.addCase(logout.pending, (state) => {

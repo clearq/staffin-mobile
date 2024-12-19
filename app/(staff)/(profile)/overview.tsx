@@ -1,12 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import { colors } from '@/constants/colors'
-import { CardBody, CardFooter, CardHeader } from '@/components/Screen/ProfileUI/ProfileCard'
+import { Link } from 'expo-router'
+// Redux
+import { useAppSelector } from '@/store/reduxHooks'
+// API
 import { User } from '@/api/user'
 import { Post } from '@/api/community'
-import { Link } from 'expo-router'
+//UI
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { CardBody, CardFooter, CardHeader } from '@/components/Screen/ProfileUI/ProfileCard'
+import { colors } from '@/constants/colors'
 import { globalStyles } from '@/constants/globalStyles'
+import { ButtonMd } from '@/components/UI/CustomButton'
 
 type profileProps = {
   user: User
@@ -19,7 +24,8 @@ type profileProps = {
 
 const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducation}:profileProps) => {
 
-  
+  const { authUser } = useAppSelector((state) => state.auth);
+
   return (
     <View style={{flexDirection:'column', gap:16,}}>
 
@@ -28,7 +34,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
 
         <CardHeader 
           title='Information'
-          isCurrentUser={true}
+          isCurrentUser={authUser?.id === user.id}
           handlePress={handleInfo}
         />
         <CardBody>
@@ -66,7 +72,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
 
         <CardHeader 
           title='About'
-          isCurrentUser={true}
+          isCurrentUser={authUser?.id === user.id}
           handlePress={handleInfo}
         />
         <CardBody>
@@ -84,7 +90,16 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
       <View style={[styles.cardContainer]}>
         <CardHeader 
           title='Activity'
-          isCurrentUser={true}
+          isCurrentUser={authUser?.id === user.id}
+          children={(
+            <ButtonMd
+              title='Create a post'
+              containerStyles={globalStyles.btnOutlineBlue}
+              handlePress={() => console.log('create a post')}
+              textColor={colors.primary}
+              isLoading={false}
+            />
+          )}
         />
         <CardBody>
           <View style={{flexDirection:'column', gap:16,}}>
@@ -129,7 +144,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
       <View style={[styles.cardContainer]}>
         <CardHeader 
           title='Experience'
-          isCurrentUser={true}
+          isCurrentUser={authUser?.id === user.id}
           handlePress={handleExperience}
         />
         <CardBody>
@@ -169,7 +184,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
       <View style={[styles.cardContainer]}>
         <CardHeader 
           title='Educations'
-          isCurrentUser={true}
+          isCurrentUser={authUser?.id === user.id}
           handlePress={handleEducation}
         />
         <CardBody>
@@ -200,7 +215,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
       <View style={[styles.cardContainer]}>
         <CardHeader 
           title='Skills'
-          isCurrentUser={true}
+          isCurrentUser={authUser?.id === user.id}
         />
         <CardBody>
           <View style={{flexDirection:'row', flexWrap:'wrap', gap:8}}>
@@ -219,7 +234,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
       <View style={[styles.cardContainer]}>
         <CardHeader 
           title='Languages'
-          isCurrentUser={true}
+          isCurrentUser={authUser?.id === user.id}
         />
         <CardBody>
         <View style={[{flexDirection:'column', gap:8}]}>
@@ -302,5 +317,6 @@ const styles = StyleSheet.create({
     borderColor:colors.tintColor,
     borderWidth: 0.5,
   },
+  
 })
 

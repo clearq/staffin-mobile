@@ -1,18 +1,60 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { colors } from '@/constants/colors'
 import { Avatar } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { globalStyles } from '@/constants/globalStyles';
+import *as ImagePicker from 'expo-image-picker'
+import { updateStaff } from '@/api/staff';
+import { getUser, User } from '@/api/user';
+import { useAppSelector } from '@/store/reduxHooks';
 
 type props = {
+  user:Partial<User>
   username?: string
   title?:string | null
   image?:string | null
   isCurrentUser:boolean
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>
 }
 
-const ProfileHeader = ({username, title, image, isCurrentUser}:props) => {
+const ProfileHeader = ({username, title, image, isCurrentUser, user, setUser}:props) => {
+  const [isUploading, setIsUploading] = useState(false);
+  const [profileImage, setProfileImage] = useState(image);
+  const { authUser } = useAppSelector((state) => state.auth);
+  const token = authUser?.token
+
+  const handleImageUpdate = async () => {
+    if(!token || !authUser?.id) return;
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes:['images'],
+      allowsEditing: true,
+      quality: 1,
+    });
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      try {
+        setIsUploading(true);
+        const selectedImageUri = result.assets[0].uri;
+  
+        const updatedUserData: Partial<User> = { ...user, profileImage: selectedImageUri };
+  
+        await updateStaff(updatedUserData, token);
+
+        const updatedUser = await getUser(authUser.id);
+        
+        setUser(updatedUser);
+        Alert.alert("Success", "Profile image updated successfully!");
+      } catch (error) {
+        console.error("Error updating profile image:", error);
+        Alert.alert("Error", "Failed to update profile image.");
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  }
+
+
   return (
     <View style={[styles.container]}>
       <View style={styles.textAreaContainer}>
@@ -38,13 +80,15 @@ const ProfileHeader = ({username, title, image, isCurrentUser}:props) => {
           )}
 
           {isCurrentUser && (
-            <TouchableOpacity style={[styles.avatarEditBtn]}>
+            <TouchableOpacity 
+              style={[styles.avatarEditBtn]}
+              onPress={handleImageUpdate}
+              disabled={isUploading}
+            >
               <MaterialCommunityIcons name='camera' size={16} color={colors.gray}/>
             </TouchableOpacity>
           )}
         </View>
-
-
 
         <View style={styles.textGroup}>
           <Text style={[globalStyles.subTitleText]}>
@@ -54,8 +98,7 @@ const ProfileHeader = ({username, title, image, isCurrentUser}:props) => {
             {title? title : 'Title'}
           </Text>
         </View>
-
-      
+    
       </View>
     </View>
   )

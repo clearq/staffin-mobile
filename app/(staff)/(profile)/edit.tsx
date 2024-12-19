@@ -1,19 +1,23 @@
-import { View, Text, StyleSheet,} from 'react-native'
+import { View, Text, StyleSheet} from 'react-native'
 import React, { useState } from 'react'
-import { ButtonMd } from '@/components/UI/CustomButton';
-import { colors } from '@/constants/colors';
-import { globalStyles } from '@/constants/globalStyles';
+// API
+import { updateStaff } from '@/api/staff';
 import { User } from '@/api/user';
+// Components
 import StaffInformation from './(Edit)/information';
 import StaffExperience from './(Edit)/experience';
 import StaffEducations from './(Edit)/educations';
-import { useAppSelector } from '@/store/reduxHooks';
-import { useRouter } from 'expo-router';
+// UI
+import { ButtonMd } from '@/components/UI/CustomButton';
+import { colors } from '@/constants/colors';
+import { globalStyles } from '@/constants/globalStyles';
+
 
 type StaffProfileEditProps = {
   user:User
   initialScreen: 'information' | 'experience' | 'education';
   token:string
+  handleEditInfo:()=> void
 };
 
 type Menu = {
@@ -40,12 +44,23 @@ const editMenu:Menu[] = [
   },
 ]
 
-const StaffProfileEdit = ({ initialScreen, user, token }: StaffProfileEditProps) => {
-  const [screen, setScreen] = useState(initialScreen);
-  const [currentUser, setCurrentUser] = useState(user); 
-  const [isLoading, setIsLoading] = useState(false); 
-  const router = useRouter()
 
+const StaffProfileEdit = ({ initialScreen, user, token, handleEditInfo }: StaffProfileEditProps) => {
+  const [screen, setScreen] = useState(initialScreen);
+  const [isSaving, setIsSaving] = useState(false); 
+  
+  const handleSave = async (updatedUser: User) => {
+    setIsSaving(true);
+    try {
+      await updateStaff(updatedUser, token);
+      handleEditInfo(); // Switch page
+    } catch (err) {
+      console.error("Error saving user:", err);
+      alert("Failed to save user data.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <View style={[globalStyles.container, globalStyles.paddingX, {gap:8,}]}>
@@ -58,8 +73,8 @@ const StaffProfileEdit = ({ initialScreen, user, token }: StaffProfileEditProps)
               title={menu.title} 
               handlePress={()=> setScreen(menu.screen)}
               containerStyles={screen === menu.screen
-                ? styles.iconButton
-                : styles.iconButtonOutline
+                ? globalStyles.iconButtonBlack
+                : globalStyles.iconButtonOutlineBlack
               }
               textColor={screen === menu.screen
                 ? colors.white
@@ -73,11 +88,12 @@ const StaffProfileEdit = ({ initialScreen, user, token }: StaffProfileEditProps)
 
       <Text>StaffProfileEdit</Text>
       {/* Informations */}
-      {screen === 'information' &&
+      {screen === 'information' &&       
         <StaffInformation
           user={user} 
-          token={token}
-        />
+          onSave={handleSave}
+          isSaving={isSaving}
+        />                  
       }
 
       {/* Experience */}
@@ -112,23 +128,4 @@ const styles = StyleSheet.create({
     justifyContent:'flex-end',
     flex:1,
   },
-  iconButton: {
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:colors.black, 
-    borderRadius:8,
-    paddingHorizontal:8,
-    height:32,
-    flexShrink:2,
-  },
-  iconButtonOutline: {
-    justifyContent:'center',
-    alignItems:'center',
-    borderColor:colors.black, 
-    borderWidth:1,
-    borderRadius:8,
-    paddingHorizontal:8,
-    height:32,
-    flexShrink:2,
-  }
 })

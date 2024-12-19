@@ -1,23 +1,22 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-
+import { ActivityIndicator } from 'react-native-paper';
+// Redux
 import { useAppSelector } from "@/store/reduxHooks";
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-
+// API
 import { getUserPostsAndShares, Post } from '@/api/community';
 import { generateCV } from '@/api/staff';
-
+import { getUser, User } from '@/api/user';
+// Components
 import ProfileHeader from '@/components/Screen/ProfileUI/ProfileHeader';
-
-import { ActivityIndicator } from 'react-native-paper';
-import { colors } from '@/constants/colors';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { globalStyles } from '@/constants/globalStyles';
 import StaffOverview from '../(profile)/overview';
 import StaffActivity from '../(profile)/activity';
 import StaffDocuments from '../(profile)/documents';
 import StaffProfileEdit from '../(profile)/edit';
+//UI
+import { colors } from '@/constants/colors';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { globalStyles } from '@/constants/globalStyles';
 
 type Menu = {
   id: number;
@@ -49,15 +48,44 @@ const staffProfileMenu:Menu []= [
 ]
 
 const StaffProfile = () => {
-  const { authUser, user, isLoading:userLoading, error:userError } = useAppSelector((state) => state.auth);
+  const { authUser, isLoading, error:userError } = useAppSelector((state) => state.auth);
 
+  const [user, setUser] = useState<User>();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [screen, setScreen] = useState<Menu["screen"]>('overview')
   const [editSubScreen, setEditSubScreen] = useState<'information' | 'experience' | 'education'>('information');
-
   const token = authUser?.token
+
+  useEffect(() => {
+    let isMounted = true; 
+    console.log('fetch feed/token;', token);
+
+    const fetchUser = async () => {
+      if (!token) {
+        setError("No authentication token found.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const user = await getUser(authUser.id);
+        if (isMounted) {setUser(user)};
+      } catch (err: any) {
+        if (isMounted) setError(err.message || "Failed to fetch feed.");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    if (token) fetchUser();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+ 
 
   const handleInfo = () => {
     setScreen('edit');
@@ -73,6 +101,10 @@ const StaffProfile = () => {
     setScreen('edit');
     setEditSubScreen('education'); 
   };
+
+  const handleEditInfo = () => {
+    setScreen('overview');
+  }
 
   const handleGenerateCV = async () => {
     if (!token) {
@@ -92,9 +124,6 @@ const StaffProfile = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Redux state - user Id:", user?.id)
-  },[user, userLoading, userError])
 
   useEffect(() => {
     if (authUser && authUser.id && token) {
@@ -115,7 +144,7 @@ const StaffProfile = () => {
     }
   }, [authUser, token]);
   
-  if (userLoading || loading) {
+  if (isLoading || loading) {
     return <ActivityIndicator size="large" color={colors.primaryLight} />;
   }
 
@@ -131,55 +160,59 @@ const StaffProfile = () => {
     <View style={{flex:1}}>
       <ScrollView>
       
-      { user !== null && !userLoading && !loading &&  (
+      { user !== null && !isLoading && !loading &&  (
   
         <View style={{flex:1}}>
 
           <ProfileHeader
+            user={user}
             username={`${user.firstName} ${user.lastName}`}
             title={user.title}
             image={user.profileImage || null}
-            isCurrentUser={true}
+            isCurrentUser={authUser?.id === user.id}
+            setUser={setUser}
           />
 
           {/* Menu */}
-          <View style={{flexDirection:'row', justifyContent:'space-between',marginTop:16, marginBottom:8 }}>
-            {staffProfileMenu.map(menu => (
-              <TouchableOpacity 
-                key={menu.id}
-                onPress={() => setScreen(menu.screen)}
-                style={{
-                  flex:1/4,
-                  backgroundColor:colors.white, 
-                  paddingTop:8,
-                  justifyContent:'space-between',
-                  flexDirection:'column',
-                  alignItems:'center'
-                }}
-              >
-                <Text style={{
-                  marginVertical:8,
-                  color: menu.screen === screen 
-                    ? colors.secondary
-                    : colors.gray,
-                  fontSize:14,
-                  fontFamily: menu.screen === screen
-                    ? 'Inter-Medium'
-                    : 'Inter-Regular'
-                }}>
-                  {menu.title}
-                </Text>
-                {menu.screen === screen &&
-                  <View 
-                    style={{
-                      borderWidth:2, 
-                      borderColor:colors.secondary,
-                      width:'100%'
-                    }}
-                  />
-                }
-              </TouchableOpacity>
-            ))}
+          <View style={{width:'100%', backgroundColor:colors.white,marginTop:16, marginBottom:8}}>
+            <View style={[{flexDirection:'row', justifyContent:'space-between' },globalStyles.paddingX]}>
+              {staffProfileMenu.map(menu => (
+                <TouchableOpacity 
+                  key={menu.id}
+                  onPress={() => setScreen(menu.screen)}
+                  style={{
+                    flex:1/4,
+                    backgroundColor:colors.white, 
+                    paddingTop:8,
+                    justifyContent:'space-between',
+                    flexDirection:'column',
+                    alignItems:'center'
+                  }}
+                >
+                  <Text style={{
+                    marginVertical:8,
+                    color: menu.screen === screen 
+                      ? colors.secondary
+                      : colors.gray,
+                    fontSize:14,
+                    fontFamily: menu.screen === screen
+                      ? 'Inter-Medium'
+                      : 'Inter-Regular'
+                  }}>
+                    {menu.title}
+                  </Text>
+                  {menu.screen === screen &&
+                    <View 
+                      style={{
+                        borderWidth:2, 
+                        borderColor:colors.secondary,
+                        width:'100%'
+                      }}
+                    />
+                  }
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
 
           <View style={{paddingVertical:8, flex:1}}>
@@ -207,6 +240,7 @@ const StaffProfile = () => {
                 user={user}
                 initialScreen={editSubScreen} 
                 token={token}
+                handleEditInfo={handleEditInfo}
               />
             }
           </View>

@@ -41,7 +41,7 @@ const SignUp = () => {
             <ButtonLg 
               title='Staff'
               handlePress={() => setRole('staff')} 
-              containerStyles={styles.btnOrange}
+              containerStyles={globalStyles.btnOrange}
               textColor={colors.white} 
               isLoading={isLoading} 
             />
@@ -49,7 +49,7 @@ const SignUp = () => {
             <ButtonLg 
               title='Admin'
               handlePress={() => setRole('admin')} 
-              containerStyles={styles.btnBlue}
+              containerStyles={globalStyles.btnBlue}
               textColor={colors.white} 
               isLoading={isLoading} 
             />
@@ -62,7 +62,7 @@ const SignUp = () => {
             <ButtonLg 
             title='Cancel'
             handlePress={() => setRole('none')} 
-            containerStyles={styles.btnOutline}
+            containerStyles={globalStyles.btnOutlineWhite}
             textColor={colors.white} 
             isLoading={isLoading} 
             />      
@@ -75,7 +75,7 @@ const SignUp = () => {
             <ButtonLg 
             title='Cancel'
             handlePress={() => setRole('none')} 
-            containerStyles={styles.btnOutline}
+            containerStyles={globalStyles.btnOutlineWhite}
             textColor={colors.white} 
             isLoading={isLoading} 
             />
@@ -112,17 +112,6 @@ const styles = StyleSheet.create({
   formContainer:{
     width:'100%',
     gap:8,
-  },
-  btnOrange:{
-    backgroundColor:colors.secondary,
-    borderColor:colors.secondary,
-  },
-  btnBlue:{
-    backgroundColor:colors.primary,
-    borderColor:colors.primary
-  },
-  btnOutline:{
-    borderColor:colors.white
   },
   link:{
     fontFamily:'Inter-Regular',

@@ -5,13 +5,13 @@ import { Link, useRouter } from "expo-router";
 
 //Redux
 import { useAppDispatch, useAppSelector } from "@/store/reduxHooks";
-import { login } from "@/store/Slice/authSlice";
+import { login } from "@/store/slice/authSlice";
 //UI
 import { TextInput } from 'react-native-paper';
 import { globalStyles } from "@/constants/globalStyles";
-import { colors } from "@/constants/colors";
+import { colors } from "@/constants/Colors";
 import { ButtonLg } from "@/components/UI/CustomButton";
-import  logo  from "../../assets/Images/icon.png"
+import  logo  from "../../assets/images/icon.png"
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 

@@ -2,7 +2,8 @@ import { View, Image, Button, Text, TouchableOpacity, StyleSheet } from 'react-n
 import { useState } from 'react';
 import { router, Tabs, useRouter } from 'expo-router'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
+import React from 'react';
 
 
 const AdminTabsLayout = () => {

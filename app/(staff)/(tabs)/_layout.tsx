@@ -1,7 +1,7 @@
 import { View, Image, Button } from 'react-native'
 import { Tabs, useRouter } from 'expo-router'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
 
 
 const StaffTabsLayout = () => {

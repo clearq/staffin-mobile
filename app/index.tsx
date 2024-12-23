@@ -5,10 +5,10 @@ import { useRouter } from 'expo-router'
 import { globalStyles } from '@/constants/globalStyles'
 import logo from '../assets/Images/icon.png'
 import { ButtonLg } from '@/components/UI/CustomButton'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 
 import { useAppSelector } from "@/store/reduxHooks";
-import { login, getCurrentUser } from "@/store/Slice/authSlice";
+import { login, getCurrentUser } from "@/store/slice/authSlice";
 
 const onboarding = () => {
   const router = useRouter();

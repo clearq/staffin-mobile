@@ -5,7 +5,7 @@ import { Link, useRouter } from "expo-router";
 //Redux
 
 //UI
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 import { globalStyles } from '@/constants/globalStyles'
 import  logo  from "../../assets/Images/icon.png"
 import { ButtonLg } from '@/components/UI/CustomButton'

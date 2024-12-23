@@ -3,7 +3,7 @@ import { Slot, Stack, useRouter, } from 'expo-router'
 import { useState } from 'react';
 
 import { useAppDispatch } from '@/store/reduxHooks';
-import { logout } from '@/store/Slice/authSlice';
+import { logout } from '@/store/slice/authSlice';
 import CustomHeader from '@/components/UI/CustomHeader';
 import HeaderMenuModal from '@/components/UI/HeaderMenuModal';
 import React from 'react';

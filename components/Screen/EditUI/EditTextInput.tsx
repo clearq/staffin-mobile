@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, Platform, Touc
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { getUser, User } from '@/api/user'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 import { updateStaff } from '@/api/staff'
 import { ButtonLg } from '@/components/UI/CustomButton'
 import { useAppDispatch } from '@/store/reduxHooks'

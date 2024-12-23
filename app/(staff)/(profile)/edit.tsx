@@ -9,7 +9,7 @@ import StaffExperience from './(Edit)/experience';
 import StaffEducations from './(Edit)/educations';
 // UI
 import { ButtonMd } from '@/components/UI/CustomButton';
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
 import { globalStyles } from '@/constants/globalStyles';
 
 

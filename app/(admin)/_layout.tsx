@@ -4,11 +4,12 @@ import { useState } from 'react';
 
 import logo from '../../../assets/Images/favicon.png'
 import { useAppDispatch } from '@/store/reduxHooks';
-import { logout } from '@/store/Slice/authSlice';
+import { logout } from '@/store/slice/authSlice';
 import CustomHeader from '@/components/UI/CustomHeader';
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import HeaderMenuModal from '@/components/UI/HeaderMenuModal';
+import React from 'react';
 
 const AdminLayout = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)

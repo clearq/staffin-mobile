@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 import { Avatar } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { globalStyles } from '@/constants/globalStyles';

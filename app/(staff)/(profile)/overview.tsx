@@ -9,7 +9,7 @@ import { Post } from '@/api/community'
 //UI
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { CardBody, CardFooter, CardHeader } from '@/components/Screen/ProfileUI/ProfileCard'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 import { globalStyles } from '@/constants/globalStyles'
 import { ButtonMd } from '@/components/UI/CustomButton'
 

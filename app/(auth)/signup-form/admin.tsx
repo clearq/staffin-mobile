@@ -4,11 +4,11 @@ import { useRouter } from 'expo-router';
 
 // Redux
 import { useAppDispatch, useAppSelector } from "@/store/reduxHooks";
-import { signUpAdmin } from "@/store/Slice/authSlice"
+import { signUpAdmin } from "@/store/slice/authSlice"
 
 // UI
 import { TextInput } from 'react-native-paper';
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ButtonLg } from '@/components/UI/CustomButton';
 import { globalStyles } from '@/constants/globalStyles';

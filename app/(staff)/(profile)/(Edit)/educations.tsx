@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { User } from '@/api/user'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 import { globalStyles } from '@/constants/globalStyles'
 import { CardBody, CardFooter, CardHeader } from '@/components/Screen/ProfileUI/ProfileCard'
 

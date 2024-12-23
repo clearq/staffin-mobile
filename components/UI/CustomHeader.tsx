@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, TextInput, StyleSheet } from 'reac
 import React, { useState } from 'react'
 
 import logo from '../../assets/Images/favicon.png'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 
 
 const styles = StyleSheet.create({
@@ -52,8 +52,9 @@ type headerProps ={
   isCurrentUser:boolean
   handlePress?:()=>void
   children?:React.ReactNode
+  headerIcon?:keyof typeof MaterialCommunityIcons.glyphMap
 }
-const CardHeader = ({title, isCurrentUser, handlePress, children}:headerProps) => {
+const CardHeader = ({title, isCurrentUser, handlePress, children, headerIcon}:headerProps) => {
 
   return(
     <View style={[styles.cardHeader]}>
@@ -63,7 +64,7 @@ const CardHeader = ({title, isCurrentUser, handlePress, children}:headerProps) =
         <TouchableOpacity
          onPress={handlePress}
         >
-          <MaterialCommunityIcons name='pencil-outline' size={20} color={colors.gray} />
+          <MaterialCommunityIcons name={!headerIcon ? 'pencil-outline' : headerIcon} size={24} color={colors.gray} />
         </TouchableOpacity>
       )}
       {title === 'Activity' && (

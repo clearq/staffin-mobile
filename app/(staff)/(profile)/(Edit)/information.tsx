@@ -1,7 +1,7 @@
 import { View, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import { User } from '@/api/user'
-import { colors } from '@/constants/colors'
+import { colors } from '@/constants/Colors'
 import { ButtonLg } from '@/components/UI/CustomButton'
 import EditTextInput from '@/components/Screen/EditUI/EditTextInput'
 import { globalStyles } from '@/constants/globalStyles'

@@ -4,7 +4,7 @@ import { getFeed, Post } from '@/api/community';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
 
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);

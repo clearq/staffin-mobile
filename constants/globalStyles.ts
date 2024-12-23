@@ -1,4 +1,4 @@
-import { colors } from "./colors";
+import { colors } from "./Colors";
 import { StyleSheet } from "react-native";
 
 export const globalStyles = StyleSheet.create({

@@ -15,7 +15,7 @@ import StaffDocuments from '../(profile)/documents';
 import StaffProfileEdit from '../(profile)/edit';
 //UI
 import { ActivityIndicator } from 'react-native-paper';
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { globalStyles } from '@/constants/globalStyles';
 

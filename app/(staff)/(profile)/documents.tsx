@@ -2,7 +2,7 @@ import { View, Text, ActivityIndicator, StyleSheet, Image, TouchableOpacity } fr
 import React, { useEffect, useState } from 'react'
 
 // UI
-import { colors } from '@/constants/colors';
+import { colors } from '@/constants/Colors';
 import { globalStyles } from '@/constants/globalStyles';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ButtonMd } from '@/components/UI/CustomButton';

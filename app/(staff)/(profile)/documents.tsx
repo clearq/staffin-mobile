@@ -1,74 +1,23 @@
 import { View, Text, ActivityIndicator, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-// API
-import { downloadCV, getCV } from '@/api/staff';
+
 // UI
 import { colors } from '@/constants/colors';
 import { globalStyles } from '@/constants/globalStyles';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ButtonMd } from '@/components/UI/CustomButton';
+import { Checkbox } from 'react-native-paper';
 
 type prop = {
-  token?:string
+  name: string | null;
+  url: string | null;
+  loading: boolean;
+  error: string | null;
+  onDownload: () => void;
 }
 
-const StaffDocuments = React.memo(({token}:prop) => {
-  const [name, setName] = useState<string | null>(null);
-  const [url, setUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const StaffDocuments = ({name, url, loading, error, onDownload}:prop) => {
   const [sortStyle, setSortStyle] = useState<'symbol'|'list'>('symbol')
-
-  const handleDownloadCV = async () => {
-    if (!token) {
-      setError("Authentication token not found.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await downloadCV(token);
-      setError(null); 
-    } catch (err: any) {
-      setError(err.message || "Failed to download CV.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const fetchCV = async () => {
-      if (!token) {
-        setError("Authentication token not found.");
-        setLoading(false);
-        return;
-      }
-  
-      try {
-        const cvData = await getCV(token);
-        setName(cvData.name);
-        setUrl(cvData.url);
-      } catch (err: any) {
-        setError(err.message || "Failed to obtain CV.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCV();
-  }, []);
-
-
-  if (loading) {
-    return <ActivityIndicator size="large" color={colors.primaryLight} />;
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={[{color:colors.errorText,}]}>{error}</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={[globalStyles.container, globalStyles.paddingX, {gap:8}]}>
@@ -112,7 +61,7 @@ const StaffDocuments = React.memo(({token}:prop) => {
 
         <ButtonMd 
           title='Download File'
-          handlePress={handleDownloadCV}
+          handlePress={onDownload}
           containerStyles={globalStyles.btnOrange}
           textColor={colors.white}
           isLoading={loading}
@@ -123,7 +72,7 @@ const StaffDocuments = React.memo(({token}:prop) => {
       {name && sortStyle === 'symbol' &&
           <View style={[styles.symbolContainer]}>
             <View style={[styles.symbolCard]}>
-              <Image source={require('@/assets/Images/pdf-icon.svg')} style={{width:24, height:24}} />
+              <Image source={require('@/assets/Images/pdf-icon.png')} style={{width:24, height:24}} />
             </View>
             <Text>{name}</Text>
           </View>       
@@ -132,14 +81,14 @@ const StaffDocuments = React.memo(({token}:prop) => {
       {name && sortStyle === 'list' &&
           <View style={[styles.listContainer]}>
             <View style={[styles.listIcon]}>
-              <Image source={require('@/assets/Images/pdf-icon.svg')} style={{width:24, height:24}} />
+              <Image source={require('@/assets/Images/pdf-icon.png')} style={{width:24, height:24}} />
             </View>
             <Text>{name}</Text>
           </View>       
       }
     </View>
   )
-})
+}
 
 export default StaffDocuments
 

@@ -1,11 +1,11 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator } from 'react-native-paper';
+import * as FileSystem from 'expo-file-system';
 // Redux
 import { useAppSelector } from "@/store/reduxHooks";
 // API
 import { getUserPostsAndShares, Post } from '@/api/community';
-import { generateCV } from '@/api/staff';
+import { CVResponse, downloadCV, generateCV, getCV } from '@/api/staff';
 import { getUser, User } from '@/api/user';
 // Components
 import ProfileHeader from '@/components/Screen/ProfileUI/ProfileHeader';
@@ -14,6 +14,7 @@ import StaffActivity from '../(profile)/activity';
 import StaffDocuments from '../(profile)/documents';
 import StaffProfileEdit from '../(profile)/edit';
 //UI
+import { ActivityIndicator } from 'react-native-paper';
 import { colors } from '@/constants/colors';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { globalStyles } from '@/constants/globalStyles';
@@ -56,36 +57,30 @@ const StaffProfile = () => {
   const [error, setError] = useState<string | null>(null);
   const [screen, setScreen] = useState<Menu["screen"]>('overview')
   const [editSubScreen, setEditSubScreen] = useState<'information' | 'experience' | 'education'>('information');
+  const [cvData, setCvData] = useState<CVResponse>({
+    name: '',
+    url: '',
+  });
   const token = authUser?.token
 
-  useEffect(() => {
-    let isMounted = true; 
-    console.log('fetch feed/token;', token);
+  const fetchCV = async () => {
+    if (!token) {
+      setError("Authentication token not found.");
+      setLoading(false);
+      return;
+    }
 
-    const fetchUser = async () => {
-      if (!token) {
-        setError("No authentication token found.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const user = await getUser(authUser.id);
-        if (isMounted) {setUser(user)};
-      } catch (err: any) {
-        if (isMounted) setError(err.message || "Failed to fetch feed.");
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    if (token) fetchUser();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
- 
+    try {
+      setLoading(true);
+      const data = await getCV(token);
+      setCvData({ name: data.name, url: data.url });
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || "Failed to fetch CV.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInfo = () => {
     setScreen('edit');
@@ -124,6 +119,64 @@ const StaffProfile = () => {
     }
   };
 
+  const handleDownloadCV = async () => {
+    if (!token) {
+      setError("Authentication token not found.");
+      return;
+    }
+  
+    try {
+      setLoading(true);
+      const response = await downloadCV(token);
+      console.log('respons download CV:', response);
+      
+      const fileURL = cvData.url;
+  
+      const fileUri = FileSystem.documentDirectory + `${cvData.name}`;
+  
+      const downloadResult = await FileSystem.downloadAsync(fileURL, fileUri);
+
+      Alert.alert("Success", "CV downloaded successfully.");
+      console.log('File saved to:', downloadResult.uri);
+      
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || "Failed to download CV.");
+      Alert.alert("Error", err.message || "Failed to download CV.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  useEffect(() => {
+    let isMounted = true; 
+    console.log('fetch feed/token;', token);
+
+    const fetchUser = async () => {
+      if (!token) {
+        setError("No authentication token found.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const user = await getUser(authUser.id);
+        if (isMounted) {setUser(user)};
+      } catch (err: any) {
+        if (isMounted) setError(err.message || "Failed to fetch feed.");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    if (token) fetchUser();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
 
   useEffect(() => {
     if (authUser && authUser.id && token) {
@@ -143,7 +196,15 @@ const StaffProfile = () => {
       fetchPosts();
     }
   }, [authUser, token]);
+
+
+  useEffect(() => {
+    if (token) {
+      fetchCV();
+    }
+  }, [token]);
   
+
   if (isLoading || loading) {
     return <ActivityIndicator size="large" color={colors.primaryLight} />;
   }
@@ -232,7 +293,11 @@ const StaffProfile = () => {
             }
             {screen === 'document' &&
               <StaffDocuments
-                token={token} 
+              name={cvData.name}
+              url={cvData.url}
+              loading={loading}
+              error={error}
+              onDownload={handleDownloadCV}
               />
             }
             {screen === 'edit' && token &&

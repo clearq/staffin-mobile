@@ -1,5 +1,7 @@
+import { Alert, Platform } from "react-native";
 import { Staffin_API } from "./API";
 import { User } from "./user";
+import * as FileSystem from 'expo-file-system';
 
 export interface CVResponse {
   name: string;
@@ -35,30 +37,33 @@ const generateCV = async (token: string): Promise<string> => {
 // Download CV
 const downloadCV = async (token: string): Promise<void> => {
   try {
-    const response = await Staffin_API.get(
-      '/Staff/Download-CV', 
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`,  
-          'accept': '*/*', 
-        },
-        responseType: 'blob' 
-      }
-    );
+    const response = await Staffin_API.get('/Staff/Download-CV', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'accept': '*/*',
+      },
+      responseType: 'blob', 
+    });
 
-    const fileURL = response.data.url;
- 
-    const link = document.createElement('a');
-    link.href = fileURL;
-    link.download = 'CV.pdf'; 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const fileData = response.data;
 
-    console.log("CV download started.");
+    const contentDisposition = response.headers['content-disposition'];
+    const filename = contentDisposition
+      ? contentDisposition.split('filename=')[1].replace(/['"]/g, '')
+      : 'StaffCV.pdf'; 
+
+    const fileUri = FileSystem.documentDirectory + filename;
+
+    await FileSystem.writeAsStringAsync(fileUri, fileData, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    Alert.alert('Success', `CV downloaded successfully to: ${fileUri}`);
+    console.log('File saved to:', fileUri);
   } catch (error: any) {
-    console.error("Error downloading CV:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to download CV");
+    console.error('Error downloading CV:', error.response?.data || error.message);
+    Alert.alert('Error', error.response?.data?.message || 'Failed to download CV');
+    throw new Error(error.response?.data?.message || 'Failed to download CV');
   }
 };
 

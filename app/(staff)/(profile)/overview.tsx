@@ -118,13 +118,15 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
                       {post.content}
                     </Text>
                     
-                    <Link href={'/#'}>
+                    <TouchableOpacity>
                       <Text style={[styles.linkText, styles.item]}>Read more...</Text>
-                    </Link>
+                    </TouchableOpacity>
                   </View>
 
                   <View>
-                    <Image source={{uri:post?.image}} style={{width:64, height:64,}} />
+                    {post.image &&
+                      <Image source={{uri:post?.image}} style={{width:64, height:64,}} />
+                    }
                   </View>
 
                 </View>

@@ -49,7 +49,7 @@ const StaffProfileEdit = ({ initialScreen, user, token, handleEditInfo }: StaffP
   const [screen, setScreen] = useState(initialScreen);
   const [isSaving, setIsSaving] = useState(false); 
   
-  const handleSave = async (updatedUser: User) => {
+  const handleUserInfo = async (updatedUser: User) => {
     setIsSaving(true);
     try {
       await updateStaff(updatedUser, token);
@@ -63,7 +63,7 @@ const StaffProfileEdit = ({ initialScreen, user, token, handleEditInfo }: StaffP
   };
 
   return (
-    <View style={[globalStyles.container, globalStyles.paddingX, {gap:8,}]}>
+    <View style={[globalStyles.container, {gap:8,}]}>
 
       {/* Sub menu buttons */}
       <View style={styles.btnGroup}>
@@ -86,12 +86,11 @@ const StaffProfileEdit = ({ initialScreen, user, token, handleEditInfo }: StaffP
         ))}
       </View>
 
-      <Text>StaffProfileEdit</Text>
       {/* Informations */}
       {screen === 'information' &&       
         <StaffInformation
           user={user} 
-          onSave={handleSave}
+          onSubmit={handleUserInfo}
           isSaving={isSaving}
         />                  
       }
@@ -127,5 +126,7 @@ const styles = StyleSheet.create({
     gap:8, 
     justifyContent:'flex-end',
     flex:1,
+    paddingHorizontal:16,
+    marginBottom:24
   },
 })

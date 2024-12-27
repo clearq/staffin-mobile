@@ -9,11 +9,11 @@ import { globalStyles } from '@/constants/globalStyles'
 
 type infoProps = {
   user: User
-  onSave: (uppdatedUser: User)=>void
+  onSubmit: (uppdatedUser: User)=>void
   isSaving:boolean
 }
 
-const StaffInformation = ({user, onSave, isSaving}: infoProps) => {
+const StaffInformation = ({user, onSubmit, isSaving}: infoProps) => {
   
   const [firstName, setFirstName] = useState(user.firstName)
   const [lastName, setLastName] = useState(user.lastName)
@@ -42,14 +42,14 @@ const StaffInformation = ({user, onSave, isSaving}: infoProps) => {
     };
     console.log('updateUser:', updatedUser);
     
-    onSave(updatedUser); 
+    onSubmit(updatedUser); 
   };
 
 
   return ( 
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{flex:1}}
+      style={[{flex:1}, globalStyles.paddingX]}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{flex:1, justifyContent:'space-around'}}> 
@@ -129,6 +129,7 @@ const StaffInformation = ({user, onSave, isSaving}: infoProps) => {
               multilineText={true}
             />
 
+          </View>
             <ButtonLg 
               title={isSaving ? "Saving... " : "Save"}
               containerStyles={globalStyles.btnBlack}
@@ -136,8 +137,6 @@ const StaffInformation = ({user, onSave, isSaving}: infoProps) => {
               isLoading={isSaving}
               handlePress={handleSave}
             />
-
-          </View>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -152,6 +151,7 @@ const styles = StyleSheet.create({
   formContainer:{
     width:'100%',
     gap:8,
+    marginBottom:24,
   },
 });
 

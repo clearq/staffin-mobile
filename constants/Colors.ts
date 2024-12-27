@@ -33,6 +33,8 @@ export const colors = {
   //Opacity60
   white70: "rgba(252, 252, 252, 0.6)",
   //Opacity40
-  white40: "rgba(252, 252, 252, 0.4)"
+  white40: "rgba(252, 252, 252, 0.4)",
+  //Opacity60
+  black60: "rgba(0, 0, 0, 0.6)",
 };
 

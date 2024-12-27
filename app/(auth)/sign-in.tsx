@@ -11,7 +11,7 @@ import { TextInput } from 'react-native-paper';
 import { globalStyles } from "@/constants/globalStyles";
 import { colors } from "@/constants/Colors";
 import { ButtonLg } from "@/components/UI/CustomButton";
-import  logo  from "../../assets/images/icon.png"
+import  logo  from "../../assets/Images/icon.png"
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 

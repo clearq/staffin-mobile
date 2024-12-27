@@ -1,11 +1,12 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import * as FileSystem from 'expo-file-system';
+import { useRouter } from 'expo-router';
 // Redux
 import { useAppSelector } from "@/store/reduxHooks";
 // API
 import { getUserPostsAndShares, Post } from '@/api/community';
-import { CVResponse, downloadCV, generateCV, getCV } from '@/api/staff';
+import { CV, downloadCV, generateCV, getCV } from '@/api/staff';
 import { getUser, User } from '@/api/user';
 // Components
 import ProfileHeader from '@/components/Screen/ProfileUI/ProfileHeader';
@@ -49,6 +50,7 @@ const staffProfileMenu:Menu []= [
 ]
 
 const StaffProfile = () => {
+  const router = useRouter();
   const { authUser, isLoading, error:userError } = useAppSelector((state) => state.auth);
 
   const [user, setUser] = useState<User>();
@@ -57,7 +59,7 @@ const StaffProfile = () => {
   const [error, setError] = useState<string | null>(null);
   const [screen, setScreen] = useState<Menu["screen"]>('overview')
   const [editSubScreen, setEditSubScreen] = useState<'information' | 'experience' | 'education'>('information');
-  const [cvData, setCvData] = useState<CVResponse>({
+  const [cvData, setCvData] = useState<CV>({
     name: '',
     url: '',
   });
@@ -151,18 +153,19 @@ const StaffProfile = () => {
 
   useEffect(() => {
     let isMounted = true; 
-    console.log('fetch feed/token;', token);
 
     const fetchUser = async () => {
       if (!token) {
         setError("No authentication token found.");
-        setLoading(false);
+        setLoading(false);        
+        router.push('/(auth)/sign-in')
         return;
       }
-
+      
       try {
         const user = await getUser(authUser.id);
         if (isMounted) {setUser(user)};
+        console.log('profile image:', user.profileImage);
       } catch (err: any) {
         if (isMounted) setError(err.message || "Failed to fetch feed.");
       } finally {

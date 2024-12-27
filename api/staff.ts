@@ -3,10 +3,31 @@ import { Staffin_API } from "./API";
 import { User } from "./user";
 import * as FileSystem from 'expo-file-system';
 
-export interface CVResponse {
+export interface CV {
   name: string;
   url: string;
 }
+
+export interface ExpData {
+  position: string;
+  description?: string;
+  companyName: string;
+  location: string;
+  startDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  endDate:{
+    year: number;
+    month: number;
+    day: number;
+  };
+  staffId: number;
+  userId: number;
+}
+
+
 
 // Generate CV
 const generateCV = async (token: string): Promise<string> => {
@@ -33,6 +54,7 @@ const generateCV = async (token: string): Promise<string> => {
     throw new Error(error.response?.data?.message || "Failed to generate CV");
   }
 };
+
 
 // Download CV
 const downloadCV = async (token: string): Promise<void> => {
@@ -69,9 +91,9 @@ const downloadCV = async (token: string): Promise<void> => {
 
 
 // Get CV
-const getCV = async (token: string): Promise<CVResponse> => {
+const getCV = async (token: string): Promise<CV> => {
   try {
-    const response = await Staffin_API.get<CVResponse>("/Staff/Get-CV", {
+    const response = await Staffin_API.get<CV>("/Staff/Get-CV", {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: "*/*",
@@ -100,4 +122,57 @@ const updateStaff = async (userData: Partial<User>, token: string) => {
   }
 };
 
-export { generateCV, downloadCV, getCV, updateStaff };
+
+// Get Staff Experience
+const getExperience = async (token:string) => {
+  try {
+    const responce = await Staffin_API.get<ExpData>("Staff/StaffExperience-Get", )
+    return responce.data
+    
+  } catch (error: any) {
+    console.error("Get staff experience error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Failed to get user experience");
+  }
+};
+
+// Add Staff Experience
+const  addExperience = async (token:string) => {};
+
+
+// Update Staff Experience
+const updateExperience = async () => {};
+
+
+// Delete Staff Experience
+const deleteExperience = async () => {};
+
+
+// Get Staff Education
+const getEducation = async () => {};
+
+
+// Add Staff Education
+const AddEducation = async () => {};
+
+
+// Update Staff Education
+const updateEducation = async () => {};
+
+
+// Delete Staff Education
+const deleteEducation = async () => {};
+
+export { 
+  generateCV,  
+  downloadCV, 
+  getCV, 
+  updateStaff,
+  getExperience,
+  addExperience,
+  updateExperience,
+  deleteExperience,
+  getEducation,
+  AddEducation,
+  updateEducation,
+  deleteEducation,
+};

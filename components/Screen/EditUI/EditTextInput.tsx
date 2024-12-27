@@ -1,11 +1,8 @@
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import { useRouter } from 'expo-router'
+import { View, Text, StyleSheet, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { getUser, User } from '@/api/user'
+
 import { colors } from '@/constants/Colors'
-import { updateStaff } from '@/api/staff'
-import { ButtonLg } from '@/components/UI/CustomButton'
-import { useAppDispatch } from '@/store/reduxHooks'
+
 
 type props = {
   label: string
@@ -13,9 +10,10 @@ type props = {
   handleChange: (e:string)=> void
   formStyle?: {}
   multilineText: boolean
+  placholderColor?: string
 }
 
-const EditTextInput = ({label, value, handleChange,formStyle, multilineText,}:props) => {
+const EditTextInput = ({label, value, handleChange,formStyle, multilineText, placholderColor}:props) => {
   const [onFocus, setOnFocus] = useState<boolean>(false)
 
   return ( 
@@ -27,11 +25,12 @@ const EditTextInput = ({label, value, handleChange,formStyle, multilineText,}:pr
         <TextInput
           style={[onFocus? styles.onTextInputStyle : styles.textInputStyle,]}
           placeholder={label}
+          placeholderTextColor={placholderColor}
           value={value}
           onFocus={()=> setOnFocus(true)}
           onBlur={()=> setOnFocus(false)}
           onChangeText={handleChange}
-          multiline={multilineText}
+          multiline={multilineText}       
         />
       </View>
     </View>

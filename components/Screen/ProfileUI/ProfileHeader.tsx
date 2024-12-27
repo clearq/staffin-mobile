@@ -20,9 +20,9 @@ type props = {
 
 const ProfileHeader = ({username, title, image, isCurrentUser, user, setUser}:props) => {
   const [isUploading, setIsUploading] = useState(false);
-  const [profileImage, setProfileImage] = useState(image);
   const { authUser } = useAppSelector((state) => state.auth);
   const token = authUser?.token
+  
 
   const handleImageUpdate = async () => {
     if(!token || !authUser?.id) return;
@@ -60,7 +60,7 @@ const ProfileHeader = ({username, title, image, isCurrentUser, user, setUser}:pr
       <View style={styles.textAreaContainer}>
         
         <View style={[styles.avatar,]}>
-          {image 
+          {image
           ?(
             <View style={[styles.borderCircle,{ width: 64, height: 64, borderRadius: '100%' }]}>
               <Image source={{ uri: image }} style={[{ width: 56, height: 56, borderRadius: '100%', bottom: 0, left:0, }]} />

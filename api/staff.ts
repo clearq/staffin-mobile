@@ -15,6 +15,7 @@ export interface ExpData {
   location: string;
   startDate: string
   endDate: string
+  id:number
 }
 
 
@@ -128,7 +129,7 @@ const getExperience = async (token: string) => {
 };
 
 // Add Staff Experience
-const  addExperience = async (expData:ExpData, token:string) => {
+const  addExperience = async (expData:Partial<ExpData>, token:string) => {
   try {
     const response = await Staffin_API.post("/Staff/StaffExperience-Add", expData, {
       headers:{

@@ -24,25 +24,24 @@ const StaffExperience = ({user}: experienceProps) => {
 
   const token = authUser?.token
 
-  useEffect (() => {
-    const fetchExp = async () => {
-      if (!token) {
-        setError("No authentication token found.");
-        setLoading(false);
-        return;
-      }
-
+  const fetchExperiences = async () => {
+    if (token) {
       try {
-        const exp = await getExperience(token)
-        setExp([exp])
-      } catch (err) {
-        setError("Failed to get experience.");
-        Alert.alert("Error", error || "An error occurred.");  
+        setLoading(true);
+        const experiences = await getExperience(token);
+        setExp(experiences); // Update the state with the new experiences
+      } catch (error:any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     }
-    // fetchExp()
-  }, [])
+  };
 
+  useEffect(() => {
+    console.log('hello')
+    fetchExperiences()
+  },[])
 
   const handleAddExperience = () => {
     setOpenAddModal(true)
@@ -63,7 +62,15 @@ const StaffExperience = ({user}: experienceProps) => {
         style: 'cancel'
       },{
         text: 'Delete',
-        onPress: () => deleteExperience(id, token) 
+        onPress: async () => {
+          try {
+            await deleteExperience(id, token);
+            Alert.alert('Success', 'Experience deleted successfully!');
+            fetchExperiences(); // Refresh experiences
+          } catch (error:any) {
+            Alert.alert('Error', error.message || 'Failed to delete experience');
+          }
+        }, 
       }
     ])
   }
@@ -75,6 +82,7 @@ const StaffExperience = ({user}: experienceProps) => {
         <AddExperience 
           token={token} 
           onClose={() => setOpenAddModal(false)} 
+          handleSuccess={fetchExperiences}
         />
       }
 
@@ -93,7 +101,7 @@ const StaffExperience = ({user}: experienceProps) => {
         />
         <CardBody>
           <View style={[{flexDirection:'column', gap:8}]}>
-            {token && user?.experience && user?.experience.map(exp => (
+            {token && exp && exp.map(exp => (
               <View key={exp.id}>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                   <Text style={[globalStyles.subTitleText]}>

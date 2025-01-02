@@ -14,9 +14,10 @@ import dayjs from 'dayjs'
 type props = {
   onClose: () => void
   token?: string
+  handleSuccess: ()=> void
 }
 
-const AddExperience = ({onClose, token}:props) => {
+const AddExperience = ({onClose, token, handleSuccess}:props) => {
   const [position, setPosition] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [location, setLocation] = useState('')
@@ -55,6 +56,7 @@ const AddExperience = ({onClose, token}:props) => {
         console.log("API Response:", response);
         Alert.alert('Success', 'Experience added successfully!');
         onClose(); // Close modal after successful submission
+        handleSuccess()
       } catch (error: any) {
         console.error('Error adding experience:', error);
     

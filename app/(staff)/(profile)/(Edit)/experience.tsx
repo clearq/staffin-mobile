@@ -6,7 +6,7 @@ import { colors } from '@/constants/Colors'
 import { globalStyles } from '@/constants/globalStyles'
 import { CardBody, CardFooter, CardHeader } from '@/components/Screen/ProfileUI/ProfileCard'
 import { useAppSelector } from '@/store/reduxHooks'
-import { getExperience, ExpData } from '@/api/staff'
+import { getExperience, ExpData, deleteExperience } from '@/api/staff'
 import AddExperience from '../modal/addExperience'
 import EditExperience from '../modal/editExperience'
 
@@ -54,8 +54,18 @@ const StaffExperience = ({user}: experienceProps) => {
     // console.log('open modal', openModal);
   }
 
-  const handleDeleteExperience = () => {
-
+  const handleDeleteExperience = (id:number, token:string) => {
+    Alert.alert('Delete item', 'Are you sure you want to delete this item?',
+    [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel'
+      },{
+        text: 'Delete',
+        onPress: () => deleteExperience(id, token) 
+      }
+    ])
   }
 
   
@@ -83,7 +93,7 @@ const StaffExperience = ({user}: experienceProps) => {
         />
         <CardBody>
           <View style={[{flexDirection:'column', gap:8}]}>
-            {user?.experience && user?.experience.map(exp => (
+            {token && user?.experience && user?.experience.map(exp => (
               <View key={exp.id}>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                   <Text style={[globalStyles.subTitleText]}>
@@ -101,7 +111,7 @@ const StaffExperience = ({user}: experienceProps) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                      onPress={handleDeleteExperience}
+                      onPress={() => handleDeleteExperience(exp.id, token)}
                     >
                       <MaterialCommunityIcons name='delete-outline' color={colors.gray} size={24} />
                     </TouchableOpacity>

@@ -8,7 +8,7 @@ import { CardBody, CardFooter, CardHeader } from '@/components/Screen/ProfileUI/
 import { useAppSelector } from '@/store/reduxHooks'
 import { getExperience, ExpData } from '@/api/staff'
 import AddExperience from '../modal/addExperience'
-import { PaperProvider, Portal } from 'react-native-paper'
+import EditExperience from '../modal/editExperience'
 
 type experienceProps = {
   user: User
@@ -16,7 +16,8 @@ type experienceProps = {
 
 const StaffExperience = ({user}: experienceProps) => {
   const { authUser } = useAppSelector((state) => state.auth);
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openAddModal, setOpenAddModal] = useState<boolean>(false)
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [exp, setExp] = useState<ExpData[]>([])
@@ -39,25 +40,38 @@ const StaffExperience = ({user}: experienceProps) => {
         Alert.alert("Error", error || "An error occurred.");  
       }
     }
+    // fetchExp()
   }, [])
 
 
   const handleAddExperience = () => {
-    setOpenModal(true)
+    setOpenAddModal(true)
     // console.log('open modal', openModal);
   }
 
-  const handleEdit = () => {
-    console.log('edit experience'); 
+  const handleEditExperience = () => {
+    setOpenEditModal(true)
+    // console.log('open modal', openModal);
   }
+
+  const handleDeleteExperience = () => {
+
+  }
+
   
   return (
     <>
-      {openModal &&
-        <AddExperience  
-          onClose={() => setOpenModal(false)} 
+      {openAddModal &&
+        <AddExperience 
+          token={token} 
+          onClose={() => setOpenAddModal(false)} 
         />
+      }
 
+      {openEditModal &&
+        <EditExperience  
+          onClose={() => setOpenEditModal(false)} 
+        />
       }
 
       <View style={[styles.cardContainer]}>
@@ -76,11 +90,22 @@ const StaffExperience = ({user}: experienceProps) => {
                     {exp.position}                 
                   </Text>
 
-                  <TouchableOpacity
-                    onPress={handleEdit}
+
+                  <View
+                    style={[styles.iconBtnGroup]}
                   >
-                    <MaterialCommunityIcons name='pencil-outline' color={colors.gray} size={24} />
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={handleEditExperience}
+                    >
+                      <MaterialCommunityIcons name='pencil-outline' color={colors.gray} size={24} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={handleDeleteExperience}
+                    >
+                      <MaterialCommunityIcons name='delete-outline' color={colors.gray} size={24} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                   <Text style={[styles.item]}>
@@ -157,5 +182,9 @@ const styles = StyleSheet.create({
     borderColor:colors.tintColor,
     borderWidth: 0.5,
   },
+  iconBtnGroup:{
+    flexDirection:'row',
+    gap:24,
+  }
   
 })

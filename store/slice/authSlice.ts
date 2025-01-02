@@ -102,7 +102,7 @@ export const signUpAdmin = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
-    const response = await Staffin_API.post('Auth/logout'); 
+    const response = await Staffin_API.post('/Auth/logout'); 
     return response.data.message; // Success case
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to logout");

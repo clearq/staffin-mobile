@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Modal,  } from 'react-native'
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { colors } from '@/constants/Colors';
@@ -11,65 +11,85 @@ type props = {
   modalclose: () => void;
   children: React.ReactNode;
   onSubmit: () => void
+  title: string
 }
 
-const ModalCard = ({modalclose, children, onSubmit, }:props) => (
-  <SafeAreaView style={[styles.container, styles.modalPosition]}>
-
-    <View style={[styles.cardContainer]}>
-      <View style={[styles.headerContainer]}>
-        <Text style={[globalStyles.titleText]}>Add Experience</Text>
-
-        <TouchableOpacity
-          onPress={modalclose}
+const ModalCard = ({modalclose, children, onSubmit, title}:props) => (
+  <SafeAreaProvider>
+    <SafeAreaView
+      style={{flex:1, justifyContent:'center', alignContent:'center'}}
+    >
+      <Modal
+        transparent={true}
+        style={[styles.container]}
+      >
+        <View
+          style={[styles.modalBg]}
         >
-          <MaterialCommunityIcons name='close' size={24} color={colors.gray} />
-        </TouchableOpacity>
-      </View>
 
-      <View style={[styles.bodyContaimer]}>
-        {children}
-      </View>
+          <View style={[styles.cardContainer]}>
+            {/** Card Header */}
+            <View style={[styles.headerContainer]}>
+              <Text style={[globalStyles.titleText]}>{title}</Text>
 
-      <ButtonLg 
-        title={'Submit'} 
-        handlePress={onSubmit} 
-        containerStyles={globalStyles.btnBlack} 
-        textColor={colors.white} 
-        isLoading={false} 
-      />
+              <TouchableOpacity
+                onPress={modalclose}
+              >
+                <MaterialCommunityIcons name='close' size={24} color={colors.gray} />
+              </TouchableOpacity>
+            </View>
 
-    </View>
-  </SafeAreaView>
+            {/** Card Body */}
+            <View style={[styles.bodyContaner]}>
+              {children}
+            </View>
+
+            {/** Card Footer */}
+            <View
+              style={[styles.footerContainer]}
+            >
+              <ButtonLg 
+                title={'Submit'} 
+                handlePress={onSubmit} 
+                containerStyles={globalStyles.btnBlack} 
+                textColor={colors.white} 
+                isLoading={false} 
+              />
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView>
+  </SafeAreaProvider>
 )
 
 export default ModalCard
 
 const styles = StyleSheet.create({
-  modalPosition:{
-    position:'absolute', 
-    width:'100%', 
-    height:'100%',
-    zIndex:1000,
-  },
+
   container: {
-    height:'100%',
+    flex:1,
+  },
+  modalBg:{
     width:'100%',
+    height:'100%',
     backgroundColor:colors.black60,
-    padding:16,
-    justifyContent:'center',
+    justifyContent:'center'
   },
   cardContainer: {
     padding:16,
     backgroundColor:colors.white,
-    gap:16,
-    height:'auto',
-  },
-  bodyContaimer: {
   },
   headerContainer:{
     flexDirection:'row',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    marginBottom:16,
   },
-
+  bodyContaner: {
+    paddingVertical:0,
+  },
+  footerContainer:{
+    marginTop:24,
+  },
 })

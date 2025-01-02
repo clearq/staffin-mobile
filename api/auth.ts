@@ -1,13 +1,13 @@
 // import { Staffin_API } from "./API";
 // import { User } from "./user";
 
-// export interface AuthResponce {
+// export interface Authresponse {
 //   token: string;
 //   id: number;
 //   role: number;
 // }
 // export interface AdminAuth {
-//   auth:AuthResponce
+//   auth:Authresponse
 //   companyUserId: number
 // }
 
@@ -17,9 +17,9 @@
 
 
 // // Sign-in
-// const login = async (email: string, password: string): Promise<AuthResponce> => {
+// const login = async (email: string, password: string): Promise<Authresponse> => {
 //   try {
-//     const response = await Staffin_API.post<AuthResponce>("/Auth/login", {
+//     const response = await Staffin_API.post<Authresponse>("/Auth/login", {
 //       email,
 //       password,
 //     });
@@ -34,9 +34,9 @@
 
 
 // // Sign-up Register Staff
-// const signUpStaff = async (userName: string, email: string, password: string): Promise<AuthResponce> => {
+// const signUpStaff = async (userName: string, email: string, password: string): Promise<Authresponse> => {
 //   try {
-//     const response = await Staffin_API.post<AuthResponce>("/Auth/register/staff", {
+//     const response = await Staffin_API.post<Authresponse>("/Auth/register/staff", {
 //       userName,
 //       email,
 //       password,
@@ -50,9 +50,9 @@
 
 
 // // Sign-up Register Admin
-// const signUpAdmin = async (companyName: string, organisationNumber: string, email: string, password: string): Promise<AuthResponce> => {
+// const signUpAdmin = async (companyName: string, organisationNumber: string, email: string, password: string): Promise<Authresponse> => {
 //   try {
-//     const response = await Staffin_API.post<AuthResponce>("/Auth/register/staff", {
+//     const response = await Staffin_API.post<Authresponse>("/Auth/register/staff", {
 //       companyName,
 //       organisationNumber,
 //       email,

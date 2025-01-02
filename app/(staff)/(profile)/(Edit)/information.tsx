@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { User } from '@/api/user'
 import { colors } from '@/constants/Colors'
 import { ButtonLg } from '@/components/UI/CustomButton'
-import EditTextInput from '@/components/Screen/EditUI/EditTextInput'
+import {EditTextInput} from '@/components/Screen/EditUI/EditTextInput'
 import { globalStyles } from '@/constants/globalStyles'
 
 

@@ -13,18 +13,8 @@ export interface ExpData {
   description?: string;
   companyName: string;
   location: string;
-  startDate: {
-    year: number;
-    month: number;
-    day: number;
-  };
-  endDate:{
-    year: number;
-    month: number;
-    day: number;
-  };
-  staffId: number;
-  userId: number;
+  startDate: string
+  endDate: string
 }
 
 
@@ -50,7 +40,7 @@ const generateCV = async (token: string): Promise<string> => {
 
     return url; 
   } catch (error: any) {
-    console.error("Error generating CV:", error.response?.data || error.message);
+    Alert.alert('Error', error.response?.data?.message || "Failed to generate CV");
     throw new Error(error.response?.data?.message || "Failed to generate CV");
   }
 };
@@ -81,9 +71,8 @@ const downloadCV = async (token: string): Promise<void> => {
     });
 
     Alert.alert('Success', `CV downloaded successfully to: ${fileUri}`);
-    console.log('File saved to:', fileUri);
+    
   } catch (error: any) {
-    console.error('Error downloading CV:', error.response?.data || error.message);
     Alert.alert('Error', error.response?.data?.message || 'Failed to download CV');
     throw new Error(error.response?.data?.message || 'Failed to download CV');
   }
@@ -93,7 +82,7 @@ const downloadCV = async (token: string): Promise<void> => {
 // Get CV
 const getCV = async (token: string): Promise<CV> => {
   try {
-    const response = await Staffin_API.get<CV>("/Staff/Get-CV", {
+    const response = await Staffin_API.get("/Staff/Get-CV", {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: "*/*",
@@ -101,7 +90,7 @@ const getCV = async (token: string): Promise<CV> => {
     });
     return response.data;
   } catch (error: any) {
-    console.error("Error fetching CV:", error.response?.data || error.message);
+    Alert.alert('Error', error.response?.data?.message || "Failed to fetch CV" )
     throw new Error(error.response?.data?.message || "Failed to fetch CV");
   }
 };
@@ -109,34 +98,48 @@ const getCV = async (token: string): Promise<CV> => {
 // Update Staff
 const updateStaff = async (userData: Partial<User>, token: string) => {
   try {
-    const response = await Staffin_API.put("Staff/UpdateStaff", userData, {
+    const response = await Staffin_API.put("/Staff/UpdateStaff", userData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Full response data:", response.data); 
     return response.data;
   } catch (error: any) {
-    console.error("UpdateUser error:", error.response?.data || error.message);
+    Alert.alert('Error', error.response?.data?.message || "Failed to update user profile")
     throw new Error(error.response?.data?.message || "Failed to update user profile");
   }
 };
 
 
 // Get Staff Experience
-const getExperience = async (token:string) => {
+const getExperience = async (token: string) => {
   try {
-    const responce = await Staffin_API.get<ExpData>("Staff/StaffExperience-Get", )
-    return responce.data
+    const response = await Staffin_API.get("/Staff/StaffExperience-Get", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data
     
   } catch (error: any) {
-    console.error("Get staff experience error:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to get user experience");
+    Alert.alert('Error', error.response?.date?.message || "Failed to get experience")
+    throw new Error(error.response?.data?.message || "Failed to get experience");
   }
 };
 
 // Add Staff Experience
-const  addExperience = async (token:string) => {};
+const  addExperience = async (expData:ExpData, token:string) => {
+  try {
+    const response = await Staffin_API.post("/Staff/StaffExperience-Add", expData, {
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return response.data;
+  } catch(error:any){
+    Alert.alert('Error', error.response?.data?.message || "Failed to add experience")
+  }
+};
 
 
 // Update Staff Experience
@@ -144,7 +147,25 @@ const updateExperience = async () => {};
 
 
 // Delete Staff Experience
-const deleteExperience = async () => {};
+const deleteExperience = async (experienceId: number, token: string): Promise<void> => {
+  try {
+    const response = await Staffin_API.delete(`/Staff/StaffExperience-Remove`, {
+      params: { experienceId },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Delete response:", response.data);
+    Alert.alert("Success", "Experience deleted successfully!");
+  } catch (error: any) {
+    console.error("Error deleting experience:", error);
+    Alert.alert(
+      "Error",
+      error.response?.data?.message || "Failed to delete experience"
+    );
+  }
+};
+
 
 
 // Get Staff Education

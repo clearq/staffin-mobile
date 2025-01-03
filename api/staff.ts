@@ -1,5 +1,5 @@
 import { Alert, Platform } from "react-native";
-import { Staffin_API } from "./API";
+import { api } from "./API";
 import { User } from "./user";
 import * as FileSystem from 'expo-file-system';
 
@@ -30,10 +30,10 @@ export interface EducationData {
 
 
 // Generate CV
-const generateCV = async (token: string): Promise<string> => {
+const generateCV = async (token: string) => {
   try {
 
-    const response = await Staffin_API.post(
+    const response = await api.post(
       '/Staff/Generate-CV', 
       {}, 
       {
@@ -57,9 +57,9 @@ const generateCV = async (token: string): Promise<string> => {
 
 
 // Download CV
-const downloadCV = async (token: string): Promise<void> => {
+const downloadCV = async (token: string) => {
   try {
-    const response = await Staffin_API.get('/Staff/Download-CV', {
+    const response = await api.get('/Staff/Download-CV', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': '*/*',
@@ -90,9 +90,9 @@ const downloadCV = async (token: string): Promise<void> => {
 
 
 // Get CV
-const getCV = async (token: string): Promise<CV> => {
+const getCV = async (token: string) => {
   try {
-    const response = await Staffin_API.get("/Staff/Get-CV", {
+    const response = await api.get("/Staff/Get-CV", {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: "*/*",
@@ -109,7 +109,7 @@ const getCV = async (token: string): Promise<CV> => {
 // Update Staff
 const updateStaff = async (userData: Partial<User>, token: string) => {
   try {
-    const response = await Staffin_API.put("/Staff/UpdateStaff", userData, {
+    const response = await api.put("/Staff/UpdateStaff", userData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -125,7 +125,7 @@ const updateStaff = async (userData: Partial<User>, token: string) => {
 // Get Staff Experience
 const getExperience = async (token: string) => {
   try {
-    const response = await Staffin_API.get("/Staff/StaffExperience-Get", {
+    const response = await api.get("/Staff/StaffExperience-Get", {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -142,7 +142,7 @@ const getExperience = async (token: string) => {
 // Add Staff Experience
 const  addExperience = async (expData:Partial<ExpData>, token:string) => {
   try {
-    const response = await Staffin_API.post("/Staff/StaffExperience-Add", expData, {
+    const response = await api.post("/Staff/StaffExperience-Add", expData, {
       headers:{
         Authorization: `Bearer ${token}`,
       }
@@ -157,7 +157,7 @@ const  addExperience = async (expData:Partial<ExpData>, token:string) => {
 // Update Staff Experience
 const updateExperience = async (experienceId: number, expData:Partial<ExpData>, token:string) => {
   try {
-    const response = await Staffin_API.put(`/Staff/StaffExperience-Update?experienceId=${experienceId}`, expData, {
+    const response = await api.put(`/Staff/StaffExperience-Update?experienceId=${experienceId}`, expData, {
       headers:{
         Authorization: `Bearer ${token}`,
       }
@@ -173,7 +173,7 @@ const updateExperience = async (experienceId: number, expData:Partial<ExpData>, 
 // Delete Staff Experience
 const deleteExperience = async (experienceId: number, token: string): Promise<void> => {
   try {
-    const response = await Staffin_API.delete(`/Staff/StaffExperience-Remove?experienceId=${experienceId}`, {
+    const response = await api.delete(`/Staff/StaffExperience-Remove?experienceId=${experienceId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -194,7 +194,7 @@ const deleteExperience = async (experienceId: number, token: string): Promise<vo
 // Get Staff Education
 const getEducation = async (token:string) => {
   try {
-    const response = await Staffin_API.get("/Staff/GetStaff-Education", {
+    const response = await api.get("/Staff/GetStaff-Education", {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -211,7 +211,7 @@ const getEducation = async (token:string) => {
 // Add Staff Education
 const addEducation = async (educationData:Partial<EducationData>, token:string) => {
   try {
-    const response = await Staffin_API.post("/Staff/StaffEducation-Add", educationData, {
+    const response = await api.post("/Staff/StaffEducation-Add", educationData, {
       headers:{
         Authorization: `Bearer ${token}`,
       }
@@ -232,7 +232,7 @@ const updateEducation = async () => {
 // Delete Staff Education
 const deleteEducation = async (educationId: number, token: string) => {
   try {
-    const response = await Staffin_API.delete(`/Staff/StaffEducation-Remove?educationId=${educationId}`, {
+    const response = await api.delete(`/Staff/StaffEducation-Remove?educationId=${educationId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

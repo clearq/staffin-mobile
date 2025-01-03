@@ -1,4 +1,4 @@
-import { Staffin_API } from "./API";
+import {api } from "./API";
 
 export interface Company {
   id: number;
@@ -16,7 +16,7 @@ export interface Company {
 
 const getCompanyDetails = async (companyId: number): Promise<Company> => {
   try {
-    const response = await Staffin_API.get(`/Company/GetCompany-id?Id=${companyId}`);
+    const response = await api.get(`/Company/GetCompany-id?Id=${companyId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching company details:", error);

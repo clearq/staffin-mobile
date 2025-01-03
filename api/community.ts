@@ -1,4 +1,4 @@
-import { Staffin_API } from "./API";
+import { API_BASE_URL, api } from "./API";
 
 export interface BasePost {
   postId: number;
@@ -35,9 +35,9 @@ export interface Comment {
 }
 
 // Get Feed by users follow/follower
-const getFeed = async (token: string): Promise<Post[]> => {
+const getFeed = async (token: string) => {
   try {
-    const response = await Staffin_API.get<Post[]>("/Community/Feed", {
+    const response = await api.get(`/Community/Feed`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -50,9 +50,9 @@ const getFeed = async (token: string): Promise<Post[]> => {
 };
 
 // Get post details
-const getPostDetails = async (postId: number, token: string): Promise<PostDetail> => {
+const getPostDetails = async (postId: number, token: string) => {
   try {
-    const response = await Staffin_API.get<PostDetail>(`/Community/GetPostDetails?postId=${postId}`, {
+    const response = await api.get(`/Community/GetPostDetails?postId=${postId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -65,9 +65,9 @@ const getPostDetails = async (postId: number, token: string): Promise<PostDetail
 };
 
 // Get users posts and shares
-const getUserPostsAndShares = async (userId: number, token: string): Promise<Post[]> => {
+const getUserPostsAndShares = async (userId: number, token: string) => {
   try {
-    const response = await Staffin_API.get<Post[]>(
+    const response = await api.get(
       `/Community/GetUserPostsAndShares?userId=${userId}`,
       {
         headers: {

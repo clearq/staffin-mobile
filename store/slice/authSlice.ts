@@ -1,4 +1,4 @@
-import { Staffin_API } from "../../api/API";
+import { api } from "../../api/API";
 import { User } from "../../api/user";
 
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -36,7 +36,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }: { email: string; password: string }, thunkAPI) => {
     try {
-      const response = await Staffin_API.post<AuthResponse>("/Auth/login", { email, password });
+      const response = await api.post("/Auth/login", { email, password });
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
@@ -47,11 +47,15 @@ export const login = createAsyncThunk(
 export const signUpStaff = createAsyncThunk(
   "auth/signUpStaff",
   async (
-    { userName, email, password }: { userName: string; email: string; password: string },
+    { userName, email, password }: { 
+      userName: string; 
+      email: string; 
+      password: string 
+    },
     thunkAPI
   ) => {
     try {
-      const response = await Staffin_API.post<AuthResponse>("/Auth/register/staff", {
+      const response = await api.post("/Auth/register/staff", {
         userName,
         email,
         password,
@@ -71,11 +75,16 @@ export const signUpAdmin = createAsyncThunk(
       organisationNumber,
       email,
       password,
-    }: { companyName: string; organisationNumber: string; email: string; password: string },
+    }: { 
+      companyName: string; 
+      organisationNumber: string; 
+      email: string; 
+      password: string 
+    },
     thunkAPI
   ) => {
     try {
-      const response = await Staffin_API.post<AuthResponse>("/Auth/register/admin", {
+      const response = await api.post("/Auth/register/admin", {
         companyName,
         organisationNumber,
         email,
@@ -92,7 +101,7 @@ export const signUpAdmin = createAsyncThunk(
 //   "auth/getCurrentUser",
 //   async (userId: number, thunkAPI) => {
 //     try {
-//       const response = await Staffin_API.get<User>(`/User/GetUser-id?userId=${userId}`);
+//       const response = await api.get<User>(`/User/GetUser-id?userId=${userId}`);
 //       return response.data;
 //     } catch (error: any) {
 //       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch current user");
@@ -102,7 +111,7 @@ export const signUpAdmin = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
-    const response = await Staffin_API.post('/Auth/logout'); 
+    const response = await api.post('/Auth/logout'); 
     return response.data.message; // Success case
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to logout");

@@ -1,5 +1,10 @@
 import axios from "axios";
 
-export const Staffin_API = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL,
-})
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL
+
+export const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers:{
+    'Content-Type': 'application/json',
+  },
+});

@@ -1,4 +1,5 @@
-import { Staffin_API } from "./API";
+import { Alert } from "react-native";
+import { api } from "./API";
 
 export interface User {
   id: number;
@@ -55,7 +56,7 @@ interface Education {
 // Get User Info
 const getUser = async (userId: number): Promise<User> => {
   try {
-    const response = await Staffin_API.get<User>(`/User/GetUser-id?userId=${userId}`);
+    const response = await api.get(`/User/GetUser-id?userId=${userId}`);
     return response.data;
   } catch (error: any) {
     console.error("GetUser error:", error.response?.data || error.message);
@@ -63,6 +64,16 @@ const getUser = async (userId: number): Promise<User> => {
   }
 };
 
+
+
+// CDN
+
+// Update profile image
+const updateProfileImage = async (token:string) => {
+
+}
+
 export { 
-  getUser
+  getUser,
+  updateProfileImage
 }

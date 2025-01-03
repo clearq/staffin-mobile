@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
 import { Link } from 'expo-router'
+import dayjs from 'dayjs'
 // Redux
 import { useAppSelector } from '@/store/reduxHooks'
 // API
@@ -162,7 +163,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
                 </Text>
 
                 <Text style={[styles.item, {color:colors.gray}]}>
-                  {exp.startDate} - {exp.endDate ? exp.endDate : 'Ongoing'}
+                  {dayjs(exp.startDate).format('YYYY-MM-DD')} - {exp.endDate ? dayjs(exp.endDate).format('YYYY-MM-DD') : 'Ongoing'}
                 </Text>
                 
                 <Text style={[styles.item, {color:colors.gray}]}>
@@ -202,7 +203,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
                 </Text>
 
                 <Text style={[styles.item, {color:colors.gray}]}>
-                  {edu.startDate} - {edu.endDate ? edu.endDate : 'Ongoing'}
+                  {dayjs(edu.startDate).format('YYYY-MM-DD')} - {edu.endDate ? dayjs(edu.endDate).format('YYYY-MM-DD') : 'Ongoing'}
                 </Text>
 
                 <View style={[styles.divider, {marginVertical:8}]}/>

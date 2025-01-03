@@ -2,6 +2,7 @@ import { Alert, Platform } from "react-native";
 import { api } from "./API";
 import { User } from "./user";
 import * as FileSystem from 'expo-file-system';
+import { LanguageData, SkillData } from "./skill";
 
 export interface CV {
   name: string;
@@ -27,6 +28,13 @@ export interface EducationData {
   endDate: string
   staffId: number
 }
+
+export interface RatingData {
+  id: number
+  rating: 2
+}
+
+
 
 
 // Generate CV
@@ -173,13 +181,11 @@ const updateExperience = async (experienceId: number, expData:Partial<ExpData>, 
 // Delete Staff Experience
 const deleteExperience = async (experienceId: number, token: string): Promise<void> => {
   try {
-    const response = await api.delete(`/Staff/StaffExperience-Remove?experienceId=${experienceId}`, {
+      await api.delete(`/Staff/StaffExperience-Remove?experienceId=${experienceId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Delete response:", response.data);
-    Alert.alert("Success", "Experience deleted successfully!");
   } catch (error: any) {
     console.error("Error deleting experience:", error);
     Alert.alert(
@@ -232,12 +238,11 @@ const updateEducation = async () => {
 // Delete Staff Education
 const deleteEducation = async (educationId: number, token: string) => {
   try {
-    const response = await api.delete(`/Staff/StaffEducation-Remove?educationId=${educationId}`, {
+    await api.delete(`/Staff/StaffEducation-Remove?educationId=${educationId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Delete response:", response.data);
     Alert.alert("Success", "Experience deleted successfully!");
   } catch (error: any) {
     console.error("Error deleting experience:", error);
@@ -247,6 +252,102 @@ const deleteEducation = async (educationId: number, token: string) => {
     );
   }
 };
+
+
+// Get Staff Skills
+const getStaffSkills = async (staffId: number) => {
+  try {
+    const response = await api.get(`/Staff/GetStaff-Skills?staffId=${staffId}`);
+    return response.data
+  } catch (error:any) {
+    Alert.alert("Error", error.response?.data?.message || "Failed to fetch skills");
+  }
+}
+
+
+// Add Staff Skill
+const addStaffSkill = async (skillData: SkillData, token: string) => {
+  try {
+    const response = await api.post('/Staff/StaffSkills-Add', skillData, {
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return response.data
+
+  } catch (error:any) {
+    Alert.alert("Error", error.response?.data?.message || "Failed to add skill")
+  }
+}
+
+
+// Remove Staff Skill
+const deleteStaffSkill = async (skillId: number, token: string) => {
+  try {
+    await api.delete(`/Staff/StaffSkills-Remove?skillId=${skillId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+  } catch (error: any) {
+    Alert.alert("Error", error.response?.data?.message || "Failed to delete skill")
+  }
+}
+
+
+// Get Staff Language
+const getStaffLanguages = async (userId: number) => {
+  try {
+    const response = await api.get(`/Staff/GetStaff-Language?staffId=${userId}` )
+
+    return response.data
+  } catch (error: any) {
+    console.error("Error:", error.response?.data || error.message);
+  }
+}
+
+
+// Rating (Update) Staff Language
+const updateStaffLanguage = async (langId: LanguageData["id"], ratingData: RatingData) => {
+  try {
+    const response = await api.put('/StaffLanguage-Rating', {
+      id: langId,
+      ratingData,
+    });
+
+    return response.data
+  } catch (error: any) {
+    Alert.alert("Error", error.response?.data?.message || "Failed to update rating")
+  }
+}
+
+
+// Add Staff Language
+const addStaffLanguage = async (langId: LanguageData["id"], ratingData: RatingData) => {
+  try {
+    const response = await api.post('/Staff/AddStaff-Language', {
+      id: langId,
+      ratingData,
+    });
+
+    return response.data
+  } catch (error: any) {
+    Alert.alert("Error", error.response?.data?.message || "Failed to add language")
+  }
+}
+
+
+// Remove Staff Language
+const deleteStaffLanguage = async (langId: LanguageData["id"]) => {
+  try {
+    await api.delete('/Staff/StaffLanguage-Remove', {
+      data: {langId},
+    })
+  } catch (error: any) {
+    Alert.alert("Error", error.response?.data?.message || "Failed to delete language")
+  }
+}
+
 
 export { 
   generateCV,  
@@ -261,4 +362,11 @@ export {
   addEducation,
   updateEducation,
   deleteEducation,
+  getStaffSkills,
+  addStaffSkill,
+  deleteStaffSkill,
+  getStaffLanguages,
+  updateStaffLanguage,
+  addStaffLanguage,
+  deleteStaffLanguage,
 };

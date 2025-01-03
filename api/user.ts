@@ -1,5 +1,6 @@
 import { Alert } from "react-native";
 import { api } from "./API";
+import { LanguageData, SkillData } from "./skill";
 
 export interface User {
   id: number;
@@ -18,8 +19,8 @@ export interface User {
   companyId?: number;
   companyName?: string;
   educations?: Education[];
-  skills?: Skill[];
-  languages?: Language[];
+  skills?: SkillData[];
+  languages?: StaffLanguage[];
   experience?: Experience[];
 }
 
@@ -33,14 +34,9 @@ interface Experience {
   endDate: string; // ISO 8601 format
 }
 
-interface Skill {
-  id: number;
-  name: string;
-}
-
-interface Language {
-  id: number;
-  name: string;
+export interface StaffLanguage {
+  id: number
+  name: string 
   rating: number;
 }
 
@@ -54,7 +50,7 @@ interface Education {
 }
 
 // Get User Info
-const getUser = async (userId: number): Promise<User> => {
+const getUser = async (userId: number) => {
   try {
     const response = await api.get(`/User/GetUser-id?userId=${userId}`);
     return response.data;

@@ -9,15 +9,24 @@ export interface CV {
 }
 
 export interface ExpData {
+  id: number
   position: string;
   description?: string;
   companyName: string;
   location: string;
   startDate: string
   endDate: string
-  id:number
+  staffId: number
 }
 
+export interface EducationData {
+  id: number
+  name: string
+  institution: string
+  startDate: string
+  endDate: string
+  staffId: number
+}
 
 
 // Generate CV
@@ -129,6 +138,7 @@ const getExperience = async (token: string) => {
   }
 };
 
+
 // Add Staff Experience
 const  addExperience = async (expData:Partial<ExpData>, token:string) => {
   try {
@@ -159,10 +169,11 @@ const updateExperience = async (experienceId: number, expData:Partial<ExpData>, 
   }
 };
 
+
 // Delete Staff Experience
 const deleteExperience = async (experienceId: number, token: string): Promise<void> => {
   try {
-    const response = await Staffin_API.delete(`/ExpStaff/StaffExperience-Remove?experienceId=${experienceId}`, {
+    const response = await Staffin_API.delete(`/Staff/StaffExperience-Remove?experienceId=${experienceId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -181,19 +192,61 @@ const deleteExperience = async (experienceId: number, token: string): Promise<vo
 
 
 // Get Staff Education
-const getEducation = async () => {};
+const getEducation = async (token:string) => {
+  try {
+    const response = await Staffin_API.get("/Staff/GetStaff-Education", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data
+    
+  } catch (error: any) {
+    Alert.alert('Error', error.response?.date?.message || "Failed to get experience")
+    throw new Error(error.response?.data?.message || "Failed to get experience");
+  }
+};
 
 
 // Add Staff Education
-const AddEducation = async () => {};
+const addEducation = async (educationData:Partial<EducationData>, token:string) => {
+  try {
+    const response = await Staffin_API.post("/Staff/StaffEducation-Add", educationData, {
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return response.data;
+  } catch(error:any){
+    Alert.alert('Error', error.response?.data?.message || "Failed to add experience")
+  }
+};
 
 
 // Update Staff Education
-const updateEducation = async () => {};
+const updateEducation = async () => {
+  
+};
 
 
 // Delete Staff Education
-const deleteEducation = async () => {};
+const deleteEducation = async (educationId: number, token: string) => {
+  try {
+    const response = await Staffin_API.delete(`/Staff/StaffEducation-Remove?educationId=${educationId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Delete response:", response.data);
+    Alert.alert("Success", "Experience deleted successfully!");
+  } catch (error: any) {
+    console.error("Error deleting experience:", error);
+    Alert.alert(
+      "Error",
+      error.response?.data?.message || "Failed to delete experience"
+    );
+  }
+};
 
 export { 
   generateCV,  
@@ -205,7 +258,7 @@ export {
   updateExperience,
   deleteExperience,
   getEducation,
-  AddEducation,
+  addEducation,
   updateEducation,
   deleteEducation,
 };

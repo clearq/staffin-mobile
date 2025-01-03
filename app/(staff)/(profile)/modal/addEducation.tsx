@@ -1,10 +1,10 @@
-import { View, StyleSheet, Alert } from 'react-native'
+import { View, Text, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
 
 import ModalCard from '@/components/Modal/ModalCard'
-import {EditTextInput, EditTextInputDate, EditTextInputMultiline} from '@/components/Screen/EditUI/EditTextInput'
+import {EditTextInput, EditTextInputDate} from '@/components/Screen/EditUI/EditTextInput'
 import { colors } from '@/constants/Colors'
-import { addExperience } from '@/api/staff'
+import { addEducation } from '@/api/staff'
 import dayjs from 'dayjs'
 
 
@@ -14,15 +14,12 @@ type props = {
   handleSuccess: ()=> void
 }
 
-const AddExperience = ({onClose, token, handleSuccess}:props) => {
-  const [position, setPosition] = useState('')
-  const [companyName, setCompanyName] = useState('')
-  const [location, setLocation] = useState('')
-  const [description, setDescription] = useState('')
+const AddEducation = ({onClose, token, handleSuccess}:props) => {
+  const [name, setName] = useState('')
+  const [institution, setInstitution] = useState('')
   const [startDate, setStartDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [isSubmitting, setIsSubmitting] = useState(false);
-
 
   const handleStartDateChange = (newDate:string) => {
     setStartDate(newDate)
@@ -34,29 +31,27 @@ const AddExperience = ({onClose, token, handleSuccess}:props) => {
 
   const handleSubmit = async () => {
     if (token) {
-      const expData = {
-        position,
-        companyName,
-        location,
-        description,
+      const eduData = {
+        name,
+        institution,
         startDate,
-        endDate,    
+        endDate
       }
-      
+
       try {
         setIsSubmitting(true);
-        
-        await addExperience(expData, token);
-        
-        Alert.alert('Success', 'Experience added successfully!');
+
+        await addEducation(eduData, token);
+
+        Alert.alert('Success', 'Education added successfully!');
         onClose(); // Close modal after successful submission
         handleSuccess()
-      } catch (error: any) {    
+      } catch (error:any) {
         // Enhanced error alert
         const errorMessage =
           error.response?.data?.message ||
           error.message ||
-          "Failed to add experience. Please try again.";
+          "Failed to add education. Please try again.";
         Alert.alert('Error', errorMessage);
       } finally {
         setIsSubmitting(false); 
@@ -66,31 +61,23 @@ const AddExperience = ({onClose, token, handleSuccess}:props) => {
 
   return (
     <ModalCard 
-      title={'Add Experience'}
+      title={'Add Education'}
       modalclose={onClose} 
       children={(
         <View style={styles.formContainer}>
           <EditTextInput 
-            label={'Position'} 
-            value={position} 
-            handleChange={(text)=> setPosition(text)} 
+            label={'Name'} 
+            value={name} 
+            handleChange={(text)=> setName(text)} 
             multilineText={false} 
             placholderColor={colors.tintColor}      
           />
 
           <EditTextInput 
-            label={'Company name'} 
-            value={companyName} 
-            handleChange={(text)=> setCompanyName(text)} 
+            label={'Institution'} 
+            value={institution} 
+            handleChange={(text)=> setInstitution(text)} 
             multilineText={false}   
-            placholderColor={colors.tintColor}     
-          />
-          
-          <EditTextInput 
-            label={'Location'} 
-            value={location} 
-            handleChange={(text)=> setLocation(text)} 
-            multilineText={false}  
             placholderColor={colors.tintColor}     
           />
 
@@ -113,27 +100,18 @@ const AddExperience = ({onClose, token, handleSuccess}:props) => {
               placholderColor={colors.tintColor}
             />     
           </View>
-
-          <EditTextInputMultiline 
-            label={'Description'} 
-            value={description} 
-            handleChange={(text)=> setDescription(text)} 
-            multilineText={true} 
-            placholderColor={colors.tintColor}       
-          />
         </View>
       )} 
       onSubmit={handleSubmit}      
     />
-
   )
 }
 
-export default AddExperience
+export default AddEducation
 
 const styles = StyleSheet.create({
   formContainer:{
-    height:320,
+    height:'auto',
     width:'100%',
     gap:16,
   },

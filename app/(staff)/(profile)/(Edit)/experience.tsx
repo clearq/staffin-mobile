@@ -21,6 +21,7 @@ const StaffExperience = ({user}: experienceProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [exp, setExp] = useState<ExpData[]>([])
+  const [expById, setExpById] = useState<ExpData>()
 
   const token = authUser?.token
 
@@ -39,7 +40,6 @@ const StaffExperience = ({user}: experienceProps) => {
   };
 
   useEffect(() => {
-    console.log('hello')
     fetchExperiences()
   },[])
 
@@ -48,8 +48,9 @@ const StaffExperience = ({user}: experienceProps) => {
     // console.log('open modal', openModal);
   }
 
-  const handleEditExperience = () => {
+  const handleEditExperience = (exp:ExpData) => {
     setOpenEditModal(true)
+    setExpById(exp)
     // console.log('open modal', openModal);
   }
 
@@ -86,9 +87,12 @@ const StaffExperience = ({user}: experienceProps) => {
         />
       }
 
-      {openEditModal &&
+      {expById && openEditModal &&
         <EditExperience  
+          token={token}
           onClose={() => setOpenEditModal(false)} 
+          handleSuccess={fetchExperiences}
+          exp={expById} // get expData by experienceId
         />
       }
 
@@ -113,7 +117,7 @@ const StaffExperience = ({user}: experienceProps) => {
                     style={[styles.iconBtnGroup]}
                   >
                     <TouchableOpacity
-                      onPress={handleEditExperience}
+                      onPress={() => handleEditExperience(exp)}
                     >
                       <MaterialCommunityIcons name='pencil-outline' color={colors.gray} size={24} />
                     </TouchableOpacity>
@@ -126,29 +130,29 @@ const StaffExperience = ({user}: experienceProps) => {
                   </View>
                 </View>
 
-                  <Text style={[styles.item]}>
-                    {exp.companyName}
-                  </Text>
+                <Text style={[styles.item]}>
+                  {exp.companyName}
+                </Text>
 
-                  <Text style={[styles.item, {color:colors.gray}]}>
-                    {exp.startDate} - {exp.endDate ? exp.endDate : 'Ongoing'}
-                  </Text>
+                <Text style={[styles.item, {color:colors.gray}]}>
+                  {exp.startDate} - {exp.endDate ? exp.endDate : 'Ongoing'}
+                </Text> 
                   
-                  <Text style={[styles.item, {color:colors.gray}]}>
+                <Text style={[styles.item, {color:colors.gray}]}>
                   {exp.location}
                 </Text>
 
-              <Text style={[styles.item]}>
-                {exp.description}
-              </Text>
+                <Text style={[styles.item]}>
+                  {exp.description}
+                </Text>
 
-              <View style={[styles.divider, {marginVertical:8}]}/>
-            </View>
-          ))}
-        </View>
-      </CardBody>
+                <View style={[styles.divider, {marginVertical:8}]}/>
+              </View>
+            ))}
+          </View>
+        </CardBody>
 
-    </View>
+      </View>
     </>
   )
 }

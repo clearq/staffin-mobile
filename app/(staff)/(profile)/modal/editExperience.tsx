@@ -1,37 +1,87 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import ModalCard from '@/components/Modal/ModalCard'
-import {EditTextInput} from '@/components/Screen/EditUI/EditTextInput'
+import {EditTextInput, EditTextInputDate, EditTextInputMultiline} from '@/components/Screen/EditUI/EditTextInput'
 import { colors } from '@/constants/Colors'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import dayjs from 'dayjs'
+import { ExpData, updateExperience } from '@/api/staff'
 
 type props = {
   onClose: () => void
+  token?: string
+  exp:ExpData
+  handleSuccess: ()=> void
 }
 
-const EditExperience = ({onClose}:props) => {
-  const [title, setTitle] = useState('')
-  const [companyName, setCompanyName] = useState('')
-  const [description, setDescription] = useState('')
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+const EditExperience = ({onClose, token, exp, handleSuccess}:props) => {
+  const [position, setPosition] = useState(exp.position)
+  const [companyName, setCompanyName] = useState(exp.companyName)
+  const [location, setLocation] = useState(exp.location)
+  const [description, setDescription] = useState(exp?.description)
+  const [startDate, setStartDate] = useState(exp.startDate)
+  const [endDate, setEndDate] = useState(exp.endDate)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
 
-  const handleSubmit = () => {
-    console.log('submit');  
+  const handleStartDateChange = (newDate:string) => {
+    setStartDate(newDate)
+    console.log('start date:', startDate);  
+  }
+
+  const handleEndDateChange = (newDate:string) => {
+    setEndDate(newDate)
+    console.log('end date:', endDate);
+    
+  }
+
+  const handleSubmit = async () => {
+    if (token) {
+      const expData = {
+        ...exp,
+        position,
+        companyName,
+        location,
+        description,
+        startDate,
+        endDate,    
+      }
+      
+      try {
+        setIsSubmitting(true); 
+        // console.log("Submitting data:", expData);
+        const response = await updateExperience(exp.id, expData, token);
+        console.log("API Response:", response, exp.id);
+        Alert.alert('Success', 'Experience updated successfully!');
+        onClose(); // Close modal after successful submission
+        handleSuccess()
+      } catch (error: any) {
+        console.error('Error updating experience:', error);
+    
+        // Enhanced error alert
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to update experience. Please try again.";
+        Alert.alert('Error', errorMessage);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  
   }
 
   return (
     <ModalCard 
-      title={'Edit Experience'}
+      title={'Add Experience'}
       modalclose={onClose} 
       children={(
         <View style={styles.formContainer}>
           <EditTextInput 
-            label={'Title'} 
-            value={title} 
-            handleChange={(text)=> setTitle(text)} 
+            label={'Position'} 
+            value={position} 
+            handleChange={(text)=> setPosition(text)} 
             multilineText={false} 
-            formStyle={styles.inputStyle}
             placholderColor={colors.tintColor}      
           />
 
@@ -39,45 +89,43 @@ const EditExperience = ({onClose}:props) => {
             label={'Company name'} 
             value={companyName} 
             handleChange={(text)=> setCompanyName(text)} 
+            multilineText={false}   
+            placholderColor={colors.tintColor}     
+          />
+          
+          <EditTextInput 
+            label={'Location'} 
+            value={location} 
+            handleChange={(text)=> setLocation(text)} 
             multilineText={false}  
-            formStyle={styles.inputStyle} 
             placholderColor={colors.tintColor}     
           />
 
           <View style={styles.row}>
-            <EditTextInput 
-              label={'Start date'} 
-              value={startDate} 
-              handleChange={(text)=> setStartDate(text)} 
-              multilineText={false}  
-              formStyle={[styles.inputStyle, {width:'90%'}]}
-              placholderColor={colors.tintColor}      
+            <EditTextInputDate
+              label={'Start date'}
+              value={startDate}
+              handleChange={handleStartDateChange}
+              multilineText={false}
+              formStyle={[styles.resize]}
+              placholderColor={colors.tintColor}
             />
-            <TouchableOpacity>
-              <MaterialCommunityIcons name='calendar-month-outline' size={24} color={colors.gray} />
-            </TouchableOpacity>
+            
+            <EditTextInputDate
+              label={'End date'}
+              value={endDate}
+              handleChange={handleEndDateChange}
+              multilineText={false}
+              formStyle={[styles.resize]}
+              placholderColor={colors.tintColor}
+            />     
           </View>
 
-          <View style={styles.row}>
-            <EditTextInput 
-              label={'End date'} 
-              value={endDate} 
-              handleChange={(text)=> setEndDate(text)} 
-              multilineText={false}  
-              formStyle={[styles.inputStyle, {width:'90%'}]} 
-              placholderColor={colors.tintColor}     
-            />
-            <TouchableOpacity>
-              <MaterialCommunityIcons name='calendar-month-outline' size={24} color={colors.gray} />
-            </TouchableOpacity>
-          </View>
-
-          <EditTextInput 
+          <EditTextInputMultiline 
             label={'Description'} 
-            value={description} 
+            value={description ? description : ''} 
             handleChange={(text)=> setDescription(text)} 
             multilineText={true} 
-            formStyle={styles.inputStyle} 
             placholderColor={colors.tintColor}       
           />
         </View>
@@ -91,20 +139,16 @@ export default EditExperience
 
 const styles = StyleSheet.create({
   formContainer:{
-    flexDirection:'column',
-    height:'auto',
+    height:320,
     width:'100%',
     gap:16,
-    marginBottom:24,
-  },
-  inputStyle:{
-    minHeight:40,
   },
   row:{
     flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'flex-end',
     gap:8,
     width:'auto',
+  },
+  resize:{
+    flexShrink:0.5
   },
 })

@@ -2,12 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'reac
 import React, { useState } from 'react'
 
 
-import DateTimePicker from 'react-native-ui-datepicker'
 import ModalCard from '@/components/Modal/ModalCard'
 import {EditTextInput, EditTextInputDate, EditTextInputMultiline} from '@/components/Screen/EditUI/EditTextInput'
 import { colors } from '@/constants/Colors'
-import { addExperience, getExperience } from '@/api/staff'
-import { User } from '@/api/user'
+import { addExperience } from '@/api/staff'
 import dayjs from 'dayjs'
 
 
@@ -50,8 +48,8 @@ const AddExperience = ({onClose, token, handleSuccess}:props) => {
       }
       
       try {
-        setIsSubmitting(true); // Show loading state
-        console.log("Submitting data:", expData);
+        setIsSubmitting(true);
+        // console.log("Submitting data:", expData);
         const response = await addExperience(expData, token);
         console.log("API Response:", response);
         Alert.alert('Success', 'Experience added successfully!');
@@ -67,7 +65,7 @@ const AddExperience = ({onClose, token, handleSuccess}:props) => {
           "Failed to add experience. Please try again.";
         Alert.alert('Error', errorMessage);
       } finally {
-        setIsSubmitting(false); // Hide loading state
+        setIsSubmitting(false); 
       }
     }
   

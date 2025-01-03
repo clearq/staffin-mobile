@@ -96,6 +96,7 @@ const getCV = async (token: string): Promise<CV> => {
   }
 };
 
+
 // Update Staff
 const updateStaff = async (userData: Partial<User>, token: string) => {
   try {
@@ -144,14 +145,24 @@ const  addExperience = async (expData:Partial<ExpData>, token:string) => {
 
 
 // Update Staff Experience
-const updateExperience = async () => {};
-
+const updateExperience = async (experienceId: number, expData:Partial<ExpData>, token:string) => {
+  try {
+    const response = await Staffin_API.put(`/Staff/StaffExperience-Update?experienceId=${experienceId}`, expData, {
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    console.log('update exp:', response)
+    return response.data;
+  } catch(error:any){
+    Alert.alert('Error', error.response?.data?.message || "Failed to update experience")
+  }
+};
 
 // Delete Staff Experience
 const deleteExperience = async (experienceId: number, token: string): Promise<void> => {
   try {
-    const response = await Staffin_API.delete(`/Staff/StaffExperience-Remove`, {
-      params: { experienceId },
+    const response = await Staffin_API.delete(`/ExpStaff/StaffExperience-Remove?experienceId=${experienceId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

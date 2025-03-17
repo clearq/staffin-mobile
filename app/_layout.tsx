@@ -1,66 +1,133 @@
+import React, { useEffect, useState } from "react";
+import { Stack } from "expo-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+export { ErrorBoundary } from "expo-router"; // Catch any errors thrown by the Layout component.
+import * as Updates from "expo-updates";
 
-import { Stack, SplashScreen } from 'expo-router';
+import "@/i18n.config"
 import { useFonts } from 'expo-font';
-import { StatusBar } from "expo-status-bar";
-import { Provider, useSelector } from "react-redux";
-import { RootState, store } from "@/store/store";
-import { useEffect } from 'react';
-import { useRouter } from "expo-router"; 
-import React from 'react';
-import { MD3LightTheme, PaperProvider } from 'react-native-paper';
-import { colors } from '@/constants/colors';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import * as SplashScreen from 'expo-splash-screen';
+
+import { Switch, ThemeMode, ThemeProvider as ThemeProviderUI, useThemeMode } from "@rneui/themed";
+import { theme } from "@/constants/Theme";
+
+import { getItem, setItem } from "@/utils/asyncStorage";
+
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ToastProvider } from "react-native-toast-notifications";
+import { MaterialIcons } from "@expo/vector-icons";
+import { AuthProvider } from "@/contexts/authContext";
 
 
-SplashScreen.preventAutoHideAsync();
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+const RootLayout = () => {
+  const [appIsReady, setAppIsReady] = useState(false);
 
-  useEffect(() => {
-    console.log('AuthProvider:', isAuthenticated);
-    
-    if (!isAuthenticated) {
-      router.push("/");
-    }
-  }, [isAuthenticated]);
-
-  return isAuthenticated ? <>{children}</> : null;
-};
-
-export default function RootLayout() {
-  const [fontsLoaded, error] = useFonts({
-    "Inter-Bold": require("../assets/fonts/Inter_24pt-Bold.ttf"),
-    "Inter-Medium": require("../assets/fonts/Inter_24pt-Medium.ttf"),
-    "Inter-Regular":require("../assets/fonts/Inter_24pt-Regular.ttf"),
-    "Inter-SemiBold":require("../assets/fonts/Inter_24pt-SemiBold.ttf"),
+  // 🚧 Add Staffin font 'Coolvetica' 🚧
+  const [loaded, error] = useFonts({
+    Coolvetica: require("@/assets/fonts/CoolveticaRg.ttf"),
+    Poppins: require("@/assets/fonts/Poppins-Regular.ttf"),
+    PoppinsBold: require("@/assets/fonts/Poppins-Bold.ttf"),
+    PoppinsMedium: require("@/assets/fonts/Poppins-Medium.ttf"),
+    ...FontAwesome.font,
   });
 
-  // It loads custom fonts asynchronously during the app's startup.
   useEffect(() => {
-    if (error) throw error;
-    // Indicates whether the fonts have been successfully loaded.
-    if (fontsLoaded) SplashScreen.hideAsync();
-  }, [fontsLoaded, error]);
+    if (loaded && !error) {
+      SplashScreen.hideAsync();
+      const time = setTimeout(() => {
+        setAppIsReady(true);
+      }, 2000);
+      return () => clearTimeout(time);
+    }
+  }, [loaded]);
 
-  if (!fontsLoaded && !error) return null;
+  if (!loaded) {
+    return null;
+  }
+
+  return ( 
+    <ToastProvider
+      placement="top"
+      swipeEnabled={true}
+      style={{ marginVertical: 5 }}
+      animationType="slide-in"
+      duration={5000}
+      animationDuration={250}
+      offsetTop={50}
+      offsetBottom={50}
+      dangerColor="#ef4444"
+      warningColor="#f59e0b"
+      successColor="#22c55e"
+      normalColor="#a3a3a3"
+      successIcon={<MaterialIcons name="check-circle" color={"white"} size={25} />}
+    >
+      <AuthProvider> 
+        <RootLayoutNav />
+      </AuthProvider>   
+    </ToastProvider> 
+  );
+};
+
+export default RootLayout
+
+const development = process.env.NODE_ENV === "development";
+
+
+function RootLayoutNav() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: 2 } },
+  });
+  const { mode, setMode } = useThemeMode();
+  const [themeMode, setThemeMode] = useState<ThemeMode>("light");
+
+  async function onFetchUpdateAsync() {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (!development) {
+      onFetchUpdateAsync();
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchTheme = async () => {
+      const theme = (await getItem("theme")) as ThemeMode;
+      if (!theme) {
+        await setItem("theme", "light");
+      } else {
+        setMode(theme)
+      }
+      
+      setThemeMode(theme);
+    };
+    fetchTheme();
+  }, []);
+
+  
+  theme.mode = themeMode;
 
   return (
-    <>
-      <Provider store={store}>
-        <Stack>
-          <Stack.Screen name="index" options={{headerShown: false, title: "Onboarding"}} />
-          <Stack.Screen name="(auth)" options={{headerShown: false}} />
-
-          <AuthProvider>
-            <Stack.Screen name="(staff)" options={{headerShown: false}} />
-            <Stack.Screen name="(admin)" options={{headerShown: false}} />
-            <Stack.Screen name="(employer)" options={{headerShown: false}} />
-            {/* <Stack.Screen name="/search/[query]" options={{headerShown: false}} />
-            <Stack.Screen name="/user/[id]" options={{headerShown: false}} /> */}
-          </AuthProvider>
-        </Stack>
-      </Provider>
-    </>
-  );
-}
+    <ThemeProviderUI theme={theme} >
+      <QueryClientProvider client={queryClient} >     
+        <SafeAreaProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{headerShown: false}} />
+            <Stack.Screen name="(auth)" options={{headerShown: false}}/>
+            <Stack.Screen name="(app)/(tabs)" options={{headerShown: false}} />
+          </Stack>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </ThemeProviderUI>
+  )}

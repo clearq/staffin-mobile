@@ -1,38 +1,33 @@
-export const colors = {
-  primary: "#0689a5",
-  secondary: "#ed8f59",
-  primaryDark: "#303a3d",
-  secondaryDark: "#9b420e",
-  primaryLight: "#c5dde2",
-  secondaryLight: "#f3d8c9",
-  
-  //MonoColor
-  tintColor: "#b4bec0",
-  gray:"#858889",
-  white:"#fcfcfc",
-  black: "#000000",
+const tintColorLight = '#0a7ea4';
+const tintColorDark = '#fff';
 
-  //Error
-  errorTitle: "#991b1b",
-  errorText: "#b91c1c",
-  error: "#f87171",
-  errorBg: "#fef2f2",
-
-  // Success
-  successTitle: "#166534",
-  successText: "#15803d",
-  success: "#4ade80",
-  successBg: "#f0fdf4",
-
-  // Warning
-  warningTitle: "#854d0e",
-  warningText: "#a26206",
-  warning: "#facc15",
-  warningBg: "#fefce8",
-
-  //Opacity60
-  white70: "rgba(252, 252, 252, 0.6)",
-  //Opacity40
-  white40: "rgba(252, 252, 252, 0.4)"
+export const Colors = {
+  light: {
+    background: "rgb(248, 247, 250)",
+    primary: "#252525",
+    secondary: "#D4AF35",
+    greyOutline: "rgb(133, 131, 138)",
+    divider: "rgb(229, 229, 230)",
+    grey0: "rgb(15, 15, 15)",
+    searchBg: "#F8F7FA",
+    white: "rgb(248, 247, 250)",
+    black: "rgb(15, 15, 15)",
+    success: "#00C851", // Define success color
+    error: "#ff4444", // Define error color
+    warning: "#FFBB33", // Define warning color
+  },
+  dark: {
+    background: "#25293C",
+    primary: "#D4AF35",
+    secondary: "#252525",
+    greyOutline: "rgb(144, 157, 170)",
+    divider: "rgb(79, 83, 103)",
+    grey0: "rgb(241, 241, 241)",
+    searchBg: "#3B405B",
+    white: "rgb(248, 247, 250)",
+    black: "rgb(15, 15, 15)",
+    success: "#00C851", // Define success color
+    error: "#ff4444", // Define error color
+    warning: "#FFBB33", // Define warning color
+  },
 };
-

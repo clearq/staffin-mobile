@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "staffin",
-    "slug": "staffin",
+    "name": "staffin-mobile-app",
+    "slug": "staffin-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -32,7 +32,17 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-secure-store",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "path/to/file.ttf"
+          ]
+        }
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

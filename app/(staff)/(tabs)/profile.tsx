@@ -19,6 +19,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { colors } from '@/constants/Colors';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { globalStyles } from '@/constants/globalStyles';
+import EditSkill from '../(profile)/modal/editSkill';
 
 type Menu = {
   id: number;
@@ -63,6 +64,8 @@ const StaffProfile = () => {
     name: '',
     url: '',
   });
+  const [openSkillModal, setOpenSkillModal] = useState(false)
+
   const token = authUser?.token
 
   const fetchCV = async () => {
@@ -227,6 +230,13 @@ const StaffProfile = () => {
       { user !== null && !isLoading && !loading &&  (
   
         <View style={{flex:1}}>
+          {openSkillModal && 
+            <EditSkill
+              onClose={() => setOpenSkillModal(false)} 
+              handleSuccess={() => {}}
+              id={user?.id}
+            />
+          }
 
           <ProfileHeader
             user={user}
@@ -287,6 +297,7 @@ const StaffProfile = () => {
                 handleInfo={handleInfo}
                 handleExperience={handleExperience}
                 handleEducation={handleEducation}
+                handleSkills={() => setOpenSkillModal(true)}
               />
             }
             {screen === 'activity' &&

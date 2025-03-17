@@ -35,8 +35,6 @@ export interface RatingData {
 }
 
 
-
-
 // Generate CV
 const generateCV = async (token: string) => {
   try {
@@ -255,11 +253,17 @@ const deleteEducation = async (educationId: number, token: string) => {
 
 
 // Get Staff Skills
-const getStaffSkills = async (staffId: number) => {
+const getStaffSkills = async (staffId: number, token:string) => {
+  // console.log('staff id:', staffId);
   try {
-    const response = await api.get(`/Staff/GetStaff-Skills?staffId=${staffId}`);
+    const response = await api.get(`/Staff/GetStaff-Skills?staffId=${staffId}`,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });   
     return response.data
   } catch (error:any) {
+    
     Alert.alert("Error", error.response?.data?.message || "Failed to fetch skills");
   }
 }

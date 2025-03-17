@@ -17,13 +17,21 @@ import { ButtonMd } from '@/components/UI/CustomButton'
 type profileProps = {
   user: User
   posts?:Post[]
-  handleInfo:()=>void
-  handleExperience:()=>void
-  handleEducation:()=>void
+  handleInfo:() => void
+  handleExperience:() => void
+  handleEducation:() => void
+  handleSkills:() => void
 }
 
 
-const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducation}:profileProps) => {
+const StaffOverview = ({
+  user, 
+  posts, 
+  handleInfo, 
+  handleExperience, 
+  handleEducation,
+  handleSkills,
+}:profileProps) => {
 
   const { authUser } = useAppSelector((state) => state.auth);
 
@@ -219,6 +227,7 @@ const StaffOverview = ({user, posts, handleInfo,handleExperience, handleEducatio
         <CardHeader 
           title='Skills'
           isCurrentUser={authUser?.id === user.id}
+          handlePress={handleSkills}
         />
         <CardBody>
           <View style={{flexDirection:'row', flexWrap:'wrap', gap:8}}>

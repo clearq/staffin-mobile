@@ -55,8 +55,7 @@ const getUser = async (userId: number) => {
     const response = await api.get(`/User/GetUser-id?userId=${userId}`);
     return response.data;
   } catch (error: any) {
-    console.error("GetUser error:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to fetch current user");
+    Alert.alert("Error", error.response?.data?.message || "Failed get users info");
   }
 };
 

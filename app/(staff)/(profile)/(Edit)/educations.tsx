@@ -68,7 +68,7 @@ const StaffEducations = ({user}:educationProps) => {
                 Alert.alert('Success', 'Experience deleted successfully!');
                 fetchEducations(); // Refresh experiences
               } catch (error:any) {
-                Alert.alert('Error', error.message || 'Failed to delete experience');
+                console.error(error)
               }
             }, 
           }

@@ -49,6 +49,11 @@ export interface IEducation {
 }
 
 export interface ISkill {
-  id: number
+  id?: number 
   name: string
+}
+
+export interface IRating {
+  id: number,
+  rating: number
 }

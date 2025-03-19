@@ -43,7 +43,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
                 styles.tabBarItem,
                 styles.middleTab,
                 {
-                  backgroundColor: isFocused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey5 : theme.colors.grey2,
+                  backgroundColor: isFocused ? theme.colors.primary :  theme.colors.background 
                 },
               ]}
             >

@@ -15,6 +15,7 @@ export {
   getStaffSkills,
   addStaffSkill,
   deleteStaffSkill,
+  getStaffAllLanguages,
   getStaffLanguages,
   updateStaffLanguage,
   addStaffLanguage,

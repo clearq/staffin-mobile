@@ -29,11 +29,6 @@ interface props {
   id: any
 }
 
-const AddExperienceSchema = Yup.object().shape({
-  companyName: Yup.string().required("Company name is required"),
-  startDate: Yup.string().required("Start date is required"),
-});
-
 
 const AddExperienceModal = ({visible, onClose, handleSuccess, id}: props) => {
   const { theme } = useTheme()
@@ -43,6 +38,11 @@ const AddExperienceModal = ({visible, onClose, handleSuccess, id}: props) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [checked, setChecked] = useState(false)
+
+  const AddExperienceSchema = Yup.object().shape({
+    companyName: Yup.string().required(t("company-name-required-message")),
+    startDate: Yup.string().required(t("start-date-required-message")),
+  });
 
   const mutation = useMutation({
     mutationFn: async (values:any) => {   

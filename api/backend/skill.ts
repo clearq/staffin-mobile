@@ -4,8 +4,11 @@ import api from "./config";
 // Get All Skills List
 export const getSkillsList = async () => {
   try {
-    return await api.get("/Skills")
+    const response = await api.get("/Skill")
+
+    return response.data
   } catch (error) {
     console.log(error)
+    return 
   }
 }

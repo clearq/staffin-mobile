@@ -9,7 +9,6 @@ import { colors, commonStyles, Fonts, screenHeight, Sizes, theme } from '@/const
 import {MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
 import pageStyle from '@/constants/Styles';
-import { color } from '@rneui/themed/dist/config';
 
 const App = () => {
   const { theme } = useTheme()
@@ -49,7 +48,7 @@ const App = () => {
         {/* insert image or animation later */}
         <View />  
         <Image 
-          source={require('@/assets/images/icon.png')}
+          source={require('@/assets/Images/icon.png')}
           style={{
             width: 100,
             height: 100,

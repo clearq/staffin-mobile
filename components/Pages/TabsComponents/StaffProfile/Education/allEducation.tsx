@@ -10,11 +10,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getEducation, getExperience } from '@/api/backend';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/authContext';
-import { IExperience, IUser } from '@/types/UserTypes';
+import { IEducation, IExperience, IUser } from '@/types/UserTypes';
 import Button from '@/components/UI/Button';
-import EditExperienceModal from './Experience/editExperienceModal';
-import HeaderTemplate from '../headerTemplate';
-import AddExperienceModal from './Experience/addExperience';
+import EditEducationModal from './editEducationModal';
+import HeaderTemplate from '../../headerTemplate';
+import AddEducationModal from './addEducationModal';
 
 interface props {
   visible: boolean;
@@ -23,10 +23,10 @@ interface props {
   handleSuccess: () => void
 }
 
-const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
+const AllEducation = ({visible, id, onClose, handleSuccess}: props) => {
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openAddModal, setOpenAddModal] = useState(false)
-  const [expData, setExpData] = useState<IExperience>()
+  const [eduData, setEduData] = useState<IEducation>()
 
   const { theme } = useTheme()
   const { t } = useTranslation();
@@ -38,29 +38,29 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
     } 
   } = useAuth();
 
-  
 
   const  { data, refetch } = useQuery({
-    queryKey: ["experience-data"],
+    queryKey: ["education-data"],
     queryFn: async () => {
-      const response = await getExperience();
+      const response = await getEducation();
 
       return response;
     },
   })
 
+  
   return (
-    <HeaderTemplate 
-      title={`${t("experience")}`}
+    <HeaderTemplate
+      title={`${t("education")}`}
       visible={visible}
       onClose={onClose}
       children={(
         <>
-          {/* Experience Edit Form */}
+          {/* Education Edit Form */}
           {data && data.length !== 0 && data
             .sort((a:any, b:any) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
-            .map((exp:IExperience,) => (
-              <View key={exp.id}>
+            .map((edu:IEducation,) => (
+              <View key={edu.id}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -80,45 +80,28 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
                         color: theme.colors.grey0,
                       }}
                     >
-                      {exp.position}                 
+                      {edu.institution}        
                     </Text>
-
+    
                     <Text 
                       style={{
                         ...pageStyle.smText,
                         color: theme.colors.grey0,
                       }}
                     >
-                      {exp.companyName}
+                      {edu.name}
                     </Text>
-
+    
                     <Text 
                       style={{
                         ...pageStyle.smText,
                         color: theme.colors.grey3,
                       }}
                     >
-                      {dayjs(exp?.startDate).format('YYYY-MM-DD')} - {exp.endDate ? dayjs(exp?.endDate).format('YYYY-MM-DD') : 'Ongoing'}
-                    </Text>
-                    
-                    <Text style={{
-                      ...pageStyle.smText,
-                      color: theme.colors.grey0,
-                    }}
-                    >
-                      {exp.location}
-                    </Text>
-
-                    <Text 
-                      style={{
-                        ...pageStyle.smText,
-                        color: theme.colors.grey0,
-                      }}
-                    >
-                      {exp.description}
+                      {dayjs(edu.startDate).format('YYYY-MM-DD')} - {edu.endDate ? dayjs(edu.endDate).format('YYYY-MM-DD') : 'Ongoing'}
                     </Text>
                   </View>
-                  
+    
                   <View>
                     { id === userId &&
                       <TouchableOpacity
@@ -126,8 +109,8 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
                           ...styles.itemEditButton,
                           backgroundColor: theme.colors.background
                         }}
-                        onPress={()=> {
-                          setExpData(exp)
+                        onPress={() => {
+                          setEduData(edu)
                           setOpenEditModal(true)
                         }} 
                       >
@@ -142,8 +125,8 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
                       </TouchableOpacity>
                     }
                   </View>
-              
-                </View>
+    
+                </View> 
       
                 <Divider color={theme.colors.greyOutline} />
                 
@@ -157,8 +140,8 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
           >
             <Button
               containerStyle={{width:'100%'}}
-              buttonStyle={{...styles.buttonStyle,}}
-              title={`${t("add")} ${t("experience")}`}
+              buttonStyle={{...styles.buttonStyle, }}
+              title={`${t("add")} ${t("education")}`}
               titleStyle={{...pageStyle.button20, color: theme.colors.primary}}
               iconPosition='right'
               icon={
@@ -178,8 +161,8 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
           </View>
 
           {/* Modal */}
-          <EditExperienceModal
-            data={expData!}
+          <EditEducationModal
+            data={eduData!}
             visible={openEditModal}
             onClose={() => {
               setOpenEditModal(!openEditModal)
@@ -187,11 +170,10 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
             }}
             handleSuccess={() => {
               handleSuccess()
-              refetch()}
-            }
+              refetch()
+            }}
           />
-
-          <AddExperienceModal
+          <AddEducationModal 
             visible={openAddModal}
             id={userId}
             onClose={() => {
@@ -200,19 +182,17 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
             }}
             handleSuccess={() => {
               handleSuccess()
-              refetch
+              refetch()
             }}
           />
         </>
       )}
-    />
-  
+    />           
 
-  
   )
 }
 
-export default AllExperience
+export default AllEducation
 
 const styles = StyleSheet.create({
   itemEditButton: {
@@ -233,6 +213,6 @@ const styles = StyleSheet.create({
   buttonStyle:{
     borderRadius: 100,
     padding: Sizes.fixPadding,
-    borderWidth:2,
+    borderWidth:2
   }
 })

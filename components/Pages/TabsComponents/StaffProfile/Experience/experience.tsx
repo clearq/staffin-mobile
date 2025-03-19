@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import dayjs from 'dayjs'
 
 import { IExperience, IUser } from '@/types/UserTypes';
-import EditExperienceModal from './Experience/editExperienceModal';
+import EditExperienceModal from './editExperienceModal';
 import pageStyle from '@/constants/Styles';
 
 

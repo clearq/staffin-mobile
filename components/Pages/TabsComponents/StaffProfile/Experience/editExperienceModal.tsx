@@ -8,7 +8,7 @@ import { Formik } from 'formik';
 import dayjs from "dayjs";
 
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
-import { getDefaultStyles } from 'react-native-ui-datepicker';
+import { useDefaultStyles } from 'react-native-ui-datepicker';
 import { deleteExperience, getExperience, updateExperience, updateStaff } from '@/api/backend';
 
 import { IExperience, IUser } from '@/types/UserTypes';
@@ -31,11 +31,6 @@ interface props {
   handleSuccess: () => void
 }
 
-const EditExperienceSchema = Yup.object().shape({
-  companyName: Yup.string().required("Company name is required"),
-  startDate: Yup.string().required("Start date is required"),
-});
-
 
 const EditExperienceModal = ({data, visible, onClose, handleSuccess}: props) => {
   const { theme } = useTheme()
@@ -46,6 +41,10 @@ const EditExperienceModal = ({data, visible, onClose, handleSuccess}: props) => 
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [checked, setChecked] = useState(false)
 
+  const EditExperienceSchema = Yup.object().shape({
+    companyName: Yup.string().required(t("company-name-required-message")),
+    startDate: Yup.string().required(t("start-date-required-message")),
+  });
 
   const mutation = useMutation({
     mutationFn: async (values:any) => {

@@ -24,18 +24,17 @@ import pageStyle from '@/constants/Styles';
 import PageTemplate from './pageTemplate';
 
 
-const SignInSchema = Yup.object().shape({
-  email: Yup.string().required("email is required"),
-  password: Yup.string().required("password is required"),
-  rememberMe: Yup.boolean(),
-});
-
-
 const SignInPage = () => {
   const { SignIn, isLoading, authState } = useAuth();
   const { theme } = useTheme()
   const { t } = useTranslation();
   const router = useRouter()
+
+  const SignInSchema = Yup.object().shape({
+    email: Yup.string().required(t("email-required-message")),
+    password: Yup.string().required(t("password-required-message")),
+    rememberMe: Yup.boolean(),
+  });
 
 
   return (

@@ -1,4 +1,4 @@
-import { IEducation, IExperience, ISkill, IUser } from "@/types/UserTypes";
+import { IEducation, IExperience, IRating, ISkill, IUser } from "@/types/UserTypes";
 import api from "./config";
 
 
@@ -145,24 +145,37 @@ export const deleteStaffSkill = async (id: number) => {
   }
 }
 
+// Get Staff All languages
+export const getStaffAllLanguages = async () => {
+  try {
+    const response = await api.get(`/Staff/AllLanguages`)
+
+    return response.data
+  } catch (error) {
+    console.log(error);
+    return
+  }
+}
+
 
 // Get Staff Language
 export const getStaffLanguages = async (userId: number) => {
   try {
-    const data = await api.get(`/Staff/GetStaff-Language?staffId=${userId}` )
+    const response = await api.get(`/Staff/GetStaff-Language?staffId=${userId}` )
 
-    return data
+    return response.data
 
   } catch (error) {
     console.log(error);
+    return
   }
 }
 
 
 // Rating (Update) Staff Language
-export const updateStaffLanguage = async (values: any) => {
+export const updateStaffLanguage = async (values:IRating) => {
   try {
-    const data = await api.put('/StaffLanguage-Rating', values);
+    const data = await api.put('/Staff/StaffLanguage-Rating', values);
 
     return data;
 
@@ -188,7 +201,9 @@ export const addStaffLanguage = async (values: any) => {
 // Remove Staff Language
 export const deleteStaffLanguage = async (values: any) => {
   try {
-    await api.delete('/Staff/StaffLanguage-Remove')
+    await api.delete('/Staff/StaffLanguage-Remove', {
+      data: values
+    } )
 
   } catch (error: any) {
     console.log(error);

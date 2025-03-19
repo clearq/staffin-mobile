@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { useRouter } from 'expo-router';
 import *as ImagePicker from 'expo-image-picker'
@@ -12,20 +12,24 @@ import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 
-import { updateStaff } from '@/api/backend';
+import { deleteStaffSkill, updateStaff } from '@/api/backend';
 
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
 import Information from './Information';
 import About from './about';
 import Activity from './activity';
-import Experience from './experience';
-import Education from './education';
+import Experience from './Experience/experience';
+import Education from './Education/education';
 import AllActivity from './allActivity';
-import AllExperience from './allExperience';
-import AllEducation from './allEducation';
+import AllExperience from './Experience/allExperience';
+import AllEducation from './Education/allEducation';
 import AddExperienceModal from './Experience/addExperience';
 import AddEducationModal from './Education/addEducationModal';
+import AddSkills from './Edit/addSkillModal';
+import AddSkillModal from './Edit/addSkillModal';
+import AddLanguageModal from './Languages/addLanguageModal';
+import EditLanguageModal from './Languages/editLanguageModal';
 
 interface props {
   user: IUser;
@@ -99,6 +103,40 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
         });
       } 
     }
+  }
+
+  const showAlert = (id:any) =>
+    Alert.alert('Alert Title', 'My Alert Msg', [
+      {
+        text: `${t("cancel")}`,
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: `${t("delete")}`, 
+        onPress: () => handleSkillDelete(id)
+      },
+    ]
+  );
+
+  const handleSkillDelete = async (id:any) => {
+    try {
+      if(!id) {
+        console.error("id is missing")
+        return;
+      }
+      await deleteStaffSkill(id)
+      refetch()
+
+      toast.show(`${t("success-delete-message")}`, {
+        type: "success",
+      });
+    } catch (error) {
+      toast.show(`${t("failed-delete-message")}`, {
+        type: "error",
+      }) 
+    }
+    
   }
 
   const ItemContainer: React.FC<ThemedContainerProps> = (props) => {   
@@ -455,8 +493,10 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
                 </Text>
 
                 {showEditButton && 
-                  <TouchableOpacity>
-                    <MaterialCommunityIcons name='close-circle' color={theme.colors.white} size={16} />
+                  <TouchableOpacity
+                    onPress={() => showAlert(skill.id)}
+                  >
+                    <MaterialCommunityIcons name='close-circle' color={theme.colors.white} size={18} />
                   </TouchableOpacity>
                 }
               </View>
@@ -616,7 +656,26 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
       <AllActivity 
         visible={openAllActivityDialog}
         onClose={() => setOpenAllActivityDialog(false)}
-      />     
+      />  
+      <AddSkillModal
+        visible={openAddSkillsDialog}
+        id={user.id}
+        onClose={() => setOpenAddSkillsDialog(!openAddSkillsDialog)}
+        handleSuccess={() => refetch()}
+      />
+      <AddLanguageModal
+        visible={openAddLanguageDialog}
+        id={user.id}
+        onClose={() => setOpenAddLanguageDialog(!openAddLanguageDialog)}
+        handleSuccess={() => refetch()}
+      />
+      <EditLanguageModal
+        visible={openEditLanguageDialog}
+        id={user.id}
+        onClose={() => setOpenEditLanguageDialog(!openEditLanguageDialog)}
+        handleSuccess={() => refetch()}
+        data= {user.languages}
+      />
     </View>
   )
 }
@@ -669,6 +728,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
-  }
+  },
 });
 

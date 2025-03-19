@@ -9,9 +9,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import dayjs from 'dayjs'
 
 import { IEducation, IUser } from '@/types/UserTypes';
-import EditEducationModal from './Education/editEducationModal';
+import EditEducationModal from './editEducationModal';
 import pageStyle from '@/constants/Styles';
-import AddEducationModal from './Education/addEducationModal';
+import AddEducationModal from './addEducationModal';
 
 
 interface props {

@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { Formik } from 'formik';
 import dayjs from "dayjs";
 
-import { addEducation, addExperience, deleteExperience, getExperience, updateExperience, updateStaff } from '@/api/backend';
+import { addEducation } from '@/api/backend';
 
 import { IEducation, IExperience, IUser } from '@/types/UserTypes';
 
@@ -29,12 +29,6 @@ interface props {
   id: any
 }
 
-const AddEducationSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  institution: Yup.string().required("Institution is required"),
-  startDate: Yup.string().required("Start date is required"),
-});
-
 
 const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
   const { theme } = useTheme()
@@ -44,6 +38,12 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [checked, setChecked] = useState(false)
+
+  const AddEducationSchema = Yup.object().shape({
+    name: Yup.string().required(t("name-required-message")),
+    institution: Yup.string().required(t("institution-required-message")),
+    startDate: Yup.string().required(t("start-date-required-message")),
+  });
 
   const mutation = useMutation({
     mutationFn: async (values:any) => {   

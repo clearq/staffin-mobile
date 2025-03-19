@@ -8,7 +8,7 @@ import { Formik } from 'formik';
 import dayjs from "dayjs";
 
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
-import { getDefaultStyles } from 'react-native-ui-datepicker';
+import { useDefaultStyles } from 'react-native-ui-datepicker';
 import { deleteEducation, deleteExperience, getExperience, updateEducation, updateExperience, updateStaff } from '@/api/backend';
 
 import { IEducation, IExperience, IUser } from '@/types/UserTypes';
@@ -30,11 +30,6 @@ interface props {
   handleSuccess: () => void
 }
 
-const EditEducationSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  institution: Yup.string().required("Institution is required"),
-  startDate: Yup.string().required("Start date is required"),
-});
 
 const EditEducationModal = ({data, visible, onClose, handleSuccess}: props) => {
   const { theme } = useTheme()
@@ -44,6 +39,12 @@ const EditEducationModal = ({data, visible, onClose, handleSuccess}: props) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [checked, setChecked] = useState(false)
+
+  const EditEducationSchema = Yup.object().shape({
+    name: Yup.string().required(t("name-required-message")),
+    institution: Yup.string().required(t("institution-required-message")),
+    startDate: Yup.string().required(t("start-date-required-message")),
+  });
 
 
   const mutation = useMutation({
@@ -56,7 +57,7 @@ const EditEducationModal = ({data, visible, onClose, handleSuccess}: props) => {
 
     onSuccess: () => {
       toast.show(`${t("success-update-message")}`, {
-        type: "custom",
+        type: "success",
       });
       handleSuccess();
       onClose();

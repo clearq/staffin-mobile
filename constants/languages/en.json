@@ -22,6 +22,18 @@
   "success-add-message": "Item successfully added",
   "failed-add-message": "Failed to add item",
 
+  "name-required-message": "Name is required",
+  "user-name-required-message": "Usern ame is required",
+  "institution-required-message": "Institution is required",
+  "start-date-required-message": "Start date is required",
+  "company-name-required-message": "Company name is required",
+  "email-required-message": "E-mail is required",
+  "password-required-message": "Password is required",
+  "org-no-required-message": "Organisation number is required",
+  "skill-required-message": "Select a skill",
+  "language-required-message": "Select a language",
+  "rating-required-message": "Rating is required",
+
   "first-name": "First name",
   "last-name": "Last name",
   "full-name": "Full name",
@@ -34,7 +46,9 @@
   "location": "Location",
   "about": "About",
   "skills": "Skills",
+  "skill": "Skill",
   "languages": "Languages",
+  "language": "Language",
   "add-language-skills": "Add language skills",
   
   "name": "Name",

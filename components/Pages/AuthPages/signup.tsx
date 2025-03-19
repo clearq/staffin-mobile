@@ -23,21 +23,6 @@ import { useAuth } from '@/contexts/authContext';
 import PageTemplate from './pageTemplate';
 import pageStyle from '@/constants/Styles';
 
-
-const StaffSignUpSchema = Yup.object().shape({
-  email: Yup.string().required("email is required"),
-  password: Yup.string().required("password is required"),
-  userName: Yup.string().required("User name is required"),
-  rememberMe: Yup.boolean(),
-});
-const AdminSignUpSchema = Yup.object().shape({
-  email: Yup.string().required("email is required"),
-  password: Yup.string().required("password is required"),
-  companyName: Yup.string().required("Company name is required"),
-  organisationNumber: Yup.string().required("Organisation number is required"),
-  rememberMe: Yup.boolean(),
-});
-
 const SignUpPage = () => {
   const { SignUp, isLoading, authState } = useAuth();
   const { theme } = useTheme()
@@ -47,6 +32,21 @@ const SignUpPage = () => {
 
   const [role, setRole] = useState<"staff"|"admin">('staff')
   const [checked, setChecked] = useState<boolean>(false)
+
+  const StaffSignUpSchema = Yup.object().shape({
+    email: Yup.string().required(t("email-required-message")),
+    password: Yup.string().required(t("password-required-message")),
+    userName: Yup.string().required(t("user-name-required-message")),
+    rememberMe: Yup.boolean(),
+  });
+  
+  const AdminSignUpSchema = Yup.object().shape({
+    email: Yup.string().required(t("email-required-message")),
+    password: Yup.string().required(t("password-required-message")),
+    companyName: Yup.string().required(t("company-name-required-message")),
+    organisationNumber: Yup.string().required(t("org-no-required-message")),
+    rememberMe: Yup.boolean(),
+  });
 
 
   // console.log("isLoading:", isLoading);

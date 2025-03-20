@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
+import ModalHeader from '../../ModalHeader';
 
 
 interface props {
@@ -94,6 +95,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
     <Modal
       visible={visible}
     >
+      <ModalHeader title={`${t("add")} ${t("skill")}`}/>
       <SafeAreaView
         style={{
           flex: 1,
@@ -121,7 +123,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
               <View
                 style={{
                   height: '100%',
-                  justifyContent: 'center',
+                  marginTop: theme.spacing.xl,
                   flexDirection:'column'
                 }}
               >
@@ -197,7 +199,8 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                 {/* Button Group */}
                 <View
                   style={{
-                    ...styles.buttonGroup
+                    ...styles.buttonGroup,
+                    marginTop: theme.spacing.xl * 2,
                   }}
                 >            
                   <Button

@@ -46,12 +46,7 @@ const _layout = () => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1, 
-        backgroundColor: theme.colors.cardBg
-      }}
-    >
+    <View style={{ flex: 1, backgroundColor: theme.colors.searchBg }}>
       <Tabs
         initialRouteName={unstable_settings.initialRouteName}
         tabBar={(props) => <CustomTabBar {...props} />}
@@ -72,7 +67,7 @@ const _layout = () => {
           tabBarInactiveTintColor: theme.colors.primary,
         })}
       >
-
+        {/* Home Tab */}
         <Tabs.Screen 
           name="home"
           options={{
@@ -80,51 +75,27 @@ const _layout = () => {
             headerTitleAlign: "center",
             headerShown: true,
             headerTitle: "Home",
-            headerTitleStyle: {
-              color: theme.colors.grey0,
-            },
-            headerStyle: {
-              backgroundColor: theme.colors.cardBg,
-            },
-            header: () => (
-              <PageHeader data={userData} isLoading={isLoading}/>
-            ),
-            tabBarLabel: t("tab-bar-overview"),
+            tabBarLabel: t("home"),
             tabBarIcon: ({ focused }) => (
-              userData?.roleId === 3 
-              ? <TabBarIcon
-                  name={focused ? "home" : "home-outline"}
-                  isActive={focused}
-                  size={32}
-                  color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
-                />
-              : <TabBarIcon
-                  name={focused ? "view-dashboard" : "view-dashboard-outline"}
-                  isActive={focused}
-                  size={30}
-                  color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
-                />
+              <TabBarIcon
+                name={focused ? "home" : "home-outline"}
+                isActive={focused}
+                size={32}
+                color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
+              />
             ),
           }} 
         />
-        
+
+        {/* Jobs Tab */}
         <Tabs.Screen 
-          name='jobs'
+          name="jobs"
           options={{
             tabBarShowLabel: true,
             headerTitleAlign: "center",
             headerShown: true,
             headerTitle: "Jobs",
-            headerTitleStyle: {
-              color: theme.colors.grey0,
-            },
-            headerStyle: {
-              backgroundColor: theme.colors.searchBg,
-            },
-            header: () => (
-              <PageHeader data={userData} isLoading={isLoading}/>
-            ),
-            tabBarLabel: t("tab-bar-overview"),
+            tabBarLabel: t("jobs"),
             tabBarIcon: ({ focused }) => (
               <TabBarIcon
                 name={focused ? "briefcase" : "briefcase-outline"}
@@ -136,51 +107,67 @@ const _layout = () => {
           }} 
         />
 
-        <Tabs.Screen 
-          name='profile'
+        {/* Route Tab (no label or icon in the tab) */}
+        <Tabs.Screen
+          name="route"
           options={{
-            tabBarShowLabel: true,
+            tabBarShowLabel: false,
             headerTitleAlign: "center",
-            headerShown: true,
-            headerTitle: "Profile",
-            headerTitleStyle: {
-              color: theme.colors.grey0,
-            },
-            headerStyle: {
-              backgroundColor: theme.colors.searchBg,
-            },
-            header: () => (
-              <PageHeader data={userData} isLoading={isLoading}/>
-            ),
+            headerShown: false,
+            headerTitle: t("profile"),
             tabBarLabel: "Route",
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                name={focused ? "account" : "account-outline"}
-                isActive={focused}
-                size={30}
-                color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
-              />
-            ),
+
+          }}
+        />
+
+        {/* Profile Screen - Hidden from Tab Bar */}
+        <Tabs.Screen 
+          name="profile"
+          options={{
+            href: null, // Hides from the tab bar
+            headerShown: true,
+            headerTitle: t("overview"),
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
 
+        {/* Application Screen - Hidden from Tab Bar */}
         <Tabs.Screen 
-          name='community'
+          name="application"
+          options={{
+            href: null, // Hides from the tab bar
+            headerShown: true,
+            headerTitle: "My Application",
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+          }} 
+        />
+
+        {/* Document Screen - Hidden from Tab Bar */}
+        <Tabs.Screen 
+          name="document"
+          options={{
+            href: null, // Hides from the tab bar
+            headerShown: true,
+            headerTitle: "My Document",
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+          }} 
+        />
+
+        {/* Community Tab */}
+        <Tabs.Screen 
+          name="community"
           options={{
             tabBarShowLabel: true,
             headerTitleAlign: "center",
             headerShown: true,
             headerTitle: "Community",
-            headerTitleStyle: {
-              color: theme.colors.grey0,
-            },
-            headerStyle: {
-              backgroundColor: theme.colors.searchBg,
-            },
-            header: () => (
-              <PageHeader data={userData} isLoading={isLoading}/>
-            ),
-            tabBarLabel: t("tab-bar-overview"),
+            tabBarLabel: t("community"),
             tabBarIcon: ({ focused }) => (
               <TabBarIcon
                 name={focused ? "account-group" : "account-group-outline"}
@@ -191,23 +178,16 @@ const _layout = () => {
             ),
           }} 
         />
+
+        {/* Setting Tab */}
         <Tabs.Screen 
-          name='setting'
+          name="setting"
           options={{
             tabBarShowLabel: true,
             headerTitleAlign: "center",
             headerShown: true,
             headerTitle: "Setting",
-            headerTitleStyle: {
-              color: theme.colors.grey0,
-            },
-            headerStyle: {
-              backgroundColor: theme.colors.searchBg,
-            },
-            header: () => (
-              <PageHeader data={userData} isLoading={isLoading}/>
-            ),
-            tabBarLabel: t("tab-bar-overview"),
+            tabBarLabel: t("setting"),
             tabBarIcon: ({ focused }) => (
               <TabBarIcon
                 name={focused ? "cog" : "cog-outline"}
@@ -235,7 +215,7 @@ const PageHeader = (data: any, isLoading: boolean) => {
     <View
       style={{
         width: "auto",
-        backgroundColor: theme.colors.cardBg,
+        backgroundColor: theme.colors.searchBg,
         paddingHorizontal: Sizes.fixPadding * 1.5,
         paddingVertical: Sizes.fixPadding,
       }}

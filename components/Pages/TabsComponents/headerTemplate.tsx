@@ -54,7 +54,7 @@ const HeaderTemplate = ({title, visible, onClose, children}: props) => {
           >
             <MaterialCommunityIcons 
               name='chevron-left' 
-              size={24} 
+              size={32} 
               color={theme.colors.grey0}
             />
           </TouchableOpacity>

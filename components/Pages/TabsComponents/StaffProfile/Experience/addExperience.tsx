@@ -20,6 +20,7 @@ import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { rgbaToHex } from '@/utils/rgba-to-hex';
 import DateCalendar from '@/components/UI/Calendar';
+import ModalHeader from '../../ModalHeader';
 
 
 interface props {
@@ -72,6 +73,7 @@ const AddExperienceModal = ({visible, onClose, handleSuccess, id}: props) => {
     <Modal
       visible={visible}
     >
+      <ModalHeader title={`${t("add")} ${t("experience")}`}/>
       <SafeAreaView
         style={{
           flex: 1,

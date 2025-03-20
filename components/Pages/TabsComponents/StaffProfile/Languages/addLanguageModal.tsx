@@ -15,6 +15,7 @@ import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ModalHeader from '../../ModalHeader';
 
 
 interface props {
@@ -82,6 +83,7 @@ const AddLanguageModal = ({visible, onClose, handleSuccess, id}: props) => {
     <Modal
     visible={visible}
   >
+    <ModalHeader title={`${t("add")} ${t("language")}`}/>
     <SafeAreaView
       style={{
         flex: 1,
@@ -110,7 +112,8 @@ const AddLanguageModal = ({visible, onClose, handleSuccess, id}: props) => {
             <View
               style={{
                 height: '100%',
-                justifyContent: 'center',
+                
+                marginTop: theme.spacing.xl,
                 flexDirection:'column',
               }}
             >
@@ -226,7 +229,8 @@ const AddLanguageModal = ({visible, onClose, handleSuccess, id}: props) => {
               {/* Button Group */}
               <View
                 style={{
-                  ...styles.buttonGroup
+                  ...styles.buttonGroup,
+                  marginTop: theme.spacing.xl *2
                 }}
               >            
                 <Button

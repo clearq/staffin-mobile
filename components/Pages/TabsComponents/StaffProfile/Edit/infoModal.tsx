@@ -15,6 +15,7 @@ import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { TextField } from '@/components/UI/Input/TextField';
 import pageStyle from '@/constants/Styles';
+import ModalHeader from '../../ModalHeader';
 
 interface props {
   user: IUser;
@@ -57,6 +58,7 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
     <Modal
       visible={visible}
     >
+      <ModalHeader title={t("information")} />
       <SafeAreaView
         style={{
           flex: 1,
@@ -344,7 +346,8 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
               
                   <View
                     style={{
-                      ...styles.buttonGroup
+                      ...styles.buttonGroup,
+                      marginTop: theme.spacing.xl * 2,
                     }}
                   >            
                     <Button

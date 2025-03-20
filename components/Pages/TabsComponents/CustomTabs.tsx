@@ -12,6 +12,8 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { theme } = useTheme();
   const { authState } = useAuth();
 
+  const hiddenTabs = ["profile", "application", "document"];
+
   const user = authState.userData
   const avatar = user?.profileImage
   
@@ -26,11 +28,15 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
     >
       
 
-      {state.routes.map((route: any, index: number) => {
-        const { options } = descriptors[route.key] 
-        const label = options.tabBarLabel || route.name
-        const isFocused = state.index === index
+      {state.routes
+        .filter((route: any) => !hiddenTabs.includes(route.name)) // Filter out hidden tabs
+        .map((route: any, index: number) => {
+          const { options } = descriptors[route.key];
+          const label = options.tabBarLabel || route.name;
+          const isFocused = state.index === index;
 
+        // console.log('route:', route);
+        // console.log('label:', label);       
 
         if (label === "Route") {
           return (
@@ -60,7 +66,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
             <TouchableOpacity
               key={route.key}
               onPress={() => {
-                navigation.navigate(route.name, route.params);
+                navigation.navigate(route.name);
               }}
               style={[styles.tabBarItem]}
             >

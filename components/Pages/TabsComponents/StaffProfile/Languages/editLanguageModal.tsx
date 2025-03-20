@@ -9,7 +9,7 @@ import { getSkillsList, addStaffSkill, getStaffAllLanguages, addStaffLanguage, g
 
 import { ILanguage, ISkill } from '@/types/UserTypes';
 
-import { useTheme } from '@rneui/themed';
+import { Divider, useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
 import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
@@ -17,6 +17,7 @@ import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { hexToRgba } from '@/utils/rgba-to-hex';
 import EditModal from './editModal';
+import ModalHeader from '../../ModalHeader';
 
 
 interface props {
@@ -65,6 +66,7 @@ const EditLanguageModal = ({visible, onClose, handleSuccess, id, data}: props) =
     <Modal
     visible={visible}
   >
+    <ModalHeader title={`${t("edit")} ${t("language")}`}/>
     <SafeAreaView
       style={{
         flex: 1,
@@ -74,7 +76,7 @@ const EditLanguageModal = ({visible, onClose, handleSuccess, id, data}: props) =
       <View
         style={{
           ...pageStyle.pageComponent,
-
+          marginTop:theme.spacing.xl,
         }}
       >
         <View style={{flexDirection:'column', gap: theme.spacing.md}}>
@@ -159,6 +161,7 @@ const EditLanguageModal = ({visible, onClose, handleSuccess, id, data}: props) =
           )}
         </View>
 
+       <View style={{marginTop: theme.spacing.xl *2}}>
         <Button
           title={`${t("cancel")}`}
           onPress={onClose}
@@ -170,9 +173,10 @@ const EditLanguageModal = ({visible, onClose, handleSuccess, id, data}: props) =
             ...styles.buttonContainer,
             borderColor: theme.colors.divider,                     
             borderWidth: 2,
-            borderRadius:10
+            borderRadius:10,
           }}
         />
+       </View>
 
       </View>
       

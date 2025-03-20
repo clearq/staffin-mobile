@@ -71,6 +71,9 @@
   "jobs": "Jobs",
   "community": "Community",
   "setting:": "Setting",
+  "overview": "Overview",
+  "my-application": "My application",
+  "my-document": "My document",
 
   "start-message": "Welcome to Staffin!",
   "start-sub-text": "Connect with professionals who inspire you",
@@ -87,6 +90,7 @@
   "see-more": "See more",
   "see-all-posts": "See all posts",
   "add": "Add",
+  "edit": "Edit",
 
   "search": "Search",
   "log-out": "Log out"

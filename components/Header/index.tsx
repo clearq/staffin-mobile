@@ -1,37 +1,69 @@
-import { Text, useTheme } from "@rneui/themed";
-import React from "react";
+import { View, Text, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { Redirect, Tabs } from 'expo-router'
 
-import { Sizes } from "@/constants/Theme";
-import { StyleSheet, View } from "react-native";
+import { IAuthInfo, IAuthState, useAuth } from "@/contexts/authContext";
+import { Fonts, Sizes, theme } from '@/constants/Theme'
+import { Avatar, ListItem, useTheme } from '@rneui/themed'
+import { useTranslation } from "react-i18next";
 
-interface HeaderProps {
-  title: string;
-  description: string;
+import CustomTabBar from '@/components/Pages/TabsComponents/CustomTabs'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import MyStatusBar from '@/components/StatusBar';
+import { ActivityIndicator } from 'react-native';
+import { SkeletonImage } from '@/components/Skeleton/skeleton-image';
+
+
+const PageHeader = (data: any, isLoading: boolean) => {
+  const { theme } = useTheme();
+  
+  const userData = data.data
+  
+  return (
+    <View
+      style={{
+        width: "auto",
+        backgroundColor: theme.colors.secondary,
+        paddingHorizontal: Sizes.fixPadding * 1.5,
+        paddingVertical: Sizes.fixPadding,
+      }}
+    >
+      <MyStatusBar />
+      {isLoading && (
+        <ActivityIndicator color={theme.colors.primary} />
+      )}
+      {data &&
+        <View
+          style={{
+            flexDirection:'row',
+            justifyContent:'space-between',
+            alignItems:'center',
+          }}
+        >
+          <Text>Search</Text>
+
+          <View
+            style={{
+              flexDirection:'row',
+              alignItems:'center',
+              gap: theme.spacing.lg,
+            }}
+          >
+
+            <TouchableOpacity>
+              <MaterialCommunityIcons name='bell-badge-outline' size={30} color={theme.colors.grey3}/>
+            </TouchableOpacity>
+
+            <TouchableOpacity>
+              <MaterialCommunityIcons name='chat-outline' size={30} color={theme.colors.grey3}/>
+            </TouchableOpacity>
+
+          </View>
+        </View>
+        }
+
+    </View>
+  )
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, description }) => {
-  const { theme } = useTheme();
-
-  return (
-    <View style={{ ...styles.container, backgroundColor: theme.colors.background }}>
-      <Text style={{ ...styles.title, color: theme.colors.grey0 }}>{title}</Text>
-      <Text style={{ ...styles.description, color: theme.colors.grey2 }}>{description}</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: Sizes.fixPadding * 2,
-    paddingVertical: Sizes.fixPadding - 3,
-  },
-  title: {
-    fontFamily: "Coolvetica",
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  description: {
-    fontFamily: "Coolvetica",
-    fontSize: 16,
-  },
-});
+export default PageHeader

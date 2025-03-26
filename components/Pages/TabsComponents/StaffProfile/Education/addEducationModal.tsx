@@ -131,7 +131,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                     >
                       <Text 
                         style={{
-                          ...styles.inputLabel,
+                          ...pageStyle.inputLabel,
                           color: theme.colors.grey0
                         }}
                       >
@@ -157,7 +157,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                     >
                       <Text 
                         style={{
-                          ...styles.inputLabel,
+                          ...pageStyle.inputLabel,
                           color: theme.colors.grey0
                         }}
                       >
@@ -194,7 +194,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                       />
                       <Text
                         style={{ 
-                          ...styles.inputLabel, 
+                          ...pageStyle.inputLabel, 
                           color: theme.colors.grey0
                         }}
                       >
@@ -215,7 +215,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                       >
                         <Text 
                           style={{
-                            ...styles.inputLabel,
+                            ...pageStyle.inputLabel,
                             color: theme.colors.grey0
                           }}
                         >
@@ -224,9 +224,11 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                         <TouchableOpacity
                           onPress={() => setShowStartTimePicker(true)}
                           style={{
-                            ...styles.dateInput,
+                            ...pageStyle.inputBox,
                             borderColor: theme.colors.divider,
-                            backgroundColor: theme.colors.searchBg
+                            backgroundColor: theme.colors.searchBg,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
                           }}
                         >                       
                         
@@ -278,7 +280,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                       >
                         <Text 
                           style={{
-                            ...styles.inputLabel,
+                            ...pageStyle.inputLabel,
                             color: checked ? theme.colors.disabled : theme.colors.grey0
                           }}
                         >
@@ -287,9 +289,11 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                         <TouchableOpacity
                           onPress={() => setShowEndTimePicker(true)}
                           style={{
-                            ...styles.dateInput,
+                            ...pageStyle.inputBox,
                             borderColor: checked ? theme.colors.disabled : theme.colors.divider,
-                            backgroundColor: theme.colors.searchBg
+                            backgroundColor: theme.colors.searchBg,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
                           }}
                           disabled={checked}
                         >
@@ -331,7 +335,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                   {/* Button Group */}
                   <View
                     style={{
-                      ...styles.buttonGroup
+                      ...pageStyle.buttonGroup
                     }}
                   >            
                     <Button
@@ -345,7 +349,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                       titleStyle={{ ...pageStyle.button16 }}
                       radius={"sm"}
                       containerStyle={{
-                        ...styles.buttonContainer,
+                        ...pageStyle.buttonContainer,
                         borderColor: theme.colors.primary,
                         borderWidth: 2,
                       }}
@@ -359,7 +363,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                       titleStyle={{ ...pageStyle.button16 }}
                       radius={"sm"}
                       containerStyle={{
-                        ...styles.buttonContainer,
+                        ...pageStyle.buttonContainer,
                         borderColor: theme.colors.primary,                     
                         borderWidth: 2,
                         borderRadius:10
@@ -382,34 +386,4 @@ const styles = StyleSheet.create({
   formContiner: {
     width: "100%",
   },
-  inputLabel: {
-    ... pageStyle.smText,
-    marginBottom: theme.spacing?.xs,
-    fontWeight: "bold",
-    paddingHorizontal: theme.spacing?.xs,
-  },
-  buttonGroup:{
-    flexDirection: 'row',
-    gap: theme.spacing?.md,
-    width: '100%',
-    marginTop: theme.spacing?.xl,
-    marginBottom: theme.spacing?.lg,
-  },
-  buttonContainer: {
-    flex: 1,
-    height: "100%",
-    paddingHorizontal: 0,
-  },
-  dateInput:{
-    paddingHorizontal: Sizes.fixPadding,
-    paddingVertical: Sizes.fixPadding,
-    borderRadius: theme.spacing?.sm,
-    marginBottom: theme.spacing?.xs,
-    borderWidth: 1,
-    overflow: "hidden",
-    width: "100%",
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  }, 
 })

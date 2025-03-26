@@ -12,6 +12,7 @@ import { theme } from '@/constants/Theme';
 import PerofileIndex from '@/components/Pages/TabsComponents/StaffProfile';
 import { Colors } from '@/constants/Colors';
 import { getUserById, getUserPostsAndShares } from '@/api/backend';
+import PageHeader from '@/components/Header';
 
 
 

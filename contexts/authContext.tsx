@@ -125,7 +125,7 @@ export function AuthProvider (props: any) {
           });
           setSession(token);
   
-          router.replace("/home");
+          router.replace("/");
         } else {
           throw new Error("User data not found or invalid response");
         }
@@ -175,7 +175,7 @@ export function AuthProvider (props: any) {
           duration: 3000,
         });
       
-        router.replace("/home");
+        router.replace("/");
 
       } else {
         throw new Error("Invalid login response");
@@ -203,7 +203,7 @@ export function AuthProvider (props: any) {
         headers: { "Content-Type": "application/json" },
       });
   
-      console.log("SignUp response:", response.data);
+      // console.log("SignUp response:", response.data);
   
       const { token, id } = response.data;
       if (token) {
@@ -220,7 +220,7 @@ export function AuthProvider (props: any) {
           duration: 3000,
         });
   
-        router.replace("/home");
+        router.replace("/");
       } else {
         throw new Error("Invalid sign-up response");
       }

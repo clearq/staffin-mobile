@@ -15,6 +15,7 @@ const Page = () => {
     const userRole = authState.userData?.roleId
 
   return (
+    
     <View>
       {userRole === 1 && <Text>Admin Home</Text>}
       {userRole === 2 && <Text>Employre Home</Text>}

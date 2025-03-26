@@ -20,13 +20,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import pageStyle from "@/constants/Styles";
 import ModalHeader from "../ModalHeader";
 
-type RecordItem = {
-  id: number;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  title: string;
-  value: string;
-  path: `${string}`;
-};
 
 const screenWidth = Dimensions.get("window").width
 
@@ -39,72 +32,87 @@ export default function RecordsScreen() {
 
   // const userData = null;
 
-  const recordsList:RecordItem[] = [
+  const recordsList = [
     {
       id: 1,
       icon: "account-box-outline",
-      title: t("overviwe"), // overview
-      value: t("overview"),
-      path: "profile",
+      title: t("profile"), // overview
+      value: t("profile"),
+      path: "/profile",
     },
     {
       id: 2,
       icon: "playlist-check", // My Application
       title: t("my-application"),
       value: t("my-application"),
-      path: "application",
+      path: "/application",
     },
     {
       id: 3,
       icon: "file-document-outline", // My Document
       title: t("my-document"),
       value: t("my-document"),
-      path: "document",
+      path: "/document",
     },
   ];
 
  
-
   return (
-    <Animated.View entering={BounceInDown.delay(300).duration(1000).springify()}>
+    <View style={{flex:1, backgroundColor: theme.colors.background}}>
       <ModalHeader title={t("profile")} />
 
-      <View
+      {userData && (
+        <>
+          {recordsInfo()}
+        </>
+      )}
+    </View>    
+  );
+
+  function recordsInfo() {
+    interface props {
+      item: any
+      index: number
+    }
+    const renderItem = ({item, index}:props) => (
+      <TouchableOpacity 
+        key={item.id}
         style={{
-          ...styles.itemContainer,
+          ...styles.recordInfoBox
+        }}
+        onPress={() =>{
+          if(item.path) {
+            router.replace(item.path)
+          }
         }}
       >
-        {/* Staff */}
-        {userData?.roleId === 3 && recordsList.map((item) => 
-          <TouchableOpacity 
-            key={item.id}
-            style={{
-              ...styles.recordInfoBox
-            }}
-            onPress={() =>{
-              if(item.path) {
-                router.push(`/(app)/(tabs)/${item.path}`)
-              }
-            }}
-          >
-            <MaterialCommunityIcons name={item.icon} size={24} color={theme.colors.grey0}/>
-            <Text
-              style={{
-                ...pageStyle.headline02,
-                color: theme.colors.grey0,
-              }}
-            >
-              {item.title}
-            </Text>
-          </TouchableOpacity>          
-        )}
-        {/* add Employer */}
-        {/* add Admin */}
-      </View>
-    </Animated.View>
-  );
-}
+        <MaterialCommunityIcons name={item.icon} size={24} color={theme.colors.grey0}/>
+        <Text
+          style={{
+            ...pageStyle.headline02,
+            color: theme.colors.grey0,
+          }}
+        >
+          {item.title}
+        </Text>
+      </TouchableOpacity> 
+    );
 
+    return (
+      <Animated.View entering={BounceInDown.delay(300).duration(1000).springify()}>
+        <FlatList 
+          data={recordsList}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={renderItem}
+          numColumns={1}
+          contentContainerStyle={{ padding: Sizes.fixPadding }}
+          showsVerticalScrollIndicator={false}
+        />
+      </Animated.View>
+    )
+  }
+
+}
 
 
 const styles = StyleSheet.create({

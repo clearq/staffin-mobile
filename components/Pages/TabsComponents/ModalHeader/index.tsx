@@ -23,7 +23,7 @@ const index = ({title,}:props) => {
           style={{
             ...pageStyle.headline01,
             ...styles.titleText,
-            color: theme.colors.grey0
+            color: theme.colors.white
           }}
         >
           {title}
@@ -38,11 +38,12 @@ export default index
 const styles = StyleSheet.create({
   container:{
     height: 150,
-    borderEndStartRadius: theme.spacing?.xl,
-    borderEndEndRadius: theme.spacing?.xl,
+    borderBottomLeftRadius: theme.spacing?.xl,
+    borderBottomRightRadius: theme.spacing?.xl,
     justifyContent:'flex-end',
     alignItems: 'center',
-    paddingBottom: theme.spacing?.xl
+    paddingBottom: theme.spacing?.xl,
+    overflow: 'hidden',
   },
   titleText:{
     textAlign: 'center',

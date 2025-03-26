@@ -129,7 +129,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
               >
                 <Text 
                   style={{
-                    ...styles.inputLabel,
+                    ...pageStyle.inputLabel,
                     color: theme.colors.grey0
                   }}
                 >
@@ -140,7 +140,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                 <View style={{ ...styles.container, borderColor: theme.colors.divider }}>
                   <View
                     style={{
-                      ...styles.input,
+                      ...pageStyle.inputBox,
                       borderColor: theme.colors.divider,
                       backgroundColor: theme.colors.searchBg,
                       width: "100%",
@@ -152,7 +152,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                       placeholder={t("skill")}
                       placeholderTextColor={theme.colors.divider}
                       value={values.name}
-                      style={{ width: '100%', ...pageStyle.inputText }}
+                      style={{ width: '100%', ...pageStyle.inputText, color: theme.colors.grey0 }}
                       onChangeText={(text) => {
                         setQuery(text);
                         setFieldValue("name", text); 
@@ -163,12 +163,12 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                   </View>
                   {/* Dropdown Suggestions */}
                   {showDropdown && (
-                    <View style={styles.dropdown} >
+                    <View style={{...pageStyle.dropdown, backgroundColor: theme.colors.background}} >
                       <ScrollView>
                       {filteredSkills.map((item: ISkill) => (
                         <TouchableOpacity
                           key={item.id}
-                          style={styles.suggestionItem}
+                          style={pageStyle.suggestionItem}
                           onPress={() => {
                             setQuery(item.name);
                             setFieldValue("name", item.name);
@@ -176,7 +176,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                             setShowDropdown(false);
                           }}
                         >
-                          <Text>{item.name}</Text>
+                          <Text  style={{...pageStyle.button16, color:theme.colors.grey0}}>{item.name}</Text>
                         </TouchableOpacity>
                       ))}
                       </ScrollView>
@@ -199,7 +199,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                 {/* Button Group */}
                 <View
                   style={{
-                    ...styles.buttonGroup,
+                    ...pageStyle.buttonGroup,
                     marginTop: theme.spacing.xl * 2,
                   }}
                 >            
@@ -213,7 +213,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                     titleStyle={{ ...pageStyle.button16 }}
                     radius={"sm"}
                     containerStyle={{
-                      ...styles.buttonContainer,
+                      ...pageStyle.buttonContainer,
                       borderColor: theme.colors.primary,
                       borderWidth: 2,
                     }}
@@ -227,7 +227,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                     titleStyle={{ ...pageStyle.button16 }}
                     radius={"sm"}
                     containerStyle={{
-                      ...styles.buttonContainer,
+                      ...pageStyle.buttonContainer,
                       borderColor: theme.colors.primary,                     
                       borderWidth: 2,
                       borderRadius:10
@@ -251,70 +251,7 @@ const styles = StyleSheet.create({
   formContiner: {
     width: "100%",
   },
-  inputLabel: {
-    ... pageStyle.smText,
-    marginBottom: theme.spacing?.xs,
-    fontWeight: "bold",
-    paddingHorizontal: theme.spacing?.xs,
-  },
-  buttonGroup:{
-    flexDirection: 'row',
-    gap: theme.spacing?.md,
-    width: '100%',
-    marginTop: theme.spacing?.xl,
-    marginBottom: theme.spacing?.lg,
-  },
-  buttonContainer: {
-    flex: 1,
-    height: "100%",
-    paddingHorizontal: 0,
-  },
-  dateInput:{
-    paddingHorizontal: Sizes.fixPadding,
-    paddingVertical: Sizes.fixPadding,
-    borderRadius: theme.spacing?.sm,
-    marginBottom: theme.spacing?.xs,
-    borderWidth: 1,
-    overflow: "hidden",
-    width: "100%",
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  }, 
   container: {
     width: "100%",
-  },
-  input: {
-    paddingHorizontal: Sizes.fixPadding,
-    paddingVertical: Sizes.fixPadding,
-    borderRadius: theme.spacing?.sm,
-    marginBottom: theme.spacing?.xs,
-    borderWidth: 1,
-    overflow: "hidden",
-    width: "100%",
-  },
-  icon: {
-    position: "absolute",
-    right: 10, 
-    top: "50%",
-    transform: [{ translateY: -10 }],
-  },
-  dropdown: {
-    position: "absolute",
-    top: '100%',
-    left: 0,
-    width: "100%",
-    maxHeight: 200,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    zIndex: 9999,
-    elevation: 5
-  },
-  suggestionItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
   },
 })

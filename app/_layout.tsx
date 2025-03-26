@@ -19,7 +19,9 @@ import { ToastProvider } from "react-native-toast-notifications";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthProvider } from "@/contexts/authContext";
 
-
+export const unstable_settings = {
+  initialRouteName: "/(app)/(tabs)",
+};
 
 const RootLayout = () => {
   const [appIsReady, setAppIsReady] = useState(false);

@@ -102,7 +102,7 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
                     >
                       <Text 
                         style={{
-                          ...styles.inputLabel,
+                          ...pageStyle.inputLabel,
                           color: theme.colors.grey0
                         }}
                       >
@@ -121,7 +121,7 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
               
                   <View
                     style={{
-                      ...styles.buttonGroup,
+                      ...pageStyle.buttonGroup,
                       marginTop: theme.spacing.xl * 2,
                     }}
                   >            
@@ -133,7 +133,7 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
                       titleStyle={{ ...pageStyle.button16 }}
                       radius={"sm"}
                       containerStyle={{
-                        ...styles.buttonContainer,
+                        ...pageStyle.buttonContainer,
                         borderColor: theme.colors.primary,
                         borderWidth: 2,
                       }}
@@ -148,7 +148,7 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
                       titleStyle={{ ...pageStyle.button16 }}
                       radius={"sm"}
                       containerStyle={{
-                        ...styles.buttonContainer,
+                        ...pageStyle.buttonContainer,
                         borderColor: theme.colors.primary,                     
                         borderWidth: 2,
                         borderRadius:10
@@ -171,22 +171,4 @@ const styles = StyleSheet.create({
   formContiner: {
     width: "100%",
   },
-  inputLabel: {
-    fontFamily: "Coolvetica",
-    marginBottom: theme.spacing?.xs,
-    fontWeight: "bold",
-    paddingHorizontal: theme.spacing?.xs,
-  },
-  buttonGroup:{
-    flexDirection: 'row',
-    gap: theme.spacing?.md,
-    width: '100%',
-    marginVertical: theme.spacing?.lg,
-  },
-  buttonContainer: {
-    flex: 1,
-    height: "100%",
-    paddingHorizontal: 0,
-  },
-
 })

@@ -37,7 +37,7 @@ export const TextField: React.FC<Props> = (props) => {
       <TextInput
         {...props}
         style={{
-          ...styles.input,
+          ...pageStyle.inputBox,
           ...props.styles,
           ...pageStyle.inputText,
           borderColor: theme.colors.divider,
@@ -76,13 +76,11 @@ export const MultiTextField: React.FC<Props> = (props) => {
       <TextInput
         {...props}
         style={{
-          ...styles.input,
+          ...pageStyle.multilineInputBox,
           ...props.styles,
           ...pageStyle.inputText,
           borderColor: theme.colors.divider,
           backgroundColor: theme.colors.searchBg,
-          width: "100%",
-          height: 150,
           color: theme.colors.grey0,
         }}
         placeholder={props.placeholder}
@@ -118,13 +116,13 @@ export const IconTextField: React.FC<Props> = (props) => {
     <View style={{ ...styles.container, borderColor: theme.colors.divider }}>
       <View
         style={{
-          ...styles.input,
+          ...pageStyle.inputBox,
           ...props.styles,
           borderColor: theme.colors.divider,
           backgroundColor: theme.colors.searchBg,
           width: "100%",
           justifyContent: 'space-between',
-          flexDirection: 'row'
+          flexDirection: 'row',
         }}
       >
 
@@ -169,15 +167,6 @@ export const IconTextField: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-  },
-  input: {
-    paddingHorizontal: Sizes.fixPadding,
-    paddingVertical: Sizes.fixPadding,
-    borderRadius: theme.spacing?.sm,
-    marginBottom: theme.spacing?.xs,
-    borderWidth: 1,
-    overflow: "hidden",
     width: "100%",
   },
   icon: {

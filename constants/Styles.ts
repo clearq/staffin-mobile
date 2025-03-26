@@ -39,6 +39,60 @@ const pageStyle = StyleSheet.create({
     fontSize: 16,
     letterSpacing: 1
   },
+  inputLabel: {
+    fontFamily: "Coolvetica",
+    marginBottom: theme.spacing?.xs,
+    fontWeight: "bold",
+    paddingHorizontal: theme.spacing?.xs,
+  },
+  inputBox: {
+    paddingHorizontal: Sizes.fixPadding,
+    //paddingVertical: Sizes.fixPadding,
+    borderRadius: theme.spacing?.sm,
+    marginBottom: theme.spacing?.xs,
+    borderWidth: 1,
+    overflow: "hidden",
+    width: "100%", 
+    height: 48,
+    alignItems: 'center'
+  },
+  multilineInputBox: {
+    paddingHorizontal: Sizes.fixPadding,
+    //paddingVertical: Sizes.fixPadding,
+    borderRadius: theme.spacing?.sm,
+    marginBottom: theme.spacing?.xs,
+    borderWidth: 1,
+    overflow: "hidden",
+    width: "100%", 
+    height: 150,
+    alignItems: 'flex-start'
+  },
+  buttonGroup:{
+    flexDirection: 'row',
+    gap: theme.spacing?.md,
+    width: '100%',
+    marginTop: theme.spacing?.xl,
+    marginBottom: theme.spacing?.lg,
+  },
+  buttonContainer: {
+    flex: 1,
+    height: "100%",
+    paddingHorizontal: 0,
+  },
+  dropdown: {
+    position: "absolute",
+    top: '100%',
+    left: 0,
+    width: "100%",
+    maxHeight: 200,
+    borderWidth: 1,
+    borderRadius: theme.spacing?.md,
+    zIndex: 9999,
+    elevation: 5
+  },
+  suggestionItem: {
+    padding: theme.spacing?.sm,
+  },
 })
 
 export default pageStyle

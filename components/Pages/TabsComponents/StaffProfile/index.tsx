@@ -480,6 +480,7 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
                   backgroundColor: theme.colors.primary, 
                   borderRadius: 8,
                   flexDirection: 'row',
+                  alignItems:'center',
                   gap: theme.spacing.sm
                 }}
               >

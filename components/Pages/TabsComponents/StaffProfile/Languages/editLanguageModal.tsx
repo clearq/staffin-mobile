@@ -198,70 +198,9 @@ const styles = StyleSheet.create({
   formContiner: {
     width: "100%",
   },
-  inputLabel: {
-    ... pageStyle.smText,
-    marginBottom: theme.spacing?.xs,
-    fontWeight: "bold",
-    paddingHorizontal: theme.spacing?.xs,
-  },
-  buttonGroup:{
-    flexDirection: 'row',
-    gap: theme.spacing?.md,
-    width: '100%',
-    marginTop: theme.spacing?.xl,
-    marginBottom: theme.spacing?.lg,
-  },
   buttonContainer: {
     //flex: 1,
     //height: "100%",
     paddingHorizontal: 0,
-  },
-  dateInput:{
-    paddingHorizontal: Sizes.fixPadding,
-    paddingVertical: Sizes.fixPadding,
-    borderRadius: theme.spacing?.sm,
-    marginBottom: theme.spacing?.xs,
-    borderWidth: 1,
-    overflow: "hidden",
-    width: "100%",
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  }, 
-  container: {
-    width: "100%",
-  },
-  input: {
-    paddingHorizontal: Sizes.fixPadding,
-    paddingVertical: Sizes.fixPadding,
-    borderRadius: theme.spacing?.sm,
-    marginBottom: theme.spacing?.xs,
-    borderWidth: 1,
-    overflow: "hidden",
-    width: "100%",
-  },
-  icon: {
-    position: "absolute",
-    right: 10, 
-    top: "50%",
-    transform: [{ translateY: -10 }],
-  },
-  dropdown: {
-    position: "absolute",
-    top: '100%',
-    left: 0,
-    width: "100%",
-    maxHeight: 200,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    zIndex: 9999,
-    elevation: 5
-  },
-  suggestionItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
   },
 })

@@ -12,17 +12,19 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import MyStatusBar from '@/components/StatusBar';
 import { ActivityIndicator } from 'react-native';
 import { SkeletonImage } from '@/components/Skeleton/skeleton-image';
+import PageHeader from '@/components/Header';
 
 
 export const unstable_settings = {
-  initialRouteName: "home",
+  initialRouteName: "index",
 };
 
 export function TabBarIcon(props: { 
   name: React.ComponentProps<typeof MaterialCommunityIcons>["name"]; 
-  color: string; size: number; 
-  isActive: boolean; style?: any 
-}) {
+  color: string; 
+  size: number; 
+  isActive: boolean; style?: any
+ }) {
   return <MaterialCommunityIcons name={props.name} color={props.color} size={props.size} style={{ ...props.style }} isActive={props.isActive} 
   />;
 }
@@ -42,34 +44,41 @@ const _layout = () => {
   }
 
   if (!session) {
-    return <Redirect href="/signin" />;
+    return <Redirect href="/(auth)/signin" />;
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.searchBg }}>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <Tabs
         initialRouteName={unstable_settings.initialRouteName}
-        tabBar={(props) => <CustomTabBar {...props} />}
+        tabBar={(props) =>(
+          <View style={{ paddingHorizontal: Sizes.fixPadding}}>
+            <CustomTabBar {...props} />
+          </View>
+        )}
+        
         screenOptions={() => ({
           headerShown: true,
           tabBarStyle: {
             backgroundColor: theme.colors.background,
             borderTopWidth: 1,
             borderColor: theme.colors.divider,
+            shadowColor: theme.colors.grey3,
           },
           tabBarItemStyle: {
+            width: 'auto',
             backgroundColor: theme.colors.background,
-            borderColor: theme.colors.divider,
-            borderWidth: 1,
-            shadowColor: theme.colors.background,
+            borderColor: "transparent",
+            borderWidth: 0,
+            shadowColor: "transparent",
           },
           tabBarActiveTintColor: theme.colors.primary,
-          tabBarInactiveTintColor: theme.colors.primary,
+          tabBarInactiveTintColor: theme.colors.grey2,
         })}
       >
         {/* Home Tab */}
         <Tabs.Screen 
-          name="home"
+          name="index"
           options={{
             tabBarShowLabel: true,
             headerTitleAlign: "center",
@@ -81,9 +90,12 @@ const _layout = () => {
                 name={focused ? "home" : "home-outline"}
                 isActive={focused}
                 size={32}
-                color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
+                color={focused ? theme.colors.primary : theme.colors.white}
               />
             ),
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
 
@@ -101,9 +113,12 @@ const _layout = () => {
                 name={focused ? "briefcase" : "briefcase-outline"}
                 isActive={focused}
                 size={30}
-                color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
+                color={focused ? theme.colors.primary : theme.colors.white}
               />
             ),
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
 
@@ -116,7 +131,9 @@ const _layout = () => {
             headerShown: false,
             headerTitle: t("profile"),
             tabBarLabel: "Route",
-
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }}
         />
 
@@ -125,8 +142,10 @@ const _layout = () => {
           name="profile"
           options={{
             href: null, // Hides from the tab bar
+            // tabBarStyle: { display: "none", height: 0, width: 0, },
+            // tabBarIcon: () => null,
             headerShown: true,
-            headerTitle: t("overview"),
+            // headerTitle: t("overview"),
             headerStyle: { backgroundColor: theme.colors.searchBg },
             headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
@@ -138,8 +157,10 @@ const _layout = () => {
           name="application"
           options={{
             href: null, // Hides from the tab bar
+            // tabBarStyle: { display: "none", height: 0, width: 0, },
+            // tabBarIcon: () => null,
             headerShown: true,
-            headerTitle: "My Application",
+            // headerTitle: "My Application",
             headerStyle: { backgroundColor: theme.colors.searchBg },
             headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
@@ -151,8 +172,10 @@ const _layout = () => {
           name="document"
           options={{
             href: null, // Hides from the tab bar
+            // tabBarStyle: { display: "none", height: 0, width: 0, },
+            // tabBarIcon: () => null,
             headerShown: true,
-            headerTitle: "My Document",
+            // headerTitle: "My Document",
             headerStyle: { backgroundColor: theme.colors.searchBg },
             headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
@@ -173,9 +196,12 @@ const _layout = () => {
                 name={focused ? "account-group" : "account-group-outline"}
                 isActive={focused}
                 size={30}
-                color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
+                color={focused ? theme.colors.primary : theme.colors.white}
               />
             ),
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
 
@@ -193,9 +219,12 @@ const _layout = () => {
                 name={focused ? "cog" : "cog-outline"}
                 isActive={focused}
                 size={30}
-                color={focused ? theme.colors.primary : theme.mode === "light" ? theme.colors.grey3 : theme.colors.white}
+                color={focused ? theme.colors.primary : theme.colors.white}
               />
             ),
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
       </Tabs>
@@ -204,56 +233,3 @@ const _layout = () => {
 }
 
 export default _layout
-
-
-const PageHeader = (data: any, isLoading: boolean) => {
-  const { theme } = useTheme();
-  
-  const userData = data.data
-  
-  return (
-    <View
-      style={{
-        width: "auto",
-        backgroundColor: theme.colors.searchBg,
-        paddingHorizontal: Sizes.fixPadding * 1.5,
-        paddingVertical: Sizes.fixPadding,
-      }}
-    >
-      <MyStatusBar />
-      {isLoading && (
-        <ActivityIndicator color={theme.colors.primary} />
-      )}
-      {data &&
-        <View
-          style={{
-            flexDirection:'row',
-            justifyContent:'space-between',
-            alignItems:'center',
-          }}
-        >
-          <Text>Search</Text>
-
-          <View
-            style={{
-              flexDirection:'row',
-              alignItems:'center',
-              gap: theme.spacing.lg,
-            }}
-          >
-
-            <TouchableOpacity>
-              <MaterialCommunityIcons name='bell-badge-outline' size={30} color={theme.colors.grey3}/>
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-              <MaterialCommunityIcons name='chat-outline' size={30} color={theme.colors.grey3}/>
-            </TouchableOpacity>
-
-          </View>
-        </View>
-        }
-
-    </View>
-  )
-}

@@ -4,7 +4,7 @@ import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { useTheme } from '@rneui/themed';
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from 'react-i18next';
-import { DateType, getDefaultStyles } from 'react-native-ui-datepicker';
+import { DateType } from 'react-native-ui-datepicker';
 import { useRouter } from 'expo-router';
 import DateTimePicker from 'react-native-ui-datepicker'
 import Button from '@/components/UI/Button'
@@ -23,7 +23,6 @@ const DateCalendar = ({onClose, setDate, onSubmit, date}: props) => {
   const { t } = useTranslation();
   const toast = useToast();
   const router = useRouter()
-  const defaultStyles = getDefaultStyles();
 
   
   return (
@@ -36,7 +35,7 @@ const DateCalendar = ({onClose, setDate, onSubmit, date}: props) => {
       <View
         style={{
           ...styles.calendarContainer,
-          backgroundColor: theme.colors.modal
+          backgroundColor: theme.colors.background
         }}
       >
         <View
@@ -47,7 +46,6 @@ const DateCalendar = ({onClose, setDate, onSubmit, date}: props) => {
         >
           <DateTimePicker
             styles={{
-              ...defaultStyles,
               today: { 
                 color: theme.colors.secondary, 
                 borderWidth: 1 

@@ -60,7 +60,6 @@ const Page = () => {
       enabled: !!userId,
     })
 
-
     
     // console.log('user', user);
     

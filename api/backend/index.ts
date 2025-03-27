@@ -33,3 +33,14 @@ export {
 export {
   getSkillsList,
 } from "./skill"
+
+
+export {
+  autoLoginToCDN,
+  getContentImage,
+  getPublicFile,
+  updateProfileImage,
+  uploadContentImage,
+  deleteContentFile,
+  invalidateCache
+} from "./cdn"

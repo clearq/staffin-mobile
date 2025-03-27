@@ -1,4 +1,7 @@
+import { CDN_PASSWORD, CDN_USERNAME } from "@/constants/key";
 import api from "./config";
+
+
 
 // Get user by id
 export const getUserById = async (userId: string) => {
@@ -7,7 +10,9 @@ export const getUserById = async (userId: string) => {
 
     return data;
   } catch (error) {
-    console.log(error);    
+    console.error(error);    
   }
 }
+
+
 

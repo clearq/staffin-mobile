@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router';
 import *as ImagePicker from 'expo-image-picker'
 import { useToast } from "react-native-toast-notifications";
@@ -30,6 +30,7 @@ import AddSkills from './Edit/addSkillModal';
 import AddSkillModal from './Edit/addSkillModal';
 import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
+import * as FileSystem from 'expo-file-system';
 
 interface props {
   user: IUser;
@@ -45,7 +46,6 @@ interface ThemedContainerProps {
   footerChildren?: React.ReactNode;
   btnChildren?: React.ReactNode;
 }
-
 
 
 const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
@@ -72,6 +72,7 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
 
   const [openEditLanguageDialog, setOpenEditLanguageDialog] = useState<boolean>(false)
   const [openAddLanguageDialog, setOpenAddLanguageDialog] = useState<boolean>(false)
+
 
   const handleImageUpdate = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -138,6 +139,7 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
     }
     
   }
+  
 
   const ItemContainer: React.FC<ThemedContainerProps> = (props) => {   
     return (
@@ -260,10 +262,11 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
             backgroundColor: theme.colors.background
           }}
         >
-          {user.profileImage  
-            ? <Avatar size={80} rounded source={{uri: user?.profileImage}} />      
-            : <Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-          }
+          {user ? (
+            <Avatar size={80} rounded source={{ uri: user?.profileImage }} />
+          ) : (
+            <Avatar size={80} rounded icon={{ name: 'account', type: 'material-community' }} containerStyle={{ backgroundColor: theme.colors.primary }} />
+          )}
 
           {showEditButton && (
             <TouchableOpacity

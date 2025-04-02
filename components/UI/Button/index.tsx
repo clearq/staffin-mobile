@@ -1,6 +1,7 @@
 import React from "react";
 import { ActivityIndicator } from "react-native";
 import { Button as ButtonBase } from "@rneui/themed";
+import { theme } from "@/constants/Theme";
 
 interface PropsButton {
   title: string;
@@ -33,7 +34,7 @@ export default function Button({ title, onPress, titleStyle, buttonStyle, contai
       radius={radius}
       type={type}
       titleStyle={titleStyle}
-      buttonStyle={buttonStyle}
+      buttonStyle={{...buttonStyle, borderRadius: theme.spacing?.xs}}
       containerStyle={containerStyle}
       disabled={disabled}
       loading={loading}

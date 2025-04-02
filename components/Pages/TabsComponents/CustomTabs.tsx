@@ -1,14 +1,17 @@
 
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, TouchableOpacity, StyleSheet, Text, Platform } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Avatar, Divider, useTheme } from "@rneui/themed";
 import { Sizes, theme } from "@/constants/Theme";
 import { useAuth } from "@/contexts/authContext";
-import { ImageManipulator, manipulateAsync, SaveFormat, useImageManipulator } from "expo-image-manipulator";
-import * as FileSystem from "expo-file-system";
-import index from "./ModalHeader";
-import { formToJSON } from "axios";
+
+import { fetchImageFromCDN } from "@/utils/CDN-action";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setProfileImage } from "@/store/slice/userSlice";
+import { useQuery } from "@tanstack/react-query";
+import { getUserById, getUserPostsAndShares } from "@/api/backend";
 
 
 const isIOS = Platform.OS === "ios";
@@ -16,10 +19,39 @@ const isIOS = Platform.OS === "ios";
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { theme } = useTheme();
   const { authState } = useAuth();
+  const dispatch = useDispatch();
+  const profileImage = useSelector((state: RootState) => state.user.profileImage);
+  console.log("Rendered profileImage in ✅");
 
+  const userId = authState.userId
 
-  const user = authState.userData
-  const avatar = user?.profileImage
+  const { 
+    data: user, 
+    refetch: userRefetch, 
+    isLoading: userIsLoading, 
+    isPending,    
+  } = useQuery({
+    queryKey: ["user-data"],
+    queryFn: async () => {
+      const response = await getUserById(userId!)      
+
+      return response;
+    },
+    enabled: !!userId,
+  });
+
+  const fetchImage = useCallback(async () => {
+    if (user?.profileImage) {
+      const url = await fetchImageFromCDN(user);
+      dispatch(setProfileImage(url));
+    }
+  }, [user?.profileImage]);
+
+  useEffect(() => {
+    if (user?.profileImage) {
+      fetchImage();
+    }
+  }, [user?.profileImage]); 
 
 
   return (
@@ -36,13 +68,6 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
         const label = options.tabBarLabel || route.name;
 
         const isFocused = state.index === index;
-
-        //console.log('route:', route.name); // Debugging the route name
-        //console.log('state', route.name);
-        
-        //console.log('index:', index); // Debugging the route index
-        //console.log('state.index:', state.index); // Debugging state.index
-        //console.log('option:', options.tabBarIcon, '|', options.headerTitle );
         
                 
         if (label === "Route") {
@@ -63,8 +88,8 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
                 },
               ]}
             >
-              {avatar 
-                ? <Avatar size={60} rounded source={{uri: avatar}} />      
+              {profileImage !== ""
+                ? <Avatar size={60} rounded source={{uri: profileImage}} />      
                 :<Avatar size={60} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
               }
             </TouchableOpacity>
@@ -103,7 +128,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderWidth: 0,
     paddingVertical: 10,
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     borderRadius: 40,
     marginBottom: isIOS ? 20 : 15,
     zIndex: 1,
@@ -115,7 +140,7 @@ const styles = StyleSheet.create({
   middleTab: {
     position:'absolute',
     left:'50%',
-    right:'50%',
+    transform: [{ translateX: -70/4 }],
     top: "-50%",
     width: 70,
     height: 70,

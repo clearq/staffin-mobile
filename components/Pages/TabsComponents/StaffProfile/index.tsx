@@ -1,8 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform, Image } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 import *as ImagePicker from 'expo-image-picker'
 import { useToast } from "react-native-toast-notifications";
+import { getItem, setItem } from '@/utils/asyncStorage';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setProfileImage } from '@/store/slice/userSlice';
+import { RootState, store } from '@/store/store';
+import { fetchImageFromCDN, getImageUrl } from '@/utils/CDN-action';
 
 import { IExperience, IUser } from '@/types/UserTypes'
 import { IPost } from '@/types/PostTypes'
@@ -11,8 +16,9 @@ import { useTranslation } from 'react-i18next';
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
+import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
-import { deleteStaffSkill, updateStaff } from '@/api/backend';
+import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
@@ -26,11 +32,10 @@ import AllExperience from './Experience/allExperience';
 import AllEducation from './Education/allEducation';
 import AddExperienceModal from './Experience/addExperience';
 import AddEducationModal from './Education/addEducationModal';
-import AddSkills from './Edit/addSkillModal';
 import AddSkillModal from './Edit/addSkillModal';
 import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
-import * as FileSystem from 'expo-file-system';
+import EmptyItemMessage from './EmptyItemMessage';
 
 interface props {
   user: IUser;
@@ -48,19 +53,19 @@ interface ThemedContainerProps {
 }
 
 
-const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
+const ProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
-  const router = useRouter()
-
-  const [expData, setExpData] = useState<IExperience>()
+  const dispatch = useDispatch();
+  const profileImage = useSelector((state: RootState) => state.user.profileImage);
+  console.log("Rendered profileImage in ⬇️");
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
   
-  const [openAddActivityDialog, setOpenAddActivityDialog] = useState<boolean>(false)
   const [openAllActivityDialog, setOpenAllActivityDialog] = useState<boolean>(false)
+  const [openCreateActivityDialog, setOpenCreateActivityDialog] = useState<boolean>(false)
 
   const [openAddExperienceDialog, setOpenAddExperienceDialog] = useState<boolean>(false)
   const [openAllExperienceDialog, setOpenAllExperienceDialog] = useState<boolean>(false)
@@ -73,29 +78,58 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
   const [openEditLanguageDialog, setOpenEditLanguageDialog] = useState<boolean>(false)
   const [openAddLanguageDialog, setOpenAddLanguageDialog] = useState<boolean>(false)
 
+  const fetchImage = useCallback(async () => {
+    if (user?.profileImage) {
+      const url = await fetchImageFromCDN(user);
+      dispatch(setProfileImage(url));
+    }
+  }, [user?.profileImage]);
+
+  useEffect(() => {
+    if (user?.profileImage) {
+      fetchImage();
+    }
+  }, [user?.profileImage]); 
+
 
   const handleImageUpdate = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes:['images'],
       allowsEditing: true,
       quality: 1,
-    });
-
+    });  
+    
     if (!result.canceled && result.assets && result.assets.length > 0) {
-      try {
-        const selectedImageUri = result.assets[0].uri;
-  
-        const updatedUserData = { 
-          ...user, 
-          profileImage: selectedImageUri 
-        };
-  
-        await updateStaff(updatedUserData);
+      
+      const file = result.assets[0];
+      const userId = user.id;
+      const contentFolder = "profile";
+      const key = `${userId}_${file.fileName}`;
+      
+      try {  
+        console.log('start handle image update');
+        let token = await getItem(CDN_TOKEN);
+        if (!token) {
+          token = await autoLoginToCDN()
+        }
+            
+        // CDN
+        await uploadContentFile(key, file, token, userId, contentFolder)
+        console.log("File uploaded successfully.");
+        
+        // databse
+        await updateUserProfileImage(key);
+        refetch()
+        console.log('user image:', user.profileImage);
+        
 
-        refetch();
+        const uri = await fetchImageFromCDN(user);
+        //console.log('get uri:', uri);
+        
+        dispatch(setProfileImage(uri));
 
         toast.show(`${t("success-update-message")}`, {
-          type: "custom",
+          type: "success",
         });
        
       } catch (error) {
@@ -106,6 +140,7 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
     }
   }
 
+    
   const showAlert = (id:any) =>
     Alert.alert('Alert Title', 'My Alert Msg', [
       {
@@ -262,11 +297,10 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
             backgroundColor: theme.colors.background
           }}
         >
-          {user ? (
-            <Avatar size={80} rounded source={{ uri: user?.profileImage }} />
-          ) : (
-            <Avatar size={80} rounded icon={{ name: 'account', type: 'material-community' }} containerStyle={{ backgroundColor: theme.colors.primary }} />
-          )}
+          {profileImage !== "" 
+            ? <Avatar size={80} rounded source={{uri: profileImage }} />      
+            :<Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
+          }
 
           {showEditButton && (
             <TouchableOpacity
@@ -340,7 +374,7 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
       <ItemContainer
         title={t("activity")}
         children={<Activity post={post} />}
-        showFooter={true}
+        showFooter={post.length > 0}
         btnChildren={
           <TouchableOpacity
             style={{
@@ -361,20 +395,28 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
           </TouchableOpacity>
         }
         footerChildren={
-          <TouchableOpacity
-            onPress={() => {
-              setOpenAllActivityDialog(true)
-            }}
-          >
-            <Text
-              style={{
-                ...pageStyle.button16,
-                color: theme.colors.grey0
-              }}
-            >
-              {`${t("see-all-posts")}`}
-            </Text>
-          </TouchableOpacity>
+          <>
+            {post.length
+              ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setOpenAllActivityDialog(true)
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...pageStyle.button16,
+                      color: theme.colors.grey0
+                    }}
+                  >
+                    {`${t("see-all-posts")}`}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )
+            }            
+          </>
         }
       />
 
@@ -405,20 +447,28 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
             />
           </TouchableOpacity>
         }
-        showFooter={true}
+        showFooter={user.experience!.length > 0 }
         footerChildren={
-          <TouchableOpacity
-            onPress={() => setOpenAllExperienceDialog(true)}
-          >
-            <Text
-              style={{
-                ...pageStyle.button16,
-                color: theme.colors.grey0
-              }}
-            >
-              {`${t("see-more")}`}
-            </Text>
-          </TouchableOpacity>
+          <>
+            {user?.experience?.length 
+              ? (
+                <TouchableOpacity
+                  onPress={() => setOpenAllExperienceDialog(true)}
+                >
+                  <Text
+                    style={{
+                      ...pageStyle.button16,
+                      color: theme.colors.grey0
+                    }}
+                  >
+                    {`${t("see-more")}`}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )
+            }            
+          </>
         }
       />  
 
@@ -448,20 +498,29 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
             />
           </TouchableOpacity>
         }
-        showFooter={true}
+        showFooter={user.educations!.length > 0}
         footerChildren={
-          <TouchableOpacity
-            onPress={() => setOpenAllEducationDialog(true)}
-          >
-            <Text
-              style={{
-                ...pageStyle.button16,
-                color: theme.colors.grey0
-              }}
-            >
-              {`${t("see-more")}`}
-            </Text>
-          </TouchableOpacity>
+          <>
+            {user?.experience?.length 
+              ? (
+                <TouchableOpacity
+                  onPress={() => setOpenAllEducationDialog(true)}
+                >
+                  <Text
+                    style={{
+                      ...pageStyle.button16,
+                      color: theme.colors.grey0
+                    }}
+                  >
+                    {`${t("see-more")}`}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )
+            }            
+          </>
+          
         }
       /> 
 
@@ -505,6 +564,12 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
                 }
               </View>
             ))}
+            {!user?.skills?.length && (
+              <EmptyItemMessage 
+                onPress={() => setOpenAddSkillsDialog(true)}
+                message={`${t("add-skill")}`}
+              />
+            )}
           </View>
         }
         btnChildren={
@@ -565,19 +630,12 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
                   </View>
                 ))
               ) : (
-                <TouchableOpacity
-                  onPress={() => setOpenAddSkillsDialog(true)}
-                >
-                  <Text
-                    style={{
-                      ...pageStyle.button16,
-                      color: theme.colors.grey0
-                    }}
-                  >
-                    {`${t("add-language-skills")}`}
-                  </Text> // Message when there are no languages
-                </TouchableOpacity>
+                <EmptyItemMessage 
+                  onPress={() => setOpenAddLanguageDialog(true)}
+                  message={`${t("add-language")}`}
+                />
             )}
+            
           </View>
         }
         btnChildren={
@@ -684,7 +742,7 @@ const PerofileIndex = ({user, showEditButton, post, refetch}: props) => {
   )
 }
 
-export default PerofileIndex
+export default ProfileIndex
 
 const styles = StyleSheet.create({
   headerContainer: {

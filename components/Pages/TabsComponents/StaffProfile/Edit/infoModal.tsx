@@ -361,7 +361,6 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
                       containerStyle={{
                         ...pageStyle.buttonContainer,
                         borderColor: theme.colors.primary,
-                        borderWidth: 2,
                       }}
                     />
                       
@@ -375,9 +374,7 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
                       radius={"sm"}
                       containerStyle={{
                         ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,                     
-                        borderWidth: 2,
-                        borderRadius:10
+                        borderColor: theme.colors.primary,       
                       }}
                     />
                   </View>

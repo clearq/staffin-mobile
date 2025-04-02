@@ -215,7 +215,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                     containerStyle={{
                       ...pageStyle.buttonContainer,
                       borderColor: theme.colors.primary,
-                      borderWidth: 2,
+                      borderWidth: 2
                     }}
                   />                      
 
@@ -228,9 +228,7 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                     radius={"sm"}
                     containerStyle={{
                       ...pageStyle.buttonContainer,
-                      borderColor: theme.colors.primary,                     
-                      borderWidth: 2,
-                      borderRadius:10
+                      borderColor: theme.colors.primary, 
                     }}
                   />
                 </View>

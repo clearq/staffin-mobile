@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Modal } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Redirect, Tabs } from 'expo-router'
 
 import { IAuthInfo, IAuthState, useAuth } from "@/contexts/authContext";
@@ -13,6 +13,7 @@ import MyStatusBar from '@/components/StatusBar';
 import { ActivityIndicator } from 'react-native';
 import { SkeletonImage } from '@/components/Skeleton/skeleton-image';
 import PageHeader from '@/components/Header';
+import { hexToRgba } from '@/utils/rgba-to-hex';
 
 
 export const unstable_settings = {
@@ -32,6 +33,7 @@ export function TabBarIcon(props: {
 const _layout = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
+  
   const {
     authState: { userData },
     session,
@@ -47,12 +49,14 @@ const _layout = () => {
     return <Redirect href="/(auth)/signin" />;
   }
 
+
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+
       <Tabs
         initialRouteName={unstable_settings.initialRouteName}
         tabBar={(props) =>(
-          <View style={{ paddingHorizontal: Sizes.fixPadding}}>
+          <View style={{ paddingHorizontal: Sizes.fixPadding, backgroundColor: 'transparent'}}>
             <CustomTabBar {...props} />
           </View>
         )}
@@ -60,14 +64,14 @@ const _layout = () => {
         screenOptions={() => ({
           headerShown: true,
           tabBarStyle: {
-            backgroundColor: theme.colors.background,
+            backgroundColor:'transparent',
             borderTopWidth: 1,
             borderColor: theme.colors.divider,
             shadowColor: theme.colors.grey3,
           },
           tabBarItemStyle: {
             width: 'auto',
-            backgroundColor: theme.colors.background,
+            backgroundColor: 'transparent',
             borderColor: "transparent",
             borderWidth: 0,
             shadowColor: "transparent",
@@ -92,7 +96,7 @@ const _layout = () => {
                 size={32}
                 color={focused ? theme.colors.primary : theme.colors.white}
               />
-            ),
+            ), 
             headerStyle: { backgroundColor: theme.colors.searchBg },
             headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
@@ -233,3 +237,6 @@ const _layout = () => {
 }
 
 export default _layout
+
+
+

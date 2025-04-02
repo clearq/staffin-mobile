@@ -12,6 +12,7 @@ import { IEducation, IUser } from '@/types/UserTypes';
 import EditEducationModal from './editEducationModal';
 import pageStyle from '@/constants/Styles';
 import AddEducationModal from './addEducationModal';
+import EmptyItemMessage from '../EmptyItemMessage';
 
 
 interface props {
@@ -21,6 +22,7 @@ interface props {
 
 const Education = ({user, showEditButton}: props) => {
   const [openEditModal, setOpenEditModal] = useState(false)
+  const [openAddModal, setOpenAddModal] = useState(false)
   const [eduData, setEduData] = useState<IEducation>()
 
   const { theme } = useTheme()
@@ -111,6 +113,13 @@ const Education = ({user, showEditButton}: props) => {
           </View>
         ))
       }
+      {!user?.educations?.length && (
+        <EmptyItemMessage 
+          onPress={() => setOpenAddModal(true)}
+          message={`${t("add-education")}`}
+        />
+      )}
+
       {/* Modal */}
       <EditEducationModal
         data={eduData!}

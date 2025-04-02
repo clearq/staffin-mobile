@@ -11,6 +11,8 @@ import dayjs from 'dayjs'
 import { IExperience, IUser } from '@/types/UserTypes';
 import EditExperienceModal from './editExperienceModal';
 import pageStyle from '@/constants/Styles';
+import EmptyItemMessage from '../EmptyItemMessage';
+import AddExperienceModal from './addExperience';
 
 
 interface props {
@@ -21,6 +23,7 @@ interface props {
 
 const Experience = ({user, showEditButton, handleSuccess}: props) => {
   const [openEditModal, setOpenEditModal] = useState(false)
+  const [openAddModal, setOpenAddModal] = useState(false)
   const [expData, setExpData] = useState<IExperience>()
   
   const { theme } = useTheme()
@@ -33,6 +36,14 @@ const Experience = ({user, showEditButton, handleSuccess}: props) => {
         ...styles.postsContainer
       }}
     >
+
+      {!user?.experience?.length && (
+        <EmptyItemMessage 
+          onPress={() => setOpenAddModal(true)}
+          message={`${t("add-experience")}`}
+        />
+      )}
+
       {user?.experience && user?.experience
         .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
         .slice(0, 2)
@@ -130,12 +141,21 @@ const Experience = ({user, showEditButton, handleSuccess}: props) => {
           </View>
         ))
       }
+      
+
       {/* Modal */}
       <EditExperienceModal
         data={expData!}
         visible={openEditModal}
         onClose={() => setOpenEditModal(!openEditModal)}
         handleSuccess={handleSuccess} 
+      />
+
+      <AddExperienceModal 
+        visible={openAddModal}
+        id={user.id}
+        onClose={() => setOpenAddModal(!openAddModal)}
+        handleSuccess={handleSuccess}
       />
     </View>
   )

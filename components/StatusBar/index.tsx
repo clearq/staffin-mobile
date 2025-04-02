@@ -25,7 +25,7 @@ export default function MyStatusBar({ children, onPress, style, showBackIcon = f
       <ExpoStatusBar
         networkActivityIndicatorVisible={true}
         translucent={true}
-        backgroundColor={theme.colors.cardBg}
+        backgroundColor="transparent"
         style={Platform.OS === "android" ? "light" : theme.mode === "light" ? "dark" : "light"}
         hidden={heightStatusBar ? true : false}
         animated={true}

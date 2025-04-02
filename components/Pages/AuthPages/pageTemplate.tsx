@@ -48,11 +48,11 @@ const PageTemplate = ({ children, title }:props) => {
         >
 
           <Text 
-          style={{
-            ...pageStyle.headline02,
-            color: theme.colors.grey0,
-            marginTop: Sizes.fixPadding * 2
-          }}
+            style={{
+              ...pageStyle.headline02,
+              color: theme.colors.grey0,
+              marginTop: Sizes.fixPadding * 2
+            }}
           >
             {title}
           </Text>

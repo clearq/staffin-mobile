@@ -10,7 +10,10 @@ export const setItem = async (key: string, value: string) => {
 
 export const getItem = async (key: string) => {
   try {
-    return await SecureStore.getItemAsync(key);
+    const value = await SecureStore.getItemAsync(key);
+    // console.log(`Retrieved value for ${key}:`, value);
+    return value;
+
   } catch (error) {
     console.log("Error retrieving value: ", error);
   }

@@ -447,7 +447,6 @@ const EditExperienceModal = ({data, visible, onClose, handleSuccess}: props) => 
                       containerStyle={{
                         ...pageStyle.buttonContainer,
                         borderColor: theme.colors.primary,
-                        borderWidth: 2,
                       }}
                     />                      
 
@@ -460,9 +459,7 @@ const EditExperienceModal = ({data, visible, onClose, handleSuccess}: props) => 
                       radius={"sm"}
                       containerStyle={{
                         ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,                     
-                        borderWidth: 2,
-                        borderRadius:10
+                        borderColor: theme.colors.primary,      
                       }}
                     />
                   </View>
@@ -479,9 +476,7 @@ const EditExperienceModal = ({data, visible, onClose, handleSuccess}: props) => 
               radius={"sm"}
               containerStyle={{
                 ...pageStyle.buttonContainer,
-                borderColor: theme.colors.error,                     
-                borderWidth: 2,
-                borderRadius:10
+                borderColor: theme.colors.error,        
               }}
             />
           </ScrollView>

@@ -24,6 +24,7 @@ export {
 
 export {
   getUserById,
+  updateUserProfileImage,
 } from "./user"
 
 export {
@@ -37,10 +38,10 @@ export {
 
 export {
   autoLoginToCDN,
-  getContentImage,
+  getContentFile,
   getPublicFile,
   updateProfileImage,
-  uploadContentImage,
+  uploadContentFile,
   deleteContentFile,
-  invalidateCache
+  // invalidateCache
 } from "./cdn"

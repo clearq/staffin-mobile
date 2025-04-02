@@ -1,13 +1,13 @@
-import { CDN_PASSWORD, CDN_USERNAME } from "@/constants/key";
+import { CDN_PASSWORD, CDN_TOKEN, CDN_USERNAME } from "@/constants/key";
+import { setItem } from "@/utils/asyncStorage";
 import axios from "axios";
 
 export const baseURL = process.env.EXPO_PUBLIC_CDN_API_URL
 
-const api = axios.create({
+const cdn_api = axios.create({
   baseURL: `${baseURL}/api`,
   timeout: 30000,
   headers: {
-    Accept: "application/json",
     "Content-Type": "application/json",
   },
 });
@@ -16,23 +16,21 @@ const api = axios.create({
  * Action for CDN
  */
 
+
 export const autoLoginToCDN = async () => {
-  try {
-    console.log("Attempting CDN login...");
-    const response = await api.post(`/auth/login`, {
+  try {   
+    const response = await cdn_api.post(`/Auth/Login`, {
       username: CDN_USERNAME,
       password: CDN_PASSWORD,
     });
-
-    console.log("Login response:", response.data);
-
     const token = response.data;
+
     if (!token) {
       throw new Error("CDN login failed: Missing token.");
     }
 
-    localStorage.setItem("cdnToken", token);
-    console.log("Token successfully saved:", token);
+    // localStorage.setItem(CDN_TOKEN, token);
+    setItem(CDN_TOKEN, token) // use AsyncStrage instead of LocalStrage
 
     return token;
   } catch (error) {
@@ -44,7 +42,7 @@ export const autoLoginToCDN = async () => {
 
 export const updateProfileImage = async (userId: number, profileImage: string) => {
   try {
-    const response = await api.put(`/User/update-ProfileImage`, {
+    const response = await cdn_api.put(`/User/update-ProfileImage`, {
       id: userId,
       profileImage,
     });
@@ -57,16 +55,27 @@ export const updateProfileImage = async (userId: number, profileImage: string) =
   }
 };
 
-export const uploadContentImage = async (key: string, file: any, token: string, userId: number, contentFolder: any) => {
-  console.log("uploadFile function called");
-  console.log("Parameters:", { key, file, token, userId, contentFolder });
-
+export const uploadContentFile = async (key: string, file: any, token: any, userId: number, contentFolder: any) => {
   const formData = new FormData();
-  formData.append("file", file);
+  const fileUri = file.uri;
+  const fileName = file.fileName
+  const fileType = file.mimeType
 
   try {
-    const response = await api.post(
-      `/content/${userId}/${contentFolder}/${key}`,
+    const res = await (fetch(fileUri));
+    const blob = await res.blob();
+    
+    formData.append("file", {
+      uri: fileUri,
+      type: fileType,
+      name: fileName,
+    } as any);
+    
+    // console.log('blob:', blob);
+    console.log('form data:', formData);
+    
+    const response = await cdn_api.post(
+      `/Content/${userId}/${contentFolder}/${key}`,
       formData,
       {
         headers: {
@@ -83,9 +92,9 @@ export const uploadContentImage = async (key: string, file: any, token: string, 
   }
 };
 
-export const getContentImage = async (key: string, token: string, userId: number, contentFolder: any) => {
+export const getContentFile = async (key: string, token: any, userId: number, contentFolder: any) => {
   try {
-    const response = await api.get(
+    const response = await cdn_api.get(
       `/content/${userId}/${contentFolder}/${key}`,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -102,7 +111,7 @@ export const getContentImage = async (key: string, token: string, userId: number
 
 export const getPublicFile = async (key: string, userId: number, contentFolder: any) => {
   try {
-    const response = await api.get(
+    const response = await cdn_api.get(
       `/public/${userId}/${contentFolder}/${key}`,
       {
         responseType: "blob",
@@ -122,7 +131,7 @@ export const deleteContentFile = async (
   contentFolder: any
 ) => {
   try {
-    const response = await api.delete(
+    const response = await cdn_api.delete(
       `/content/${userId}/${contentFolder}/${key}`,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -135,22 +144,22 @@ export const deleteContentFile = async (
   }
 };
 
-export const invalidateCache = async (
-  pattern: any,
-  token: string,
-  userId: number,
-  contentFolder: any
-) => {
-  try {
-    const response = await api.delete(
-      `/content/pattern/${userId}/${contentFolder}/${pattern}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error invalidating cache:", error);
-    throw error;
-  }
-};
+// export const invalidateCache = async (
+//   pattern: any,
+//   token: string,
+//   userId: number,
+//   contentFolder: any
+// ) => {
+//   try {
+//     const response = await cdn_api.delete(
+//       `/content/pattern/${userId}/${contentFolder}/${pattern}`,
+//       {
+//         headers: { Authorization: `Bearer ${token}` },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error invalidating cache:", error);
+//     throw error;
+//   }
+// };

@@ -64,7 +64,7 @@ const Information = ({user, showEditButton}: props) => {
             color: theme.colors.grey0,
           }}
         >
-          {`${user?.city}, ${user?.country}`}
+          {`${user?.city} ${user?.country}`}
         </Text>
       </View>
 

@@ -23,16 +23,16 @@ export const autoLoginToCDN = async () => {
       username: CDN_USERNAME,
       password: CDN_PASSWORD,
     });
-    const token = response.data;
+    const cdnToken = response.data;
 
-    if (!token) {
-      throw new Error("CDN login failed: Missing token.");
+    if (!cdnToken) {
+      throw new Error("CDN login failed: Missing cdnToken.");
     }
 
-    // localStorage.setItem(CDN_TOKEN, token);
-    setItem(CDN_TOKEN, token) // use AsyncStrage instead of LocalStrage
+    // localStorage.setItem(CDN_TOKEN, cdnToken);
+    setItem(CDN_TOKEN, cdnToken) // use AsyncStrage instead of LocalStrage
 
-    return token;
+    return cdnToken;
   } catch (error) {
     console.error("CDN login failed:", error);
     throw error;

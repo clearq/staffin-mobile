@@ -12,7 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import MyStatusBar from '@/components/StatusBar';
 import { ActivityIndicator } from 'react-native';
 import { SkeletonImage } from '@/components/Skeleton/skeleton-image';
-import PageHeader from '@/components/Header';
+import PageHeader from '@/components/TabsHeader';
 import { hexToRgba } from '@/utils/rgba-to-hex';
 
 
@@ -33,9 +33,9 @@ export function TabBarIcon(props: {
 const _layout = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  
+
   const {
-    authState: { userData },
+    authState: { userData, userId },
     session,
     isLoading,
   } = useAuth();
@@ -49,14 +49,31 @@ const _layout = () => {
     return <Redirect href="/(auth)/signin" />;
   }
 
+  const homeTab = () => {
+    if (userData?.roleId === 3 ) {
+      return {title: "Home", label: "home"}
+    }
+    if (userData?.roleId === 1 ) {
+      return {title: "Dashboard", label: "dashboard"}
+    } 
+    if (userData?.roleId === 2) {
+      return {title: "Dashboard", label: "dashboard"}
+    }
+  }
+
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+    <View style={{ flex: 1, backgroundColor: hexToRgba(theme.colors.background, 0.1) }}>
 
       <Tabs
         initialRouteName={unstable_settings.initialRouteName}
         tabBar={(props) =>(
-          <View style={{ paddingHorizontal: Sizes.fixPadding, backgroundColor: 'transparent'}}>
+          <View 
+            style={{ 
+              paddingHorizontal: Sizes.fixPadding, 
+              backgroundColor: hexToRgba(theme.colors.background, 0.1),
+            }}
+          >
             <CustomTabBar {...props} />
           </View>
         )}
@@ -64,7 +81,7 @@ const _layout = () => {
         screenOptions={() => ({
           headerShown: true,
           tabBarStyle: {
-            backgroundColor:'transparent',
+            backgroundColor: hexToRgba(theme.colors.background, 0.1),
             borderTopWidth: 1,
             borderColor: theme.colors.divider,
             shadowColor: theme.colors.grey3,
@@ -87,15 +104,35 @@ const _layout = () => {
             tabBarShowLabel: true,
             headerTitleAlign: "center",
             headerShown: true,
-            headerTitle: "Home",
-            tabBarLabel: t("home"),
+            headerTitle: `${homeTab()?.title}`,
+            tabBarLabel: t(`${homeTab()?.label}`),
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                name={focused ? "home" : "home-outline"}
-                isActive={focused}
-                size={32}
-                color={focused ? theme.colors.primary : theme.colors.white}
-              />
+              <>
+                {userData?.roleId === 3 && 
+                  <TabBarIcon
+                    name={focused ? "home" : "home-outline"}
+                    isActive={focused}
+                    size={32}
+                    color={focused ? theme.colors.primary : theme.colors.white}
+                  />
+                }
+                {userData?.roleId === 1 && 
+                  <TabBarIcon
+                    name={focused ? "view-dashboard" : "view-dashboard-outline"}
+                    isActive={focused}
+                    size={32}
+                    color={focused ? theme.colors.primary : theme.colors.white}
+                  />
+                }
+                {userData?.roleId === 2 && 
+                  <TabBarIcon
+                    name={focused ? "view-dashboard" : "view-dashboard-outline"}
+                    isActive={focused}
+                    size={32}
+                    color={focused ? theme.colors.primary : theme.colors.white}
+                  />
+                }
+              </>
             ), 
             headerStyle: { backgroundColor: theme.colors.searchBg },
             headerTitleStyle: { color: theme.colors.grey0 },

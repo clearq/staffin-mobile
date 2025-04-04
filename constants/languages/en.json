@@ -22,6 +22,12 @@
   "failed-update-message":"Update failed.",
   "success-add-message": "Item successfully added",
   "failed-add-message": "Failed to add item",
+  "success-generate-cv-message": "CV generated successfully",
+  "no-url-message": "No download URL received",
+  "failed-generate-cv-message": "Error generating CV",
+  "success-download-message": "CV has been saved",
+  "failed-download-message": "Failed to download CV",
+  
 
   "name-required-message": "Name is required",
   "user-name-required-message": "Usern ame is required",

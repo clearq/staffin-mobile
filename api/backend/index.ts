@@ -20,6 +20,9 @@ export {
   updateStaffLanguage,
   addStaffLanguage,
   deleteStaffLanguage,
+  generateCv,
+  getCv,
+  downloadCv
 } from "./staff"
 
 export {

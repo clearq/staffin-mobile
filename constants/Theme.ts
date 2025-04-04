@@ -13,7 +13,6 @@ export interface IColors {
   grey3: string;
   grey4: string;
   grey5: string;
-  modal: string;
   greyOutline: string;
   searchBg: string;
   success: string;
@@ -21,7 +20,6 @@ export interface IColors {
   error: string;
   disabled: string;
   divider: string;
-  cardBg: string;
 }
 
 export interface Theme {
@@ -62,8 +60,6 @@ export const theme = createTheme({
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color
-    cardBg: "rgba(212, 175, 53, 0.4)",
-    modal: "rgba(15, 15, 15, 0.6)",
   },
   darkColors: {
     ...darkColors,
@@ -80,8 +76,6 @@ export const theme = createTheme({
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color
-    cardBg: "rgba(37, 37, 37, 0.7)",
-    modal: "rgba(15, 15, 15, 0.6)",
   },
   components: {
     CheckBox: (props, theme) => ({

@@ -7,9 +7,6 @@ import { Sizes, theme } from "@/constants/Theme";
 import { useAuth } from "@/contexts/authContext";
 
 import { fetchImageFromCDN } from "@/utils/CDN-action";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { setProfileImage } from "@/store/slice/userSlice";
 import { useQuery } from "@tanstack/react-query";
 import { getUserById, getUserPostsAndShares } from "@/api/backend";
 
@@ -18,40 +15,28 @@ const isIOS = Platform.OS === "ios";
 
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { theme } = useTheme();
-  const { authState } = useAuth();
-  const dispatch = useDispatch();
-  const profileImage = useSelector((state: RootState) => state.user.profileImage);
-  console.log("Rendered profileImage in ✅");
-
-  const userId = authState.userId
-
-  const { 
-    data: user, 
-    refetch: userRefetch, 
-    isLoading: userIsLoading, 
-    isPending,    
-  } = useQuery({
-    queryKey: ["user-data"],
-    queryFn: async () => {
-      const response = await getUserById(userId!)      
-
-      return response;
-    },
-    enabled: !!userId,
-  });
-
-  const fetchImage = useCallback(async () => {
-    if (user?.profileImage) {
-      const url = await fetchImageFromCDN(user);
-      dispatch(setProfileImage(url));
-    }
-  }, [user?.profileImage]);
-
+  const { authState: { userData, userId, profileImage }} = useAuth();
+ 
   useEffect(() => {
-    if (user?.profileImage) {
-      fetchImage();
-    }
-  }, [user?.profileImage]); 
+    console.log('change image:', profileImage);
+  }, [userData, userId])
+
+  // const fetchImage = useCallback(async () => {
+  //   if (userData?.profileImage !== "") {
+  //     const url = await fetchImageFromCDN(userData!);
+  //     dispatch(setProfileImage(url));
+  //   }
+    
+  // }, [userData, userId]);
+
+  // useEffect(() => {
+  //   console.log('tabs', userData?.email, userId, userData?.profileImage);
+    
+  //   if (userData?.profileImage !== "") {
+  //     fetchImage();
+  //   }
+  //   console.log('url:', profileImage);
+  // }, [userData, userId]); 
 
 
   return (
@@ -132,6 +117,14 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginBottom: isIOS ? 20 : 15,
     zIndex: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   tabBarItem: {
     alignItems: "center",

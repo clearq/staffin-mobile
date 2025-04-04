@@ -3,11 +3,12 @@ import React from 'react'
 import { Slot, Stack } from 'expo-router'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from "react-i18next";
+import { useAuth } from '@/contexts/authContext';
 
 const Layout = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
-
+  const {authState: {userId, userData}, session} = useAuth()
 
   return (
     <View

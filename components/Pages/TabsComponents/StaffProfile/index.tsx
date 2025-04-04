@@ -36,6 +36,7 @@ import AddSkillModal from './Edit/addSkillModal';
 import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
 import EmptyItemMessage from './EmptyItemMessage';
+import { useAuth } from '@/contexts/authContext';
 
 interface props {
   user: IUser;
@@ -53,13 +54,12 @@ interface ThemedContainerProps {
 }
 
 
-const ProfileIndex = ({user, showEditButton, post, refetch}: props) => {
+const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
-  const dispatch = useDispatch();
-  const profileImage = useSelector((state: RootState) => state.user.profileImage);
-  console.log("Rendered profileImage in ⬇️");
+  const { authState: {profileImage}, setAuthState,} = useAuth()
+  
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
@@ -77,19 +77,6 @@ const ProfileIndex = ({user, showEditButton, post, refetch}: props) => {
 
   const [openEditLanguageDialog, setOpenEditLanguageDialog] = useState<boolean>(false)
   const [openAddLanguageDialog, setOpenAddLanguageDialog] = useState<boolean>(false)
-
-  const fetchImage = useCallback(async () => {
-    if (user?.profileImage) {
-      const url = await fetchImageFromCDN(user);
-      dispatch(setProfileImage(url));
-    }
-  }, [user?.profileImage]);
-
-  useEffect(() => {
-    if (user?.profileImage) {
-      fetchImage();
-    }
-  }, [user?.profileImage]); 
 
 
   const handleImageUpdate = async () => {
@@ -126,12 +113,16 @@ const ProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         const uri = await fetchImageFromCDN(user);
         //console.log('get uri:', uri);
         
-        dispatch(setProfileImage(uri));
+        setAuthState((prev) => ({
+          ...prev,
+          profileImage: uri
+        }))
 
         toast.show(`${t("success-update-message")}`, {
           type: "success",
         });
-       
+        
+       refetch()
       } catch (error) {
         toast.show(`${t("failed-update-message")}`, {
           type: "error",
@@ -139,6 +130,7 @@ const ProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       } 
     }
   }
+
 
     
   const showAlert = (id:any) =>
@@ -742,7 +734,7 @@ const ProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   )
 }
 
-export default ProfileIndex
+export default StaffProfileIndex
 
 const styles = StyleSheet.create({
   headerContainer: {

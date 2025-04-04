@@ -32,7 +32,7 @@ export default function RecordsScreen() {
 
   // const userData = null;
 
-  const recordsList = [
+  const staffRecordsList = [
     {
       id: 1,
       icon: "account-box-outline",
@@ -55,6 +55,17 @@ export default function RecordsScreen() {
       path: "/document",
     },
   ];
+
+  const adminRecordsList = [
+    {
+      id: 1,
+      icon: "account-box-outline",
+      title: t("profile"), // overview
+      value: t("profile"),
+      path: "/profile",
+    },
+  ]
+
 
  
   return (
@@ -100,14 +111,29 @@ export default function RecordsScreen() {
 
     return (
       <Animated.View entering={BounceInDown.delay(300).duration(1000).springify()}>
-        <FlatList 
-          data={recordsList}
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={renderItem}
-          numColumns={1}
-          contentContainerStyle={{ padding: Sizes.fixPadding }}
-          showsVerticalScrollIndicator={false}
-        />
+
+        {userData?.roleId === 3 && 
+          <FlatList 
+            data={staffRecordsList}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={renderItem}
+            numColumns={1}
+            contentContainerStyle={{ padding: Sizes.fixPadding }}
+            showsVerticalScrollIndicator={false}
+          />
+        }
+
+        { userData?.roleId === 1 &&
+          <FlatList 
+            data={adminRecordsList}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={renderItem}
+            numColumns={1}
+            contentContainerStyle={{ padding: Sizes.fixPadding }}
+            showsVerticalScrollIndicator={false}
+          />
+        }
+        
       </Animated.View>
     )
   }

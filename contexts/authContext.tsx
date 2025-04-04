@@ -6,7 +6,7 @@ import api from "@/api/backend/config"
 
 import { useStorageState } from "@/utils/useStorageState";
 import { removeItem, setItem } from "@/utils/asyncStorage";
-import { AUTH_TOKEN } from "@/constants/key";
+import { AUTH_TOKEN, CDN_TOKEN, USER_ID } from "@/constants/key";
 import { jwtDecode } from "jwt-decode";
 
 import { IUser } from "@/types/UserTypes"
@@ -14,12 +14,16 @@ import { AxiosError } from "axios";
 import { getItem } from "expo-secure-store";
 import { getUserById } from "@/api/backend";
 import { useTranslation } from "react-i18next";
+import { setProfileImage } from "@/store/slice/userSlice";
+import { useDispatch } from "react-redux";
+import { fetchImageFromCDN } from "@/utils/CDN-action";
 
 
 export interface IAuthState {
   userData: IUser | null;
   userId: string | null;
   token: string | null;
+  profileImage: string 
 }
 
 export interface IAuthInfo {
@@ -65,6 +69,7 @@ const AuthContext = React.createContext<IAuthContext>({
     userData: null,
     userId: null,
     token: null,
+    profileImage: "",
   },
   setAuthState: () => { },
   session: null,
@@ -94,34 +99,38 @@ export function AuthProvider (props: any) {
     userId: null,
     userData: null,
     token: null,
+    profileImage: "",
   });
 
   const initializeAuth = async () => {
-    // console.log("start initializeAuth"); // ✅
+    // console.log("✅start initializeAuth"); 
     setIsLoadingSession(true);
     try {
       const token = await getItem(AUTH_TOKEN);
+
       if (token) {
-        // console.log("initializeAuth-token", token); // ✅
+        // console.log("✅initializeAuth-token", token); 
   
         const decoded: TokenPayload = jwtDecode<TokenPayload>(token);
-        // console.log("Decoded token:", decoded); // ✅
+        // console.log("✅Decoded token:", decoded); 
 
         let response;
       
         try {
           response = await getUserById(decoded.userId);
-          // console.log("getUserById response:", response); // ✅
+          // console.log("✅getUserById response:", response); 
         } catch (err) {
           console.error("Error fetching user data:", err);
           throw new Error("Failed to fetch user data");
         }
   
         if (response && response.id) { 
+          const imageUrl = await fetchImageFromCDN(response)
           setAuthState({
             userData: response,
             userId: response.id,
             token,
+            profileImage: imageUrl
           });
           setSession(token);
   
@@ -153,11 +162,8 @@ export function AuthProvider (props: any) {
             "Content-Type": "application/json",
           },
         }
-      );
-  
-      // console.log("Login response:", response.data);
-      
-
+      );  
+      // console.log("Login response:", response.data);      
       const { token, id } = response.data;
       
       if (token) {
@@ -165,6 +171,7 @@ export function AuthProvider (props: any) {
           userData: null,
           userId: id,
           token: token,
+          profileImage: ""
         });
         setSession(token);
         // console.log('session:', session)
@@ -194,16 +201,14 @@ export function AuthProvider (props: any) {
   };
 
   const SignUp = async (role: "staff" | "admin", data: IAuthInfo) => {
-    
     setIsLoadingSession(true);
     try {
-      const endpoint = role === "staff" ? "/Auth/register/staff" : "/Auth/register/admin";
-  
-      const response = await api.post(endpoint, data, {
+
+      const response = await api.post(`/Auth/register/${role}`, data, {
         headers: { "Content-Type": "application/json" },
       });
   
-      // console.log("SignUp response:", response.data);
+      console.log("SignUp response:", response.data);
   
       const { token, id } = response.data;
       if (token) {
@@ -211,6 +216,7 @@ export function AuthProvider (props: any) {
           userData: null,
           userId: id,
           token,
+          profileImage: ""
         });
         setSession(token);
   
@@ -246,11 +252,16 @@ export function AuthProvider (props: any) {
     setAuthState({
       userData: null,
       userId: null,
-      token: null
+      token: null,
+      profileImage: ""
     });
     setSession(null);
     await removeItem(AUTH_TOKEN);
+    await removeItem(USER_ID)
+    await removeItem(CDN_TOKEN)
     router.replace("/signin")
+    console.log('--- log out ---');
+    
   }
 
   const values = {

@@ -28,6 +28,8 @@ export const getImageUrl = (key: string, userId: number, contentFolder: any) => 
 
 
 export const fetchImageFromCDN = async (user: IUser) => {
+  console.log('cdn action', user.id);
+  
   const userId = user?.id;
   const contentFolder = "profile";
   const key = user?.profileImage;

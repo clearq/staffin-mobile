@@ -21,23 +21,6 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
     console.log('change image:', profileImage);
   }, [userData, userId])
 
-  // const fetchImage = useCallback(async () => {
-  //   if (userData?.profileImage !== "") {
-  //     const url = await fetchImageFromCDN(userData!);
-  //     dispatch(setProfileImage(url));
-  //   }
-    
-  // }, [userData, userId]);
-
-  // useEffect(() => {
-  //   console.log('tabs', userData?.email, userId, userData?.profileImage);
-    
-  //   if (userData?.profileImage !== "") {
-  //     fetchImage();
-  //   }
-  //   console.log('url:', profileImage);
-  // }, [userData, userId]); 
-
 
   return (
     <View

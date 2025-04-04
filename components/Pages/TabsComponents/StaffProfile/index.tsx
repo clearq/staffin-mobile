@@ -20,6 +20,7 @@ import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
 import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
+import ProfileItemContainer from '../ProfileListContainer';
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
 import Information from './Information';
@@ -43,14 +44,6 @@ interface props {
   showEditButton: boolean;
   post: IPost[];
   refetch : () => void
-}
-
-interface ThemedContainerProps {
-  title: string;
-  children: React.ReactNode;
-  showFooter: boolean;
-  footerChildren?: React.ReactNode;
-  btnChildren?: React.ReactNode;
 }
 
 
@@ -121,7 +114,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         toast.show(`${t("success-update-message")}`, {
           type: "success",
         });
-        
+
        refetch()
       } catch (error) {
         toast.show(`${t("failed-update-message")}`, {
@@ -168,78 +161,6 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   }
   
 
-  const ItemContainer: React.FC<ThemedContainerProps> = (props) => {   
-    return (
-      <View
-        style={{
-          ...styles.itemContainer,
-          backgroundColor: theme.colors.background
-        }}
-      >
-        {/* Item Header */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingBottom: theme.spacing.md,
-            alignItems: 'center',
-          }}
-        >
-          <Text
-            style={{
-              ...pageStyle.headline02,
-              color: theme.colors.grey0,
-            }}
-          >
-            {props.title}
-          </Text>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: theme.spacing.sm,
-            }}
-          >
-            {showEditButton &&
-              <>
-                {props.btnChildren}
-              </>
-            }
-          </View>
-        </View>
-        
-        <Divider color={theme.colors.divider} />
-
-        {/* Item */}
-        <View
-          style={{ paddingVertical: theme.spacing.md}}
-        >
-          {props.children}
-        </View>
-
-        {props.showFooter && 
-          <Divider color={theme.colors.greyOutline} />
-        }
-
-        {/* Item Footer */}
-        {props.showFooter && 
-          <View
-            style={{ 
-              alignItems: 'center',
-              justifyContent:'center',
-              marginTop: theme.spacing.md,
-            }}
-          >
-            <Text>
-              {props.footerChildren}
-            </Text>
-          </View>
-        }
-      </View>
-    )
-  }
-
-  
   return (
     <View
       style={{
@@ -315,10 +236,11 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       </View>
 
       {/* Main */}
-      <ItemContainer
+      <ProfileItemContainer
         title={t("information")}
         children={<Information user={user} showEditButton={showEditButton} />}
         showFooter={false}
+        showEditButton={showEditButton}
         btnChildren={
           <TouchableOpacity
             style={{
@@ -339,10 +261,11 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         }
       />
 
-      <ItemContainer
+      <ProfileItemContainer
         title={t("about")}
         children={<About user={user} showEditButton={showEditButton}/>}
         showFooter={false}
+        showEditButton={showEditButton}
         btnChildren={
           <TouchableOpacity
             style={{
@@ -363,10 +286,11 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         }
       />
 
-      <ItemContainer
+      <ProfileItemContainer
         title={t("activity")}
         children={<Activity post={post} />}
         showFooter={post.length > 0}
+        showEditButton={showEditButton}
         btnChildren={
           <TouchableOpacity
             style={{
@@ -412,7 +336,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         }
       />
 
-      <ItemContainer
+      <ProfileItemContainer
         title={t("experience")}
         children={
           <Experience 
@@ -440,6 +364,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           </TouchableOpacity>
         }
         showFooter={user.experience!.length > 0 }
+        showEditButton={showEditButton}
         footerChildren={
           <>
             {user?.experience?.length 
@@ -464,7 +389,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         }
       />  
 
-      <ItemContainer
+      <ProfileItemContainer
         title={t("education")}
         children={
           <Education 
@@ -491,6 +416,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           </TouchableOpacity>
         }
         showFooter={user.educations!.length > 0}
+        showEditButton={showEditButton}
         footerChildren={
           <>
             {user?.experience?.length 
@@ -516,7 +442,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         }
       /> 
 
-      <ItemContainer
+      <ProfileItemContainer
         title={t("skills")}
         children={
           <View  
@@ -583,9 +509,10 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           </TouchableOpacity>
         }
         showFooter={false}
+        showEditButton={showEditButton}
       /> 
 
-      <ItemContainer
+      <ProfileItemContainer
         title={t("languages")}
         children={
           <View
@@ -668,6 +595,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           </>
         }
         showFooter={false}
+        showEditButton={showEditButton}
       /> 
 
       {/* Dialog */}
@@ -771,11 +699,7 @@ const styles = StyleSheet.create({
     right: -8,
     bottom: 4,
   },
-  itemContainer: {
-    width: '100%',
-    paddingHorizontal: Sizes.fixPadding,
-    paddingVertical: Sizes.fixPadding,
-  },
+  
   itemEditButton: {
     width: 36,
     height: 36,

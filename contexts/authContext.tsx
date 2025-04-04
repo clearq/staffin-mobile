@@ -125,7 +125,13 @@ export function AuthProvider (props: any) {
         }
   
         if (response && response.id) { 
-          const imageUrl = await fetchImageFromCDN(response)
+          
+          let imageUrl
+          if(response && response.profileImage) {
+            imageUrl = await fetchImageFromCDN(response)
+          } else {
+            imageUrl = ""
+          }
           setAuthState({
             userData: response,
             userId: response.id,

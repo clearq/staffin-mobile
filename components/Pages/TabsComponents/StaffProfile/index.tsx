@@ -4,9 +4,6 @@ import *as ImagePicker from 'expo-image-picker'
 import { useToast } from "react-native-toast-notifications";
 import { getItem, setItem } from '@/utils/asyncStorage';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { setProfileImage } from '@/store/slice/userSlice';
-import { RootState, store } from '@/store/store';
 import { fetchImageFromCDN, getImageUrl } from '@/utils/CDN-action';
 
 import { IExperience, IUser } from '@/types/UserTypes'

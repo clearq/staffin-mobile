@@ -7,20 +7,19 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
-import EmptyItemMessage from '../EmptyItemMessage';
+import EmptyItemMessage from '../../EmptyItemMessage';
 
 interface props {
   post: IPost[];
 }
 
-const Activity = ({post}: props) => {
+const AdminActivity = ({post}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const router = useRouter()
 
   const [openAddModal, setOpenAddModal] = useState(false)
 
-    
   return (
     <View 
       style={{
@@ -115,7 +114,7 @@ const Activity = ({post}: props) => {
   )
 }
 
-export default Activity
+export default AdminActivity
 
 const styles = StyleSheet.create({
   postsContainer: {

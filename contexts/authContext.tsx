@@ -14,8 +14,6 @@ import { AxiosError } from "axios";
 import { getItem } from "expo-secure-store";
 import { getUserById } from "@/api/backend";
 import { useTranslation } from "react-i18next";
-import { setProfileImage } from "@/store/slice/userSlice";
-import { useDispatch } from "react-redux";
 import { fetchImageFromCDN } from "@/utils/CDN-action";
 
 

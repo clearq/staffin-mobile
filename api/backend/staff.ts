@@ -1,4 +1,4 @@
-import { IEducation, IExperience, IRating, ISkill, IUser } from "@/types/UserTypes";
+import { IEducation, IExperience, IRating, ISkill, IUser } from "@/types";
 import api from "./config";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";

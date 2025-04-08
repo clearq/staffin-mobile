@@ -82,7 +82,7 @@ const App = () => {
 
         <Button
           containerStyle={{width:'100%'}}
-          buttonStyle={[commonStyles.buttonStyle, styles.buttonStyle]}
+          buttonStyle={{ ...pageStyle.buttonContainer}}
           title={`${t("start-button-text")}`}
           titleStyle={{...pageStyle.button20, color: theme.colors.white}}
           iconPosition='right'

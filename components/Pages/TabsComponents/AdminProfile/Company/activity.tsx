@@ -1,26 +1,25 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import { IPost } from '@/types/PostTypes';
+import { IPost } from '@/types';
 import { Fonts, theme } from '@/constants/Theme';
 import { Divider, Image, useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
-import EmptyItemMessage from '../EmptyItemMessage';
+import EmptyItemMessage from '../../EmptyItemMessage';
 
 interface props {
   post: IPost[];
 }
 
-const Activity = ({post}: props) => {
+const CompanyActivity = ({post}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const router = useRouter()
 
   const [openAddModal, setOpenAddModal] = useState(false)
 
-    
   return (
     <View 
       style={{
@@ -115,7 +114,7 @@ const Activity = ({post}: props) => {
   )
 }
 
-export default Activity
+export default CompanyActivity
 
 const styles = StyleSheet.create({
   postsContainer: {

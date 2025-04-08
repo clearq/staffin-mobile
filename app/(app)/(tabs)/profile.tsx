@@ -125,27 +125,32 @@ const Page = () => {
             />
           }
 
+          {/* admim|company profile */}
           { userData?.roleId === 1 &&
-            <AdminProfileIndex />
+            <AdminProfileIndex 
+              user={user}
+              showEditButton={ user.id === userId}
+              post={userPosts}
+              refetch={() => userRefetch()}
+            />
           }
-
 
         </ScrollView>
       }
 
-    {user?.roleId === 3 &&       
-      <CreateCvButton 
-        pending= {pending}
-        onPress={handleCreateCv}
-      />
-    }
+      {user?.roleId === 3 &&       
+        <CreateCvButton 
+          pending= {pending}
+          onPress={handleCreateCv}
+        />
+      }
 
-    { userInfoMessage && 
-      <MessageModal  
-        visible={userInfoMessage} 
-        onClose={() => setUserInfoMessage(false)}
-      />
-    }
+      { userInfoMessage && 
+        <MessageModal  
+          visible={userInfoMessage} 
+          onClose={() => setUserInfoMessage(false)}
+        />
+      }
     </View>
   )
 }

@@ -1,6 +1,6 @@
 import { autoLoginToCDN, getContentFile } from "@/api/backend";
 import avatarSkeleton from "../assets/Images/avatarSkeleton.jpeg"
-import { IUser } from "@/types/UserTypes";
+import { IUser } from "@/types";
 import { getItem } from "./asyncStorage";
 import { CDN_TOKEN } from "@/constants/key";
 import * as ImageManipulator from 'expo-image-manipulator';

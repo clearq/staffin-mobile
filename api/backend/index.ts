@@ -48,3 +48,9 @@ export {
   deleteContentFile,
   // invalidateCache
 } from "./cdn"
+
+export {
+  getCompanyProfileUserId,
+  getCompanyById,
+} from "./company"
+

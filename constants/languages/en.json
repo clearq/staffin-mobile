@@ -69,6 +69,8 @@
   "description": "Description",
   "company-name": "Company name",
   "organisation-number": "Organisation no.",
+  "contact-person": "Contact person",
+  "web-site": "Web site",
 
   "start-date": "Start date",
   "end-date": "End date",

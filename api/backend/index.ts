@@ -20,9 +20,6 @@ export {
   updateStaffLanguage,
   addStaffLanguage,
   deleteStaffLanguage,
-  generateCv,
-  getCv,
-  downloadCv
 } from "./staff"
 
 export {
@@ -48,3 +45,8 @@ export {
   deleteContentFile,
   // invalidateCache
 } from "./cdn"
+
+export {
+  getAllJobs
+
+} from "./job"

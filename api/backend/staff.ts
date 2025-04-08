@@ -1,10 +1,6 @@
 import { IEducation, IExperience, IRating, ISkill, IUser } from "@/types/UserTypes";
 import api from "./config";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
-import { Linking } from "react-native";
-import { useToast } from "react-native-toast-notifications";
-import { useTranslation } from "react-i18next";
+
 
 // Update Staff
 export const updateStaff = async (values: Partial<IUser>) => {
@@ -14,7 +10,7 @@ export const updateStaff = async (values: Partial<IUser>) => {
     return data;
 
   } catch (error) {
-    console.error(error);   
+    console.log(error);   
   }
 };
 
@@ -26,7 +22,7 @@ export const getExperience = async () => {
     return data
     
   } catch (error) {
-    console.error(error)
+    console.log(error)
   };  
 };
 
@@ -39,7 +35,7 @@ export const addExperience = async (values:Partial<IExperience>) => {
     return data;
 
   } catch(error:any){
-    console.error(error);    
+    console.log(error);    
   }
 };
 
@@ -52,7 +48,7 @@ export const updateExperience = async (id: number, values:Partial<IExperience>) 
     return data;
 
   } catch(error){
-    console.error(error);    
+    console.log(error);    
   }
 };
 
@@ -63,7 +59,7 @@ export const deleteExperience = async (id: number) => {
       await api.delete(`/Staff/StaffExperience-Remove?experienceId=${id}`);
 
   } catch (error) {
-    console.error(error);  
+    console.log(error);  
   }
 };
 
@@ -77,7 +73,7 @@ export const getEducation = async () => {
     return data;
     
   } catch (error: any) {
-    console.error(error);   
+    console.log(error);   
   }
 };
 
@@ -90,7 +86,7 @@ export const addEducation = async (values:Partial<IEducation>) => {
     return data;
 
   } catch(error){
-    console.error(error);   
+    console.log(error);   
   }
 };
 
@@ -107,7 +103,7 @@ export const deleteEducation = async (id: number) => {
     await api.delete(`/Staff/StaffEducation-Remove?educationId=${id}`);
     
   } catch (error) {
-    console.error(error);  
+    console.log(error);  
   }
 };
 
@@ -120,7 +116,7 @@ export const getStaffSkills = async (id: number) => {
     return data
 
   } catch (error) {
-    console.error(error);    
+    console.log(error);    
   }
 }
 
@@ -133,7 +129,7 @@ export const addStaffSkill = async (values: ISkill) => {
     return data
 
   } catch (error) {
-    console.error(error);
+    console.log(error);
     
   }
 }
@@ -145,7 +141,7 @@ export const deleteStaffSkill = async (id: number) => {
     await api.delete(`/Staff/StaffSkills-Remove?skillId=${id}`)
 
   } catch (error) {
-    console.error(error);   
+    console.log(error);   
   }
 }
 
@@ -156,7 +152,7 @@ export const getStaffAllLanguages = async () => {
 
     return response.data
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return
   }
 }
@@ -170,7 +166,7 @@ export const getStaffLanguages = async (userId: number) => {
     return response.data
 
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return
   }
 }
@@ -184,7 +180,7 @@ export const updateStaffLanguage = async (values:IRating) => {
     return data;
 
   } catch (error) {
-    console.error(error);    
+    console.log(error);    
   }
 }
 
@@ -197,7 +193,7 @@ export const addStaffLanguage = async (values: any) => {
     return data;
 
   } catch (error) {
-    console.error(error);   
+    console.log(error);   
   }
 }
 
@@ -210,68 +206,7 @@ export const deleteStaffLanguage = async (values: any) => {
     } )
 
   } catch (error: any) {
-    console.error(error);   
-  }
-}
-
-export const generateCv = async () => {
-  try {
-    const response = await api.post('/Staff/Generate-CV');
-    return response.data;
-
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-export const getCv = async () => {
-  try {
-    const response = await api.get('/Staff/Get-CV');
+    console.log(error);
     
-    if (!response || !response.data) {
-      throw new Error("No data received from API");
-    }
-
-    return response.data; 
-
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-export const downloadCv = async () => {
-  try {
-    const response = await api.get("/Staff/Download-CV", {
-      responseType: "blob", // or "arraybuffer" based on API response format
-    });
-    
-    // Convert blob to base64 (Required for React Native)
-    const reader = new FileReader();
-    reader.readAsDataURL(response.data);
-    reader.onloadend = async () => {
-      if (!reader.result || typeof reader.result !== "string") {
-        console.error("Error", "Failed to process the CV file.");
-        return;
-      }
-
-      const base64Data = reader.result.split(",")[1]; // Extract base64 string
-
-      // Define file path
-      const fileUri = `${FileSystem.documentDirectory}StaffCV.pdf`;
-
-      // Write file
-      await FileSystem.writeAsStringAsync(fileUri, base64Data, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-
-      // Check if sharing is available
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(fileUri);
-      } else {
-        console.log("Download Complete", "CV has been saved in the app's storage.");
-      }
-    };
-  } catch (error) {
-    console.error(error);
   }
 }

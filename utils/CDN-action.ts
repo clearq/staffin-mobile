@@ -1,5 +1,5 @@
 import { autoLoginToCDN, getContentFile } from "@/api/backend";
-import avatarSkeleton from "../assets/Images/avatarSkeleton.jpeg"
+import avatarSkeleton from "../assets/images/avatarSkeleton.jpeg"
 import { IUser } from "@/types/UserTypes";
 import { getItem } from "./asyncStorage";
 import { CDN_TOKEN } from "@/constants/key";
@@ -28,8 +28,6 @@ export const getImageUrl = (key: string, userId: number, contentFolder: any) => 
 
 
 export const fetchImageFromCDN = async (user: IUser) => {
-  console.log('cdn action', user.id);
-  
   const userId = user?.id;
   const contentFolder = "profile";
   const key = user?.profileImage;

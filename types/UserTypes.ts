@@ -20,7 +20,6 @@ export interface IUser {
   skills?: ISkill[];
   languages?: ILanguage[];
   experience?: IExperience[];
-  password?: string| undefined;
 }
 
 

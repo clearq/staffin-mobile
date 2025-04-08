@@ -20,7 +20,7 @@ import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContent
 import ProfileItemContainer from '../ProfileListContainer';
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
-import Information from './Information';
+import Information from './information';
 import About from './about';
 import Activity from './activity';
 import Experience from './Experience/experience';
@@ -33,7 +33,7 @@ import AddEducationModal from './Education/addEducationModal';
 import AddSkillModal from './Edit/addSkillModal';
 import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
-import EmptyItemMessage from './EmptyItemMessage';
+import EmptyItemMessage from '../EmptyItemMessage';
 import { useAuth } from '@/contexts/authContext';
 
 interface props {
@@ -154,7 +154,6 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         type: "error",
       }) 
     }
-    
   }
   
 

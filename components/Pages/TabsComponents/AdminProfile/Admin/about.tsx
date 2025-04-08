@@ -15,12 +15,11 @@ interface props {
   showEditButton: boolean;
 }
 
-const About = ({user, showEditButton}: props) => {
+const AdminAbout = ({user, showEditButton}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
-  const router = useRouter()
 
-
+  
   return (
     <View>
       <Text
@@ -35,4 +34,4 @@ const About = ({user, showEditButton}: props) => {
   )
 }
 
-export default About
+export default AdminAbout

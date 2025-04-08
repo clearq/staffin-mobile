@@ -20,6 +20,9 @@ export {
   updateStaffLanguage,
   addStaffLanguage,
   deleteStaffLanguage,
+  generateCv,
+  getCv,
+  downloadCv
 } from "./staff"
 
 export {
@@ -47,6 +50,6 @@ export {
 } from "./cdn"
 
 export {
-  getAllJobs
-
-} from "./job"
+  getCompanyProfileUserId,
+  getCompanyById,
+} from "./company"

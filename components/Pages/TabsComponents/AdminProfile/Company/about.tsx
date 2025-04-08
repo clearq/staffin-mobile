@@ -9,18 +9,18 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { IUser } from '@/types/UserTypes';
 import pageStyle from '@/constants/Styles';
+import { ICompany } from '@/types';
 
 interface props {
-  user: IUser;
+  company: ICompany;
   showEditButton: boolean;
 }
 
-const About = ({user, showEditButton}: props) => {
+const CompanyAbout = ({company, showEditButton}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
-  const router = useRouter()
 
-
+  
   return (
     <View>
       <Text
@@ -29,10 +29,10 @@ const About = ({user, showEditButton}: props) => {
           color: theme.colors.grey0,
         }}
       >
-        {user?.about}
+        {company?.about}
       </Text>
     </View>
   )
 }
 
-export default About
+export default CompanyAbout

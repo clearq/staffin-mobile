@@ -1,4 +1,4 @@
-import { ISkill, IUser } from "@/types/UserTypes";
+import { ISkill, IUser } from "@/types";
 import api from "./config";
 
 // Get All Skills List

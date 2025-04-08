@@ -21,6 +21,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ToastProvider } from "react-native-toast-notifications";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthProvider } from "@/contexts/authContext";
+import { UserTypeProvider } from "@/contexts/userTypeContext";
 
 export const unstable_settings = {
   initialRouteName: "/(app)/(tabs)",
@@ -68,10 +69,10 @@ const RootLayout = () => {
       normalColor="#a3a3a3"
       successIcon={<MaterialIcons name="check-circle" color={"white"} size={25} />}
     >
-      <AuthProvider> 
-        <Provider store={store}>
+      <AuthProvider>               
+        <UserTypeProvider>
           <RootLayoutNav />
-        </Provider>
+        </UserTypeProvider>
       </AuthProvider>   
     </ToastProvider> 
   );

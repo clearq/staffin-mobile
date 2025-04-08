@@ -9,7 +9,7 @@ import {
   Dimensions,
   SafeAreaView,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Fonts, Sizes, theme } from "@/constants/Theme";
 import { Divider, useTheme } from "@rneui/themed";
 import { router } from "expo-router";
@@ -19,6 +19,7 @@ import { useAuth } from "@/contexts/authContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import pageStyle from "@/constants/Styles";
 import ModalHeader from "../ModalHeader";
+import { IActiveUser, useUserType } from "@/contexts/userTypeContext";
 
 
 const screenWidth = Dimensions.get("window").width
@@ -27,8 +28,10 @@ export default function RecordsScreen() {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const {
-    authState: { userData },
+    authState: { userData, userId},
   } = useAuth();
+
+  const {setActiveUserState, userType} = useUserType()
 
   // const userData = null;
 
@@ -66,8 +69,34 @@ export default function RecordsScreen() {
     },
   ]
 
+  useEffect(() => {
+    if(!userId) {
+      setActiveUserState({ userType: null })
+      }      
+      setActiveUserState({ userType:"owner" })   
+      console.log(userType, userId);
+         
+  },[userId])
 
- 
+  const handleUserType = async () => {
+    console.log(userType);
+    
+    
+    if(userType === "owner") {
+      setActiveUserState({
+        userType: "company"
+      })
+      console.log(userType);
+      
+    } else if (userType === "company"){
+      setActiveUserState({
+        userType: "owner"
+      })
+      console.log(userType);
+      
+    }
+  }
+
   return (
     <View style={{flex:1, backgroundColor: theme.colors.background}}>
       <ModalHeader title={t("profile")} />
@@ -124,14 +153,22 @@ export default function RecordsScreen() {
         }
 
         { userData?.roleId === 1 &&
-          <FlatList 
-            data={adminRecordsList}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={renderItem}
-            numColumns={1}
-            contentContainerStyle={{ padding: Sizes.fixPadding }}
-            showsVerticalScrollIndicator={false}
-          />
+          <>
+            <TouchableOpacity
+              onPress={handleUserType}
+            >
+              <Text>Switch user </Text>
+              <Text>{userType} : {userId}</Text>
+            </TouchableOpacity>
+            <FlatList 
+              data={adminRecordsList}
+              keyExtractor={(item) => `${item.id}`}
+              renderItem={renderItem}
+              numColumns={1}
+              contentContainerStyle={{ padding: Sizes.fixPadding }}
+              showsVerticalScrollIndicator={false}
+            />
+          </>
         }
         
       </Animated.View>

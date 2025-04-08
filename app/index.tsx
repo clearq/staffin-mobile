@@ -81,10 +81,13 @@ const App = () => {
         </View>
 
         <Button
-          containerStyle={{width:'100%'}}
-          buttonStyle={{ ...pageStyle.buttonContainer}}
           title={`${t("start-button-text")}`}
-          titleStyle={{...pageStyle.button20, color: theme.colors.white}}
+          onPress={handleOnPress}
+          loading={loading}
+          containerStyle={{width:'100%'}}
+          size='md'
+          color='primary'
+          titleStyle={{ ...pageStyle.button20, color: theme.colors.white, }}
           iconPosition='right'
           icon={
             <MaterialCommunityIcons 
@@ -94,9 +97,6 @@ const App = () => {
               style={{paddingLeft:24}}
             />
           }
-          size='lg'
-          loading={loading}
-          onPress={handleOnPress}
         />
 
       </SafeAreaView>

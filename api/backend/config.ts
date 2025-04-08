@@ -14,15 +14,13 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async function (config) {
-    //console.log('config:', config);
-    
 
-    if (config.url === "/Auth/login" || config.url === "/Auth/register/staff" || config.url === "/Auth/register/admin") {
+    if (config.url === "/Auth/login") {
       return config;
     }
 
     const token = await getItem(AUTH_TOKEN);
-    //console.log('token:',token);
+    // console.log('token:',token);
     
 
     if (!token) {

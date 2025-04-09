@@ -24,6 +24,8 @@ const Page = () => {
 
   const userRole = userData?.roleId
 
+  console.log('login:', userData?.email, userId );
+  
   useEffect(() => {
     if(userData?.firstName === "" && userData.lastName === "") {
       setUserInfoMessage(true)

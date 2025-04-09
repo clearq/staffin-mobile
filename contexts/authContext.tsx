@@ -171,13 +171,22 @@ export function AuthProvider (props: any) {
       const { token, id } = response.data;
       
       if (token) {
+        setSession(token);
+
+        const decoded: TokenPayload = jwtDecode<TokenPayload>(token)
+        const userResponse = await getUserById(decoded.userId)
+
+        let imageUrl = "";
+        if(userResponse?.profileImage) {
+          imageUrl = await fetchImageFromCDN(userResponse)
+        }
+
         setAuthState({
-          userData: null,
+          userData: userResponse,
           userId: id,
           token: token,
-          profileImage: ""
+          profileImage: imageUrl
         });
-        setSession(token);
         // console.log('session:', session)
         // console.log('token:', token); 
         toast.show(`${t("log-in-successful-message")}`, {

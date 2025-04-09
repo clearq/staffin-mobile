@@ -48,7 +48,7 @@ const App = () => {
         {/* insert image or animation later */}
         <View />  
         <Image 
-          source={require('@/assets/Images/icon.png')}
+          source={require('../assets/Images/icon.png')}
           style={{
             width: 100,
             height: 100,

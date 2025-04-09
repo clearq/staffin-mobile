@@ -3,6 +3,9 @@ import { Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 export { ErrorBoundary } from "expo-router"; // Catch any errors thrown by the Layout component.
 import * as Updates from "expo-updates";
+import { Provider } from "react-redux";
+import { store } from "../store/store";
+
 
 import "@/i18n.config"
 import { useFonts } from 'expo-font';

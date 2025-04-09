@@ -53,4 +53,3 @@ export {
   getCompanyProfileUserId,
   getCompanyById,
 } from "./company"
-

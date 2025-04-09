@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, StyleSheet} from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Switch, useTheme, useThemeMode, Text, Image } from '@rneui/themed'
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,14 +9,24 @@ import { colors, commonStyles, Fonts, screenHeight, Sizes, theme } from '@/const
 import {MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
 import pageStyle from '@/constants/Styles';
+import { getItem } from '@/utils/asyncStorage';
+import { ONBOARDING } from '@/constants/key';
 
 const App = () => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const router = useRouter();
   const [ loading, setLoading ] = useState(false)
+  const [showOnBoarding, setShowOnBoarding] = useState<any>(null);
 
     
+  useEffect(() => {
+    async function fetchOnboardingStatus() {
+      const onboarded = await getItem(ONBOARDING);
+      setShowOnBoarding(onboarded !== "true");
+    }
+    fetchOnboardingStatus();
+  }, []);
   
     // console.log('theme:', theme.mode);
     const handleOnPress = () => {

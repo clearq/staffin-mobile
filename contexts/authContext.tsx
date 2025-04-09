@@ -6,7 +6,7 @@ import api from "@/api/backend/config"
 
 import { useStorageState } from "@/utils/useStorageState";
 import { removeItem, setItem } from "@/utils/asyncStorage";
-import { AUTH_TOKEN, CDN_TOKEN, USER_ID } from "@/constants/key";
+import { AUTH_TOKEN, CDN_TOKEN, ONBOARDING, USER_ID } from "@/constants/key";
 import { jwtDecode } from "jwt-decode";
 
 import { IUser } from "@/types/UserTypes"
@@ -143,7 +143,7 @@ export function AuthProvider (props: any) {
           throw new Error("User data not found or invalid response");
         }
       } else {
-        router.replace("/signin");
+        router.replace("/onBoarding");
       }
     } catch (error) {
       console.error("Initialization error:", error);
@@ -199,6 +199,7 @@ export function AuthProvider (props: any) {
         });
         // console.log('session:', session)
         // console.log('token:', token); 
+        await setItem(ONBOARDING, "true").then(() => initializeAuth())
         toast.show(`${t("log-in-successful-message")}`, {
           type: "success",
           placement: "top",
@@ -278,6 +279,7 @@ export function AuthProvider (props: any) {
     await removeItem(AUTH_TOKEN);
     await removeItem(USER_ID)
     await removeItem(CDN_TOKEN)
+    await removeItem(ONBOARDING)
     router.replace("/signin")
     console.log('--- log out ---');
     

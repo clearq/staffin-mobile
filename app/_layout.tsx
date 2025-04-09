@@ -129,7 +129,7 @@ function RootLayoutNav() {
       <QueryClientProvider client={queryClient} >     
         <SafeAreaProvider>
           <Stack>
-            <Stack.Screen name="index" options={{headerShown: false}} />
+            <Stack.Screen name="onBoarding" options={{headerShown: false}} />
             <Stack.Screen name="(auth)" options={{headerShown: false}}/>
             <Stack.Screen name="(app)/(tabs)" options={{headerShown: false}} />
           </Stack>

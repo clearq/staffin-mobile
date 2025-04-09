@@ -47,7 +47,7 @@ const _layout = () => {
 
   if (!session) {
     return <Redirect href="/(auth)/signin" />;
-  }
+  } 
 
   const homeTab = () => {
     if (userData?.roleId === 3 ) {
@@ -63,7 +63,7 @@ const _layout = () => {
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: hexToRgba(theme.colors.background, 0.1) }}>
+    <View style={{ flex: 1, backgroundColor: 'transparate' }}>
 
       <Tabs
         initialRouteName={unstable_settings.initialRouteName}
@@ -71,7 +71,7 @@ const _layout = () => {
           <View 
             style={{ 
               paddingHorizontal: Sizes.fixPadding, 
-              backgroundColor: hexToRgba(theme.colors.background, 0.1),
+              backgroundColor: 'transparate',
             }}
           >
             <CustomTabBar {...props} />
@@ -81,10 +81,9 @@ const _layout = () => {
         screenOptions={() => ({
           headerShown: true,
           tabBarStyle: {
-            backgroundColor: hexToRgba(theme.colors.background, 0.1),
+            backgroundColor: theme.colors.background,
             borderTopWidth: 1,
-            borderColor: theme.colors.divider,
-            shadowColor: theme.colors.grey3,
+           
           },
           tabBarItemStyle: {
             width: 'auto',

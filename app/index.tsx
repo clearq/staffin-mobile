@@ -88,6 +88,7 @@ const App = () => {
           size='md'
           color='primary'
           titleStyle={{ ...pageStyle.button20, color: theme.colors.white, }}
+          radius="sm"
           iconPosition='right'
           icon={
             <MaterialCommunityIcons 

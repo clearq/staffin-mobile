@@ -20,7 +20,8 @@ import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContent
 import ProfileItemContainer from '../ProfileListContainer';
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
-import Information from './information';
+
+import Information from './Information';
 import About from './about';
 import Activity from './activity';
 import Experience from './Experience/experience';

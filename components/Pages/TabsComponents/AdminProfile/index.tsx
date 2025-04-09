@@ -75,8 +75,8 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           >
             
             {userType === "owner" 
-              ? <Text>Company Profile</Text> 
-              : <Text>Admin Profile</Text>
+              ? <Text>Company</Text> 
+              : <Text>Admin</Text>
             }
           </Text>
         </TouchableOpacity>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     width: 72,
     height:72,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

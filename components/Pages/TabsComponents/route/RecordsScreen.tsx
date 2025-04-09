@@ -153,22 +153,14 @@ export default function RecordsScreen() {
         }
 
         { userData?.roleId === 1 &&
-          <>
-            <TouchableOpacity
-              onPress={handleUserType}
-            >
-              <Text>Switch user </Text>
-              <Text>{userType} : {userId}</Text>
-            </TouchableOpacity>
-            <FlatList 
-              data={adminRecordsList}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={renderItem}
-              numColumns={1}
-              contentContainerStyle={{ padding: Sizes.fixPadding }}
-              showsVerticalScrollIndicator={false}
-            />
-          </>
+          <FlatList 
+            data={adminRecordsList}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={renderItem}
+            numColumns={1}
+            contentContainerStyle={{ padding: Sizes.fixPadding }}
+            showsVerticalScrollIndicator={false}
+          />
         }
         
       </Animated.View>

@@ -18,7 +18,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { authState: { userData, userId, profileImage }} = useAuth();
  
   useEffect(() => {
-    console.log('change image:', profileImage);
+    // console.log('change image:', profileImage);
   }, [userData, userId])
 
 

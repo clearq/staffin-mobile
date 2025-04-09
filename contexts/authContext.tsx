@@ -260,9 +260,10 @@ export function AuthProvider (props: any) {
   //     initializeAuth();
   //   }
   // }, [authState.token]); 
+
   useEffect(() => {
     initializeAuth(); // Always check storage and rehydrate token
-  }, []);
+  }, [authState.token]);
 
   async function handleSignOut() {
     setAuthState({

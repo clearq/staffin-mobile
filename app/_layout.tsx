@@ -22,7 +22,7 @@ import { AuthProvider } from "@/contexts/authContext";
 import { UserTypeProvider } from "@/contexts/userTypeContext";
 
 export const unstable_settings = {
-  initialRouteName: "/(app)/(tabs)",
+  initialRouteName: "/",
 };
 
 const RootLayout = () => {

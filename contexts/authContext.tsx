@@ -143,7 +143,7 @@ export function AuthProvider (props: any) {
           throw new Error("User data not found or invalid response");
         }
       } else {
-        router.replace("/sign-in");
+        router.replace("/signin");
       }
     } catch (error) {
       console.error("Initialization error:", error);
@@ -152,6 +152,16 @@ export function AuthProvider (props: any) {
       setIsLoadingSession(false);
     }
   };
+
+  // useEffect(() => {
+  //   if (authState.token) {
+  //     initializeAuth();
+  //   }
+  // }, [authState.token]); 
+
+  useEffect(() => {
+    initializeAuth(); // Always check storage and rehydrate token
+  }, [authState.token]);
 
 
   const SignIn = async ({ email, password }: IAuthInfo) => {
@@ -255,15 +265,7 @@ export function AuthProvider (props: any) {
     }
   };
 
-  // useEffect(() => {
-  //   if (authState.token) {
-  //     initializeAuth();
-  //   }
-  // }, [authState.token]); 
-
-  useEffect(() => {
-    initializeAuth(); // Always check storage and rehydrate token
-  }, [authState.token]);
+  
 
   async function handleSignOut() {
     setAuthState({

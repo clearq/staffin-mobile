@@ -51,7 +51,7 @@ const _layout = () => {
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'transparate' }}>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background}}>
 
 
       <Tabs
@@ -60,7 +60,7 @@ const _layout = () => {
           <View 
             style={{ 
               paddingHorizontal: Sizes.fixPadding, 
-              backgroundColor: 'transparate',
+              backgroundColor: 'transparent',
             }}
           >
 
@@ -71,8 +71,11 @@ const _layout = () => {
         screenOptions={() => ({
           headerShown: true,
           tabBarStyle: {
-            backgroundColor:'transparent',
-            borderTopWidth: 1,       
+            position: 'absolute', // Optional: lets you float the bar
+            backgroundColor: 'transparent', // 👈 This is important!
+            borderTopWidth: 0,
+            elevation: 0, // Android shadow
+            shadowColor: 'transparent',      
           },
           tabBarItemStyle: {
             width: 'auto',

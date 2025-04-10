@@ -6,7 +6,7 @@ import api from "@/api/backend/config"
 
 import { useStorageState } from "@/utils/useStorageState";
 import { removeItem, setItem } from "@/utils/asyncStorage";
-import { AUTH_TOKEN, CDN_TOKEN, ONBOARDING, USER_ID } from "@/constants/key";
+import { AUTH_TOKEN, ONBOARDING, USER_ID } from "@/constants/key";
 import { jwtDecode } from "jwt-decode";
 
 import { IUser } from "@/types/UserTypes"
@@ -21,7 +21,6 @@ export interface IAuthState {
   userData: IUser | null;
   userId: string | null;
   token: string | null;
-  profileImage: string 
 }
 
 export interface IAuthInfo {
@@ -67,7 +66,6 @@ const AuthContext = React.createContext<IAuthContext>({
     userData: null,
     userId: null,
     token: null,
-    profileImage: "",
   },
   setAuthState: () => { },
   session: null,
@@ -97,7 +95,6 @@ export function AuthProvider (props: any) {
     userId: null,
     userData: null,
     token: null,
-    profileImage: "",
   });
 
   const initializeAuth = async () => {
@@ -113,6 +110,7 @@ export function AuthProvider (props: any) {
         // console.log("✅Decoded token:", decoded); 
 
         let response;
+        let imageUrl = ""
       
         try {
           response = await getUserById(decoded.userId);
@@ -123,18 +121,10 @@ export function AuthProvider (props: any) {
         }
   
         if (response && response.id) { 
-          
-          let imageUrl
-          if(response && response.profileImage) {
-            imageUrl = await fetchImageFromCDN(response)
-          } else {
-            imageUrl = ""
-          }
           setAuthState({
             userData: response,
             userId: response.id,
             token,
-            profileImage: imageUrl
           });
           setSession(token);
   
@@ -186,16 +176,10 @@ export function AuthProvider (props: any) {
         const decoded: TokenPayload = jwtDecode<TokenPayload>(token)
         const userResponse = await getUserById(decoded.userId)
 
-        let imageUrl = "";
-        if(userResponse?.profileImage) {
-          imageUrl = await fetchImageFromCDN(userResponse)
-        }
-
         setAuthState({
           userData: userResponse,
           userId: id,
           token: token,
-          profileImage: imageUrl
         });
         // console.log('session:', session)
         // console.log('token:', token); 
@@ -232,7 +216,7 @@ export function AuthProvider (props: any) {
         headers: { "Content-Type": "application/json" },
       });
   
-      console.log("SignUp response:", response.data);
+      // console.log("SignUp response:", response.data);
   
       const { token, id } = response.data;
       if (token) {
@@ -240,7 +224,6 @@ export function AuthProvider (props: any) {
           userData: null,
           userId: id,
           token,
-          profileImage: ""
         });
         setSession(token);
   
@@ -265,22 +248,20 @@ export function AuthProvider (props: any) {
       setIsLoadingSession(false);
     }
   };
-
-  
+ 
 
   async function handleSignOut() {
     setAuthState({
       userData: null,
       userId: null,
       token: null,
-      profileImage: ""
     });
     setSession(null);
     await removeItem(AUTH_TOKEN);
     await removeItem(USER_ID)
-    await removeItem(CDN_TOKEN)
     await removeItem(ONBOARDING)
     router.replace("/signin")
+    
     console.log('--- log out ---');
     
   }

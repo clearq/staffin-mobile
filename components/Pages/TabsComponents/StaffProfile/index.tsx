@@ -50,7 +50,8 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const { t } = useTranslation();
   const toast = useToast();
   const router = useRouter()
-  const { authState: {profileImage}, setAuthState,} = useAuth()
+  const { authState } = useAuth()
+  const [avatar, setAvatar] = useState("")
   
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
@@ -104,10 +105,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         const uri = await fetchImageFromCDN(user);
         //console.log('get uri:', uri);
         
-        setAuthState((prev) => ({
-          ...prev,
-          profileImage: uri
-        }))
+        setAvatar(uri)
 
         toast.show(`${t("success-update-message")}`, {
           type: "success",
@@ -121,8 +119,6 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       } 
     }
   }
-
-
     
   const showAlert = (id:any) =>
     Alert.alert('Alert Title', 'My Alert Msg', [
@@ -134,7 +130,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       {
         text: `${t("delete")}`, 
         onPress: () => handleSkillDelete(id)
-      },
+      }, 
     ]
   );
 
@@ -156,6 +152,21 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       }) 
     }
   }
+
+  useEffect(() => {
+    setAvatar("")
+    const fetchUrl = async () =>{
+      console.log('staff image:', user.profileImage, user.id);
+      
+      if(user && user.profileImage !== "") {
+        const image = await fetchImageFromCDN(user)
+        console.log('image:', image);
+        return setAvatar(image)
+      }     
+      return setAvatar("")
+    }
+    fetchUrl()
+  },[])
   
 
   return (
@@ -207,8 +218,8 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
             backgroundColor: theme.colors.background
           }}
         >
-          {profileImage !== "" 
-            ? <Avatar size={80} rounded source={{uri: profileImage }} />      
+          {avatar !== "" 
+            ? <Avatar size={80} rounded source={{uri: avatar }} />      
             :<Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
           }
 

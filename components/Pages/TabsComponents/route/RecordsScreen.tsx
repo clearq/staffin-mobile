@@ -81,28 +81,10 @@ export default function RecordsScreen() {
       setActiveUserState({ userType: null })
       }      
       setActiveUserState({ userType:"owner" })   
-      console.log(userType, userId);
+      console.log(userId);
          
   },[userId])
 
-  const handleUserType = async () => {
-    console.log(userType);
-    
-    
-    if(userType === "owner") {
-      setActiveUserState({
-        userType: "company"
-      })
-      console.log(userType);
-      
-    } else if (userType === "company"){
-      setActiveUserState({
-        userType: "owner"
-      })
-      console.log(userType);
-      
-    }
-  }
 
   return (
     <View style={{flex:1, backgroundColor: theme.colors.background}}>

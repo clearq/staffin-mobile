@@ -35,31 +35,28 @@ const CompanyProfile = ({company, showEditButton, post, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
-  const { authState: {profileImage}, setAuthState,} = useAuth()
+  const { authState, setAuthState,} = useAuth()
+  const [avatar, setAvatar] = useState("")
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
   const [openAllActivityDialog, setOpenAllActivityDialog] = useState<boolean>(false)
-  const [avatar, setAvatar] = useState("")
 
+  
+  // Update Image file as Base64 (Don't use CDN)
+  const handleImageUpdate = async () => {
+    
+  }
+  
   useEffect(() => {
     const fetchUrl = async () =>{
       if(company && company.image !== "") {
 
       }
-      
       return setAvatar("")
     }
-
     fetchUrl()
-
   },[])
-
-  // Update Image file as Base64 (Don't use CDN)
-  const handleImageUpdate = async () => {
-   
-  }
-
   
   return (
     <View

@@ -36,27 +36,12 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
-  const { authState: {profileImage}, setAuthState,} = useAuth()
+  const { authState: {userData} } = useAuth()
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
   const [openAllActivityDialog, setOpenAllActivityDialog] = useState<boolean>(false)
   const [avatar, setAvatar] = useState("")
-
-  useEffect(() => {
-    const fetchUrl = async () =>{
-      if(user && user.profileImage !== "") {
-        const image = await fetchImageFromCDN(user)
-        console.log('image:', image);
-        return setAvatar(image)
-      }
-      
-      return setAvatar("")
-    }
-
-    fetchUrl()
-
-  },[])
 
   const handleImageUpdate = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -91,12 +76,7 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
 
         const uri = await fetchImageFromCDN(user);
         //console.log('get uri:', uri);
-        
-        setAuthState((prev) => ({
-          ...prev,
-          profileImage: uri
-        }))
-
+      
         setAvatar(uri)
 
         toast.show(`${t("success-update-message")}`, {
@@ -111,6 +91,21 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
       } 
     }
   }
+
+  useEffect(() => {
+    setAvatar("")
+    const fetchUrl = async () =>{
+      console.log('admin image:', userData?.profileImage, userData?.id);
+      
+      if(userData && userData.profileImage !== "") {
+        const image = await fetchImageFromCDN(userData)
+        console.log('image:', image);
+        return setAvatar(image)
+      }     
+      return setAvatar("")
+    }
+    fetchUrl()
+  },[])
 
 
   return (

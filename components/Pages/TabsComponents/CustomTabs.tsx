@@ -15,11 +15,20 @@ const isIOS = Platform.OS === "ios";
 
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { theme } = useTheme();
-  const { authState: { userData, userId, profileImage }} = useAuth();
+  const { authState: { userData, userId }} = useAuth();
+  const [avatar, setAvatar] = useState("") // Profile image url
  
   useEffect(() => {
-    // console.log('change image:', profileImage);
-  }, [userData, userId])
+    const fetchUrl = async () =>{
+      if(userData && userData.profileImage !== "") {
+        const image = await fetchImageFromCDN(userData)
+        console.log('image:', image);
+        return setAvatar(image)
+      }     
+      return setAvatar("")
+    }
+    fetchUrl()
+  },[])
 
 
   return (
@@ -56,8 +65,8 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
                 },
               ]}
             >
-              {profileImage !== ""
-                ? <Avatar size={60} rounded source={{uri: profileImage}} />      
+              {avatar !== ""
+                ? <Avatar size={60} rounded source={{uri: avatar}} />      
                 :<Avatar size={60} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
               }
             </TouchableOpacity>
@@ -96,7 +105,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderWidth: 0,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: theme.spacing?.xl,
     borderRadius: 40,
     marginBottom: isIOS ? 20 : 15,
     zIndex: 1,

@@ -51,24 +51,24 @@ const Page = () => {
 
   // Get Users Posts
   const {
-    data: userPosts,
+    data: userPosts = [],
     refetch: userPostsRefetch,
     isLoading: postIsLoading,
   } = useQuery({
     queryKey: ["user-posts"],
     queryFn: async () => {
-      const response = await getUserPostsAndShares(userId!)
-      
-      return response;
+      if (userId) {
+        const response = await getUserPostsAndShares(userId)
+        return response
+      }
+      return []
     },
     enabled: !!userId,
   })
 
   useEffect(() => {
     console.log('id:', userId);
-    console.log('user', userData?.id, userData?.roleId);
-        
-    
+    console.log('user', userData?.id, userData?.roleId);    
   }, [userId])
 
   const handleCreateCv = async () => {

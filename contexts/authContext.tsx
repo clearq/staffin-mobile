@@ -110,7 +110,6 @@ export function AuthProvider (props: any) {
         // console.log("✅Decoded token:", decoded); 
 
         let response;
-        let imageUrl = ""
       
         try {
           response = await getUserById(decoded.userId);

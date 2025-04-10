@@ -53,3 +53,7 @@ export {
   getCompanyProfileUserId,
   getCompanyById,
 } from "./company"
+
+export {
+  getAllJobs,
+} from "./job"

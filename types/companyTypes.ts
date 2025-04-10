@@ -15,5 +15,12 @@ export interface ICompany {
 }
 
 export interface IBranch {
-
+  id: number;
+  name: string;
+  contactPerson: string;
+  phoneNumber: string
+  address: string;
+  city: string;
+  country: string;
+  companyId: number;
 }

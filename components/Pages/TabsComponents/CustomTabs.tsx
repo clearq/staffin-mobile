@@ -37,7 +37,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
  
     useEffect(() => {
       const fetchUrl = async () =>{
-        console.log('staff image:', user.profileImage, user.id);
+        // console.log('staff image:', user.profileImage, user.id);
         const url = await fetchImageFromCDN(user)
         setAvatar(url)
       }

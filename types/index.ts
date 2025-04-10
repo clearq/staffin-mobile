@@ -1,6 +1,7 @@
 export {
-
-} from './JobsTypes'
+  IJob,
+  IJobSkills,
+} from './JobTypes'
 
 export {
   IPost,

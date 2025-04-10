@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import { useAuth } from "./authContext";
 
 export interface IActiveUser {
-  userType: "company" | "owner" | null 
+  userType: "company" | "admin" | null 
 }
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 interface UserTypeContext {
-  userType: "company"|"owner"| null
+  userType: "company"|"admin"| null
   setActiveUserState: React.Dispatch<React.SetStateAction<IActiveUser>>
 }
 

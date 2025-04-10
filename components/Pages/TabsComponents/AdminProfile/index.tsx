@@ -28,7 +28,7 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
-  const [userType, setUserType] = useState<"company" | "owner">("owner")
+  const [userType, setUserType] = useState<"company" | "admin">("admin")
 
   const { 
     authState:{ 
@@ -38,7 +38,7 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   } = useAuth();
 
 
-  const { data: company } = useQuery({
+  const { data: company, refetch: companyRefetch, isLoading: companyIsLoading } = useQuery({
     queryKey: ["company-data"],
     queryFn: async () => {
       if (userData && userData.companyId) {
@@ -49,7 +49,7 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         return response
       }
       console.error("Doesn't have a company id");
-      setUserType("owner")      
+      setUserType("admin")      
     }
   })
 
@@ -58,14 +58,14 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       <View>
         <TouchableOpacity
           onPress={() => {
-            userType === "company" ? setUserType("owner") : setUserType("company")
+            userType === "company" ? setUserType("admin") : setUserType("company")
           }}
           style={{
             ...styles.switch,
             backgroundColor: theme.colors.primary,
           }}
         >
-          <MaterialCommunityIcons name='account-switch' color={theme.colors.white} size={20} />
+
           <Text 
             style={{
               ...pageStyle.smText,
@@ -74,14 +74,29 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
             }}
           >
             
-            {userType === "owner" 
+            {userType === "admin" 
+              ? <Text>Admin</Text> 
+              : <Text>Company</Text>
+            }
+          </Text>
+
+          <MaterialCommunityIcons name='account-switch-outline' color={theme.colors.white} size={20} />
+          <Text 
+            style={{
+              ...pageStyle.smText,
+              color: theme.colors.white,
+              textAlign: 'center'
+            }}
+          >
+            
+            {userType === "admin" 
               ? <Text>Company</Text> 
               : <Text>Admin</Text>
             }
           </Text>
         </TouchableOpacity>
       </View>
-      {userType === "owner" &&
+      {userType === "admin" &&
         <AdminUserProfile
           user={user}
           showEditButton={showEditButton}
@@ -109,12 +124,14 @@ const styles = StyleSheet.create({
     top: Sizes.fixPadding,
     right:Sizes.fixPadding,
     zIndex: 99999,
-    padding: theme.spacing?.sm,
-    borderRadius: 100,
-    width: 72,
-    height:72,
+    paddingVertical: theme.spacing?.sm,
+    paddingHorizontal: theme.spacing?.md,
+    gap: theme.spacing?.sm,
+    height:40,
+    borderRadius: 20,
+    flexDirection:'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

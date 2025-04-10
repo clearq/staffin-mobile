@@ -72,7 +72,7 @@ export const uploadContentFile = async (key: string, file: any, token: any, user
     } as any);
     
     // console.log('blob:', blob);
-    console.log('form data:', formData);
+    // console.log('form data:', formData);
     
     const response = await cdn_api.post(
       `/Content/${userId}/${contentFolder}/${key}`,

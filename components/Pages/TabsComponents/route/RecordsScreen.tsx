@@ -80,7 +80,7 @@ export default function RecordsScreen() {
     if(!userId) {
       setActiveUserState({ userType: null })
       }      
-      setActiveUserState({ userType:"owner" })   
+      setActiveUserState({ userType:"admin" })   
       console.log(userId);
          
   },[userId])

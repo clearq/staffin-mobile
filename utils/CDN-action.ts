@@ -32,7 +32,7 @@ export const fetchImageFromCDN = async (user: IUser) => {
   const contentFolder = "profile";
   const key = user?.profileImage;
 
-  console.log('fetch image', userId);
+  // console.log('fetch image', userId);
   
   if (!userId || !key) {
     console.error("Missing required parameters for fetching file.");

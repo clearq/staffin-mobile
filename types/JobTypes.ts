@@ -6,7 +6,7 @@ export interface IJob {
     endDate: Date;
     location: string;
     applicationDeadline: Date;
-    jobSkills:[id: number, name:string, description: string]
+    jobSkills: IJobSkills[]
     jobType: number;
     onSiteOrRemote: number;
     occupationType: number;
@@ -14,5 +14,10 @@ export interface IJob {
     companyName: string;
     createdAt: Date;
     status: string;
+}
 
+export interface IJobSkills {
+    id: number;
+    name: string;
+    description: string
 }

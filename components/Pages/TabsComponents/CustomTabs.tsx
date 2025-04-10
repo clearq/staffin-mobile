@@ -17,18 +17,33 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { theme } = useTheme();
   const { authState: { userData, userId }} = useAuth();
   const [avatar, setAvatar] = useState("") // Profile image url
+
+  // Get User Info
+    const { 
+      data: user, 
+      refetch: userRefetch, 
+      isLoading: userIsLoading, 
+      isPending,    
+    } = useQuery({
+      queryKey: ["user-data"],
+      queryFn: async () => {
+        const response = await getUserById(userId!)      
+  
+        return response;
+      },
+      enabled: !!userId,
+    });
  
-  useEffect(() => {
-    const fetchUrl = async () =>{
-      if(userData && userData.profileImage !== "") {
-        const image = await fetchImageFromCDN(userData)
-        console.log('image:', image);
-        return setAvatar(image)
-      }     
-      return setAvatar("")
-    }
-    fetchUrl()
-  },[])
+    useEffect(() => {
+      const fetchUrl = async () =>{
+        console.log('staff image:', user.profileImage, user.id);
+        const url = await fetchImageFromCDN(user)
+        setAvatar(url)
+      }
+      if(user?.profileImage) {
+        fetchUrl()
+      }
+    },[user?.profileImage])
 
 
   return (

@@ -71,6 +71,10 @@ export const fetchImageFromCDN = async (user: IUser) => {
       }
     );
 
+    // const manipResult = await ImageManipulator.ImageManipulator
+    //   .manipulate(localUri)
+    //   .resize({width:300})
+      
     return manipResult.uri;
 
   } catch (error) {

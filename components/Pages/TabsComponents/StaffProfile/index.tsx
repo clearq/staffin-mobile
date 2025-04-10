@@ -50,7 +50,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const { t } = useTranslation();
   const toast = useToast();
   const router = useRouter()
-  const { authState } = useAuth()
+  const { authState, setAuthState } = useAuth()
   const [avatar, setAvatar] = useState("")
   
 
@@ -86,11 +86,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       const key = `${userId}_${file.fileName}`;
       
       try {  
-        console.log('start handle image update');
-        let token = await getItem(CDN_TOKEN);
-        if (!token) {
-          token = await autoLoginToCDN()
-        }
+        let token = await getItem(CDN_TOKEN) || (await autoLoginToCDN());
             
         // CDN
         await uploadContentFile(key, file, token, userId, contentFolder)
@@ -98,20 +94,14 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         
         // databse
         await updateUserProfileImage(key);
+
+        setAuthState((prev) => ({
+          ...prev,
+          profileImage: key,
+        }))
+
         refetch()
-        console.log('user image:', user.profileImage);
         
-
-        const uri = await fetchImageFromCDN(user);
-        //console.log('get uri:', uri);
-        
-        setAvatar(uri)
-
-        toast.show(`${t("success-update-message")}`, {
-          type: "success",
-        });
-
-       refetch()
       } catch (error) {
         toast.show(`${t("failed-update-message")}`, {
           type: "error",
@@ -154,19 +144,15 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   }
 
   useEffect(() => {
-    setAvatar("")
     const fetchUrl = async () =>{
       console.log('staff image:', user.profileImage, user.id);
-      
-      if(user && user.profileImage !== "") {
-        const image = await fetchImageFromCDN(user)
-        console.log('image:', image);
-        return setAvatar(image)
-      }     
-      return setAvatar("")
+      const url = await fetchImageFromCDN(user)
+      setAvatar(url)
     }
-    fetchUrl()
-  },[])
+    if(user?.profileImage) {
+      fetchUrl()
+    }
+  },[user?.profileImage])
   
 
   return (

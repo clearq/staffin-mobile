@@ -36,7 +36,7 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
-  const { authState: {userData} } = useAuth()
+  const { authState: {userData}, setAuthState } = useAuth()
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
@@ -58,11 +58,7 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
       const key = `${userId}_${file.fileName}`;
       
       try {  
-        console.log('start handle image update');
-        let token = await getItem(CDN_TOKEN);
-        if (!token) {
-          token = await autoLoginToCDN()
-        }
+        let token = await getItem(CDN_TOKEN) || (await autoLoginToCDN());
             
         // CDN
         await uploadContentFile(key, file, token, userId, contentFolder)
@@ -70,20 +66,14 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
         
         // databse
         await updateUserProfileImage(key);
+
+        setAuthState((prev) => ({
+          ...prev,
+          profileImage: key,
+        }))
+
         refetch()
-        console.log('user image:', user.profileImage);
         
-
-        const uri = await fetchImageFromCDN(user);
-        //console.log('get uri:', uri);
-      
-        setAvatar(uri)
-
-        toast.show(`${t("success-update-message")}`, {
-          type: "success",
-        });
-
-        refetch()
       } catch (error) {
         toast.show(`${t("failed-update-message")}`, {
           type: "error",
@@ -93,19 +83,15 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
   }
 
   useEffect(() => {
-    setAvatar("")
     const fetchUrl = async () =>{
-      console.log('admin image:', userData?.profileImage, userData?.id);
-      
-      if(userData && userData.profileImage !== "") {
-        const image = await fetchImageFromCDN(userData)
-        console.log('image:', image);
-        return setAvatar(image)
-      }     
-      return setAvatar("")
+      console.log('staff image:', user.profileImage, user.id);
+      const url = await fetchImageFromCDN(user)
+      setAvatar(url)
     }
-    fetchUrl()
-  },[])
+    if(user?.profileImage) {
+      fetchUrl()
+    }
+  },[user?.profileImage])
 
 
   return (

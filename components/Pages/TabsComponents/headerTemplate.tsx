@@ -15,8 +15,8 @@ import Button from '@/components/UI/Button';
 
 interface props {
   title: string;
-  visible: boolean;
-  onClose: () => void
+  visible?: boolean;
+  onClose?: () => void
   children: React.ReactNode
 }
 

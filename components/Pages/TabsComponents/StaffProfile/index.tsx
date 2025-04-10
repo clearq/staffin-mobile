@@ -25,7 +25,6 @@ import About from './about';
 import Activity from './activity';
 import Experience from './Experience/experience';
 import Education from './Education/education';
-import AllActivity from './allActivity';
 import AllExperience from './Experience/allExperience';
 import AllEducation from './Education/allEducation';
 import AddExperienceModal from './Experience/addExperience';
@@ -35,6 +34,8 @@ import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
 import EmptyItemMessage from '../EmptyItemMessage';
 import { useAuth } from '@/contexts/authContext';
+import { useRouter } from 'expo-router';
+import CreatePostModal from './CreatePostModal';
 
 interface props {
   user: IUser;
@@ -48,13 +49,13 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
+  const router = useRouter()
   const { authState: {profileImage}, setAuthState,} = useAuth()
   
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
   
-  const [openAllActivityDialog, setOpenAllActivityDialog] = useState<boolean>(false)
   const [openCreateActivityDialog, setOpenCreateActivityDialog] = useState<boolean>(false)
 
   const [openAddExperienceDialog, setOpenAddExperienceDialog] = useState<boolean>(false)
@@ -295,6 +296,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
               borderWidth: 2,
               padding: theme.spacing.sm,
             }}
+            onPress={() => setOpenCreateActivityDialog(true)}
           >
             <Text
               style={{
@@ -312,7 +314,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
               ? (
                 <TouchableOpacity
                   onPress={() => {
-                    setOpenAllActivityDialog(true)
+                    router.push("/activity")
                   }}
                 >
                   <Text
@@ -607,6 +609,10 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         onClose={() => setOpenEditAboutDialog(!openEditAboutDialog)}
         handleSuccess = {() => refetch()}
       />
+      <CreatePostModal 
+        visible={openCreateActivityDialog}
+        onClose={() => setOpenCreateActivityDialog(!openCreateActivityDialog)}
+      />
       <AllExperience 
         visible={openAllExperienceDialog}
         id={user.id!}
@@ -630,10 +636,6 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         id={user.id}
         onClose={() => setOpenAllEducationDialog(!openAllEducationDialog)}
         handleSuccess={() => refetch()}
-      /> 
-      <AllActivity 
-        visible={openAllActivityDialog}
-        onClose={() => setOpenAllActivityDialog(false)}
       />  
       <AddSkillModal
         visible={openAddSkillsDialog}

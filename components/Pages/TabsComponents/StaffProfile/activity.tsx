@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 import EmptyItemMessage from '../EmptyItemMessage';
+import CreatePostModal from './CreatePostModal';
 
 interface props {
   post: IPost[];
@@ -111,6 +112,12 @@ const Activity = ({post}: props) => {
       }
 
       {/* 🚧Add Dialog 'CreatePostDialog🚧' */}
+      {openAddModal && 
+        <CreatePostModal 
+          visible={openAddModal}
+          onClose={() => setOpenAddModal(!openAddModal)}
+        />
+      }
     </View>
   )
 }

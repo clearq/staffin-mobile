@@ -193,6 +193,20 @@ const _layout = () => {
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
+        
+        <Tabs.Screen 
+          name="activity"
+          options={{
+            href: null, // Hides from the tab bar
+            // tabBarStyle: { display: "none", height: 0, width: 0, },
+            // tabBarIcon: () => null,
+            headerShown: true,
+            // headerTitle: "My Document",
+            headerStyle: { backgroundColor: theme.colors.searchBg },
+            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+          }} 
+        />
 
         {/* Community Tab */}
         <Tabs.Screen 

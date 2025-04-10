@@ -10,14 +10,13 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/authContext';
 import HeaderTemplate from '../headerTemplate';
+import { IPost } from '@/types';
 
 interface props {
-  visible: boolean;
-  onClose: () => void
+  post: IPost[]
 }
 
-
-const AllActivity = ({visible, onClose}: props) => {
+const AllActivity = ({post}:props) => {
   const { theme } = useTheme()
     const { t } = useTranslation();
     const toast = useToast();
@@ -30,32 +29,42 @@ const AllActivity = ({visible, onClose}: props) => {
 
 
   return (
+    <View
+      style={{
+        ...pageStyle.pageComponent,
+        backgroundColor: 'red',
+        height: '100%'
+      }}
+    >
 
-    <HeaderTemplate 
-      title={t("activity")}
-      visible={visible}
-      onClose={onClose}
-      children={
-        <View
+      <View style={{flexDirection:'column'}}>
+        {!post.length &&
+          <View style={{}}>
+            <Text 
+              style={{
+                ...pageStyle.headline02, 
+                color: theme.colors.grey0,
+              }}
+            >
+              {t("no-activity-messag")}
+            </Text>
+          </View>
+        } 
+
+        {/* 🚧 Insert post list */}
+        <Text 
           style={{
-            ...pageStyle.pageComponent,
-            justifyContent: 'center',
-            backgroundColor: theme.colors.background
+            ...pageStyle.headline02, 
+            color: theme.colors.grey0
           }}
         >
-          <ScrollView
-            automaticallyAdjustKeyboardInsets={true}
-            showsVerticalScrollIndicator={false}
-          >
+          Posts
+        </Text>
+        
 
-            {/* 🚧 Insert post list */}
-            <Text>Posts</Text>
+      </View>
 
-          </ScrollView>
-        </View>
-      }
-    />
-
+    </View>
   )
 }
 

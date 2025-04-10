@@ -28,7 +28,6 @@
   "success-download-message": "CV has been saved",
   "failed-download-message": "Failed to download CV",
   
-
   "name-required-message": "Name is required",
   "user-name-required-message": "Usern ame is required",
   "institution-required-message": "Institution is required",
@@ -80,6 +79,7 @@
   "dashboard": "Dashboard",
   "home": "Home",
   "chat": "Chat",
+  "my-page": "My page",
   "profile": "Profile",
   "jobs": "Jobs",
   "community": "Community",
@@ -87,18 +87,20 @@
   "overview": "Overview",
   "my-application": "My application",
   "my-document": "My document",
+  "my-activity": "My activity",
 
   "start-message": "Welcome to Staffin!",
   "start-sub-text": "Connect with professionals who inspire you",
   "start-button-text": "Get Started",
   "no-activity-message": "There are no item yet.",
   "create-profile": "Create your profile",
+  "create-post-message": "Create your first post",
+  "create-post": "Create post",
 
   "information": "Information",
   "activity": "Activity",
   "experience": "Experience",
   "education": "Education",  
-  "create-post": "Create post",
 
   "read-more": "Read more...",
   "see-more": "See more",

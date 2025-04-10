@@ -57,6 +57,13 @@ export default function RecordsScreen() {
       value: t("my-document"),
       path: "/document",
     },
+    {
+      id: 4,
+      icon: "post-outline", // My Document
+      title: t("my-activity"),
+      value: t("my-activity"),
+      path: "/activity",
+    },
   ];
 
   const adminRecordsList = [
@@ -99,7 +106,7 @@ export default function RecordsScreen() {
 
   return (
     <View style={{flex:1, backgroundColor: theme.colors.background}}>
-      <ModalHeader title={t("profile")} />
+      <ModalHeader title={t("my-page")} />
 
       {userData && (
         <>

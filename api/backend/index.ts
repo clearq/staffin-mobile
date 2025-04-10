@@ -50,8 +50,11 @@ export {
 } from "./cdn"
 
 export {
+  getAllCompanies,
   getCompanyProfileUserId,
   getCompanyById,
+  createCompany,
+  updateCompanyInformation,
 } from "./company"
 
 export {

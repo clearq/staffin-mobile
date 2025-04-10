@@ -99,6 +99,10 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           ...prev,
           profileImage: key,
         }))
+        
+        toast.show(`${t("success-update-message")}`, {
+          type: "success"
+        })
 
         refetch()
         

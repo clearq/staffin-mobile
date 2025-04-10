@@ -15,12 +15,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
-import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
+import { autoLoginToCDN, deleteStaffSkill, getCompanyById, updateCompanyInformation, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 import CompanyInformation from './Company/information';
 import ProfileItemContainer from '../ProfileListContainer';
 import { useAuth } from '@/contexts/authContext';
 import CompanyAbout from './Company/about';
 import CompanyActivity from './Company/activity';
+import { partial, values } from 'lodash';
 
 
 
@@ -29,9 +30,10 @@ interface props {
   showEditButton: boolean;
   post: IPost[];
   refetch : () => void
+  companyId: number
 }
 
-const CompanyProfile = ({company, showEditButton, post, refetch}: props) => {
+const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
@@ -45,17 +47,53 @@ const CompanyProfile = ({company, showEditButton, post, refetch}: props) => {
   
   // Update Image file as Base64 (Don't use CDN)
   const handleImageUpdate = async () => {
-    
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Permission to access media library is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true, // important to include base64 data
+      quality: 0.4, // optional: reduce quality to reduce size
+    });
+
+    if (!result.canceled) {
+      const base64 = result.assets[0].base64;
+
+      setAvatar(`data:image/jpeg;base64,${base64}`)  
+
+      const values = {
+        ...company,
+        image: `data:image/jpeg;base64,${base64}`
+      }
+
+      try {
+        await updateCompanyInformation(companyId, values)
+
+        toast.show(`${t("success-update-message")}`, {
+          type: "success"
+        })
+
+        refetch()
+      } catch (error) {
+        toast.show(`${t("failed-update-message")}`, {
+          type: "error",
+        });
+      }
+    }
   }
   
   useEffect(() => {
     const fetchUrl = async () =>{
-      if(company && company.image !== "") {
-
-      }
-      return setAvatar("")
+      const uri = company.image
+ 
+      setAvatar(uri)    
     }
-    fetchUrl()
+    if (company.image) {
+      fetchUrl()
+    }
+    
   },[])
   
   return (

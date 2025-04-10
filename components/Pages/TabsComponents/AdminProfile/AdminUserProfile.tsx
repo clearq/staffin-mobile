@@ -72,6 +72,10 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
           profileImage: key,
         }))
 
+        toast.show(`${t("success-update-message")}`, {
+          type: "success"
+        })
+
         refetch()
         
       } catch (error) {

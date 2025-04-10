@@ -36,15 +36,15 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       userId,
     } ,
   } = useAuth();
-
+  const companyId = userData?.companyId
 
   const { data: company, refetch: companyRefetch, isLoading: companyIsLoading } = useQuery({
     queryKey: ["company-data"],
     queryFn: async () => {
-      if (userData && userData.companyId) {
+      if (userData && companyId) {
         //const companyId = await getCompanyProfileUserId(user.companyId)
 
-        const response = await getCompanyById(userData.companyId)
+        const response = await getCompanyById(companyId)
         
         return response
       }
@@ -110,6 +110,7 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           showEditButton={showEditButton}
           post={post}
           refetch={refetch}
+          companyId={companyId!}
         />
       }
     </View>

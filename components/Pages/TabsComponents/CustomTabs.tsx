@@ -15,7 +15,7 @@ const isIOS = Platform.OS === "ios";
 
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { theme } = useTheme();
-  const { authState: { userData, userId }} = useAuth();
+  const { authState: { userData, userId }, isLoading, } = useAuth();
   const [avatar, setAvatar] = useState("") // Profile image url
 
   // Get User Info
@@ -27,9 +27,10 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
     } = useQuery({
       queryKey: ["user-data"],
       queryFn: async () => {
-        const response = await getUserById(userId!)      
-  
-        return response;
+        if (!isLoading && userId) {
+          const response = await getUserById(userId!)      
+          return response;
+        }
       },
       enabled: !!userId,
     });
@@ -42,6 +43,9 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
       }
       if(user?.profileImage) {
         fetchUrl()
+      }
+      if(isLoading && !userId) {
+        setAvatar("")
       }
     },[user?.profileImage])
 

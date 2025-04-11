@@ -74,6 +74,13 @@ export default function RecordsScreen() {
       value: t("profile"),
       path: "/profile",
     },
+    {
+      id: 2,
+      icon: "post-outline", // My Document
+      title: t("activity"),
+      value: t("activity"),
+      path: "/activity",
+    },
   ]
 
   useEffect(() => {

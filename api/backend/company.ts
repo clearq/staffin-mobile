@@ -33,9 +33,9 @@ export const getCompanyById = async (companyId: number) => {
   }
 }
 
-export const createCompany = async (value:any) => {
+export const createCompany = async (values:any) => {
   try {
-    const data = await api.post(`/Company/Create-company`, value)
+    const data = await api.post(`/Company/Create-company`, values)
 
     return data
   } catch (error) {
@@ -43,9 +43,9 @@ export const createCompany = async (value:any) => {
   }
 }
 
-export const updateCompanyInformation = async (companyId: number, value:Partial<ICompany>) => {
+export const updateCompanyInformation = async (companyId: number, values:Partial<ICompany>) => {
   try {
-    const data = await api.put(`/Company/Update-CompanyInformation?id=${companyId}`, value)
+    const data = await api.put(`/Company/Update-CompanyInformation?id=${companyId}`, values)
 
     return data
   } catch (error) {
@@ -53,3 +53,32 @@ export const updateCompanyInformation = async (companyId: number, value:Partial<
   }
 }
 
+export const getAllBranches = async () => {
+  try {
+    const { data } = await api.get(`/Company/GetAll-Branches`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getBranchById = async (id: number) => {
+  try {
+    const { data } = await api.get(`/Company/GetBranch-id?Id=${id}`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const addBranchCompany = async (values: Partial<ICompany>) => {
+  try {
+    const response = await api.post(`/Company/AddBranch-Company`, values)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}

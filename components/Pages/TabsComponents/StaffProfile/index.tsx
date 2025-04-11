@@ -35,7 +35,7 @@ import EditLanguageModal from './Languages/editLanguageModal';
 import EmptyItemMessage from '../EmptyItemMessage';
 import { useAuth } from '@/contexts/authContext';
 import { useRouter } from 'expo-router';
-import CreatePostModal from './CreatePostModal';
+import CreatePostModal from '../../Activity/CreatePostModal';
 
 interface props {
   user: IUser;

@@ -22,6 +22,10 @@ import { useAuth } from '@/contexts/authContext';
 import CompanyAbout from './Company/about';
 import CompanyActivity from './Company/activity';
 import { partial, values } from 'lodash';
+import CompanyInfoModal from './Company/Edit/CompanyInfoModal';
+import CompanyAboutModal from './Company/Edit/aboutModal';
+import CreatePostModal from '../../Activity/CreatePostModal';
+import { useRouter } from 'expo-router';
 
 
 
@@ -37,12 +41,16 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
+  const router = useRouter()
   const { authState, setAuthState,} = useAuth()
   const [avatar, setAvatar] = useState("")
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
-  const [openAllActivityDialog, setOpenAllActivityDialog] = useState<boolean>(false)
+  const [openCreateActivityDialog, setOpenCreateActivityDialog] = useState<boolean>(false)
+
+  const [openCreateBranchDialog, setOpenCreateBranchDialog] = useState<boolean>(false)
+  const [openEditBranchDialog, setOpenEditBranchDialog] = useState<Boolean>(false)
 
   
   // Update Image file as Base64 (Don't use CDN)
@@ -226,6 +234,7 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
               borderWidth: 2,
               padding: theme.spacing.sm,
             }}
+            onPress={() => setOpenCreateActivityDialog(true)}
           >
             <Text
               style={{
@@ -243,7 +252,7 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
               ? (
                 <TouchableOpacity
                   onPress={() => {
-                    setOpenAllActivityDialog(true)
+                    router.push("/activity")
                   }}
                 >
                   <Text
@@ -263,9 +272,78 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
         }
       />
 
+      <ProfileItemContainer 
+        title={t("branches")}
+        children={ <></>}
+        showFooter={false}
+        showEditButton={showEditButton}
+        btnChildren={
+          <TouchableOpacity
+            style={{
+              borderRadius: theme.spacing.sm,
+              borderColor: theme.colors.primary,
+              borderWidth: 2,
+              padding: theme.spacing.sm,
+            }}
+            onPress={() => setOpenCreateBranchDialog(true)}
+          >
+            <Text
+              style={{
+                ...pageStyle.button16,
+                color: theme.colors.primary
+              }}
+            >
+              {`${t("create-branch")}`}
+            </Text>
+          </TouchableOpacity>
+        }
+      />
+
+      <ProfileItemContainer 
+        title={t("jobs")}
+        children={ <></>}
+        showFooter={false}
+        showEditButton={showEditButton}
+        btnChildren={
+          <TouchableOpacity
+            style={{
+              borderRadius: theme.spacing.sm,
+              borderColor: theme.colors.primary,
+              borderWidth: 2,
+              padding: theme.spacing.sm,
+            }}
+            onPress={() => setOpenCreateBranchDialog(true)}
+          >
+            <Text
+              style={{
+                ...pageStyle.button16,
+                color: theme.colors.primary
+              }}
+            >
+              {`${t("create-job-announce")}`}
+            </Text>
+          </TouchableOpacity>
+        }
+      />
+
 
       {/* Dialog */}
-      
+      <CompanyInfoModal 
+        visible={openEditInfoDialog}
+        user={company}
+        onClose={() => setOpenEditInfoDialog(!openEditInfoDialog)}
+        handleSuccess={() => refetch()}
+      />
+      <CompanyAboutModal 
+        visible={openEditAboutDialog}
+        user={company}
+        onClose={() => setOpenEditAboutDialog(!openEditAboutDialog)}
+        handleSuccess={() => refetch()}
+      />
+      <CreatePostModal 
+        visible={openCreateActivityDialog}
+        onClose={() => setOpenCreateActivityDialog(!openCreateActivityDialog)}
+      />
     </View>
   )
 }

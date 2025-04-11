@@ -22,3 +22,7 @@ export {
   ICompany,
   IBranch,
 } from './companyTypes'
+
+export {
+  IAdmin,
+} from './AdminTypes'

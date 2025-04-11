@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from "react-native-toast-notifications";
 import { Formik } from 'formik';
 
-import { updateStaff } from '@/api/backend';
+import { updateAdminProfile, updateStaff } from '@/api/backend';
 
 import { IUser } from '@/types/UserTypes';
 
@@ -15,8 +15,8 @@ import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { TextField } from '@/components/UI/Input/TextField';
 import pageStyle from '@/constants/Styles';
-import ModalHeader from '../../ModalHeader';
-
+import ModalHeader from '../../../ModalHeader';
+import { IAdmin } from '@/types';
 
 interface props {
   user: IUser;
@@ -25,15 +25,15 @@ interface props {
   handleSuccess: () => void
 }
 
-const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
+const AdminInfoModal = ({user, visible, onClose, handleSuccess}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
   const router = useRouter()
 
   const mutation = useMutation({
-    mutationFn: async (values:any) => {
-      return await updateStaff(values);
+    mutationFn: async (values:IAdmin) => {
+      return await updateAdminProfile(values);
     },
     onMutate: (variables) => {
       // Optionally, you can handle any state updates or optimistic updates here.
@@ -52,7 +52,7 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
       });
     },
   });
-  
+
 
 
   return (
@@ -78,7 +78,6 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
           >
             <Formik
               initialValues={{
-                ...user,
                 id: user?.id,
                 firstName: user?.firstName || "",
                 lastName: user?.lastName || "",
@@ -88,9 +87,9 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
                 postalCode: user?.postalCode || "",
                 country: user?.country || "",
                 phoneNumber: user?.phoneNumber || "",
-                email: user?.email,
+                profileImage: user?.profileImage || "",
               }}
-              onSubmit={(values: IUser) => {
+              onSubmit={(values: IAdmin) => {
                 mutation.mutate(values);
               }}
             >
@@ -317,29 +316,7 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
                           type={"text"}
                         />
                       </View>
-
-                      <View
-                        style={{
-                          flex: 1,
-                        }}
-                      >
-                        <Text 
-                          style={{
-                            ...pageStyle.inputLabel,
-                            color: theme.colors.grey0
-                          }}
-                        >
-                          {t("e-mail")}
-                        </Text>
-                        <TextField
-                          placeholder={t("e-mail")}
-                          onChangeText={handleChange("email")}
-                          onBlur={handleBlur("email")}
-                          value={values.email}
-                          name={"email"}
-                          type={"email"}
-                        />
-                      </View>              
+            
                     </View>
 
                   </View>
@@ -378,7 +355,7 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
                       }}
                     />
                   </View>
-                  </>
+                </>
               )}
             </Formik>
           </ScrollView>
@@ -388,11 +365,4 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
   )
 }
 
-export default InfoModal
-
-const styles = StyleSheet.create({
-  formContiner: {
-    width: "100%",
-  },
-  
-})
+export default AdminInfoModal

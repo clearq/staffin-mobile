@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/authContext';
-import HeaderTemplate from '../headerTemplate';
+import HeaderTemplate from '../TabsComponents/headerTemplate';
 import { IPost } from '@/types';
 
 interface props {

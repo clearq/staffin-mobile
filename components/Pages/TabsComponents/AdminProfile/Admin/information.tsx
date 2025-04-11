@@ -22,27 +22,6 @@ const AdminInformation = ({user, showEditButton}:props) => {
 
   return (
     <View>
-      {/* Name */}
-      <View style={{...styles.itemGroup}}>
-        <MaterialCommunityIcons name='office-building-outline' size={16} color={theme.colors.grey0} />
-        <Text
-          style={{
-            ...pageStyle.headline03,
-            color: theme.colors.grey0,
-          }}
-        >
-          {`${t("company-name")}:`}
-        </Text>
-        <Text
-          style={{
-            ...pageStyle.headline03,
-            color: theme.colors.grey0,
-          }}
-        >
-          {`${user?.companyName}`}
-        </Text>
-      </View>
-
       {/* Contact person */}
       <View style={{...styles.itemGroup}}>
         <MaterialCommunityIcons name='account-outline' size={16} color={theme.colors.grey0} />
@@ -52,7 +31,7 @@ const AdminInformation = ({user, showEditButton}:props) => {
             color: theme.colors.grey0,
           }}
         >
-          {`${t("contact-person")}:`}
+          {`${t("full-name")}:`}
         </Text>
         <Text
           style={{
@@ -104,48 +83,6 @@ const AdminInformation = ({user, showEditButton}:props) => {
           }}
         >
           {`${user.phoneNumber}`}
-        </Text>
-      </View>
-      
-      {/* Email */}
-      <View style={{...styles.itemGroup}}>
-        <MaterialCommunityIcons name='email-outline' size={16} color={theme.colors.grey0} />
-        <Text
-          style={{
-            ...pageStyle.headline03,
-            color: theme.colors.grey0,
-          }}
-        >
-          {`${t("e-mail")}:`}
-        </Text>
-        <Text
-          style={{
-            ...pageStyle.headline03,
-            color: theme.colors.grey0,
-          }}
-        >
-          {`${user.email}`}
-        </Text>
-      </View>
-      
-      {/* Website */}
-      <View style={{...styles.itemGroup}}>
-        <MaterialCommunityIcons name='web' size={16} color={theme.colors.grey0} />
-        <Text
-          style={{
-            ...pageStyle.headline03,
-            color: theme.colors.grey0,
-          }}
-        >
-          {`${t("web-site")}:`}
-        </Text>
-        <Text
-          style={{
-            ...pageStyle.headline03,
-            color: theme.colors.grey0,
-          }}
-        >
-          {/* user website */}
         </Text>
       </View>
     </View>

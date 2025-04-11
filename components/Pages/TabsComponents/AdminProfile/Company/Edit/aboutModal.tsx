@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from "react-native-toast-notifications";
 import { Formik } from 'formik';
 
-import { updateStaff } from '@/api/backend';
+import { updateCompanyInformation, updateStaff } from '@/api/backend';
 
 import { IUser } from '@/types/UserTypes';
 
@@ -15,16 +15,19 @@ import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { MultiTextField } from '@/components/UI/Input/TextField';
 import pageStyle from '@/constants/Styles';
-import ModalHeader from '../../ModalHeader';
+;
+import { ICompany } from '@/types';
+import ModalHeader from '../../../ModalHeader';
+
 
 interface props {
-  user: IUser;
+  user: ICompany;
   visible: boolean;
   onClose: () => void;
   handleSuccess: () => void
 }
 
-const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
+const CompanyAboutModal = ({user, visible, onClose, handleSuccess}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
@@ -32,7 +35,7 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
 
   const mutation = useMutation({
     mutationFn: async (values:any) => {
-      return await updateStaff(values);
+      return await updateCompanyInformation(user.id, values);
     },
     onMutate: (variables) => {
       // Optionally, you can handle any state updates or optimistic updates here.
@@ -78,9 +81,9 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
             <Formik
               initialValues={{
                 ...user,
-                about: user?.about
+                about: user?.about 
               }}
-              onSubmit={(values: IUser) => {
+              onSubmit={(values: ICompany) => {
                 mutation.mutate(values);
               }}
             >
@@ -137,7 +140,6 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
                         borderColor: theme.colors.primary,
                       }}
                     />
-                      
 
                     <Button
                       title={`${t("save")}`}
@@ -162,7 +164,7 @@ const AboutModal = ({user, visible, onClose, handleSuccess}: props) => {
   )
 }
 
-export default AboutModal
+export default CompanyAboutModal
 
 const styles = StyleSheet.create({
   formContiner: {

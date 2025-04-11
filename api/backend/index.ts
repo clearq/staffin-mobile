@@ -1,5 +1,5 @@
 export {
-
+  updateAdminProfile,
 } from "./admin"
 
 export {
@@ -55,6 +55,9 @@ export {
   getCompanyById,
   createCompany,
   updateCompanyInformation,
+  getAllBranches,
+  getBranchById,
+  addBranchCompany,
 } from "./company"
 
 export {

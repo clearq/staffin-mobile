@@ -53,6 +53,8 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
     }
   })
 
+  // 🚧 fetch Branches and Job announce 🚧
+
   return (
     <View>
       <View>
@@ -109,7 +111,7 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           company = {company}
           showEditButton={showEditButton}
           post={post}
-          refetch={refetch}
+          refetch={companyRefetch}
           companyId={companyId!}
         />
       }

@@ -92,6 +92,7 @@ export const MultiTextField: React.FC<Props> = (props) => {
         onBlur={props.onBlur}
         autoCapitalize="none"
         multiline={true}
+        textAlignVertical="top"
       />
       {props.errorMessage ? (
         <Text

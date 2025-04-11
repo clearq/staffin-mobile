@@ -22,7 +22,7 @@ import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { rgbaToHex } from '@/utils/rgba-to-hex';
 import DateCalendar from '@/components/UI/Calendar';
-import ModalHeader from '../ModalHeader';
+import ModalHeader from '../TabsComponents/ModalHeader';
 import { IPost } from '@/types';
 
 interface props {
@@ -61,40 +61,40 @@ const CreatePostModal = ({visible, onClose}: props) => {
 
             <Text>Create new post</Text>
 
-             {/* Button Group */}
-             <View
-                    style={{
-                      ...pageStyle.buttonGroup
-                    }}
-                  >            
-                    <Button
-                      title={`${t("cancel")}`}
-                      onPress={() => {
-                        onClose()
-                      }}
-                      size='md'
-                      type='clear'
-                      titleStyle={{ ...pageStyle.button16 }}
-                      radius={"sm"}
-                      containerStyle={{
-                        ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,
-                      }}
-                    />                      
+            {/* Button Group */}
+            <View
+            style={{
+              ...pageStyle.buttonGroup
+            }}
+            >            
+              <Button
+                title={`${t("cancel")}`}
+                onPress={() => {
+                  onClose()
+                }}
+                size='md'
+                type='clear'
+                titleStyle={{ ...pageStyle.button16 }}
+                radius={"sm"}
+                containerStyle={{
+                  ...pageStyle.buttonContainer,
+                  borderColor: theme.colors.primary,
+                }}
+              />                      
 
-                    <Button
-                      title={`${t("save")}`}
-                      onPress={() => {}}
-                      size='md'
-                      color='primary'
-                      titleStyle={{ ...pageStyle.button16 }}
-                      radius={"sm"}
-                      containerStyle={{
-                        ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,      
-                      }}
-                    />
-                  </View>
+              <Button
+                title={`${t("save")}`}
+                onPress={() => {}}
+                size='md'
+                color='primary'
+                titleStyle={{ ...pageStyle.button16 }}
+                radius={"sm"}
+                containerStyle={{
+                  ...pageStyle.buttonContainer,
+                  borderColor: theme.colors.primary,      
+                }}
+              />
+            </View>
           </ScrollView>
         </View>
       </SafeAreaView>

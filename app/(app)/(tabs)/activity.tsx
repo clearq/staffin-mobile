@@ -1,6 +1,5 @@
 import { View, Text, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
-import AllActivity from '@/components/Pages/Activity/allActivity'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { useToast } from 'react-native-toast-notifications'

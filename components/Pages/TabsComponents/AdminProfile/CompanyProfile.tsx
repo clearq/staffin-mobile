@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
-import { autoLoginToCDN, deleteStaffSkill, getCompanyById, updateCompanyInformation, updateUserProfileImage, uploadContentFile } from '@/api/backend';
+import { autoLoginToCDN, deleteStaffSkill, getAllBranches, getCompanyById, updateCompanyInformation, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 import CompanyInformation from './Company/information';
 import ProfileItemContainer from '../ProfileListContainer';
 import { useAuth } from '@/contexts/authContext';
@@ -24,8 +24,13 @@ import CompanyActivity from './Company/activity';
 import { partial, values } from 'lodash';
 import CompanyInfoModal from './Company/Edit/CompanyInfoModal';
 import CompanyAboutModal from './Company/Edit/aboutModal';
-import CreatePostModal from '../../Activity/CreatePostModal';
+
 import { useRouter } from 'expo-router';
+import CreatePostModal from '../Activity/CreatePostModal';
+import BranchList from './Company/Branch/branches';
+import AddBranchModal from './Company/Branch/addBranch';
+import EditBranchModal from './Company/Branch/editBranch';
+import { useQuery } from '@tanstack/react-query';
 
 
 
@@ -45,12 +50,20 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
   const { authState, setAuthState,} = useAuth()
   const [avatar, setAvatar] = useState("")
 
+  const { data = [], isLoading, refetch:branchRefetch } = useQuery({
+    queryKey: ["all-branches"],
+    queryFn: async () => {
+      const response = getAllBranches()
+
+      return response
+    }
+  })
+
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
   const [openCreateActivityDialog, setOpenCreateActivityDialog] = useState<boolean>(false)
 
   const [openCreateBranchDialog, setOpenCreateBranchDialog] = useState<boolean>(false)
-  const [openEditBranchDialog, setOpenEditBranchDialog] = useState<Boolean>(false)
 
   
   // Update Image file as Base64 (Don't use CDN)
@@ -274,7 +287,14 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
 
       <ProfileItemContainer 
         title={t("branches")}
-        children={ <></>}
+        children={ 
+          <BranchList
+            showEditButton={showEditButton} 
+            companyId={company.id}
+            data={data}
+            handleSuccess={() => branchRefetch()}
+          />          
+        }
         showFooter={false}
         showEditButton={showEditButton}
         btnChildren={
@@ -344,6 +364,12 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
         visible={openCreateActivityDialog}
         onClose={() => setOpenCreateActivityDialog(!openCreateActivityDialog)}
       />
+      <AddBranchModal 
+        visible={openCreateBranchDialog}
+        onClose={() => setOpenCreateBranchDialog(!openCreateBranchDialog)}
+        handleSuccess={() => refetch()}
+      />
+
     </View>
   )
 }

@@ -25,7 +25,8 @@ import AdminInformation from './Admin/information';
 import AdminActivity from './Admin/activity';
 import AdminInfoModal from './Admin/Edit/AdminInfoModal';
 import { useRouter } from 'expo-router';
-import CreatePostModal from '../../Activity/CreatePostModal';
+import CreatePostModal from '../Activity/CreatePostModal';
+
 
 
 interface props {

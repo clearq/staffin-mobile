@@ -1,4 +1,4 @@
-import { ICompany } from "@/types";
+import { IBranch, ICompany } from "@/types";
 import api from "./config";
 
 
@@ -78,6 +78,16 @@ export const addBranchCompany = async (values: Partial<ICompany>) => {
     const response = await api.post(`/Company/AddBranch-Company`, values)
 
     return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const updateBranch = async (id: number, values: Partial<IBranch>) => {
+  try {
+    const data = await api.put(`/Company/UpdateBranch-Company?branchId=${id}`, values)
+
+    return data
   } catch (error) {
     console.error(error)
   }

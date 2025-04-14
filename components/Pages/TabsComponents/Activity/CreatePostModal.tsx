@@ -23,8 +23,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { rgbaToHex } from '@/utils/rgba-to-hex';
 import DateCalendar from '@/components/UI/Calendar';
 import { IPost } from '@/types';
-import ModalHeader from '../TabsComponents/ModalHeader';
-
+import ModalHeader from '../ModalHeader';
 
 interface props {
   visible: boolean;

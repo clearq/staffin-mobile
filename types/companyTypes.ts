@@ -11,7 +11,7 @@ export interface ICompany {
   userId: number;
   createdAt: Date;
   updatedAt: Date;
-  branchNames?: IBranch[];
+  branchNames: IBranch[] | [];
 }
 
 export interface IBranch {

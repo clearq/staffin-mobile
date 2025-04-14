@@ -107,7 +107,10 @@ const Education = ({user, showEditButton}: props) => {
             </View> 
 
             {index < array.length - 1 && 
-              <Divider color={theme.colors.greyOutline} />
+              <Divider 
+                color={theme.colors.greyOutline} 
+                style={{marginTop: theme.spacing.md,}}
+              />
             }
 
           </View>

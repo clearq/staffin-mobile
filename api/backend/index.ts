@@ -58,6 +58,7 @@ export {
   getAllBranches,
   getBranchById,
   addBranchCompany,
+  updateBranch,
 } from "./company"
 
 export {

@@ -2,7 +2,6 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllBranches } from '@/api/backend'
-import Branches from '@/components/Pages/Branch/branches'
 
 const page = () => {
   
@@ -19,7 +18,7 @@ const page = () => {
 
   return (
     <View>
-      <Branches />
+      {/* Branch component */}
     </View>
   )
 }

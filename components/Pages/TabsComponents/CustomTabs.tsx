@@ -140,11 +140,13 @@ const styles = StyleSheet.create({
   tabBarItem: {
     alignItems: "center",
     justifyContent: "center",
+    transform:[{translateX: 8}],
   },
   middleTab: {
     position:'absolute',
     left:'50%',
-    transform: [{ translateX: -70/4 }],
+    right: '50%',
+    transform: [{ translateX: -16 }],
     top: "-50%",
     width: 70,
     height: 70,

@@ -106,6 +106,7 @@
   "activity": "Activity",
   "experience": "Experience",
   "education": "Education", 
+  "job-announce": "Job announce",
   
   "status": "Status",
   "open": "Open",
@@ -121,6 +122,7 @@
   "job-type": "Job type",
   "instant": "Instant job",
   "regular": "Regular job",
+  "all": "All",
 
   "read-more": "Read more...",
   "see-more": "See more",

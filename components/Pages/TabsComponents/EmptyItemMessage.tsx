@@ -28,7 +28,7 @@ const EmptyItemMessage = ({onPress, message}: props) => {
         <TouchableOpacity 
           style={{
             ...styles.button,
-            borderColor: theme.colors.primary
+            borderColor: theme.colors.grey0
           }}
           onPress={onPress}
         >

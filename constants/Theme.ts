@@ -39,40 +39,42 @@ export interface Theme {
   };
 }
 export const colors = {
-  white: "rgb(248, 247, 250)",
-  black: "rgb(15, 15, 15)",
+  white: "#FDFDFF",
+  black: "#313234",
 }
 
 export const theme = createTheme({
   mode: "light" as "light" | "dark",
   lightColors: {
     ...lightColors,
-    background: "rgb(248, 247, 250)",
-    primary: "#252525",
-    secondary: "#D4AF35",
-    greyOutline: "rgb(133, 131, 138)",
-    divider: "rgb(79, 83, 103)",
-    grey0: "rgb(15, 15, 15)",
-    grey3: "#8F8F8F",
-    searchBg: "rgba(248, 247, 250, 0.7)",
-    white: "rgb(248, 247, 250)",
-    black: "rgb(15, 15, 15)",
+    background: "rgb(246, 246, 249)",
+    primary: "rgb(116, 118, 180)",
+    secondary: "rgb(49, 51, 122)",
+    greyOutline: "rgb(183, 184, 192)",
+    divider: "rgb(183, 184, 192)",
+    grey0: "rgb(49, 50, 52)",
+    grey3: "rgb(183, 184, 192)",
+    grey5: "rgb(253, 253, 253)",
+    searchBg: "rgba(253, 253, 253, 0.7)",
+    white: "rgb(253, 253, 253)",
+    black: "#313234",
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color
   },
   darkColors: {
     ...darkColors,
-    background: "#252525",
-    primary: "#D4AF35",
-    secondary: "#8F8F8F",
-    greyOutline: "rgb(144, 157, 170)",
-    divider: "rgb(229, 229, 230)",
-    grey0: "rgb(241, 241, 241)",
-    grey3: "#8F8F8F",
-    searchBg: "rgba(37, 37, 37, 0.7)",
-    white: "rgb(248, 247, 250)",
-    black: "rgb(15, 15, 15)",
+    background: "rgb(49, 50, 52)",
+    primary: "rgb(116, 118, 180)",
+    secondary: "rgb(64, 66, 103)",
+    greyOutline: "rgb(131, 131, 137)",
+    divider: "rgb(131, 131, 137)",
+    grey0: "rgb(253, 253, 253)",
+    grey3: "rgb(183, 184, 192)",
+    grey5:"rgb(49, 50, 52)",
+    searchBg: "rgba(131, 131, 137, 0.7)",
+    white: "rgb(253, 253, 253)",
+    black: "rgb(49, 50, 52)",
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color

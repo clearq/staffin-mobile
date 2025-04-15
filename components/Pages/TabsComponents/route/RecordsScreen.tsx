@@ -82,6 +82,14 @@ export default function RecordsScreen() {
       value: t("activity"),
       path: "/activity",
     },
+    {
+      id: 3,
+      icon: "briefcase-account-outline", // Job announce
+      title: t("job-announce"),
+      value: t("job-announce"),
+      path: "/jobAnnounce",
+    },
+    
   ]
 
   useEffect(() => {

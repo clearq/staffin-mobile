@@ -115,7 +115,7 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
       <View
         style={{
           ...styles.headerContainer,
-          backgroundColor: theme.colors.secondary
+          backgroundColor: theme.colors.primary
         }}
       >
 

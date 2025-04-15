@@ -53,65 +53,71 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
   return (
     <View
       style={{
-        ...styles.tabBarContainer,
-        backgroundColor: theme.colors.secondary,
-        borderColor: theme.colors.divider,
+        paddingHorizontal: Sizes.fixPadding,                                 
       }}
     >
-      
-      {state.routes.map((route: any, index: number) => {
-        const { options } = descriptors[route.key];
-        const label = options.tabBarLabel || route.name;
-
-        const isFocused = state.index === index;
+      <View
+        style={{
+          ...styles.tabBarContainer,
+          backgroundColor: theme.colors.primary,
+          borderColor: theme.colors.divider,
+        }}
+      >
         
-                
-        if (label === "Route") {
-          return (
-            <TouchableOpacity
-              key={route.key}
-              onPress={() => {
-                if (isFocused) return;
+        {state.routes.map((route: any, index: number) => {
+          const { options } = descriptors[route.key];
+          const label = options.tabBarLabel || route.name;
 
-                // Navigate to the respective route
-                navigation.navigate(route.name, route.params);
-              }}
-              style={[
-                styles.tabBarItem,
-                styles.middleTab,
-                {
-                  backgroundColor: isFocused ? theme.colors.primary :  theme.colors.background 
-                },
-              ]}
-            >
-              {avatar !== ""
-                ? <Avatar size={60} rounded source={{uri: avatar}} />      
-                :<Avatar size={60} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-              }
-            </TouchableOpacity>
-          );
-        } else {
           const isFocused = state.index === index;
-          const renderTextBelow = index !== Math.floor(state.routes.length / 2) && options.tabBarIcon; // Render text below for non-middle tabs
           
-          // console.log('option:', options.tabBarIcon, '|', options.headerTitle );
-          
-          return (
-            <TouchableOpacity
-              key={route.key}
-              onPress={() => {
-                navigation.navigate(route.name, route.params);
-              }}
-              style={[styles.tabBarItem]}
-            >
-              <View style={{ alignItems: "center" }}>
-                {options && options.tabBarIcon && options?.tabBarIcon({ focused: isFocused })}
+                  
+          if (label === "Route") {
+            return (
+              <TouchableOpacity
+                key={route.key}
+                onPress={() => {
+                  if (isFocused) return;
 
-              </View>
-            </TouchableOpacity>
-          );
-        }
-      })}
+                  // Navigate to the respective route
+                  navigation.navigate(route.name, route.params);
+                }}
+                style={[
+                  styles.tabBarItem,
+                  styles.middleTab,
+                  {
+                    backgroundColor: theme.colors.background 
+                  },
+                ]}
+              >
+                {avatar !== ""
+                  ? <Avatar size={60} rounded source={{uri: avatar}} />      
+                  :<Avatar size={60} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
+                }
+              </TouchableOpacity>
+            );
+          } else {
+            const isFocused = state.index === index;
+            const renderTextBelow = index !== Math.floor(state.routes.length / 2) && options.tabBarIcon; // Render text below for non-middle tabs
+            
+            // console.log('option:', options.tabBarIcon, '|', options.headerTitle );
+            
+            return (
+              <TouchableOpacity
+                key={route.key}
+                onPress={() => {
+                  navigation.navigate(route.name, route.params);
+                }}
+                style={[styles.tabBarItem]}
+              >
+                <View style={{ alignItems: "center" }}>
+                  {options && options.tabBarIcon && options?.tabBarIcon({ focused: isFocused })}
+
+                </View>
+              </TouchableOpacity>
+            );
+          }
+        })}
+      </View>
     </View>
   );
 }

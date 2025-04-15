@@ -7,15 +7,15 @@ export interface IJob {
     location: string;
     applicationDeadline: Date;
     jobSkills: IJobSkills[]
-    jobType: number; // ❓ InstantJob: 1 | RegularJob:2  
-    onSiteOrRemote: number; // ❓ Onsite: 1 | Remote: 2 | Hybrid: 3
-    occupationType: number; // ❓ FullTime: 1 | PartTime: 2 | Internship: 3
+    jobType: number; // InstantJob: 1 | RegularJob:2  
+    onSiteOrRemote: number; // Onsite: 1 | Remote: 2 | Hybrid: 3
+    occupationType: number; // FullTime: 1 | PartTime: 2 | Internship: 3
     numberofPosition: number;
     companyName: string;
     companyId: number;
     createdAt: Date;
     updatedAt?: Date;
-    status: string; // ❓ Open | Assigned | Closed 
+    status: string; // Open | Assigned | Closed 
     professionAreaId?: number;
     createAsTemplate?: boolean;
     templateName?: string;

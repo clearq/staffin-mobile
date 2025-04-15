@@ -55,7 +55,7 @@ export const theme = createTheme({
     grey0: "rgb(49, 50, 52)",
     grey3: "rgb(183, 184, 192)",
     grey5: "rgb(253, 253, 253)",
-    searchBg: "rgba(253, 253, 253, 0.7)",
+    searchBg: "rgba(253, 253, 253, 0.9)",
     white: "rgb(253, 253, 253)",
     black: "#313234",
     success: "#00C851", // Define success color
@@ -72,7 +72,7 @@ export const theme = createTheme({
     grey0: "rgb(253, 253, 253)",
     grey3: "rgb(183, 184, 192)",
     grey5:"rgb(49, 50, 52)",
-    searchBg: "rgba(131, 131, 137, 0.7)",
+    searchBg: "rgba(131, 131, 137, 0.9)",
     white: "rgb(253, 253, 253)",
     black: "rgb(49, 50, 52)",
     success: "#00C851", // Define success color

@@ -261,6 +261,7 @@ export function AuthProvider (props: any) {
     await removeItem(ONBOARDING)
     router.replace("/signin")
     
+    //console.log(AUTH_TOKEN);
     console.log('--- log out ---');
     
   }

@@ -10,6 +10,7 @@ export interface IPost {
   sharedCount?: number; // Option
   likes?: ILike[];
   comments?: IComment[];
+  grpupId?: number
 }
 
 export interface ILike {
@@ -24,3 +25,4 @@ export interface IComment {
   content: string;
   createdAt: string; // ISO 8601 format
 }
+

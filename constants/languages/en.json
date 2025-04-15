@@ -16,6 +16,7 @@
   "delete": "Delete",
   "submit": "Submit",
   "create": "Create",
+  "post": "Post",
   "success-delete-message": "Successfully deleted",
   "failed-delete-message": "Delete failed", 
   "success-update-message": "Successfully updated!",
@@ -101,6 +102,9 @@
   "create-post": "Create post",
   "create-branch": "Create branch",
   "create-job-announce": "Create job announce",
+  "create-post-placeholder": "What do you want to talk about?",
+  "no-document-message": "You haven't created your CV yet",
+  "create-cv-message": "Complete your profile and create your CV",
 
   "information": "Information",
   "activity": "Activity",

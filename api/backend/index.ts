@@ -31,6 +31,13 @@ export {
 } from "./user"
 
 export {
+  getFollower,
+  getFollowing,
+  follow,
+  unfollow,
+  getAllPosts,
+  createPost,
+  getPostDetails,
   getUserPostsAndShares,
 } from "./community"
 

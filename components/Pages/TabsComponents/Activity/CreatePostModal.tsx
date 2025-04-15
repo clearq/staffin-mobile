@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
 import { useDefaultStyles } from 'react-native-ui-datepicker';
-import { deleteExperience, getExperience, updateExperience, updateStaff } from '@/api/backend';
+import { createPost, deleteExperience, getExperience, updateExperience, updateStaff } from '@/api/backend';
 
 import { IExperience, IUser } from '@/types/UserTypes';
 
@@ -24,6 +24,8 @@ import { rgbaToHex } from '@/utils/rgba-to-hex';
 import DateCalendar from '@/components/UI/Calendar';
 import { IPost } from '@/types';
 import ModalHeader from '../ModalHeader';
+import { values } from 'lodash';
+import { useAuth } from '@/contexts/authContext';
 
 interface props {
   visible: boolean;
@@ -34,6 +36,23 @@ const CreatePostModal = ({visible, onClose}: props) => {
   const { theme } = useTheme()
     const { t } = useTranslation();
     const toast = useToast();
+    const { authState:{userId} } = useAuth()
+
+    const mutation = useMutation({
+      mutationFn: async () => {
+        return await createPost(values)
+      },
+      onSuccess: () => {
+        toast.show(`${t("success-update-message")}`, {
+          type: "success",
+        })
+      },
+      onError: () => {
+        toast.show(`${t("failed-update-message")}`, {
+          type: "error",
+        });
+      },
+     })
 
 
   return (
@@ -57,44 +76,81 @@ const CreatePostModal = ({visible, onClose}: props) => {
             automaticallyAdjustKeyboardInsets={true}
             showsVerticalScrollIndicator={false}
           >
+            <Formik
+              initialValues={{
+                content: "",
+                image: "",
+                userId: userId,
+                groupId: null
+              }}
+              onSubmit={(values: any) => {
+                mutation.mutate(values);
+              }}
+            >
+              {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => (
+                <>              
+                  <MultiTextField 
+                    placeholder={t("create-post-placeholder")}
+                    onChangeText={handleChange("content")}
+                    onBlur={handleBlur("content")}
+                    value={values.content as string}
+                    name={"content"}
+                    type={"text"}
+                  />
 
+                  <View 
+                    style={{
+                      flexDirection: 'row',
+                      gap: theme.spacing.md,
+                      justifyContent: 'flex-end'
+                    }}
+                  >
+                    <TouchableOpacity>
+                      <MaterialCommunityIcons name='image-outline' size={24} color={theme.colors.divider} />
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity>
+                      <MaterialCommunityIcons name='account-group' size={24} color={theme.colors.divider} />
+                    </TouchableOpacity>
+                  </View>
 
-            <Text>Create new post</Text>
+                  {/* Button Group */}
+                  <View
+                  style={{
+                    ...pageStyle.buttonGroup
+                  }}
+                  >            
+                    <Button
+                      title={`${t("cancel")}`}
+                      onPress={() => {
+                        onClose()
+                      }}
+                      size='md'
+                      type='clear'
+                      titleStyle={{ ...pageStyle.button16 }}
+                      radius={"sm"}
+                      containerStyle={{
+                        ...pageStyle.buttonContainer,
+                        borderColor: theme.colors.primary,
+                      }}
+                    />                      
 
-            {/* Button Group */}
-            <View
-            style={{
-              ...pageStyle.buttonGroup
-            }}
-            >            
-              <Button
-                title={`${t("cancel")}`}
-                onPress={() => {
-                  onClose()
-                }}
-                size='md'
-                type='clear'
-                titleStyle={{ ...pageStyle.button16 }}
-                radius={"sm"}
-                containerStyle={{
-                  ...pageStyle.buttonContainer,
-                  borderColor: theme.colors.primary,
-                }}
-              />                      
-
-              <Button
-                title={`${t("save")}`}
-                onPress={() => {}}
-                size='md'
-                color='primary'
-                titleStyle={{ ...pageStyle.button16 }}
-                radius={"sm"}
-                containerStyle={{
-                  ...pageStyle.buttonContainer,
-                  borderColor: theme.colors.primary,      
-                }}
-              />
-            </View>
+                    <Button
+                      title={`${t("post")}`}
+                      onPress={() => {}}
+                      size='md'
+                      color='primary'
+                      titleStyle={{ ...pageStyle.button16 }}
+                      radius={"sm"}
+                      containerStyle={{
+                        ...pageStyle.buttonContainer,
+                        borderColor: theme.colors.primary,      
+                      }}
+                    />
+                  </View>
+                </>
+              )}
+            </Formik>
           </ScrollView>
         </View>
       </SafeAreaView>

@@ -225,10 +225,7 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
               <MaterialCommunityIcons 
                 name='pencil' 
                 size={24}
-                color={ theme.mode === 'light'
-                  ? theme.colors.grey3
-                  : theme.colors.white
-                }
+                color={theme.colors.grey3}
               />
             </TouchableOpacity>)}
         </View>

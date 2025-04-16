@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
-import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
 import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
@@ -36,6 +35,7 @@ import EmptyItemMessage from '../EmptyItemMessage';
 import { useAuth } from '@/contexts/authContext';
 import { useRouter } from 'expo-router';
 import CreatePostModal from '../Activity/CreatePostModal';
+import ProfileHeader from '../ProfileHeader';
 
 
 interface props {
@@ -52,7 +52,6 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const toast = useToast();
   const router = useRouter()
   const { authState, setAuthState } = useAuth()
-  const [avatar, setAvatar] = useState("")
   
 
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
@@ -72,49 +71,6 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
   const [openAddLanguageDialog, setOpenAddLanguageDialog] = useState<boolean>(false)
 
 
-  const handleImageUpdate = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes:['images'],
-      allowsEditing: true,
-      quality: 1,
-    });  
-    
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      
-      const file = result.assets[0];
-      const userId = user.id;
-      const contentFolder = "profile";
-      const key = `${userId}_${file.fileName}`;
-      
-      try {  
-        let token = await getItem(CDN_TOKEN) || (await autoLoginToCDN());
-            
-        // CDN
-        await uploadContentFile(key, file, token, userId, contentFolder)
-        console.log("File uploaded successfully.");
-        
-        // databse
-        await updateUserProfileImage(key);
-
-        setAuthState((prev) => ({
-          ...prev,
-          profileImage: key,
-        }))
-        
-        toast.show(`${t("success-update-message")}`, {
-          type: "success"
-        })
-
-        refetch()
-        
-      } catch (error) {
-        toast.show(`${t("failed-update-message")}`, {
-          type: "error",
-        });
-      } 
-    }
-  }
-    
   const showAlert = (id:any) =>
     Alert.alert('Alert Title', 'My Alert Msg', [
       {
@@ -148,17 +104,6 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
     }
   }
 
-  useEffect(() => {
-    const fetchUrl = async () =>{
-      // console.log('staff image:', user.profileImage, user.id);
-      const url = await fetchImageFromCDN(user)
-      setAvatar(url)
-    }
-    if(user?.profileImage) {
-      fetchUrl()
-    }
-  },[user?.profileImage])
-  
 
   return (
     <View
@@ -168,68 +113,12 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
       }}
     >
       {/* header */}
-      <View
-        style={{
-          ...styles.headerContainer,
-          backgroundColor: theme.colors.primary
-        }}
-      >
-
-        <View
-          style={{
-            ...styles.headerTextContainer,
-            backgroundColor: theme.colors.searchBg,
-          }}
-        >
-          <Text
-            style={{
-              ...styles.headerText,
-              ...pageStyle.headline01,
-              color: theme.colors.grey0
-            }}
-          >
-            {`${user?.firstName} ${user?.lastName}`}
-          </Text>
-
-          <Text
-            style={{
-              ...styles.headerText,
-              ...pageStyle.headline03,
-              color: theme.colors.grey0
-            }}
-          >
-            {`${user?.title}`}
-          </Text>
-
-        </View>
+      <ProfileHeader 
+        user={user}
+        showEditButton={showEditButton}
+        refetch={refetch}
+      />
       
-        <View
-          style={{
-            ...styles.avatarContainer,
-            backgroundColor: theme.colors.background
-          }}
-        >
-          {avatar !== "" 
-            ? <Avatar size={80} rounded source={{uri: avatar }} />      
-            :<Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-          }
-
-          {showEditButton && (
-            <TouchableOpacity
-              style={{
-                ...styles.imageEditButton,
-                backgroundColor: theme.colors.searchBg
-              }}
-              onPress={handleImageUpdate}
-            >
-              <MaterialCommunityIcons 
-                name='pencil' 
-                size={24}
-                color={theme.colors.grey3}
-              />
-            </TouchableOpacity>)}
-        </View>
-      </View>
 
       {/* Main */}
       <ProfileItemContainer

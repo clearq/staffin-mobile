@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/authContext";
 import { fetchImageFromCDN } from "@/utils/CDN-action";
 import { useQuery } from "@tanstack/react-query";
 import { getUserById, getUserPostsAndShares } from "@/api/backend";
+import { ProfileAvatar } from "@/components/ProfileAvatar";
 
 
 const isIOS = Platform.OS === "ios";
@@ -35,19 +36,19 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
       enabled: !!userId,
     });
  
-    useEffect(() => {
-      const fetchUrl = async () =>{
-        // console.log('staff image:', user.profileImage, user.id);
-        const url = await fetchImageFromCDN(user)
-        setAvatar(url)
-      }
-      if(user?.profileImage) {
-        fetchUrl()
-      }
-      if(isLoading && !userId) {
-        setAvatar("")
-      }
-    },[user?.profileImage])
+    // useEffect(() => {
+    //   const fetchUrl = async () =>{
+    //     // console.log('staff image:', user.profileImage, user.id);
+    //     const url = await fetchImageFromCDN(user)
+    //     setAvatar(url)
+    //   }
+    //   if(user?.profileImage) {
+    //     fetchUrl()
+    //   }
+    //   if(isLoading && !userId) {
+    //     setAvatar("")
+    //   }
+    // },[user?.profileImage])
 
 
   return (
@@ -89,10 +90,15 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
                   },
                 ]}
               >
-                {avatar !== ""
+                <ProfileAvatar 
+                  user={user}
+                  size={60}
+                  handleUpdate={userRefetch}
+                />
+                {/* {avatar !== ""
                   ? <Avatar size={60} rounded source={{uri: avatar}} />      
                   :<Avatar size={60} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-                }
+                } */}
               </TouchableOpacity>
             );
           } else {

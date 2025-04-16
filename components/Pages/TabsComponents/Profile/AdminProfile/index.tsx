@@ -64,7 +64,7 @@ const AdminProfileIndex = ({user, showEditButton, post, refetch}: props) => {
           }}
           style={{
             ...styles.switch,
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.secondary,
           }}
         >
 

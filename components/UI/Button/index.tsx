@@ -2,6 +2,7 @@ import React from "react";
 import { ActivityIndicator } from "react-native";
 import { Button as ButtonBase } from "@rneui/themed";
 import { theme } from "@/constants/Theme";
+import pageStyle from "@/constants/Styles";
 
 interface PropsButton {
   title: string;
@@ -33,9 +34,9 @@ export default function Button({ title, onPress, titleStyle, buttonStyle, contai
       color={color}
       radius={radius}
       type={type}
-      titleStyle={titleStyle}
+      titleStyle={{...titleStyle, ...pageStyle.button16}}
       buttonStyle={{...buttonStyle, borderRadius: theme.spacing?.xs}}
-      containerStyle={containerStyle}
+      containerStyle={{...containerStyle}}
       disabled={disabled}
       loading={loading}
       // Replace the icon with a spinner if loading, otherwise show the provided icon

@@ -26,6 +26,7 @@ import { IPost } from '@/types';
 import ModalHeader from '../ModalHeader';
 import { values } from 'lodash';
 import { useAuth } from '@/contexts/authContext';
+import { MessageModal } from '@/components/Modal/MessageModal';
 
 interface props {
   visible: boolean;
@@ -34,32 +35,35 @@ interface props {
 
 const CreatePostModal = ({visible, onClose}: props) => {
   const { theme } = useTheme()
-    const { t } = useTranslation();
-    const toast = useToast();
-    const { authState:{userId} } = useAuth()
+  const { t } = useTranslation();
+  const toast = useToast();
+  const { authState:{userId, userData} } = useAuth()
+  const [isDisabled, setIsDisabled] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
 
-    const mutation = useMutation({
-      mutationFn: async () => {
-        return await createPost(values)
-      },
-      onSuccess: () => {
-        toast.show(`${t("success-update-message")}`, {
-          type: "success",
-        })
-      },
-      onError: () => {
-        toast.show(`${t("failed-update-message")}`, {
-          type: "error",
-        });
-      },
-     })
+  const mutation = useMutation({
+    mutationFn: async () => {
+      return await createPost(values)
+    },
+    onSuccess: () => {
+      toast.show(`${t("success-update-message")}`, {
+        type: "success",
+      })
+    },
+    onError: () => {
+      toast.show(`${t("failed-update-message")}`, {
+        type: "error",
+      });
+    },
+  })
+ 
 
 
   return (
     <Modal
       visible={visible}
     >
-      <ModalHeader title={`${t("edit")} ${t("experience")}`}/>
+      <ModalHeader title={`${t("create-post")}`}/>
       <SafeAreaView
         style={{
           flex: 1,
@@ -72,10 +76,12 @@ const CreatePostModal = ({visible, onClose}: props) => {
             justifyContent: 'center',
           }}
         >
+
           <ScrollView
             automaticallyAdjustKeyboardInsets={true}
             showsVerticalScrollIndicator={false}
           >
+
             <Formik
               initialValues={{
                 content: "",
@@ -88,7 +94,19 @@ const CreatePostModal = ({visible, onClose}: props) => {
               }}
             >
               {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => (
-                <>              
+                <>  
+                  {isDisabled && 
+                    <MessageModal 
+                      visible={openModal}
+                      onClose={() => setOpenModal(!openModal)}
+                    />
+                  }
+
+                  <View style={{flexDirection: 'row', gap: theme.spacing.md, alignItems: 'center', marginBottom: theme.spacing.sm,}}>
+                    <View style={{width: 40, height: 40, borderRadius: 100, backgroundColor: theme.colors.grey3}} />
+                    <Text style={{...pageStyle.headline03, color: theme.colors.grey0}}>FirstName LastName</Text>
+                  </View>    
+                                    
                   <MultiTextField 
                     placeholder={t("create-post-placeholder")}
                     onChangeText={handleChange("content")}
@@ -96,6 +114,14 @@ const CreatePostModal = ({visible, onClose}: props) => {
                     value={values.content as string}
                     name={"content"}
                     type={"text"}
+                    readonly={isDisabled}
+                    onPressIn={() => {
+                      if (!userData?.firstName && !userData?.lastName) {
+                        setIsDisabled(true)
+                        setOpenModal(true)
+                        console.log(isDisabled, openModal);  
+                     }} 
+                    }
                   />
 
                   <View 
@@ -144,13 +170,15 @@ const CreatePostModal = ({visible, onClose}: props) => {
                       radius={"sm"}
                       containerStyle={{
                         ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,      
+                        borderColor: isDisabled ? theme.colors.disabled : theme.colors.primary,      
                       }}
+                      disabled= {isDisabled}
                     />
                   </View>
                 </>
               )}
             </Formik>
+            
           </ScrollView>
         </View>
       </SafeAreaView>

@@ -17,36 +17,25 @@ import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
 import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
-import ProfileItemContainer from '../ProfileListContainer';
-
 import { useAuth } from '@/contexts/authContext';
-
-import AdminInformation from './Admin/information';
-import AdminActivity from './Admin/activity';
-import AdminInfoModal from './Admin/Edit/AdminInfoModal';
 import { useRouter } from 'expo-router';
 import CreatePostModal from '../Activity/CreatePostModal';
-
-
+import { ProfileAvatar } from '@/components/ProfileAvatar';
 
 interface props {
   user: IUser;
   showEditButton: boolean;
-  post: IPost[];
   refetch : () => void
 }
 
-const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
+
+const ProfileHeader = ({user, showEditButton, refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
   const router = useRouter()
-  const { authState: {userData}, setAuthState } = useAuth()
+  const { authState, setAuthState } = useAuth()
   const [avatar, setAvatar] = useState("")
-
-  const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
-  const [openCreateActivityDialog, setOpenCreateActivityDialog] = useState<boolean>(false)
-  
 
   const handleImageUpdate = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -76,7 +65,7 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
           ...prev,
           profileImage: key,
         }))
-
+        
         toast.show(`${t("success-update-message")}`, {
           type: "success"
         })
@@ -91,28 +80,9 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
     }
   }
 
-  useEffect(() => {
-    const fetchUrl = async () =>{
-      // console.log('staff image:', user.profileImage, user.id);
-      const url = await fetchImageFromCDN(user)
-      setAvatar(url)
-    }
-    if(user?.profileImage) {
-      fetchUrl()
-    }
-  },[user?.profileImage])
-
 
   return (
     <View
-      style={{
-        flexDirection:'column',
-        gap: theme.spacing.md,
-      }}
-    >
-    
-      {/* header */}
-      <View
         style={{
           ...styles.headerContainer,
           backgroundColor: theme.colors.primary
@@ -125,7 +95,6 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
             backgroundColor: theme.colors.searchBg,
           }}
         >
-
           <Text
             style={{
               ...styles.headerText,
@@ -136,8 +105,6 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
             {`${user?.firstName} ${user?.lastName}`}
           </Text>
 
-  
-          
           <Text
             style={{
               ...styles.headerText,
@@ -156,10 +123,16 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
             backgroundColor: theme.colors.background
           }}
         >
-          {avatar !== "" 
+          <ProfileAvatar 
+            user={user}
+            size={80}
+            handleUpdate={refetch}
+          />
+
+          {/* {avatar !== "" 
             ? <Avatar size={80} rounded source={{uri: avatar }} />      
-            : <Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-          }
+            :<Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
+          } */}
 
           {showEditButton && (
             <TouchableOpacity
@@ -172,110 +145,15 @@ const AdminUserProfile = ({user, showEditButton, post, refetch}: props) => {
               <MaterialCommunityIcons 
                 name='pencil' 
                 size={24}
-                color={ theme.mode === 'light'
-                  ? theme.colors.grey3
-                  : theme.colors.white
-                }
+                color={theme.colors.grey3}
               />
             </TouchableOpacity>)}
         </View>
       </View>
-
-      {/* Main */}
-      <ProfileItemContainer
-        title={t("information")}
-        children={<AdminInformation user={user} showEditButton={showEditButton} />}
-        showFooter={false}
-        showEditButton={showEditButton}
-        btnChildren={
-          <TouchableOpacity
-            style={{
-              ...styles.itemEditButton,
-              backgroundColor: theme.colors.background
-            }}
-            onPress={() => setOpenEditInfoDialog(!openEditInfoDialog)}
-          >
-            <MaterialCommunityIcons 
-              name='pencil' 
-              size={24} 
-              color={ theme.mode === 'light'
-                ? theme.colors.grey3
-                : theme.colors.white
-              }
-            />
-          </TouchableOpacity>
-        }
-      />
-
-      <ProfileItemContainer
-        title={t("activity")}
-        children={<AdminActivity post={post} />}
-        showFooter={post.length > 0}
-        showEditButton={showEditButton}
-        btnChildren={
-          <TouchableOpacity
-            style={{
-              borderRadius: theme.spacing.sm,
-              borderColor: theme.colors.primary,
-              borderWidth: 2,
-              padding: theme.spacing.sm,
-            }}
-            onPress={() => setOpenCreateActivityDialog(true)}
-          >
-            <Text
-              style={{
-                ...pageStyle.button16,
-                color: theme.colors.primary
-              }}
-            >
-              {`${t("create-post")}`}
-            </Text>
-          </TouchableOpacity>
-        }
-        footerChildren={
-          <>
-            {post.length
-              ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    router.push("/activity")
-                  }}
-                >
-                  <Text
-                    style={{
-                      ...pageStyle.button16,
-                      color: theme.colors.grey0
-                    }}
-                  >
-                    {`${t("see-all-posts")}`}
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <></>
-              )
-            }            
-          </>
-        }
-      />
-
-
-      {/* Dialog */}
-      <AdminInfoModal 
-        visible={openEditInfoDialog}
-        user={user}
-        onClose={() => setOpenEditInfoDialog(!openEditInfoDialog)}
-        handleSuccess={() => refetch()}
-      />
-
-      <CreatePostModal 
-        visible={openCreateActivityDialog}
-        onClose={() => setOpenCreateActivityDialog(!openCreateActivityDialog)}
-      />
-    </View>
   )
 }
 
-export default AdminUserProfile
+export default ProfileHeader
 
 const styles = StyleSheet.create({
   headerContainer: {

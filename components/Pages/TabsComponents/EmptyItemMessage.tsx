@@ -32,7 +32,7 @@ const EmptyItemMessage = ({onPress, message}: props) => {
           }}
           onPress={onPress}
         >
-          <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>{message}</Text>
+          <Text style={{...pageStyle.headline03, color: theme.colors.grey0}}>{message}</Text>
           <MaterialCommunityIcons name='playlist-plus' size={20} color={theme.colors.grey0} />
         </TouchableOpacity>
       </View>

@@ -49,12 +49,18 @@ export const ProfileAvatar = ({user, size, handleUpdate}:userProps) => {
   )
 }
 
-export const companyAvatar = () => {
+export const companyAvatar = ({company, size, handleUpdate}: companyProps) => {
+  const { theme } = useTheme();
+  const { authState, setAuthState } = useAuth()
   const [avatar, setAvatar] = useState("")
 
 
   return (
     <>
+      {avatar !== ""
+        ? <Avatar size={size} rounded source={{uri: avatar}} />      
+        :<Avatar size={size} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
+      }
     </>
   )
 }

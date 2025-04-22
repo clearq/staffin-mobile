@@ -129,7 +129,7 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
       <View
         style={{
           ...styles.headerContainer,
-          backgroundColor: theme.colors.secondary
+          backgroundColor: theme.colors.primary
         }}
       >
 

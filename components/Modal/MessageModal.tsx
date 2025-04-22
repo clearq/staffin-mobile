@@ -60,6 +60,7 @@ export const MessageModal = ({visible, onClose}:props) => {
                 titleStyle={{ ...pageStyle.button16 }}
                 radius={"sm"}
                 containerStyle={{
+                  ...pageStyle.button16,
                   ...pageStyle.buttonContainer,
                   borderColor: theme.colors.primary,
                 }}
@@ -72,6 +73,7 @@ export const MessageModal = ({visible, onClose}:props) => {
                 titleStyle={{ ...pageStyle.button16 }}
                 radius={"sm"}
                 containerStyle={{
+                  ...pageStyle.button16,
                   ...pageStyle.buttonContainer,
                   borderColor: theme.colors.primary,    
                 }}

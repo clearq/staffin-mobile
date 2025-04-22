@@ -27,22 +27,22 @@ const pageStyle = StyleSheet.create({
     fontSize: 16,
   },
   smText:{
-    fontFamily: "Coolvetica",
+    fontFamily: "InterRegular",
     fontSize: 14,
   },
   xsText: {
-    fontFamily: "Coolvetica",
+    fontFamily: "InterRegular",
     fontSize: 10,
   },
   inputText: {
-    fontFamily: "Coolvetica",
+    fontFamily: "InterRegular",
     fontSize: 16,
     letterSpacing: 1
   },
   inputLabel: {
-    fontFamily: "Coolvetica",
+    fontFamily: "InterSemibold",
     marginBottom: theme.spacing?.xs,
-    fontWeight: "bold",
+    fontWeight: 600,
     paddingHorizontal: theme.spacing?.xs,
   },
   inputBox: {

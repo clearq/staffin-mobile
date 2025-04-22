@@ -25,6 +25,8 @@ interface Props {
   keyboardType?: 'default' | 'number-pad' |'decimal-pad' | 'numeric' | 'email-address' | 'phone-pad' | 'url';
   multiline?: boolean;
   openDatePicker?: () => void
+  readonly?: boolean;
+  onPressIn?: () => void
 }
 
 

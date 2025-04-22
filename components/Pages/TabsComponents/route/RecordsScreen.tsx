@@ -20,6 +20,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import pageStyle from "@/constants/Styles";
 import ModalHeader from "../ModalHeader";
 import { IActiveUser, useUserType } from "@/contexts/userTypeContext";
+import { values } from "lodash";
 
 
 const screenWidth = Dimensions.get("window").width
@@ -81,6 +82,14 @@ export default function RecordsScreen() {
       value: t("activity"),
       path: "/activity",
     },
+    {
+      id: 3,
+      icon: "briefcase-account-outline", // Job announce
+      title: t("job-announce"),
+      value: t("job-announce"),
+      path: "/jobAnnounce",
+    },
+    
   ]
 
   useEffect(() => {

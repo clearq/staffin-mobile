@@ -49,23 +49,13 @@ const _layout = () => {
     return <Redirect href="/(auth)/signin" />;
   } 
 
-
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background}}>
 
-
       <Tabs
         initialRouteName={unstable_settings.initialRouteName}
-        tabBar={(props) =>(
-          <View 
-            style={{ 
-              paddingHorizontal: Sizes.fixPadding, 
-              backgroundColor: 'transparent',
-            }}
-          >
-
-            <CustomTabBar {...props} />
-          </View>
+        tabBar={(props) =>(          
+          <CustomTabBar {...props} />          
         )}
         
         screenOptions={() => ({
@@ -84,8 +74,6 @@ const _layout = () => {
             borderWidth: 0,
             shadowColor: "transparent",
           },
-          tabBarActiveTintColor: theme.colors.primary,
-          tabBarInactiveTintColor: theme.colors.grey2,
         })}
       >
         {/* Home Tab */}
@@ -98,15 +86,33 @@ const _layout = () => {
             headerTitle: "Home",
             tabBarLabel: t("home"),
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                name={focused ? "home" : "home-outline"}
-                isActive={focused}
-                size={32}
-                color={focused ? theme.colors.primary : theme.colors.white}
-              />
+              <>
+              {userData?.roleId === 3 && 
+                <TabBarIcon
+                  name={focused ? "home" : "home-outline"}
+                  isActive={focused}
+                  size={32}
+                  color={focused ? theme.colors.secondary : theme.colors.white}
+                />
+              }
+              {userData?.roleId === 1 && 
+                  <TabBarIcon
+                    name={focused ? "view-dashboard" : "view-dashboard-outline"}
+                    isActive={focused}
+                    size={32}
+                    color={focused ? theme.colors.secondary : theme.colors.white}
+                  />
+                }
+                {userData?.roleId === 2 && 
+                  <TabBarIcon
+                    name={focused ? "view-dashboard" : "view-dashboard-outline"}
+                    isActive={focused}
+                    size={32}
+                    color={focused ? theme.colors.secondary : theme.colors.white}
+                  />
+                }
+              </>
             ), 
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
@@ -121,14 +127,26 @@ const _layout = () => {
             headerTitle: "Jobs",
             tabBarLabel: t("jobs"),
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                name={focused ? "briefcase" : "briefcase-outline"}
-                isActive={focused}
-                size={30}
-                color={focused ? theme.colors.primary : theme.colors.white}
-              />
+              <>
+                {userData?.roleId === 3 && 
+                  <TabBarIcon
+                    name={focused ? "briefcase" : "briefcase-outline"}
+                    isActive={focused}
+                    size={30}
+                    color={focused ? theme.colors.secondary : theme.colors.white}
+                  />
+                }
+                {userData?.roleId === 1 &&
+                  <TabBarIcon
+                    name="table-account"
+                    isActive={focused}
+                    size={30}
+                    color={focused ? theme.colors.secondary : theme.colors.white}
+                  />
+                }
+              </>
             ),
-            headerStyle: { backgroundColor: theme.colors.searchBg },
+            //headerStyle: { backgroundColor: theme.colors.searchBg },
             headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
@@ -143,8 +161,6 @@ const _layout = () => {
             headerShown: false,
             headerTitle: t("profile"),
             tabBarLabel: "Route",
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }}
         />
@@ -158,8 +174,6 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: t("overview"),
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
@@ -173,8 +187,6 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: "My Application",
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
@@ -188,8 +200,6 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: "My Document",
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
@@ -202,8 +212,18 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: "My Document",
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
+            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+          }} 
+        />
+        
+        <Tabs.Screen 
+          name="jobAnnounce"
+          options={{
+            href: null, // Hides from the tab bar
+            // tabBarStyle: { display: "none", height: 0, width: 0, },
+            // tabBarIcon: () => null,
+            headerShown: true,
+            // headerTitle: "My Document",
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
@@ -222,11 +242,9 @@ const _layout = () => {
                 name={focused ? "account-group" : "account-group-outline"}
                 isActive={focused}
                 size={30}
-                color={focused ? theme.colors.primary : theme.colors.white}
+                color={focused ? theme.colors.secondary : theme.colors.white}
               />
             ),
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />
@@ -245,11 +263,9 @@ const _layout = () => {
                 name={focused ? "cog" : "cog-outline"}
                 isActive={focused}
                 size={30}
-                color={focused ? theme.colors.primary : theme.colors.white}
+                color={focused ? theme.colors.secondary : theme.colors.white}
               />
             ),
-            headerStyle: { backgroundColor: theme.colors.searchBg },
-            headerTitleStyle: { color: theme.colors.grey0 },
             header: () => <PageHeader data={userData} isLoading={isLoading} />,
           }} 
         />

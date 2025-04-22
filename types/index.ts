@@ -1,6 +1,7 @@
 export {
   IJob,
   IJobSkills,
+  IProfessionArea,
 } from './JobTypes'
 
 export {

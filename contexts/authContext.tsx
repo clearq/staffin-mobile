@@ -6,7 +6,7 @@ import api from "@/api/backend/config"
 
 import { useStorageState } from "@/utils/useStorageState";
 import { removeItem, setItem } from "@/utils/asyncStorage";
-import { AUTH_TOKEN, ONBOARDING, USER_ID } from "@/constants/key";
+import { AUTH_TOKEN, CDN_TOKEN, CDN_USERNAME, ONBOARDING, USER_ID } from "@/constants/key";
 import { jwtDecode } from "jwt-decode";
 
 import { IUser } from "@/types/UserTypes"
@@ -257,10 +257,12 @@ export function AuthProvider (props: any) {
     });
     setSession(null);
     await removeItem(AUTH_TOKEN);
-    await removeItem(USER_ID)
+    await removeItem(USER_ID);
+    await removeItem(CDN_TOKEN);
     await removeItem(ONBOARDING)
     router.replace("/signin")
     
+    //console.log(AUTH_TOKEN);
     console.log('--- log out ---');
     
   }

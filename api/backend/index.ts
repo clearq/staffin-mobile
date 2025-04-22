@@ -31,6 +31,13 @@ export {
 } from "./user"
 
 export {
+  getFollower,
+  getFollowing,
+  follow,
+  unfollow,
+  getAllPosts,
+  createPost,
+  getPostDetails,
   getUserPostsAndShares,
 } from "./community"
 
@@ -63,4 +70,8 @@ export {
 
 export {
   getAllJobs,
+  getArchivedJobs,
+  getAllJobsPublic,
+  getAllJobsAdmin,
+  getMatchingJobs,
 } from "./job"

@@ -80,20 +80,16 @@ const Activity = ({post}: props) => {
                 </View>
 
 
-                {p.image 
+                {p.image !== ""
                   ? <Image
                       source={{uri: p.image}} 
                       containerStyle={{ 
                         ...styles.imageSize,
-                        backgroundColor: theme.colors.disabled
                       }}
                     />
                   : <View 
                       style={{
                         ...styles.imageSize,
-                        backgroundColor: theme.colors.disabled,
-                        alignItems: 'center',
-                        justifyContent: 'center'
                       }} 
                     />
                 }

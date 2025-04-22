@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/authContext";
 import { fetchImageFromCDN } from "@/utils/CDN-action";
 import { useQuery } from "@tanstack/react-query";
 import { getUserById, getUserPostsAndShares } from "@/api/backend";
+import { ProfileAvatar } from "@/components/ProfileAvatar";
 
 
 const isIOS = Platform.OS === "ios";
@@ -35,83 +36,94 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
       enabled: !!userId,
     });
  
-    useEffect(() => {
-      const fetchUrl = async () =>{
-        // console.log('staff image:', user.profileImage, user.id);
-        const url = await fetchImageFromCDN(user)
-        setAvatar(url)
-      }
-      if(user?.profileImage) {
-        fetchUrl()
-      }
-      if(isLoading && !userId) {
-        setAvatar("")
-      }
-    },[user?.profileImage])
+    // useEffect(() => {
+    //   const fetchUrl = async () =>{
+    //     // console.log('staff image:', user.profileImage, user.id);
+    //     const url = await fetchImageFromCDN(user)
+    //     setAvatar(url)
+    //   }
+    //   if(user?.profileImage) {
+    //     fetchUrl()
+    //   }
+    //   if(isLoading && !userId) {
+    //     setAvatar("")
+    //   }
+    // },[user?.profileImage])
 
 
   return (
     <View
       style={{
-        ...styles.tabBarContainer,
-        backgroundColor: theme.colors.secondary,
-        borderColor: theme.colors.divider,
+        paddingHorizontal: Sizes.fixPadding,                                 
       }}
     >
-      
-      {state.routes.map((route: any, index: number) => {
-        const { options } = descriptors[route.key];
-        const label = options.tabBarLabel || route.name;
-
-        const isFocused = state.index === index;
+      <View
+        style={{
+          ...styles.tabBarContainer,
+          backgroundColor: theme.colors.primary,
+          borderColor: theme.colors.divider,
+        }}
+      >
         
-                
-        if (label === "Route") {
-          return (
-            <TouchableOpacity
-              key={route.key}
-              onPress={() => {
-                if (isFocused) return;
+        {state.routes.map((route: any, index: number) => {
+          const { options } = descriptors[route.key];
+          const label = options.tabBarLabel || route.name;
 
-                // Navigate to the respective route
-                navigation.navigate(route.name, route.params);
-              }}
-              style={[
-                styles.tabBarItem,
-                styles.middleTab,
-                {
-                  backgroundColor: isFocused ? theme.colors.primary :  theme.colors.background 
-                },
-              ]}
-            >
-              {avatar !== ""
-                ? <Avatar size={60} rounded source={{uri: avatar}} />      
-                :<Avatar size={60} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-              }
-            </TouchableOpacity>
-          );
-        } else {
           const isFocused = state.index === index;
-          const renderTextBelow = index !== Math.floor(state.routes.length / 2) && options.tabBarIcon; // Render text below for non-middle tabs
           
-          // console.log('option:', options.tabBarIcon, '|', options.headerTitle );
-          
-          return (
-            <TouchableOpacity
-              key={route.key}
-              onPress={() => {
-                navigation.navigate(route.name, route.params);
-              }}
-              style={[styles.tabBarItem]}
-            >
-              <View style={{ alignItems: "center" }}>
-                {options && options.tabBarIcon && options?.tabBarIcon({ focused: isFocused })}
+                  
+          if (label === "Route") {
+            return (
+              <TouchableOpacity
+                key={route.key}
+                onPress={() => {
+                  if (isFocused) return;
 
-              </View>
-            </TouchableOpacity>
-          );
-        }
-      })}
+                  // Navigate to the respective route
+                  navigation.navigate(route.name, route.params);
+                }}
+                style={[
+                  styles.tabBarItem,
+                  styles.middleTab,
+                  {
+                    backgroundColor: theme.colors.background 
+                  },
+                ]}
+              >
+                <ProfileAvatar 
+                  user={user}
+                  size={60}
+                  handleUpdate={userRefetch}
+                />
+                {/* {avatar !== ""
+                  ? <Avatar size={60} rounded source={{uri: avatar}} />      
+                  :<Avatar size={60} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
+                } */}
+              </TouchableOpacity>
+            );
+          } else {
+            const isFocused = state.index === index;
+            const renderTextBelow = index !== Math.floor(state.routes.length / 2) && options.tabBarIcon; // Render text below for non-middle tabs
+            
+            // console.log('option:', options.tabBarIcon, '|', options.headerTitle );
+            
+            return (
+              <TouchableOpacity
+                key={route.key}
+                onPress={() => {
+                  navigation.navigate(route.name, route.params);
+                }}
+                style={[styles.tabBarItem]}
+              >
+                <View style={{ alignItems: "center" }}>
+                  {options && options.tabBarIcon && options?.tabBarIcon({ focused: isFocused })}
+
+                </View>
+              </TouchableOpacity>
+            );
+          }
+        })}
+      </View>
     </View>
   );
 }
@@ -140,11 +152,13 @@ const styles = StyleSheet.create({
   tabBarItem: {
     alignItems: "center",
     justifyContent: "center",
+    transform:[{translateX: 8}],
   },
   middleTab: {
     position:'absolute',
     left:'50%',
-    transform: [{ translateX: -70/4 }],
+    right: '50%',
+    transform: [{ translateX: -16 }],
     top: "-50%",
     width: 70,
     height: 70,

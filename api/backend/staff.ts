@@ -227,15 +227,14 @@ export const generateCv = async () => {
 export const getCv = async () => {
   try {
     const response = await api.get('/Staff/Get-CV');
-    
-    if (!response || !response.data) {
-      throw new Error("No data received from API");
-    }
 
     return response.data; 
 
-  } catch (error) {
-    console.error(error)
+  } catch (error: any) {
+    if (error.response && error.response.status === 404) {
+      return null;
+    }
+    throw error;
   }
 }
 

@@ -23,7 +23,7 @@ const PageHeader = (data: any, isLoading: boolean) => {
     <View
       style={{
         width: "auto",
-        backgroundColor: theme.colors.secondary,
+        backgroundColor: theme.colors.primary,
         paddingHorizontal: Sizes.fixPadding * 1.5,
         paddingVertical: Sizes.fixPadding,
       }}

@@ -170,7 +170,7 @@ const CreateCvButton = ({onPress, pending}:props) => {
     <TouchableOpacity
       style={{
         ...styles.cvButton,
-        backgroundColor:hexToRgba(theme.colors.secondary, 0.9),
+        backgroundColor:(theme.colors.secondary),
       }}
       onPress={onPress}
     >

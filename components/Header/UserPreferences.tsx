@@ -187,7 +187,7 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
           />
 
           <View>
-            {cities.length && cities.map((city: ICity) => (
+            {cities.length > 0 && cities.map((city: ICity) => (
               <View 
                 key={city.cityId}
                 style={{

@@ -21,6 +21,7 @@
   "get-started": "Get started",
   "maybe-later": "Maybe later...",
   "next": "Next",
+  "back": "Back",
 
   "success-delete-message": "Successfully deleted",
   "failed-delete-message": "Delete failed", 

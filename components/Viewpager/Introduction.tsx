@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Modal, Image, TouchableOpacity } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { theme } from '@/constants/Theme';
 import { CheckBox, useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
@@ -29,12 +29,66 @@ interface pageProps {
   user: IUser
   handleSuccess: () => void
   onClose: () => void 
+  goToNext: () => void
+  goBack: () => void
+}
+
+interface bubbleProps {
+  children: React.ReactNode
+}
+
+interface buttonProps {
+  goToNext: () => void
+  goBack: () => void
+  onClose: () => void
+}
+
+const TalkBubble = ({children}: bubbleProps) => {
+
+  return (
+    <View style={{...styles.bubbleContainer}}>
+      <View style={{...styles.bubbleSquare, ...pageStyle.cardPrimaryColor}}>
+        
+        {children}  
+
+      </View>
+      <View style={{...styles.bubbleTriangle}} />
+    </View>
+  )
+}
+
+
+const ButtonGroup = ({goToNext, goBack, onClose, }: buttonProps) => {
+  const { theme } = useTheme()
+  const { t } = useTranslation();
+
+  return (
+    <View style={{...pageStyle.buttonGroup}}>
+
+      <Button 
+        title={t("back")}
+        containerStyle={{...pageStyle.buttonContainer, ...pageStyle.cardShadow}}
+        size='sm'
+        onPress={goBack}
+      />
+
+      <Button 
+        title={t("next")}
+        containerStyle={{...pageStyle.buttonContainer, ...pageStyle.cardShadow}}
+        size='sm'
+        color='secondary'
+        onPress={goToNext}
+      />
+    </View>
+  )
 }
 
 const Introduction = ({onClose}: Props ) => {
+  const [currentPage, setCurrentPage] = useState(0);
   const { theme } = useTheme()
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId } } = useAuth();
+  const pagerRef = useRef<PagerView>(null);
 
   const { 
     data: user, 
@@ -51,15 +105,34 @@ const Introduction = ({onClose}: Props ) => {
     enabled: !!userId,
   });
 
+  const goToNextPage = () => {
+    const nextPage = currentPage + 1;
+    pagerRef.current?.setPage(nextPage);
+    setCurrentPage(nextPage);
+    console.log('page:', currentPage);
+  };
+
+  const goBackPage = () => {
+    const previousPage = currentPage - 1;
+    pagerRef.current?.setPage(previousPage);
+    setCurrentPage(previousPage);
+    console.log('page:', currentPage);
+  }
 
   return (
     <View style={{...styles.centeredView}}>  
-      <PagerView initialPage={0} style={{...styles.pageWrapper}}>
+      <PagerView 
+        ref={pagerRef}
+        initialPage={0} 
+        style={{...styles.pageWrapper}}
+      >
 
         <View style={{...styles.page}} key="1">
           <PageOne 
             user={user}
             handleSuccess={userRefetch}
+            goToNext={goToNextPage}
+            goBack={goBackPage}
             onClose={onClose}
           />
         </View>   
@@ -68,6 +141,8 @@ const Introduction = ({onClose}: Props ) => {
           <PageTwo 
             user={user}
             handleSuccess={userRefetch}
+            goToNext={goToNextPage}
+            goBack={goBackPage}
             onClose={onClose}
           />
         </View>   
@@ -76,6 +151,8 @@ const Introduction = ({onClose}: Props ) => {
           <PageThree 
             user={user}
             handleSuccess={userRefetch}
+            goToNext={goToNextPage}
+            goBack={goBackPage}
             onClose={onClose}
           />
         </View>   
@@ -84,6 +161,8 @@ const Introduction = ({onClose}: Props ) => {
           <PageFour 
             user={user}
             handleSuccess={userRefetch}
+            goToNext={goToNextPage}
+            goBack={goBackPage}
             onClose={onClose}
           />
         </View>   
@@ -92,6 +171,8 @@ const Introduction = ({onClose}: Props ) => {
           <PageFive
             user={user}
             handleSuccess={userRefetch}
+            goToNext={goToNextPage}
+            goBack={goBackPage}
             onClose={onClose}
           />
         </View>   
@@ -100,6 +181,8 @@ const Introduction = ({onClose}: Props ) => {
           <PageSix
             user={user}
             handleSuccess={userRefetch}
+            goToNext={goToNextPage}
+            goBack={goBackPage}
             onClose={onClose}
           />
         </View>   
@@ -117,7 +200,7 @@ export default Introduction
  * @param param0 
  * @returns 
  */
-const PageOne = ({user, handleSuccess, onClose}: pageProps) => {
+const PageOne = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -137,8 +220,8 @@ const PageOne = ({user, handleSuccess, onClose}: pageProps) => {
             </View>
 
             <ButtonGroup 
-              user={user}
-              handleSuccess={() => {}}
+              goToNext={goToNext}
+              goBack={goBack}
               onClose={onClose}
             />
           </View>
@@ -155,7 +238,7 @@ const PageOne = ({user, handleSuccess, onClose}: pageProps) => {
  * @param param0 
  * @returns 
  */
-const PageTwo = ({user, handleSuccess, onClose}: pageProps) => {
+const PageTwo = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
@@ -251,8 +334,8 @@ const PageTwo = ({user, handleSuccess, onClose}: pageProps) => {
                   </View>
                   
                   <ButtonGroup 
-                    user={user}
-                    handleSuccess={() => {}}
+                    goToNext={goToNext}
+                    goBack={goBack}
                     onClose={onClose}
                   />
                 </View>
@@ -276,7 +359,7 @@ const PageTwo = ({user, handleSuccess, onClose}: pageProps) => {
  * @param param0 
  * @returns 
  */
-const PageThree = ({user, handleSuccess, onClose}: pageProps) => {
+const PageThree = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -297,8 +380,8 @@ const PageThree = ({user, handleSuccess, onClose}: pageProps) => {
             </View>
 
             <ButtonGroup 
-              user={user}
-              handleSuccess={() => {}}
+              goToNext={goToNext}
+              goBack={goBack}
               onClose={onClose}
             />
 
@@ -320,7 +403,7 @@ const PageThree = ({user, handleSuccess, onClose}: pageProps) => {
  * @param param0 
  * @returns 
  */
-const PageFour = ({user, handleSuccess, onClose}: pageProps) => {
+const PageFour = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -358,7 +441,7 @@ const PageFour = ({user, handleSuccess, onClose}: pageProps) => {
               <Cities refetch={() => {}} />
 
               <View>
-                {cities.length && cities.map((city: ICity) => (
+                {cities.length > 0 && cities.map((city: ICity) => (
                   <View 
                     key={city.cityId}
                     style={{
@@ -383,8 +466,8 @@ const PageFour = ({user, handleSuccess, onClose}: pageProps) => {
             </View>
 
             <ButtonGroup 
-              user={user}
-              handleSuccess={() => {}}
+              goToNext={goToNext}
+              goBack={goBack}
               onClose={onClose}
             />
           </View>
@@ -405,7 +488,7 @@ const PageFour = ({user, handleSuccess, onClose}: pageProps) => {
  * @param param0 
  * @returns 
  */
-const PageFive = ({user, handleSuccess, onClose}: pageProps) => {
+const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -562,8 +645,8 @@ const PageFive = ({user, handleSuccess, onClose}: pageProps) => {
             </View>
 
             <ButtonGroup 
-              user={user}
-              handleSuccess={() => {}}
+              goToNext={goToNext}
+              goBack={goBack}
               onClose={onClose}
             />
           </View>
@@ -587,7 +670,7 @@ interface bubbleProps {
  * @param param0 
  * @returns 
  */
-const PageSix = ({user, handleSuccess, onClose}: pageProps) => {
+const PageSix = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -608,7 +691,7 @@ const PageSix = ({user, handleSuccess, onClose}: pageProps) => {
 
             <Button 
               title={t("get-started")}
-              onPress={() => {}}
+              onPress={onClose}
             />
 
           </>
@@ -623,48 +706,6 @@ const PageSix = ({user, handleSuccess, onClose}: pageProps) => {
   )
 }
 
-interface bubbleProps {
-  children: React.ReactNode
-}
-
-const TalkBubble = ({children}: bubbleProps) => {
-
-  return (
-    <View style={{...styles.bubbleContainer}}>
-      <View style={{...styles.bubbleSquare, ...pageStyle.cardPrimaryColor}}>
-        
-        {children}  
-
-      </View>
-      <View style={{...styles.bubbleTriangle}} />
-    </View>
-  )
-}
-
-
-const ButtonGroup = ({user, handleSuccess, onClose}: pageProps) => {
-  const { theme } = useTheme()
-  const { t } = useTranslation();
-
-  return (
-    <View style={{...pageStyle.buttonGroup}}>
-      <Button 
-        title={t('maybe-later')}
-        containerStyle={{...pageStyle.buttonContainer, ...pageStyle.cardShadow}}
-        size='sm'
-        onPress={() => {}}
-      />
-
-      <Button 
-        title={t("next")}
-        containerStyle={{...pageStyle.buttonContainer, ...pageStyle.cardShadow}}
-        size='sm'
-        color='secondary'
-        onPress={() => {}}
-      />
-    </View>
-  )
-}
 
 
 const styles = StyleSheet.create({

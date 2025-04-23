@@ -17,7 +17,7 @@ import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { hexToRgba } from '@/utils/rgba-to-hex';
 import EditModal from './editModal';
-import ModalHeader from '../../ModalHeader';
+import ModalHeader from '../../../ModalHeader';
 
 
 interface props {

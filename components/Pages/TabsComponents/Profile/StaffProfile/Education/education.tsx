@@ -12,7 +12,7 @@ import { IEducation, IUser } from '@/types/UserTypes';
 import EditEducationModal from './editEducationModal';
 import pageStyle from '@/constants/Styles';
 import AddEducationModal from './addEducationModal';
-import EmptyItemMessage from '../../EmptyItemMessage';
+import EmptyItemMessage from '../../../EmptyItemMessage';
 
 
 interface props {

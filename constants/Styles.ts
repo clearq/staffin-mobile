@@ -37,7 +37,6 @@ const pageStyle = StyleSheet.create({
   inputText: {
     fontFamily: "InterRegular",
     fontSize: 16,
-    letterSpacing: 1
   },
   inputLabel: {
     fontFamily: "InterSemibold",
@@ -78,7 +77,7 @@ const pageStyle = StyleSheet.create({
     flex: 1,
     height: "100%",
     paddingHorizontal: 0,
-    borderWidth: 2,
+    //borderWidth: 2,
   },
   dropdown: {
     position: "absolute",
@@ -94,6 +93,20 @@ const pageStyle = StyleSheet.create({
   suggestionItem: {
     padding: theme.spacing?.sm,
   },
+  cardPrimaryColor: {
+    backgroundColor: "rgb(213, 213, 235)"
+  },
+  cardShadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  }
+
 })
 
 export default pageStyle

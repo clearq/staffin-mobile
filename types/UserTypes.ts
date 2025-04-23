@@ -57,3 +57,16 @@ export interface IRating {
   id: number,
   rating: number
 }
+
+export interface ICity {
+  cityId: number;
+  cityName: string;
+}
+
+export interface IPreference {
+  jobTypeId: number | null;
+  workplaceTypeId: number | null;
+  employmentTypeId: number | null;
+  professionAreaId: number[]
+  cityId: number[]
+}

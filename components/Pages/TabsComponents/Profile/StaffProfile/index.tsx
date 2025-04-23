@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import *as ImagePicker from 'expo-image-picker'
 import { useToast } from "react-native-toast-notifications";
 import { getItem, setItem } from '@/utils/asyncStorage';
+import { useAuth } from '@/contexts/authContext';
+import { useRouter } from 'expo-router';
 
 import { fetchImageFromCDN, getImageUrl } from '@/utils/CDN-action';
 
@@ -16,7 +18,6 @@ import pageStyle from '@/constants/Styles';
 
 import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
-import ProfileItemContainer from '../ProfileListContainer';
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
 import Information from './Information';
@@ -31,11 +32,10 @@ import AddEducationModal from './Education/addEducationModal';
 import AddSkillModal from './Edit/addSkillModal';
 import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
-import EmptyItemMessage from '../EmptyItemMessage';
-import { useAuth } from '@/contexts/authContext';
-import { useRouter } from 'expo-router';
-import CreatePostModal from '../Activity/CreatePostModal';
-import ProfileHeader from '../ProfileHeader';
+import ProfileHeader from '../../ProfileHeader';
+import ProfileItemContainer from '../../ProfileListContainer';
+import EmptyItemMessage from '../../EmptyItemMessage';
+import CreatePostModal from '../../Activity/CreatePostModal';
 
 
 interface props {

@@ -11,8 +11,8 @@ import dayjs from 'dayjs'
 import { IExperience, IUser } from '@/types/UserTypes';
 import EditExperienceModal from './editExperienceModal';
 import pageStyle from '@/constants/Styles';
-import EmptyItemMessage from '../../EmptyItemMessage';
 import AddExperienceModal from './addExperience';
+import EmptyItemMessage from '../../../EmptyItemMessage';
 
 
 interface props {

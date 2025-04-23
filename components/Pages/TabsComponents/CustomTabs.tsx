@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/authContext";
 import { fetchImageFromCDN } from "@/utils/CDN-action";
 import { useQuery } from "@tanstack/react-query";
 import { getUserById, getUserPostsAndShares } from "@/api/backend";
-import { ProfileAvatar } from "@/components/ProfileAvatar";
+import { ProfileAvatar } from "@/components/UI/ProfileAvatar";
 
 
 const isIOS = Platform.OS === "ios";

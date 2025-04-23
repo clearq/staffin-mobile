@@ -17,6 +17,7 @@ export {
   ILanguage,
   IRating,
   ISkill,
+  ICity,
 } from './UserTypes'
 
 export {

@@ -12,6 +12,7 @@ import Button from '@/components/UI/Button';
 import { MessageModal } from '../../../components/Modal/MessageModal';
 import { useQuery } from '@tanstack/react-query';
 import { getCompanyProfileUserId } from '@/api/backend';
+import StaffHome from '@/components/Pages/Home/StaffHome';
 
 
 
@@ -20,30 +21,20 @@ const Page = () => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   
-  const [userInfoMessage, setUserInfoMessage] = useState(false)
 
   const userRole = userData?.roleId
 
-  
-  useEffect(() => {
-    console.log('login:', userData?.email, userId );
-    if(userData?.firstName === "" && userData.lastName === "") {
-      setUserInfoMessage(true)
-    }
-  },[])
+
 
   return (
-    <View>
-      {userInfoMessage && 
-        <MessageModal  
-          visible={userInfoMessage} 
-          onClose={() => setUserInfoMessage(false)}
-        />
-      }
-      
+    <View>   
       {userRole === 1 && <Text>{`Admin Home ${userId}`}</Text>}
       {userRole === 2 && <Text>{`Employre Home ${userId}`}</Text>}
-      {userRole === 3 && <Text>{`Staff Home ${userId}`}</Text>}
+      {userRole === 3 && 
+      <View>
+        <StaffHome />
+      </View>
+      }
 
     </View>
   )

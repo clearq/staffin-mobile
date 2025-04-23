@@ -9,6 +9,7 @@ import { useTheme } from '@rneui/themed'
 import Button from '@/components/UI/Button'
 import pageStyle from '@/constants/Styles'
 import { useRouter } from 'expo-router'
+import Document from '@/components/Pages/TabsComponents/Profile/StaffProfile/Document'
 
 const page = () => {
   const { t } = useTranslation();
@@ -68,20 +69,6 @@ const page = () => {
     </View>
   );
 
-
-  const handleDownloadCv = async () => {
-    try {
-      downloadCv() 
-
-      toast.show(`${t("success-download-message")}`, {
-        type: "success"
-      });
-    } catch (error) {
-      toast.show(`${t("failed-download-message")}`, {
-        type: "error"
-      })
-    }
-  }
   
   return (
     <View
@@ -94,42 +81,8 @@ const page = () => {
     >
       {isLoading && <ActivityIndicator color={theme.colors.primary}/>}
 
-      <View
-        style={{
-          flexDirection:'column',
-          justifyContent: 'center',
-          gap: theme.spacing.xl *2
-        }}
-      >
-        <Image 
-          source={require('@/assets/Images/CV-Download.png')}
-          width={100}
-        />
-
-        <View
-          style={{
-            flexDirection: 'row', 
-            alignItems: 'center', 
-            gap: theme.spacing.md,
-          }}
-        >
-          <Text
-            style={{
-              ...pageStyle.button16,
-              color: theme.colors.grey0,
-            }}
-          >
-            {data.name}
-          </Text> 
-          <Button  
-            title="Download" 
-            onPress={handleDownloadCv} 
-            size='sm'
-          />
-        </View>
-
-      </View>
-
+      <Document data={data}/>
+  
     </View>
   )
 }

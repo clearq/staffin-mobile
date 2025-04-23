@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
-import EmptyItemMessage from '../../EmptyItemMessage';
+import EmptyItemMessage from '../../../EmptyItemMessage';
 
 interface props {
   post: IPost[];

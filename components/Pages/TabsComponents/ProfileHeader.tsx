@@ -20,7 +20,7 @@ import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContent
 import { useAuth } from '@/contexts/authContext';
 import { useRouter } from 'expo-router';
 import CreatePostModal from '../Activity/CreatePostModal';
-import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { ProfileAvatar } from '@/components/UI/ProfileAvatar';
 
 interface props {
   user: IUser;

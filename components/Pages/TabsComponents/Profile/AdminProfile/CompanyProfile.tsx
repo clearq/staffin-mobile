@@ -17,7 +17,6 @@ import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
 import { autoLoginToCDN, deleteStaffSkill, getAllBranches, getCompanyById, updateCompanyInformation, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 import CompanyInformation from './Company/information';
-import ProfileItemContainer from '../ProfileListContainer';
 import { useAuth } from '@/contexts/authContext';
 import CompanyAbout from './Company/about';
 import CompanyActivity from './Company/activity';
@@ -26,11 +25,11 @@ import CompanyInfoModal from './Company/Edit/CompanyInfoModal';
 import CompanyAboutModal from './Company/Edit/aboutModal';
 
 import { useRouter } from 'expo-router';
-import CreatePostModal from '../Activity/CreatePostModal';
 import BranchList from './Company/Branch/branches';
 import AddBranchModal from './Company/Branch/addBranch';
-import EditBranchModal from './Company/Branch/editBranch';
 import { useQuery } from '@tanstack/react-query';
+import ProfileItemContainer from '../../ProfileListContainer';
+import CreatePostModal from '../../Activity/CreatePostModal';
 
 
 

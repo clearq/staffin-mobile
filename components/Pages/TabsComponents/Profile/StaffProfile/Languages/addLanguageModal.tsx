@@ -15,7 +15,7 @@ import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import ModalHeader from '../../ModalHeader';
+import ModalHeader from '../../../ModalHeader';
 
 
 interface props {

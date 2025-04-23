@@ -53,3 +53,13 @@ export const getMatchingJobs = async () => {
 }
 
 // Get a list of all profession areas(categories)
+export const getProfessionAreas = async () => {
+  try {
+    const {data} = await api.get(`/Job/GetProfessionAreas`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+ 

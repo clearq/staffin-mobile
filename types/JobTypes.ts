@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface IJob {
     salary: ReactNode;
     id: number;

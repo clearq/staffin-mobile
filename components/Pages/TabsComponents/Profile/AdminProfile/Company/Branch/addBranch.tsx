@@ -3,7 +3,7 @@ import React from 'react'
 import { IBranch } from '@/types';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import ModalHeader from '../../../ModalHeader';
+import ModalHeader from '../../../../ModalHeader';
 import { theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
 import { useTheme } from '@rneui/themed';

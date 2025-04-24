@@ -16,7 +16,7 @@ import pageStyle from '@/constants/Styles';
 
 import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
-import ProfileItemContainer from '../ProfileListContainer';
+import ProfileItemContainer from '../../ProfileListContainer';
 
 import { useAuth } from '@/contexts/authContext';
 
@@ -24,8 +24,8 @@ import AdminInformation from './Admin/information';
 import AdminActivity from './Admin/activity';
 import AdminInfoModal from './Admin/Edit/AdminInfoModal';
 import { useRouter } from 'expo-router';
-import CreatePostModal from '../Activity/CreatePostModal';
-import ProfileHeader from '../ProfileHeader';
+import CreatePostModal from '../../Activity/CreatePostModal';
+import ProfileHeader from '../../ProfileHeader';
 
 
 

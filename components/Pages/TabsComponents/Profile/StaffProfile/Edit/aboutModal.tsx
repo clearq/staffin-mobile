@@ -15,7 +15,7 @@ import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { MultiTextField } from '@/components/UI/Input/TextField';
 import pageStyle from '@/constants/Styles';
-import ModalHeader from '../../ModalHeader';
+import ModalHeader from '../../../ModalHeader';
 
 interface props {
   user: IUser;

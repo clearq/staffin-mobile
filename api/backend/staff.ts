@@ -5,6 +5,7 @@ import * as Sharing from "expo-sharing";
 import { Linking } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
+import { values } from "lodash";
 
 // Update Staff
 export const updateStaff = async (values: Partial<IUser>) => {
@@ -272,5 +273,15 @@ export const downloadCv = async () => {
     };
   } catch (error) {
     console.error(error);
+  }
+}
+
+export const postNewApplication = async (values: {jobId: number}) => {
+  try {
+    const response = await api.post(`/Staff/New-Application`, values)
+
+    return response
+  } catch (error) {
+    console.error(error)
   }
 }

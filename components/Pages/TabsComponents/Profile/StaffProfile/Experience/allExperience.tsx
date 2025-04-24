@@ -13,7 +13,7 @@ import { useAuth } from '@/contexts/authContext';
 import { IExperience, IUser } from '@/types/UserTypes';
 import Button from '@/components/UI/Button';
 import EditExperienceModal from './editExperienceModal';
-import HeaderTemplate from '../../headerTemplate';
+import HeaderTemplate from '../../../headerTemplate';
 import AddExperienceModal from './addExperience';
 
 interface props {

@@ -16,7 +16,7 @@ import pageStyle from '@/constants/Styles';
 
 import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
-import ProfileItemContainer from '../ProfileListContainer';
+import ProfileItemContainer from '../../ProfileListContainer';
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
 import Information from './Information';
@@ -31,11 +31,11 @@ import AddEducationModal from './Education/addEducationModal';
 import AddSkillModal from './Edit/addSkillModal';
 import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
-import EmptyItemMessage from '../EmptyItemMessage';
+import EmptyItemMessage from '../../EmptyItemMessage';
 import { useAuth } from '@/contexts/authContext';
 import { useRouter } from 'expo-router';
-import CreatePostModal from '../Activity/CreatePostModal';
-import ProfileHeader from '../ProfileHeader';
+import CreatePostModal from '../../Activity/CreatePostModal';
+import ProfileHeader from '../../ProfileHeader';
 
 
 interface props {

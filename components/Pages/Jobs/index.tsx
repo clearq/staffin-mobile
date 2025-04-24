@@ -1,125 +1,86 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, StyleSheet, View, Modal, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { ScrollView, Text, StyleSheet, View, Modal, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import { IJob } from '@/types';
+import { postNewApplication } from '@/api/backend';
+import { useToast } from 'react-native-toast-notifications';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   job: IJob[];
 }
 
 const Jobsindex = ({ job = [] }: Props) => {
-  const [selectedJob, setSelectedJob] = useState<IJob | null>(null); // Håller det valda jobbet
-  const [isModalVisible, setModalVisible] = useState(false); // Hanterar dialogens synlighet
-  const [isLoading, setIsLoading] = useState(false); // Laddningsstatus
-  const [isApplying, setIsApplying] = useState(false); // Status för "Apply"-knappen
+  const toast = useToast();
+  const { t } = useTranslation();
+  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
-  const handlePress = async (jobId: number) => {
-    setIsLoading(true);
-    setModalVisible(true);
 
-    try {
-      console.log('Sending jobId:', jobId);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+  });
 
-      const response = await fetch(`https://staffin.clearq.se/api/Job/GetJob-Id?id=${jobId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzYW1pYWxhYmRhbGFoQHlhaG9vLmNvbSIsInVzZXJJZCI6IjIwMTA5Iiwicm9sZSI6IlN0YWZmIiwiZXhwIjoxNzQ1MzUyMzM5fQ.x1EBB8vOg4R-oh7O5JIMKYSGfhc_8UcBUr9QuDBS-AEhiBTfDYO6fEAy_pCZY1UytC97oFChH-WTu-aokZVVyQ', // Ersätt med rätt token
-        },
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Response:', response.status, errorText);
-        let errorMessage = 'Kunde inte hämta jobbdetaljer.';
-        if (response.status === 404) {
-          errorMessage = 'Jobb inte hittat.';
-        } else if (response.status === 500) {
-          errorMessage = 'Serverfel. Försök igen senare.';
-        }
-        throw new Error(errorMessage);
-      }
-
-      const data = await response.json();
-      setSelectedJob(data);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('API Error:', error.message);
-        Alert.alert('Fel', `Kunde inte hämta jobbdetaljer. Error: ${error.message}`);
-      } else {
-        console.error('Unknown error:', error);
-        Alert.alert('Fel', 'Ett okänt fel inträffade.');
-      }
-      closeModal();
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  
+  const isFormValid = Object.values(formData).every((value) => value.trim() !== '');
 
   const handleApply = async () => {
     if (!selectedJob) return;
 
-    setIsApplying(true);
     try {
-      console.log('Applying for jobId:', selectedJob.id);
-
-      const response = await fetch('https://staffin.clearq.se/api/Staff/New-Application', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzYW1pYWxhYmRhbGFoQHlhaG9vLmNvbSIsInVzZXJJZCI6IjIwMTA5Iiwicm9sZSI6IlN0YWZmIiwiZXhwIjoxNzQ1MzUyMzM5fQ.x1EBB8vOg4R-oh7O5JIMKYSGfhc_8UcBUr9QuDBS-AEhiBTfDYO6fEAy_pCZY1UytC97oFChH-WTu-aokZVVyQ', // Ersätt med rätt token
-        },
-        body: JSON.stringify({ jobId: selectedJob.id }),
+      setIsApplying(true);
+      const response = await postNewApplication({
+        jobId: selectedJob.id,
+        ...formData,
       });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Response:', response.status, errorText);
-        let errorMessage = 'Kunde inte skicka ansökan.';
-        if (response.status === 400) {
-          errorMessage = 'Felaktig förfrågan.';
-        } else if (response.status === 500) {
-          errorMessage = 'Serverfel. Försök igen senare.';
-        }
-        throw new Error(errorMessage);
-      }
-
-      Alert.alert('Ansökan skickad', 'Din ansökan har skickats framgångsrikt.');
+      toast.show(`${t('success-update-message')}`, { type: 'success' });
+      closeModal();
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('API Error:', error.message);
-        Alert.alert('Fel', `Kunde inte skicka ansökan. Error: ${error.message}`);
-      } else {
-        console.error('Unknown error:', error);
-        Alert.alert('Fel', 'Ett okänt fel inträffade.');
-      }
+      toast.show(`${t('failed-update-message')}`, { type: 'error' });
     } finally {
       setIsApplying(false);
     }
   };
 
+  const handlePress = (item: IJob) => {
+    setSelectedJob(item);
+    setModalVisible(true);
+    setShowForm(false); 
+  };
+
   const closeModal = () => {
-    setSelectedJob(null); // Rensar det valda jobbet
-    setModalVisible(false); // Dölj dialogen
+    setSelectedJob(null);
+    setModalVisible(false);
+    setFormData({
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      email: '',
+    });
+    setShowForm(false);
   };
 
   return (
     <ScrollView style={{ padding: 14 }}>
       {job?.length > 0 &&
-        job.map((item: IJob) => (
+        job.map((item) => (
           <Card key={item.id} style={{ marginBottom: 15 }}>
             <Card.Content>
-              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.modalTitle}>{item.title}</Text>
               <Text>{item.description}</Text>
               <Text>{item.location}</Text>
             </Card.Content>
             <Card.Actions>
-              <Button onPress={() => handlePress(item.id)}>View More</Button>
+              <Button onPress={() => handlePress(item)}>View More</Button>
             </Card.Actions>
           </Card>
         ))}
 
-      {/* Dialogrutan */}
       <Modal
         visible={isModalVisible}
         animationType="slide"
@@ -128,44 +89,72 @@ const Jobsindex = ({ job = [] }: Props) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            {isLoading ? (
-              <ActivityIndicator size="large" color="#6200ee" />
-            ) : selectedJob ? (
+            {selectedJob && !showForm ? (
               <>
                 <Text style={styles.modalTitle}>{selectedJob.title}</Text>
                 <Text>Beskrivning: {selectedJob.description}</Text>
-                <Text>
-                  Publicerad: {new Intl.DateTimeFormat('sv-SE', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  }).format(new Date(selectedJob.startDate))}
-                </Text>
-                <Text>
-                  Sista ansökningsdag: {new Intl.DateTimeFormat('sv-SE', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  }).format(new Date(selectedJob.endDate))}
-                </Text>
                 <Text>Plats: {selectedJob.location}</Text>
                 <Text>Lön: {selectedJob.salary}</Text>
                 <Button
                   mode="contained"
-                  onPress={handleApply}
-                  loading={isApplying}
-                  disabled={isApplying}
+                  onPress={() => setShowForm(true)}
                   style={styles.applyButton}
                 >
                   Apply
                 </Button>
+                <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              </>
+            ) : selectedJob && showForm ? (
+              <>
+                <Text style={styles.modalTitle}>Apply for {selectedJob.title}</Text>
+                <Text style={styles.label}>First Name</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="First Name"
+                  value={formData.firstName}
+                  onChangeText={(text) => setFormData({ ...formData, firstName: text })}
+                />
+                <Text style={styles.label}>Last Name</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Last Name"
+                  value={formData.lastName}
+                  onChangeText={(text) => setFormData({ ...formData, lastName: text })}
+                />
+                <Text style={styles.label}>Phone Number</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Phone Number"
+                  keyboardType="numeric"
+                  value={formData.phoneNumber}
+                  onChangeText={(text) => setFormData({ ...formData, phoneNumber: text })}
+                />
+                 <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                  value={formData.email}
+                  onChangeText={(text) => setFormData({ ...formData, email: text })}
+                />
+                <Button
+                  mode="contained"
+                  onPress={handleApply}
+                  loading={isApplying}
+                  disabled={!isFormValid || isApplying}
+                  style={[styles.applyButton, !isFormValid && styles.disabledButton]}
+                >
+                  Apply
+                </Button>
+                <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
               </>
             ) : (
-              <Text>Ingen data tillgänglig</Text>
+              <Text>No job selected.</Text>
             )}
-            <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-              <Text style={styles.closeButtonText}>Stäng</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -174,11 +163,6 @@ const Jobsindex = ({ job = [] }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -186,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    width: '80%',
+    width: '90%',
     backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
@@ -196,12 +180,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
   closeButton: {
-    marginTop: 20,
+    marginTop: 10,
     alignSelf: 'center',
     backgroundColor: '#6200ee',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    padding: 10,
     borderRadius: 5,
   },
   closeButtonText: {
@@ -209,7 +199,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   applyButton: {
-    marginTop: 20,
+    marginTop: 10,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#333', 
   },
 });
 

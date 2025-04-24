@@ -64,9 +64,7 @@ export interface ICity {
 }
 
 export interface IPreference {
-  jobTypeId: number | null;
-  workplaceTypeId: number | null;
-  employmentTypeId: number | null;
-  professionAreaId: number[]
-  cityId: number[]
+  jobTypeIds: number[];
+  workplaceTypeIds: number[];
+  employmentTypeIds: number[];
 }

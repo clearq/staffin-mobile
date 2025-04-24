@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import PostTemplate from '@/components/UI/PostTemplate'
 import MachingJobsTemplate from '@/components/UI/MachingJobsTemplate'
@@ -10,49 +10,50 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/authContext'
 
 const StaffHome = () => {
-  const [openIntroduction, setOpenIntroduction] = useState(true)
+  const [openIntroduction, setOpenIntroduction] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { theme } = useTheme()
   const { t } = useTranslation();
   
-  const { authState:{ userData, userId } } = useAuth();
+  const { authState:{ userData, userId, token }, isLoading } = useAuth();
 
-  const {} = useQuery({
-    queryKey: ["user-prefere"],
+  const {data: matchJob = [], refetch: matchJobRefetch} = useQuery({
+    queryKey: ["matching-jobs"],
     queryFn: async () => {
-      const response = await getUserPreferences()
-
-      return response
-    }
-  })
-
-  const closeIntroduction = () => {
-    console.log('close introduction');
-    
-  }
-  
-  const {data: matchingJobs = [], refetch, isLoading } = useQuery({
-    queryKey: ["matching-job"],
-    queryFn: async () => {
-      const response = await getMatchingJobs()
-      
-      return response
+      return await getMatchingJobs()
     }
   })
 
   useEffect(() => {
-    
+    if(!userData) {
+      setLoading(true)
+    }
+
+    if(
+      userData?.firstName === "" ||
+      userData?.lastName === "" ||
+      matchJob?.length < 0
+    ) {
+      setOpenIntroduction(true)
+    }
+
   },[])
 
   return (
     <View>
-      <Introduction 
-        onClose={closeIntroduction}
-      />
+      {isLoading || loading &&  <ActivityIndicator color={theme.colors.primary} /> }     
+        <>
+        {openIntroduction && 
+          <Introduction 
+            onClose={() => setOpenIntroduction(!openIntroduction)}
+          />
+        }
 
-      <ScrollView>  
-        <PostTemplate />
-        <MachingJobsTemplate />
-      </ScrollView>
+          <ScrollView>  
+            <PostTemplate />
+            <MachingJobsTemplate />
+          </ScrollView>
+        </>  
     </View>
   )
 }

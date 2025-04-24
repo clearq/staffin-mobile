@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Modal, SafeAreaView, StyleSheet, ScrollView, Alert, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { addPreferredCity, getAllCities, getProfessionAreas } from '@/api/backend'
+import { addPreferredCity, getAllCities, getProfessionAreas, getUserPreferences, updateProfessionArea } from '@/api/backend'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { useToast } from 'react-native-toast-notifications'
@@ -20,6 +20,17 @@ const ProfessionArea  = ({refetch}: props) => {
 
   const [showDropdown, setShowDropdown] = useState(false)
   const [ProfessionArea, setProfessisonArea] = useState('')
+  const [selectedProfessionAreas, setSelectedProfessionAreas] = useState<number[]>([]);
+
+  const {data: preference = [], refetch: preferenceRefetch} = useQuery({
+    queryKey: ["user-preferences"],
+    queryFn: async () => {
+      const response = await getUserPreferences()
+      //console.log('res', response);
+      
+      return response
+    }
+  })
 
   const {data = []} = useQuery({
     queryKey: ["professionArea-list"],
@@ -29,19 +40,23 @@ const ProfessionArea  = ({refetch}: props) => {
   })
 
   const handleAddPreferences = async (id: number) => {
-    try {
-      
-      // add action for adding profession area 
-      //const response = await (id)
-      refetch()
+    // If already selected, ignore
+    if (selectedProfessionAreas.includes(id)) return;
 
-      //return response
+    const updated = [...preference?.professionAreaId, ...selectedProfessionAreas, id];
+    setSelectedProfessionAreas(updated);
+
+    console.log('updated:', updated);
+    
+    try {
+      await updateProfessionArea(updated);
+      refetch();
+      preferenceRefetch()
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
- 
 
   return (
 
@@ -60,7 +75,7 @@ const ProfessionArea  = ({refetch}: props) => {
           placeholderTextColor={theme.colors.divider}
           value={ProfessionArea}
           style={{ width: '80%', ...pageStyle.inputText, color: theme.colors.grey0}}
-          onChangeText={(text: string) => setProfessisonArea(text)}
+          onChangeText={(text) => setProfessisonArea(text)}
           onBlur={() => {}}
         />
 

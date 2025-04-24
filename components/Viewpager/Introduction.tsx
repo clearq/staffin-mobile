@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Modal, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Modal, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { theme } from '@/constants/Theme';
@@ -10,7 +10,7 @@ import pageStyle from '@/constants/Styles';
 import { TextField } from '../UI/Input/TextField';
 import { round, values } from 'lodash';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { deletePreferredCity, getPreferredCities, getUserById, updateStaff } from '@/api/backend';
+import { deletePreferredCity, getPreferredCities, getProfessionAreas, getUserById, getUserPreferences, setUserPreferences, updateStaff } from '@/api/backend';
 import toast from 'react-native-toast-notifications/lib/typescript/toast';
 import { useToast } from 'react-native-toast-notifications';
 import { Formik } from 'formik';
@@ -19,6 +19,7 @@ import Button from '../UI/Button';
 import Cities from '../Dropdown/Cities';
 import ProfessionArea from '../Dropdown/ProfessionArea';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 
 interface Props {
@@ -58,7 +59,7 @@ const TalkBubble = ({children}: bubbleProps) => {
 }
 
 
-const ButtonGroup = ({goToNext, goBack, onClose, }: buttonProps) => {
+const ButtonGroup = ({goToNext, goBack, onClose}: buttonProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -100,7 +101,7 @@ const Introduction = ({onClose}: Props ) => {
     queryFn: async () => {
       const response = await getUserById(userId!)      
 
-      return response;
+      return response; 
     },
     enabled: !!userId,
   });
@@ -109,18 +110,22 @@ const Introduction = ({onClose}: Props ) => {
     const nextPage = currentPage + 1;
     pagerRef.current?.setPage(nextPage);
     setCurrentPage(nextPage);
-    console.log('page:', currentPage);
+    // console.log('page:', currentPage);
   };
 
   const goBackPage = () => {
     const previousPage = currentPage - 1;
     pagerRef.current?.setPage(previousPage);
     setCurrentPage(previousPage);
-    console.log('page:', currentPage);
+    //console.log('page:', currentPage);
   }
 
   return (
     <View style={{...styles.centeredView}}>  
+      {!userData && isLoading &&
+        <ActivityIndicator />
+      }
+
       <PagerView 
         ref={pagerRef}
         initialPage={0} 
@@ -278,7 +283,18 @@ const PageTwo = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
                 lastName: user?.lastName || "",
               }}
               onSubmit={(values: IUser) => {
-                mutation.mutate(values);
+                const firstName = values.firstName?.trim() || "";
+                const lastName = values.lastName?.trim() || "";
+
+                const firstNameChanged = (user?.firstName?.trim() || "") !== firstName;
+                const lastNameChanged = (user?.lastName?.trim() || "") !== lastName;
+
+                if (firstNameChanged || lastNameChanged) {
+                  mutation.mutate(values);
+                } 
+                
+                goToNext(); 
+              
               }}
             >
               {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => (
@@ -299,7 +315,7 @@ const PageTwo = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
                         {t("first-name")}
                       </Text>
                       <TextField
-                        placeholder={t("first-name")}
+                        placeholder={user?.firstName ? user?.firstName : t("firstName")}
                         onChangeText={handleChange("firstName")}
                         onBlur={handleBlur("firstName")}
                         value={values.firstName as string}
@@ -322,7 +338,7 @@ const PageTwo = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
                         {t("last-name")}
                       </Text>
                       <TextField
-                        placeholder={t("last-name")}
+                        placeholder={user?.lastName ? user?.lastName : t("last-name")}
                         onChangeText={handleChange("lastName")}
                         onBlur={handleBlur("lastName")}
                         value={values.lastName as string}
@@ -334,7 +350,7 @@ const PageTwo = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
                   </View>
                   
                   <ButtonGroup 
-                    goToNext={goToNext}
+                    goToNext={handleSubmit}
                     goBack={goBack}
                     onClose={onClose}
                   />
@@ -363,6 +379,31 @@ const PageThree = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) 
   const { theme } = useTheme()
   const { t } = useTranslation();
 
+  const {data: preference = [], refetch: preferenceRefetch} = useQuery({
+    queryKey: ["user-preferences"],
+    queryFn: async () => {
+      const response = await getUserPreferences()
+      // console.log('res', response.professionAreaId);
+      
+      return response
+    }
+  })
+
+  const { data: allProfessions = [] } = useQuery({
+    queryKey: ["all-profession-areas"],
+    queryFn: getProfessionAreas,
+  });
+
+  const preferredProfessionAreas = useMemo(() => {
+    if (!preference.professionAreaId || !Array.isArray(allProfessions)) return [];
+  
+    return allProfessions.filter((area) =>
+      preference.professionAreaId.includes(area.id)
+    );
+  }, [preference, allProfessions]);
+
+  
+
   return (
     <View style={{...styles.pageItemContainer}}>
 
@@ -376,7 +417,24 @@ const PageThree = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) 
             </Text>
 
             <View>
-              <ProfessionArea refetch={() => {}} />
+              <ProfessionArea refetch={preferenceRefetch} />
+              <View>
+                {preferredProfessionAreas.length > 0 && preferredProfessionAreas.map((item, index: number) => (
+                  <View 
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      gap: theme.spacing.sm,
+                      alignItems: 'center'
+                    }}
+                  >
+                  <Text style={{...pageStyle.inputText, color: theme.colors.grey0}}>
+                    {item.name}
+                  </Text>
+
+                  </View>
+                ))}
+              </View> 
             </View>
 
             <ButtonGroup 
@@ -406,26 +464,30 @@ const PageThree = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) 
 const PageFour = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
+  const { isLoading, authState:{ userData, userId } } = useAuth();
 
   const {data: cities = [], refetch: cityRefetch } = useQuery({
     queryKey: ["cities"],
     queryFn: async () => {
-      const response = await getPreferredCities()
-      // console.log(response);
-      
-      return response
+      if (!userId) {
+        console.warn("No userId — skipping fetch");
+        return [];
+      }
+  
+      const response = await getPreferredCities();
+      return response ?? []; 
     }
   }) 
 
   const handleDeletePreferredCity = async (id: number) => {
-      try {
-        await deletePreferredCity(id)
-        cityRefetch()
-  
-      } catch (error) {
-        console.error(error)
-      }
+    try {
+      await deletePreferredCity(id)
+      cityRefetch()
+
+    } catch (error) {
+      console.error(error)
     }
+  }
 
   return (
     <View style={{...styles.pageItemContainer}}>
@@ -438,7 +500,7 @@ const PageFour = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
             </Text>
 
             <View>
-              <Cities refetch={() => {}} />
+              <Cities refetch={cityRefetch} />
 
               <View>
                 {cities.length > 0 && cities.map((city: ICity) => (
@@ -492,9 +554,25 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
   const { theme } = useTheme()
   const { t } = useTranslation();
 
-  const [selectedEmploymentId, setSelectedEmploymentId] = useState(0)
-  const [selectedJobId, setSelectedJobId] = useState(0)
-  const [selectedWorkPlaceId, setSelectedWorkPlaceId] = useState(0)
+  const [selectedEmploymentId, setSelectedEmploymentId] = useState<number[]>([])
+  const [selectedJobId, setSelectedJobId] = useState<number[]>([])
+  const [selectedWorkPlaceId, setSelectedWorkPlaceId] = useState<number[]>([])
+
+  const {data: preference = [], refetch: preferenceRefetch} = useQuery({
+    queryKey: ["user-preferences"],
+    queryFn: async () => {
+      const response = await getUserPreferences()
+      //console.log('res', response);
+      
+      return response
+    }
+  })
+
+  useEffect(() => {
+    setSelectedEmploymentId(preference.employmentTypeId)
+    setSelectedJobId(preference.jobTypeId)
+    setSelectedWorkPlaceId(preference.workplaceTypeId)
+  }, [])
 
   const employmentTypeRadio = useMemo(() => ([
     {
@@ -556,6 +634,19 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
     }
   ]),[])
 
+  const handleSubmit = async () => {
+    const values = {
+      jobTypeIds: selectedJobId,
+      employmentTypeIds: selectedEmploymentId,
+      workplaceTypeIds: selectedWorkPlaceId
+    }
+    try {
+      return await setUserPreferences(values)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <View style={{...styles.pageItemContainer}}>
 
@@ -577,12 +668,16 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
                   {employmentTypeRadio.map(item => (
                     <View key={item.id} style={{...styles.radioButtonGroup}}>
                       <CheckBox 
-                        checked={selectedEmploymentId === item.id}
-                        onPress={() => 
-                          selectedEmploymentId === item.id
-                          ? setSelectedEmploymentId(0)
-                          : setSelectedEmploymentId(item.id)
-                        }
+                        checked={selectedEmploymentId?.includes(item.id)}
+                        onPress={() =>  {
+                          if (selectedEmploymentId?.includes(item.id)) {
+                            // Remove if already selected
+                            setSelectedEmploymentId(selectedEmploymentId.filter(id => id !== item.id));
+                          } else {
+                            // Add if not selected
+                            setSelectedEmploymentId([...selectedEmploymentId, item.id]);
+                          }
+                        }}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                         size={16}
@@ -602,12 +697,14 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
                   {jobTypeRadio.map(item => (
                     <View key={item.id} style={{...styles.radioButtonGroup}}>
                       <CheckBox 
-                        checked={selectedJobId === item.id}
-                        onPress={() => 
-                          selectedJobId === item.id
-                          ? setSelectedJobId(0)
-                          : setSelectedJobId(item.id)
-                        }
+                        checked={selectedJobId?.includes(item.id)}
+                        onPress={() => {
+                          if(selectedJobId?.includes(item.id)) {
+                            setSelectedJobId(selectedJobId.filter(id => id !== item.id));
+                          } else {
+                            setSelectedJobId([...selectedJobId, item.id]);
+                          }
+                        }}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                         size={16}
@@ -627,12 +724,14 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
                   {workPlaceTypeRadio.map(item => (
                     <View key={item.id} style={{...styles.radioButtonGroup}}>
                       <CheckBox 
-                        checked={selectedWorkPlaceId === item.id}
-                        onPress={() => 
-                          selectedWorkPlaceId === item.id
-                          ? setSelectedWorkPlaceId(0)
-                          : setSelectedWorkPlaceId(item.id)
-                        }
+                        checked={selectedWorkPlaceId?.includes(item.id)}
+                        onPress={() => {
+                          if (selectedWorkPlaceId?.includes(item.id)) {
+                            setSelectedWorkPlaceId(selectedWorkPlaceId.filter(id => id !== item.id));
+                          } else {
+                            setSelectedWorkPlaceId([...selectedWorkPlaceId, item.id])
+                          }
+                        }}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                         size={16}
@@ -645,7 +744,10 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
             </View>
 
             <ButtonGroup 
-              goToNext={goToNext}
+              goToNext={() => {
+                goToNext()
+                handleSubmit()
+              }}
               goBack={goBack}
               onClose={onClose}
             />

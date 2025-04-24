@@ -14,7 +14,7 @@ export const updateStaff = async (values: Partial<IUser>) => {
     return data;
 
   } catch (error) {
-    console.error(error);   
+    console.error('updateStaff', error);   
   }
 };
 

@@ -48,7 +48,7 @@ export const getMatchingJobs = async () => {
     const {data} = await api.get(`/Job/GetMatchingJobs`)
     return data
   } catch (error) {
-    console.error(error)
+    console.error('getMatchingJobs', error)
   }
 }
 
@@ -59,7 +59,7 @@ export const getProfessionAreas = async () => {
 
     return data
   } catch (error) {
-    console.error(error)
+    console.error('getProfessionAreas',error)
   }
 }
  

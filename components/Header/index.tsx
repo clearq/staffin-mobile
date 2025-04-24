@@ -79,29 +79,11 @@ const PageHeader = () => {
             <TouchableOpacity>
               <MaterialCommunityIcons name='chat-outline' size={24} color={theme.colors.white}/>
             </TouchableOpacity>
-            
-            <TouchableOpacity
-              onPress={() => setShowDropdown(true)}
-            >
-              <MaterialCommunityIcons 
-                name={showDropdown ? 'account-settings': 'account-settings-outline'} 
-                size={24} 
-                color={showDropdown ? theme.colors.secondary : theme.colors.white}
-              />
-            </TouchableOpacity>
 
           </View>
         </View>
         }
-
-        { showDropdown && userData?.roleId === 3 &&
-          <UserPreferences 
-            visible={showDropdown}
-            onClose={() => setShowDropdown(!showDropdown)}
-            user={user}
-            refetch={userRefetch}
-          />
-        }
+        
     </View>
   )
 }

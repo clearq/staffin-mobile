@@ -1,23 +1,45 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { Redirect, Tabs } from 'expo-router'
+import { View, Text, TouchableOpacity, Modal, StyleSheet} from 'react-native'
+import React, { useState } from 'react'
 
 import { IAuthInfo, IAuthState, useAuth } from "@/contexts/authContext";
 import { Fonts, Sizes, theme } from '@/constants/Theme'
 import { Avatar, ListItem, useTheme } from '@rneui/themed'
-import { useTranslation } from "react-i18next";
 
-import CustomTabBar from '@/components/Pages/TabsComponents/CustomTabs'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import MyStatusBar from '@/components/StatusBar';
 import { ActivityIndicator } from 'react-native';
-import { SkeletonImage } from '@/components/Skeleton/skeleton-image';
+
+import { useQuery } from '@tanstack/react-query';
+import { getUserById } from '@/api/backend';
+import UserPreferences from './UserPreferences';
 
 
-const PageHeader = (data: any, isLoading: boolean) => {
+
+const PageHeader = () => {
   const { theme } = useTheme();
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  const {
+    authState: { userData, userId },
+    session,
+    isLoading,
+  } = useAuth();
+
+  const { 
+    data: user, 
+    refetch: userRefetch, 
+    isLoading: userIsLoading, 
+    isPending,    
+  } = useQuery({
+    queryKey: ["user-data"],
+    queryFn: async () => {
+      const response = await getUserById(userId!)      
+
+      return response;
+    },
+    enabled: !!userId,
+  }); 
   
-  const userData = data.data
   
   return (
     <View
@@ -32,7 +54,7 @@ const PageHeader = (data: any, isLoading: boolean) => {
       {isLoading && (
         <ActivityIndicator color={theme.colors.primary} />
       )}
-      {data &&
+      {user &&
         <View
           style={{
             flexDirection:'row',
@@ -51,17 +73,35 @@ const PageHeader = (data: any, isLoading: boolean) => {
           >
 
             <TouchableOpacity>
-              <MaterialCommunityIcons name='bell-badge-outline' size={30} color={theme.colors.grey3}/>
+              <MaterialCommunityIcons name='bell-badge-outline' size={24} color={theme.colors.white}/>
             </TouchableOpacity>
 
             <TouchableOpacity>
-              <MaterialCommunityIcons name='chat-outline' size={30} color={theme.colors.grey3}/>
+              <MaterialCommunityIcons name='chat-outline' size={24} color={theme.colors.white}/>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              onPress={() => setShowDropdown(true)}
+            >
+              <MaterialCommunityIcons 
+                name={showDropdown ? 'account-settings': 'account-settings-outline'} 
+                size={24} 
+                color={showDropdown ? theme.colors.secondary : theme.colors.white}
+              />
             </TouchableOpacity>
 
           </View>
         </View>
         }
 
+        { showDropdown && userData?.roleId === 3 &&
+          <UserPreferences 
+            visible={showDropdown}
+            onClose={() => setShowDropdown(!showDropdown)}
+            user={user}
+            refetch={userRefetch}
+          />
+        }
     </View>
   )
 }

@@ -3,7 +3,6 @@ import React from 'react'
 import { IBranch } from '@/types';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import ModalHeader from '../../../../ModalHeader';
 import { theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
 import { useTheme } from '@rneui/themed';
@@ -14,6 +13,7 @@ import { useMutation } from '@tanstack/react-query';
 import { values } from 'lodash';
 import { TextField } from '@/components/UI/Input/TextField';
 import { updateBranch } from '@/api/backend';
+import ModalHeader from '@/components/Pages/TabsComponents/ModalHeader';
 
 
 interface props {

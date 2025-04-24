@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getUserPostsAndShares } from '@/api/backend'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import pageStyle from '@/constants/Styles'
+import PostTemplate from '@/components/UI/PostTemplate'
 
 const Page = () => {
   const [userInfoMessage, setUserInfoMessage] = useState(false)
@@ -42,6 +43,17 @@ const Page = () => {
   
   return (
     <View>
+      <View>
+        <TouchableOpacity>
+          <Text>All</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text>Liked</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text>Comments</Text>
+        </TouchableOpacity>
+      </View>
       { isPending && postIsLoading &&(
         <ActivityIndicator size="large" color={theme.colors.primary} />
       )}
@@ -64,14 +76,7 @@ const Page = () => {
       }
 
       {/* 🚧 Insert post list */}
-      <Text 
-        style={{
-          ...pageStyle.headline02, 
-          color: theme.colors.grey0
-        }}
-      >
-        Posts
-      </Text>
+      <PostTemplate />
     </View>
   )
 }

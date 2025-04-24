@@ -13,8 +13,12 @@ import { useAuth } from '@/contexts/authContext';
 import { IExperience, IUser } from '@/types/UserTypes';
 import Button from '@/components/UI/Button';
 import EditExperienceModal from './editExperienceModal';
+<<<<<<< HEAD
 import HeaderTemplate from '../../../headerTemplate';
+=======
+>>>>>>> 4135651dac9595fab599b10b24a0f5ee2a52911a
 import AddExperienceModal from './addExperience';
+import HeaderTemplate from '../../../headerTemplate';
 
 interface props {
   visible: boolean;

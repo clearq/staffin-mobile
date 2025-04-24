@@ -14,6 +14,8 @@ import { ActivityIndicator } from 'react-native';
 import { SkeletonImage } from '@/components/Skeleton/skeleton-image';
 import PageHeader from '@/components/Header';
 import { hexToRgba } from '@/utils/rgba-to-hex';
+import { useQuery } from '@tanstack/react-query';
+import { getUserById } from '@/api/backend';
 
 
 export const unstable_settings = {
@@ -35,10 +37,25 @@ const _layout = () => {
   const { theme } = useTheme();
   
   const {
-    authState: { userData },
+    authState: { userData, userId },
     session,
     isLoading,
   } = useAuth();
+
+  const { 
+    data: user, 
+    refetch: userRefetch, 
+    isLoading: userIsLoading, 
+    isPending,    
+  } = useQuery({
+    queryKey: ["user-data"],
+    queryFn: async () => {
+      const response = await getUserById(userId!)      
+
+      return response;
+    },
+    enabled: !!userId,
+  }); 
 
   if (isLoading && !userData) {
     return <ActivityIndicator color={theme.colors.primary} />
@@ -113,7 +130,7 @@ const _layout = () => {
                 }
               </>
             ), 
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
 
@@ -148,7 +165,7 @@ const _layout = () => {
             ),
             //headerStyle: { backgroundColor: theme.colors.searchBg },
             headerTitleStyle: { color: theme.colors.grey0 },
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
 
@@ -161,7 +178,7 @@ const _layout = () => {
             headerShown: false,
             headerTitle: t("profile"),
             tabBarLabel: "Route",
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }}
         />
 
@@ -174,7 +191,7 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: t("overview"),
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
 
@@ -187,7 +204,7 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: "My Application",
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
 
@@ -200,7 +217,7 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: "My Document",
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
         
@@ -212,7 +229,7 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: "My Document",
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
         
@@ -224,7 +241,7 @@ const _layout = () => {
             // tabBarIcon: () => null,
             headerShown: true,
             // headerTitle: "My Document",
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
 
@@ -245,7 +262,7 @@ const _layout = () => {
                 color={focused ? theme.colors.secondary : theme.colors.white}
               />
             ),
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
 
@@ -266,7 +283,7 @@ const _layout = () => {
                 color={focused ? theme.colors.secondary : theme.colors.white}
               />
             ),
-            header: () => <PageHeader data={userData} isLoading={isLoading} />,
+            header: () => <PageHeader />,
           }} 
         />
       </Tabs>

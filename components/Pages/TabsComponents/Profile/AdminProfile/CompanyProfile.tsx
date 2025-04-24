@@ -24,13 +24,12 @@ import CompanyActivity from './Company/activity';
 import { partial, values } from 'lodash';
 import CompanyInfoModal from './Company/Edit/CompanyInfoModal';
 import CompanyAboutModal from './Company/Edit/aboutModal';
-
 import { useRouter } from 'expo-router';
 import CreatePostModal from '../../Activity/CreatePostModal';
 import BranchList from './Company/Branch/branches';
 import AddBranchModal from './Company/Branch/addBranch';
-import EditBranchModal from './Company/Branch/editBranch';
 import { useQuery } from '@tanstack/react-query';
+
 
 
 

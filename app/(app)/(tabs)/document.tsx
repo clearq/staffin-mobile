@@ -9,6 +9,7 @@ import { useTheme } from '@rneui/themed'
 import Button from '@/components/UI/Button'
 import pageStyle from '@/constants/Styles'
 import { useRouter } from 'expo-router'
+import Document from '@/components/Pages/TabsComponents/Profile/StaffProfile/Document'
 
 const page = () => {
   const { t } = useTranslation();
@@ -68,21 +69,12 @@ const page = () => {
     </View>
   );
 
-
-  const handleDownloadCv = async () => {
-    try {
-      downloadCv() 
-
-      toast.show(`${t("success-download-message")}`, {
-        type: "success"
-      });
-    } catch (error) {
-      toast.show(`${t("failed-download-message")}`, {
-        type: "error"
-      })
-    }
-  }
   
+  function handleDownloadCv(): void {
+    console.log("download CV")
+    // throw new Error('Function not implemented.')
+  }
+
   return (
     <View
       style={{
@@ -130,6 +122,8 @@ const page = () => {
 
       </View>
 
+      <Document data={data}/>
+  
     </View>
   )
 }

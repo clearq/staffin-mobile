@@ -22,8 +22,12 @@ import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { rgbaToHex } from '@/utils/rgba-to-hex';
 import DateCalendar from '@/components/UI/Calendar';
+<<<<<<< HEAD
 import ModalHeader from '../../../ModalHeader';
+=======
+>>>>>>> 4135651dac9595fab599b10b24a0f5ee2a52911a
 import page from '@/app/(app)/(tabs)/application';
+import ModalHeader from '../../../ModalHeader';
 
 interface props {
   data: IEducation;

@@ -9,13 +9,13 @@ import { useTranslation } from 'react-i18next';
 
 import pageStyle from '@/constants/Styles';
 import { theme } from '@/constants/Theme';
-import StaffProfileIndex from '@/components/Pages/TabsComponents/Profile/StaffProfile';
 import { generateCv, getUserById, getUserPostsAndShares } from '@/api/backend';
 import { fetchImageFromCDN } from '@/utils/CDN-action';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { hexToRgba } from '@/utils/rgba-to-hex';
 import { MessageModal } from '@/components/Modal/MessageModal';
 import { useToast } from 'react-native-toast-notifications';
+import StaffProfileIndex from '@/components/Pages/TabsComponents/Profile/StaffProfile';
 import AdminProfileIndex from '@/components/Pages/TabsComponents/Profile/AdminProfile';
 
 

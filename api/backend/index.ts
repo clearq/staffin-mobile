@@ -29,6 +29,17 @@ export {
 export {
   getUserById,
   updateUserProfileImage,
+  changePassword,
+  getUserLocation,
+  deleteMyLocation,
+  addPreferredCity,
+  getPreferredCities,
+  deletePreferredCity,
+  getAllCities,
+  updateProfessionArea,
+  setUserPreferences,
+  getUserPreferences,
+  getPreferenceOptions,
 } from "./user"
 
 export {
@@ -76,4 +87,5 @@ export {
   getAllJobsAdmin,
   getMatchingJobs,
   getJobById,
+  getProfessionAreas,
 } from "./job"

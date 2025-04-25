@@ -94,7 +94,7 @@ const page = () => {
         }}
       >
         <Image 
-          source={require('@/assets/images/CV-Download.png')}
+          source={require('@/assets/image/CV-Download.png')}
           width={100}
         />
 

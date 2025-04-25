@@ -13,10 +13,6 @@ import { useAuth } from '@/contexts/authContext';
 import { IEducation, IExperience, IUser } from '@/types/UserTypes';
 import Button from '@/components/UI/Button';
 import EditEducationModal from './editEducationModal';
-<<<<<<< HEAD
-import HeaderTemplate from '../../../headerTemplate';
-=======
->>>>>>> 4135651dac9595fab599b10b24a0f5ee2a52911a
 import AddEducationModal from './addEducationModal';
 import HeaderTemplate from '../../../headerTemplate';
 

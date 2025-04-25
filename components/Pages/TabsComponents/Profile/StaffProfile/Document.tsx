@@ -11,6 +11,7 @@ import pageStyle from '@/constants/Styles'
 import { useRouter } from 'expo-router'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
+
 interface ICv {
   name: string
   url: string
@@ -48,10 +49,10 @@ const Document = ({data}: props) => {
       }}
     >
       <View>
-        <Image 
-          source={require('@/assets/Images/CV-Download.png')}
+        {/* <Image 
+          source={require('@/assets/image/CV-Download.png')}
           width={100}
-        />
+        /> */}
       </View>
 
       <View

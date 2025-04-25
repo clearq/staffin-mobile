@@ -1,5 +1,5 @@
 import { autoLoginToCDN, getContentFile } from "@/api/backend";
-import avatarSkeleton from "../assets/images/avatarSkeleton.jpeg"
+import avatarSkeleton from "../assets/image/avatarSkeleton.jpeg"
 import { IUser } from "@/types";
 import { getItem } from "./asyncStorage";
 import { CDN_TOKEN } from "@/constants/key";

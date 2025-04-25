@@ -1,3 +1,4 @@
+
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform, Image } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import *as ImagePicker from 'expo-image-picker'
@@ -18,10 +19,6 @@ import pageStyle from '@/constants/Styles';
 
 import { autoLoginToCDN, deleteStaffSkill, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 
-<<<<<<< HEAD
-import ProfileItemContainer from '../../ProfileListContainer';
-=======
->>>>>>> 4135651dac9595fab599b10b24a0f5ee2a52911a
 import InfoModal from './Edit/infoModal';
 import AboutModal from './Edit/aboutModal';
 import Information from './Information';
@@ -36,18 +33,10 @@ import AddEducationModal from './Education/addEducationModal';
 import AddSkillModal from './Edit/addSkillModal';
 import AddLanguageModal from './Languages/addLanguageModal';
 import EditLanguageModal from './Languages/editLanguageModal';
-<<<<<<< HEAD
-import EmptyItemMessage from '../../EmptyItemMessage';
-import { useAuth } from '@/contexts/authContext';
-import { useRouter } from 'expo-router';
-import CreatePostModal from '../../Activity/CreatePostModal';
-import ProfileHeader from '../../ProfileHeader';
-=======
 import ProfileHeader from '../../ProfileHeader';
 import ProfileItemContainer from '../../ProfileListContainer';
 import EmptyItemMessage from '../../EmptyItemMessage';
 import CreatePostModal from '../../Activity/CreatePostModal';
->>>>>>> 4135651dac9595fab599b10b24a0f5ee2a52911a
 
 
 interface props {
@@ -606,4 +595,3 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
 });
-

@@ -447,7 +447,8 @@ const PageThree = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) 
         }
       />
       <Image 
-        style={{...styles.imageStyle}} 
+        source={require('@/assets/image/onboarding/Jack7.png')} 
+        style={{...styles.imageStyle}}
       />
     </View>
   )
@@ -571,7 +572,7 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
     setSelectedEmploymentId(preference.employmentTypeId)
     setSelectedJobId(preference.jobTypeId)
     setSelectedWorkPlaceId(preference.workplaceTypeId)
-  }, [])
+  }, [preference])
 
   const employmentTypeRadio = useMemo(() => ([
     {
@@ -785,10 +786,10 @@ const PageSix = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
               {t("intro-last-message")}
             </Text>
 
-            <Image 
+            {/* <Image 
               source={require('@/assets/image/Tutorial.png')} 
               style={{width: 150, resizeMode: 'contain'}} 
-            />
+            /> */}
 
             <Button 
               title={t("get-started")}

@@ -70,9 +70,16 @@ const ButtonGroup = ({goToNext, goBack, onClose}: buttonProps) => {
         title={t("back")}
         containerStyle={{...pageStyle.buttonContainer, ...pageStyle.cardShadow}}
         size='sm'
+        color='secondary'
         onPress={goBack}
       />
-
+      <Button 
+        title={t("skip")}
+        containerStyle={{...pageStyle.buttonContainer, ...pageStyle.cardShadow}}
+        size='sm'
+        color='primary'
+        onPress={onClose}
+      />
       <Button 
         title={t("next")}
         containerStyle={{...pageStyle.buttonContainer, ...pageStyle.cardShadow}}
@@ -120,6 +127,11 @@ const Introduction = ({onClose}: Props ) => {
     //console.log('page:', currentPage);
   }
 
+  const skipPage = () => {
+    pagerRef.current?.setPage(5)
+    setCurrentPage(5)
+  }
+
   return (
     <View style={{...styles.centeredView}}>  
       {!userData && isLoading &&
@@ -138,7 +150,7 @@ const Introduction = ({onClose}: Props ) => {
             handleSuccess={userRefetch}
             goToNext={goToNextPage}
             goBack={goBackPage}
-            onClose={onClose}
+            onClose={skipPage}
           />
         </View>   
         
@@ -148,7 +160,7 @@ const Introduction = ({onClose}: Props ) => {
             handleSuccess={userRefetch}
             goToNext={goToNextPage}
             goBack={goBackPage}
-            onClose={onClose}
+            onClose={skipPage}
           />
         </View>   
         
@@ -158,7 +170,7 @@ const Introduction = ({onClose}: Props ) => {
             handleSuccess={userRefetch}
             goToNext={goToNextPage}
             goBack={goBackPage}
-            onClose={onClose}
+            onClose={skipPage}
           />
         </View>   
         
@@ -168,7 +180,7 @@ const Introduction = ({onClose}: Props ) => {
             handleSuccess={userRefetch}
             goToNext={goToNextPage}
             goBack={goBackPage}
-            onClose={onClose}
+            onClose={skipPage}
           />
         </View>   
         
@@ -178,7 +190,7 @@ const Introduction = ({onClose}: Props ) => {
             handleSuccess={userRefetch}
             goToNext={goToNextPage}
             goBack={goBackPage}
-            onClose={onClose}
+            onClose={skipPage}
           />
         </View>   
         
@@ -790,6 +802,13 @@ const PageSix = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
               source={require('@/assets/image/Tutorial.png')} 
               style={{width: 150, resizeMode: 'contain'}} 
             /> */}
+
+            {/* placeholder for image */}
+            <View 
+              style={{
+                height: 150
+              }}
+            />
 
             <Button 
               title={t("get-started")}

@@ -22,6 +22,7 @@
   "maybe-later": "Maybe later...",
   "next": "Next",
   "back": "Back",
+  "skip": "Skip",
 
   "success-delete-message": "Successfully deleted",
   "failed-delete-message": "Delete failed", 

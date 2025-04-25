@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 import EmptyItemMessage from '../../../EmptyItemMessage';
-import CreatePostModal from '@/components/Pages/Activity/CreatePostModal';
+import CreatePostModal from '../../../Activity/CreatePostModal';
 
 interface props {
   post: IPost[];

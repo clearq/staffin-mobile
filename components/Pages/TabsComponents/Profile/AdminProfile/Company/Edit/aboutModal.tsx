@@ -17,7 +17,7 @@ import { MultiTextField } from '@/components/UI/Input/TextField';
 import pageStyle from '@/constants/Styles';
 ;
 import { ICompany } from '@/types';
-import ModalHeader from '@/components/Pages/TabsComponents/ModalHeader';
+import ModalHeader from '../../../../ModalHeader';
 
 
 interface props {

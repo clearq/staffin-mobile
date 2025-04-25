@@ -232,7 +232,7 @@ const PageOne = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
           </View>
         }
       />
-      <Image source={require('@/assets/Images/onboarding/Jack6.png')} style={{...styles.imageStyle}} />
+      <Image source={require('@/assets/image/onboarding/Jack6.png')} style={{...styles.imageStyle}} />
     </View>
   )
 }
@@ -362,7 +362,7 @@ const PageTwo = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
         }
       />
       <Image 
-        source={require('@/assets/Images/onboarding/Jack7.png')} 
+        source={require('@/assets/image/onboarding/Jack7.png')} 
         style={{...styles.imageStyle}} 
       />
     </View>
@@ -447,7 +447,6 @@ const PageThree = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) 
         }
       />
       <Image 
-        source={require('@/assets/Images/onboarding/Jack3.png')} 
         style={{...styles.imageStyle}} 
       />
     </View>
@@ -536,7 +535,7 @@ const PageFour = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
         }
       />
       <Image 
-        source={require('@/assets/Images/onboarding/Jack7.png')} 
+        source={require('@/assets/image/onboarding/Jack7.png')} 
         style={{...styles.imageStyle}} 
       />
     </View>
@@ -755,7 +754,7 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
         }
       />
       <Image 
-        source={require('@/assets/Images/onboarding/Jack8.png')} 
+        source={require('@/assets/image/onboarding/Jack8.png')} 
         style={{...styles.imageStyle}} 
       />
     </View>
@@ -787,7 +786,7 @@ const PageSix = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
             </Text>
 
             <Image 
-              source={require('@/assets/Images/Tutorial.png')} 
+              source={require('@/assets/image/Tutorial.png')} 
               style={{width: 150, resizeMode: 'contain'}} 
             />
 
@@ -800,7 +799,7 @@ const PageSix = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =>
         }
       />
       <Image 
-        source={require('@/assets/Images/onboarding/Jack6.png')} 
+        source={require('@/assets/image/onboarding/Jack6.png')} 
         style={{...styles.imageStyle}} 
       />
 

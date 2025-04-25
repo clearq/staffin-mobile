@@ -22,7 +22,8 @@ export {
   deleteStaffLanguage,
   generateCv,
   getCv,
-  downloadCv
+  downloadCv,
+  postNewApplication,
 } from "./staff"
 
 export {
@@ -85,5 +86,6 @@ export {
   getAllJobsPublic,
   getAllJobsAdmin,
   getMatchingJobs,
+  getJobById,
   getProfessionAreas,
 } from "./job"

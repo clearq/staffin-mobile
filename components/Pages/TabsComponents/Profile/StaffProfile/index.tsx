@@ -1,3 +1,4 @@
+
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform, Image } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import *as ImagePicker from 'expo-image-picker'
@@ -594,4 +595,3 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
 });
-

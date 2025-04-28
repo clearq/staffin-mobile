@@ -5,6 +5,7 @@ import { IJob } from '@/types';
 import { postNewApplication } from '@/api/backend';
 import { useToast } from 'react-native-toast-notifications';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/contexts/authContext';
 
 interface Props {
   job: IJob[];
@@ -17,13 +18,13 @@ const Jobsindex = ({ job = [] }: Props) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [showForm, setShowForm] = useState(false);
-
+  const {authState: {userData}} = useAuth()
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
+    firstName: userData?.firstName || '',
+    lastName: userData?.lastName || '',
+    phoneNumber: userData?.phoneNumber || '',
+    email: userData?.email || '',
   });
 
   

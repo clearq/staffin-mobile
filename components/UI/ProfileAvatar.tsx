@@ -30,7 +30,12 @@ export const ProfileAvatar = ({user, size, handleUpdate}:userProps) => {
   useEffect(() => {
     const fetchUrl = async () =>{
       // console.log('staff image:', user.profileImage, user.id);
-      const url = await fetchImageFromCDN(user)
+
+      const url = await fetchImageFromCDN({
+        userId: user?.id,
+        contentFolder: "profile",
+        key: user?.profileImage 
+      })
       setAvatar(url)
     }
     if(user?.profileImage) {
@@ -49,7 +54,7 @@ export const ProfileAvatar = ({user, size, handleUpdate}:userProps) => {
   )
 }
 
-export const companyAvatar = ({company, size, handleUpdate}: companyProps) => {
+export const CompanyAvatar = ({company, size, handleUpdate}: companyProps) => {
   const { theme } = useTheme();
   const { authState, setAuthState } = useAuth()
   const [avatar, setAvatar] = useState("")

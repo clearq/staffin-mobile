@@ -12,7 +12,7 @@ import { useAuth } from '@/contexts/authContext'
 import { fetchImageFromCDN } from '@/utils/CDN-action'
 import { useQuery } from '@tanstack/react-query'
 import { getPostDetails, getUserById, likePost, unlikePost } from '@/api/backend'
-import { ProfileAvatar } from './ProfileAvatar'
+import { CompanyAvatar, ProfileAvatar } from './ProfileAvatar'
 import { number } from 'yup'
 
 interface Props {
@@ -27,30 +27,17 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
   const { theme } = useTheme()
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId } } = useAuth();
-
-  // const {data: post, refetch: postRefetch, isLoading: postIsLoading} = useQuery({
-  //   queryKey: ["post", postId],
-  //   queryFn: async () => {
-  //     const response = await getPostDetails(postId)
-
-  //     if (response) {
-  //       //console.log('res:', response);
-  //       return response
-  //     } else {
-  //       return (
-  //         <ActivityIndicator color={theme.colors.primary} />
-  //       )
-  //     }
-   
-  //   }
-  // }) 
   
   const {data: user} = useQuery({
     queryKey: ['author', authorId],
     queryFn: async () => {
-      return await getUserById(authorId)
+      const response = await getUserById(authorId)
+
+      return response
     }
   })
+
+
 
   const [authorImage, setAuthorImage] = useState('')
   const [postImages, setPostImages] = useState([])
@@ -59,23 +46,26 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
 
 
   useEffect(() => {
+    const likedByUser = post.likes?.some(item => item.userId === Number(userId)) || false;
+    setLiked(likedByUser);
     
-    const fetchUrl = async () =>{
-      const url = await fetchImageFromCDN(user)
-      setAuthorImage(url)
-    }
-    if(user?.profileImage) {
-      fetchUrl()
-    }
-  },[])
+  }, [post.likes, userId]);
 
   useEffect(() => {
+    const isLiked = async () => {
+      post.likes?.find((item) => {
+        if (item.userId === Number(userId)){
+          return setLiked(true)
+        }
+        return setLiked(false)
+      })
+    }
 
+    isLiked()
   },[])
 
 
   const handleLikeAction = async (id: number) => {
-
     if (liked === true) {
       await unlikePost(id)
       setLiked(false)
@@ -100,12 +90,13 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
       <View style={{...styles.headerContainer}}>
 
         <View style={{...styles.userContainer}}>
+         
           <ProfileAvatar
             user={user}
             size={40}
             handleUpdate={() => {}}
           />
-
+          
           <View style={{...styles.headerTextGroup}}>
             <Text 
               style={{
@@ -221,7 +212,7 @@ export default PostTemplate
 const styles = StyleSheet.create({
   postContainer: {
     width: '100%',
-    padding: theme.spacing?.md,
+    //padding: theme.spacing?.md,
     flexDirection: 'column',
   },
   headerContainer: {

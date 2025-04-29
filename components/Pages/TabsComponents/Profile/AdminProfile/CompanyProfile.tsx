@@ -29,6 +29,7 @@ import CreatePostModal from '../../Activity/CreatePostModal';
 import BranchList from './Company/Branch/branches';
 import AddBranchModal from './Company/Branch/addBranch';
 import { useQuery } from '@tanstack/react-query';
+import { CompanyAvatar } from '@/components/UI/ProfileAvatar';
 
 
 
@@ -157,10 +158,12 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
             backgroundColor: theme.colors.background
           }}
         >
-          {avatar !== "" 
-            ? <Avatar size={80} rounded source={{uri: avatar }} />      
-            : <Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-          }
+          <CompanyAvatar 
+            company={company}
+            size={80}
+            handleUpdate={branchRefetch}
+          />
+
 
           {showEditButton && (
             <TouchableOpacity

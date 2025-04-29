@@ -62,8 +62,7 @@ const StaffHome = () => {
         }
 
           <ScrollView>  
-            <View
-            >
+            <View>
               {postsLoading && <ActivityIndicator color={theme.colors.primary} /> }
               {allPosts && !postsLoading && 
                 allPosts.map((post: IPost) => (

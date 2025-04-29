@@ -285,3 +285,14 @@ export const postNewApplication = async (values: {jobId: number}) => {
     console.error(error)
   }
 }
+
+export const getMyApplications = async () => {
+  try {
+    const { data } = await api.get(`/Staff/GetMyApplications`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}

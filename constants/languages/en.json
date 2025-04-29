@@ -23,6 +23,10 @@
   "next": "Next",
   "back": "Back",
   "skip": "Skip",
+  "like": "Like",
+  "comment": "Comment",
+  "repost": "Repost",
+  "share": "Share",
 
   "success-delete-message": "Successfully deleted",
   "failed-delete-message": "Delete failed", 

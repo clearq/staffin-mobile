@@ -1,13 +1,15 @@
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import PostTemplate from '@/components/UI/PostTemplate'
 import MachingJobsTemplate from '@/components/UI/MachingJobsTemplate'
 import { useQuery } from '@tanstack/react-query'
-import { getMatchingJobs, getUserPreferences } from '@/api/backend'
+import { getAllPosts, getMatchingJobs, getUserById, getUserPreferences } from '@/api/backend'
 import Introduction from '@/components/Viewpager/Introduction'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/authContext'
+import { IPost } from '@/types'
+import { theme } from '@/constants/Theme'
 
 const StaffHome = () => {
   const [openIntroduction, setOpenIntroduction] = useState(false)
@@ -23,6 +25,16 @@ const StaffHome = () => {
       return await getMatchingJobs()
     }
   })
+
+  const {data: allPosts = [], isLoading: postsLoading, refetch: postsRefetch } = useQuery({
+    queryKey: ["all-posts"],
+    queryFn: async () => {
+      const response = await getAllPosts()
+      console.log('posts:', response.length);
+      return response
+    }
+  })
+
 
   useEffect(() => {
     if(!userData) {
@@ -50,7 +62,21 @@ const StaffHome = () => {
         }
 
           <ScrollView>  
-            <PostTemplate />
+            <View
+            >
+              {postsLoading && <ActivityIndicator color={theme.colors.primary} /> }
+              {allPosts && !postsLoading && 
+                allPosts.map((post: IPost) => (
+                  <View key={post.postId}>
+                    <PostTemplate 
+                      postId={post.postId}
+                      authorId={post.userId}
+                    />
+                  </View>
+                ))
+              } 
+            </View>
+           
             <MachingJobsTemplate />
           </ScrollView>
         </>  
@@ -59,3 +85,14 @@ const StaffHome = () => {
 }
 
 export default StaffHome
+
+const styles = StyleSheet.create({
+  col: {
+    flexDirection: 'column',
+    gap: theme.spacing?.md,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: theme.spacing?.md
+  }
+})

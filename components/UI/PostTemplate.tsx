@@ -1,29 +1,104 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import pageStyle from '@/constants/Styles'
 import { theme } from '@/constants/Theme'
 import { Divider, useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import page from '@/app/(app)/(tabs)/application'
+import { IPost, IUser } from '@/types'
+import { Colors } from '@/constants/Colors'
+import { useAuth } from '@/contexts/authContext'
+import { fetchImageFromCDN } from '@/utils/CDN-action'
+import { useQuery } from '@tanstack/react-query'
+import { getPostDetails, getUserById, likePost, unlikePost } from '@/api/backend'
+import { ProfileAvatar } from './ProfileAvatar'
+import { number } from 'yup'
 
-const PostTemplate = () => {
+interface Props {
+  postId: number
+  authorId: number
+}
+
+const PostTemplate = ({postId, authorId}: Props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
+  const { isLoading, authState:{ userData, userId } } = useAuth();
+
+  const {data: post, refetch: postRefetch, isLoading: postIsLoading} = useQuery({
+    queryKey: ["post", postId],
+    queryFn: async () => {
+      const response = await getPostDetails(postId)
+
+      if (response) {
+        //console.log('res:', response);
+        return response
+      } else {
+        return (
+          <ActivityIndicator color={theme.colors.primary} />
+        )
+      }
+   
+    }
+  }) 
+  
+  const {data: user} = useQuery({
+    queryKey: ['author', authorId],
+    queryFn: async () => {
+      return await getUserById(authorId)
+    }
+  })
+
+  const [authorImage, setAuthorImage] = useState('')
+  const [postImages, setPostImages] = useState([])
+  const [liked, setLiked] = useState(false)
+  const [openComments, setOpenComments] = useState(false)
+
+
+  useEffect(() => {
+    
+    const fetchUrl = async () =>{
+      const url = await fetchImageFromCDN(user)
+      setAuthorImage(url)
+    }
+    if(user?.profileImage) {
+      fetchUrl()
+    }
+  },[user?.profileImage])
+
+
+  const handleLikeAction = async (id: number) => {
+    setLiked(!liked)
+
+    if (liked === true) {
+      await likePost(id)
+      postRefetch()
+    }
+
+    if (liked === false) {
+      await unlikePost(id)
+      postRefetch()
+    }
+  }
 
   return (
     <View 
-      style={{
-        ...styles.postContainer,
-        backgroundColor: theme.colors.background,
-      }}
+    style={{
+      ...styles.postContainer,
+      backgroundColor: theme.colors.background,
+    }}
     >
+      {postIsLoading && <Text>Loading...</Text>}
       
       {/* Header */}
       <View style={{...styles.headerContainer}}>
 
         <View style={{...styles.userContainer}}>
-          <View style={{width: 40, height: 40, borderRadius: 100, backgroundColor: theme.colors.disabled}}/>
+          <ProfileAvatar
+            user={user}
+            size={40}
+            handleUpdate={() => {}}
+          />
 
           <View style={{...styles.headerTextGroup}}>
             <Text 
@@ -32,16 +107,7 @@ const PostTemplate = () => {
                 color: theme.colors.grey0
               }}
             >
-              Auther Name
-            </Text>
-
-            <Text
-              style={{
-                ...pageStyle.xsText, 
-                color: theme.colors.grey0
-              }}
-            >
-              Job title
+              {post?.authorName ?  post?.authorName : ""}
             </Text>
 
             <Text
@@ -50,7 +116,7 @@ const PostTemplate = () => {
                 color: theme.colors.grey0,
               }}
             >
-              1w
+              {post?.createdAt ? post?.createdAt : ""}
             </Text>
           </View>
         </View>
@@ -87,7 +153,7 @@ const PostTemplate = () => {
           
           {/* Text content */}
           <Text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem quae possimus nisi porro reiciendis ipsam voluptate veritatis aspernatur dignissimos aliquam non enim ducimus assumenda, iure nam, optio impedit voluptatibus at?
+            {post?.content ? post?.content : ""}
           </Text>
 
           {/* Image content */}
@@ -95,11 +161,14 @@ const PostTemplate = () => {
 
           {/* Reactions */}
           <View style={{...styles.reactionGroup}}>
-            <Text>0 Likes</Text>
+            <View style={{...styles.countsGrop}}>
+              <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>{post?.likeCount ? post?.likeCount : 0}</Text>
+              <MaterialCommunityIcons name='heart' size={16} color={"rgb(255, 45, 85)"} />
+            </View>
             
-            <Text>
-              <Text>0 Comments</Text>
-              <Text>0 Reposts</Text>
+            <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>
+              <Text>{`${post?.commentCount ? post?.commentCount : 0 } comments • `}</Text>
+              <Text>{`${post?.sharedCount ? post?.sharedCount : 0 } shares`}</Text>
             </Text>
           </View>
 
@@ -113,10 +182,29 @@ const PostTemplate = () => {
 
       {/* Footer */}
       <View style={{...styles.footerContainer}}>
-        <View style={{width:24, height:24, backgroundColor: theme.colors.disabled}}/>
-        <View style={{width:24, height:24, backgroundColor: theme.colors.disabled}}/>
-        <View style={{width:24, height:24, backgroundColor: theme.colors.disabled}}/>
-        <View style={{width:24, height:24, backgroundColor: theme.colors.disabled}}/>
+        {/* Like */}
+        <TouchableOpacity 
+          style={{...styles.footerButtonItem}}
+          onPress={() => handleLikeAction(post.postId)}
+        >
+          <MaterialCommunityIcons name={liked ? 'heart' : 'heart-outline'} size={24} color={liked ? "rgb(255, 45, 85)" : theme.colors.grey3} />
+          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("like")}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{...styles.footerButtonItem}}>
+          <MaterialCommunityIcons name='comment-text-outline' size={24} color={theme.colors.grey3} />
+          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("comment")}</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={{...styles.footerButtonItem}}>
+          <MaterialCommunityIcons name='repeat' size={24} color={theme.colors.grey3} />
+          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("repost")}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{...styles.footerButtonItem}}>
+          <MaterialCommunityIcons name='share-outline' size={24} color={theme.colors.grey3} />
+          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("share")}</Text>
+        </TouchableOpacity>
       </View> 
     </View>
   )
@@ -173,5 +261,18 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  footerButtonItem: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  footerText: {
+    fontSize: 10
+  },
+  countsGrop: {
+    flexDirection: 'row', 
+    gap: theme.spacing?.xs,
+    alignItems: 'center'
   }
 })

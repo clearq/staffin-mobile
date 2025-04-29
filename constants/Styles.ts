@@ -107,8 +107,10 @@ const pageStyle = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  likeColor: {
+    backgroundColor: "rgb(255, 45, 85)",
   }
-
 })
 
 export default pageStyle

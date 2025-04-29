@@ -139,7 +139,7 @@ const index = () => {
     setSelectedEmploymentId(preference.employmentTypeId)
     setSelectedJobId(preference.jobTypeId)
     setSelectedWorkPlaceId(preference.workplaceTypeId)
-  }, [preference])
+  }, [])
 
   const handleSubmit = async () => {
     try {

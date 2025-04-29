@@ -78,7 +78,7 @@ export const fetchImageFromCDN = async (user: IUser) => {
     return manipResult.uri;
 
   } catch (error) {
-    console.error("Error fetching file from CDN:", error);
+    console.error("Error fetching file from CDN:", error, 'user:', userId);
     
     return "";
   }

@@ -6,7 +6,7 @@ import { IPreference } from "@/types/UserTypes";
 
 
 // Get user by id
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: any) => {
   try{
     const { data } = await api.get(`/User/GetUser-id?userId=${userId}`);
 

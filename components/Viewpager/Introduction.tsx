@@ -584,7 +584,7 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
     setSelectedEmploymentId(preference.employmentTypeId)
     setSelectedJobId(preference.jobTypeId)
     setSelectedWorkPlaceId(preference.workplaceTypeId)
-  }, [preference])
+  }, [])
 
   const employmentTypeRadio = useMemo(() => ([
     {

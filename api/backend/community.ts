@@ -1,4 +1,6 @@
+import { values } from "lodash";
 import api from "./config";
+import { number } from "yup";
 
 // Get follower (List of users follower)
 export const getFollower = async (userId: number) => {
@@ -51,7 +53,8 @@ export const getAllPosts = async () => {
   
     return data
   } catch (error) {
-    console.error(error)
+    console.error('[get all posts] ', error)
+    return []
   }
 }
 
@@ -73,7 +76,7 @@ export const getPostDetails = async (postId: number) => {
 
     return data
   } catch (error) {
-    console.error(error)
+    console.error('[get posts details] ', error, 'post:', postId)
   }
 }
 
@@ -90,3 +93,145 @@ export const getUserPostsAndShares = async (userId: string) => {
   }
 };
 
+
+export const updatePost = async (postId: number, values: any) => {
+  try {
+    const response = await api.put(`/Community/UpdatePost?postId=${postId}`, values)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+
+// Hide Post
+
+// Unhyde Post
+
+// Get hidden posts
+
+// Delete post
+export const deletePost = async (postId: number) => {
+  try {
+    const response = await api.delete(`/Community/DeletePost?postId=${postId}`)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// Share post
+export const sharePost = async (postId: number, values: any) => {
+  try {
+    const response = await api.post(`/Community/SharePost?postId=${postId}`, values)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getSharesForPost = async (postId: number) => {
+  try {
+    const { data } = await api.get(`/Community/GetSharesForPost?postId=${postId}`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const deleteSharedPost = async (postId: number) => {
+  try {
+    const response = await api.delete(`/Community/DeleteSharedPost?sharedPostId=${postId}`)
+
+    return response
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const reportItem = async (values: any) => {
+  try {
+    const response = await api.post(`/Community/ReportItem`, values)
+
+    return response
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getReportedItem = async () => {
+  try {
+    const {data} = await api.get(`/Community/GetReportedItem`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// postResolveReport
+// Create group
+// Update group info
+
+export const getAllGroups = async () => {
+  try {
+    const {data} = await api.get(`/Community/GetAllGroups`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const deleteGroupe = async (id: number) => {
+  try {
+    const response = await api.delete(`/DeleteGroup?groupId=${number}`)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// Grant admin
+// Remove member from group
+// Join group
+// Leave group
+// Get group details
+// Invite to group
+// Get group invites
+// User groups
+// Group members
+// Accept invitation
+// Decline invitaion
+// Create group post
+// Delete group post
+
+export const likePost = async (id: number) => {
+  try {
+    const response = await api.post(`/Community/LikePost?postId=${id}`)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const unlikePost = async (id: number) => {
+  try {
+    const response = await api.post(`/Community/UnlikePost?postId=${id}`)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+//likeSharePost
+//UnlikeSharePost
+//AddComment
+//AddCommentSharePost

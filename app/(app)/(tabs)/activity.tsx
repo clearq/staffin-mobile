@@ -34,6 +34,8 @@ const Page = () => {
     queryKey: ["user-posts"],
     queryFn: async () => {
       const response = await getUserPostsAndShares(userId!)
+      console.log('kör i activity : getUserPostsAndShares');
+      
       
       return response;
     },
@@ -76,7 +78,7 @@ const Page = () => {
       }
 
       {/* 🚧 Insert post list */}
-      <PostTemplate />
+      <PostTemplate post={posts}/>
     </View>
   )
 }

@@ -50,7 +50,7 @@ export const updateProfileImage = async (userId: number, profileImage: string) =
     console.log("Profile image updated successfully:", response.data);
     return response.data;
   } catch (error) {
-    console.error( error);
+    console.error( '[profile image] ', error, ':', userId);
     throw error;
   }
 };
@@ -103,7 +103,7 @@ export const getContentFile = async (key: string, token: any, userId: number, co
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching file:", error);
+    console.error("Error fetching file:", error, 'user:', userId);
     throw error;
   }
 };

@@ -217,7 +217,7 @@ export const likePost = async (id: number) => {
 
     return response.data
   } catch (error) {
-    console.error(error)
+    console.error('[like post]', error, 'post:', id )
   }
 }
 
@@ -227,7 +227,7 @@ export const unlikePost = async (id: number) => {
 
     return response.data
   } catch (error) {
-    console.error(error)
+    console.error('[unlike post]', error, 'post:', id)
   }
 }
 

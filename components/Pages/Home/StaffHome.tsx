@@ -71,6 +71,9 @@ const StaffHome = () => {
                     <PostTemplate 
                       postId={post.postId}
                       authorId={post.userId}
+                      post={post}
+                      postsRefetch={postsRefetch}
+                      postIsLoading={postsLoading}
                     />
                   </View>
                 ))

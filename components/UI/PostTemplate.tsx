@@ -18,29 +18,32 @@ import { number } from 'yup'
 interface Props {
   postId: number
   authorId: number
+  post: IPost
+  postsRefetch: () => void
+  postIsLoading: boolean
 }
 
-const PostTemplate = ({postId, authorId}: Props) => {
+const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId } } = useAuth();
 
-  const {data: post, refetch: postRefetch, isLoading: postIsLoading} = useQuery({
-    queryKey: ["post", postId],
-    queryFn: async () => {
-      const response = await getPostDetails(postId)
+  // const {data: post, refetch: postRefetch, isLoading: postIsLoading} = useQuery({
+  //   queryKey: ["post", postId],
+  //   queryFn: async () => {
+  //     const response = await getPostDetails(postId)
 
-      if (response) {
-        //console.log('res:', response);
-        return response
-      } else {
-        return (
-          <ActivityIndicator color={theme.colors.primary} />
-        )
-      }
+  //     if (response) {
+  //       //console.log('res:', response);
+  //       return response
+  //     } else {
+  //       return (
+  //         <ActivityIndicator color={theme.colors.primary} />
+  //       )
+  //     }
    
-    }
-  }) 
+  //   }
+  // }) 
   
   const {data: user} = useQuery({
     queryKey: ['author', authorId],
@@ -64,20 +67,23 @@ const PostTemplate = ({postId, authorId}: Props) => {
     if(user?.profileImage) {
       fetchUrl()
     }
-  },[user?.profileImage])
+  },[])
+
+  useEffect(() => {
+
+  },[])
 
 
   const handleLikeAction = async (id: number) => {
-    setLiked(!liked)
 
     if (liked === true) {
-      await likePost(id)
-      postRefetch()
-    }
-
-    if (liked === false) {
       await unlikePost(id)
-      postRefetch()
+      setLiked(false)
+      postsRefetch()
+    } else {
+      await likePost(id)
+      setLiked(true)
+      postsRefetch()
     }
   }
 

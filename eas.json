@@ -1,28 +1,57 @@
 {
   "cli": {
-    "version": ">= 16.0.1",
+    "version": ">= 16.3.3",
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
+    "preview": {
+      "channel": "preview",
       "android": {
-        "buildType": "apk",
-        "gradleCommand": "app:asembleDebug"
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.timeer.app",
+        "EXPO_PUBLIC_CDN_API_URL": "https://staffin-cdn.clearq.se",
+        "EXPO_PUBLIC_CDN_PASSWORD": "2A9EADCB-11CE-4480-9A56-23FA875F976F"
       }
     },
-    "preview": {
+    "development": {
       "distribution": "internal",
       "android": {
-        "gradleCommand": "app:assembleRelease"
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      },
+      "channel": "development",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.timeer.app",
+        "EXPO_PUBLIC_CDN_API_URL": "https://staffin-cdn.clearq.se",
+        "EXPO_PUBLIC_CDN_PASSWORD": "2A9EADCB-11CE-4480-9A56-23FA875F976F"
       }
     },
     "production": {
-      "autoIncrement": true
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.timeer.app",
+        "EXPO_PUBLIC_CDN_API_URL": "https://staffin-cdn.clearq.se",
+        "EXPO_PUBLIC_CDN_PASSWORD": "2A9EADCB-11CE-4480-9A56-23FA875F976F"
+      }
+    },
+    "test": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.timeer.app",
+        "EXPO_PUBLIC_CDN_API_URL": "https://staffin-cdn.clearq.se",
+        "EXPO_PUBLIC_CDN_PASSWORD": "2A9EADCB-11CE-4480-9A56-23FA875F976F"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        // "serviceAccountKeyPath": "./api/timeer-google-json.json",
+        // "track": "alpha"
+      }
+    }
   }
 }

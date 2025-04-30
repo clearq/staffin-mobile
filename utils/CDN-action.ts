@@ -28,7 +28,7 @@ export const getImageUrl = (key: string, userId: number, contentFolder: any) => 
 };
 
 
-export const fetchImageFromCDN = async ({userId, contentFolder, key}:{userId: number, contentFolder:"profile"|"post", key: string }) => {
+export const fetchImageFromCDN = async ({userId, contentFolder, key}:{userId: number, contentFolder:"profile"|"posts_images", key: string }) => {
   //const userId = user?.id;
   //const contentFolder = "profile";
   //const key = user?.profileImage;
@@ -79,7 +79,7 @@ export const fetchImageFromCDN = async ({userId, contentFolder, key}:{userId: nu
     return manipResult.uri;
 
   } catch (error) {
-    console.error("Error fetching file from CDN:", error, 'user:', userId);
+    console.error("Error fetching file from CDN:", error, 'user:', userId, 'key:', key );
     
     return "";
   }

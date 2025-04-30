@@ -12,7 +12,7 @@ export const getUserById = async (userId: any) => {
 
     return data;
   } catch (error) {
-    console.error('getUserById',error);    
+    console.error('[getUserById]',error, userId);    
   }
 }
 

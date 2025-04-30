@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import pageStyle from '@/constants/Styles'
 import { theme } from '@/constants/Theme'
@@ -13,7 +13,7 @@ import { fetchImageFromCDN } from '@/utils/CDN-action'
 import { useQuery } from '@tanstack/react-query'
 import { getPostDetails, getUserById, likePost, unlikePost } from '@/api/backend'
 import { CompanyAvatar, ProfileAvatar } from './ProfileAvatar'
-import { number } from 'yup'
+
 
 interface Props {
   postId: number
@@ -38,9 +38,8 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
     }
   })
 
-
   const [authorImage, setAuthorImage] = useState('')
-  const [postImages, setPostImages] = useState([])
+  const [postImages, setPostImages] = useState<string[]>([])
   const [liked, setLiked] = useState(false)
   const [openComments, setOpenComments] = useState(false)
 
@@ -52,6 +51,22 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
   }, [post.likes, userId]);
 
   useEffect(() => {
+    const fetchUrls = async () => {
+      if (post?.images?.length > 0) {
+        const urls = await Promise.all(
+          post.images.map((imageKey) =>
+            fetchImageFromCDN({
+              userId: post.userId,
+              contentFolder: "posts_images",
+              key: imageKey
+            })
+          )
+        );
+  
+        setPostImages(urls); // assumes fetchImageFromCDN returns a string (URL)
+      }
+    };
+
     const isLiked = async () => {
       post.likes?.find((item) => {
         if (item.userId === Number(userId)){
@@ -61,6 +76,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
       })
     }
 
+    fetchUrls()
     isLiked()
   },[])
 
@@ -155,7 +171,12 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
           </Text>
 
           {/* Image content */}
-          <View style={{width: '100%', height: 250, backgroundColor: theme.colors.disabled}}/>
+          {postImages.length > 0 && postImages.map((uri, index) => (
+            <View key={index}>
+              <Image source={{ uri: uri }} style={{height: 250 ,resizeMode: 'contain'}} />
+            </View>
+          ))}
+          
 
           {/* Reactions */}
           <View style={{...styles.reactionGroup}}>

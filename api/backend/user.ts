@@ -16,12 +16,14 @@ export const getUserById = async (userId: any) => {
   }
 }
 
-export const updateUserProfileImage = async (imageData: string) => {
+export const updateUserProfileImage = async ({imageData, userId}:{imageData: string, userId: number}) => {
   console.log("Updating profile image in database...");
+  console.log('imageData', imageData, 'userid', userId);
   
   try {
     const response = await api.put(`/User/update-profileImage`, {
-      profileImage: imageData
+      profileImage: imageData,
+      userId: userId
     })
     //console.log('response:', response);
     

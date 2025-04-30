@@ -28,6 +28,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId } } = useAuth();
   
+  // Fetch user data for profile image
   const {data: user} = useQuery({
     queryKey: ['author', authorId],
     queryFn: async () => {
@@ -36,7 +37,6 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
       return response
     }
   })
-
 
 
   const [authorImage, setAuthorImage] = useState('')
@@ -92,7 +92,8 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
         <View style={{...styles.userContainer}}>
          
           <ProfileAvatar
-            user={user}
+            userId={user?.id}
+            image={user?.profileImage}
             size={40}
             handleUpdate={() => {}}
           />

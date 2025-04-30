@@ -165,7 +165,8 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
 
         <View style={{...styles.userInfoContainer}}>
           <ProfileAvatar 
-            user={user}
+            userId={user.id}
+            image={user.profileImage}
             size={40}
             handleUpdate={refetch}
           />

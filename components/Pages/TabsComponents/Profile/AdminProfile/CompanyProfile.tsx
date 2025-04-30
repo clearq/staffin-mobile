@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
-import { autoLoginToCDN, deleteStaffSkill, getAllBranches, getCompanyById, updateCompanyInformation, updateUserProfileImage, uploadContentFile } from '@/api/backend';
+import { autoLoginToCDN, deleteStaffSkill, getAllBranches, getCompanyById, getUserById, updateCompanyInformation, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 import CompanyInformation from './Company/information';
 import ProfileItemContainer from '../../ProfileListContainer';
 import { useAuth } from '@/contexts/authContext';
@@ -29,7 +29,7 @@ import CreatePostModal from '../../Activity/CreatePostModal';
 import BranchList from './Company/Branch/branches';
 import AddBranchModal from './Company/Branch/addBranch';
 import { useQuery } from '@tanstack/react-query';
-import { CompanyAvatar } from '@/components/UI/ProfileAvatar';
+import { CompanyAvatar, ProfileAvatar } from '@/components/UI/ProfileAvatar';
 
 
 
@@ -50,7 +50,7 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
   const { authState, setAuthState,} = useAuth()
   const [avatar, setAvatar] = useState("")
 
-  const { data = [], isLoading, refetch:branchRefetch } = useQuery({
+  const { data = [], isLoading, refetch: branchRefetch} = useQuery({
     queryKey: ["all-branches"],
     queryFn: async () => {
       const response = getAllBranches()
@@ -59,38 +59,54 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
     }
   })
 
+
   const [openEditInfoDialog, setOpenEditInfoDialog] = useState<boolean>(false)
   const [openEditAboutDialog, setOpenEditAboutDialog] = useState<boolean>(false)
   const [openCreateActivityDialog, setOpenCreateActivityDialog] = useState<boolean>(false)
 
   const [openCreateBranchDialog, setOpenCreateBranchDialog] = useState<boolean>(false)
 
+
+  console.log('companyid', companyId, company.userId);
   
   // Update Image file as Base64 (Don't use CDN)
   const handleImageUpdate = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      alert("Permission to access media library is required!");
-      return;
-    }
+    // const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    // if (!permissionResult.granted) {
+    //   alert("Permission to access media library is required!");
+    //   return;
+    // }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
-      base64: true, // important to include base64 data
-      quality: 0.4, // optional: reduce quality to reduce size
-    });
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes:['images'],
+      allowsEditing: true,
+      quality: 1,
+    });  
 
-    if (!result.canceled) {
-      const base64 = result.assets[0].base64;
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      
+      const file = result.assets[0];
+      const userId = company.userId;
+      const contentFolder = "profile";
+      const key = `${userId}_${file.fileName}`;
 
-      setAvatar(`data:image/jpeg;base64,${base64}`)  
+      console.log('key:', key, 'userId:', userId );
+      
 
-      const values = {
-        ...company,
-        image: `data:image/jpeg;base64,${base64}`
-      }
+      // const base64 = result.assets[0].base64;
+
+      // setAvatar(`data:image/jpeg;base64,${base64}`)  
+
 
       try {
-        await updateCompanyInformation(companyId, values)
+        let token = await getItem(CDN_TOKEN) || (await autoLoginToCDN());
+
+        // CDN
+        await uploadContentFile(key, file, token, userId, contentFolder)
+        console.log("File uploaded successfully.");
+
+        //await updateCompanyInformation(companyId, values)
+        await updateUserProfileImage({imageData: key, userId: company.userId});
 
         toast.show(`${t("success-update-message")}`, {
           type: "success"
@@ -158,8 +174,9 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
             backgroundColor: theme.colors.background
           }}
         >
-          <CompanyAvatar 
-            company={company}
+          <ProfileAvatar 
+            userId={company.userId}
+            image={company.image}
             size={80}
             handleUpdate={branchRefetch}
           />

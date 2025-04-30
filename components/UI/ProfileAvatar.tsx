@@ -11,7 +11,9 @@ import { ICompany, IUser } from '@/types';
 import { useAuth } from '@/contexts/authContext';
 
 interface userProps {
-  user: IUser
+  //user: IUser
+  userId: number;
+  image: string
   size: number
   handleUpdate: () => void
 }
@@ -22,7 +24,7 @@ interface companyProps {
   handleUpdate: () => void
 }
 
-export const ProfileAvatar = ({user, size, handleUpdate}:userProps) => {
+export const ProfileAvatar = ({userId, image, size, handleUpdate}:userProps) => {
   const { theme } = useTheme();
   const { authState, setAuthState } = useAuth()
   const [avatar, setAvatar] = useState("")
@@ -32,16 +34,16 @@ export const ProfileAvatar = ({user, size, handleUpdate}:userProps) => {
       // console.log('staff image:', user.profileImage, user.id);
 
       const url = await fetchImageFromCDN({
-        userId: user?.id,
+        userId: userId,
         contentFolder: "profile",
-        key: user?.profileImage 
+        key: image  
       })
       setAvatar(url)
     }
-    if(user?.profileImage) {
+    if(image) {
       fetchUrl()
     }
-  },[user?.profileImage])
+  },[image, userId])
 
 
   return (

@@ -59,7 +59,7 @@ const ProfileHeader = ({user, showEditButton, refetch}: props) => {
         console.log("File uploaded successfully.");
         
         // databse
-        await updateUserProfileImage(key);
+        await updateUserProfileImage({imageData:key, userId:user.id});
 
         setAuthState((prev) => ({
           ...prev,
@@ -124,9 +124,10 @@ const ProfileHeader = ({user, showEditButton, refetch}: props) => {
           }}
         >
           <ProfileAvatar 
-            user={user}
+            userId={user.id}
+            image={user.profileImage}
             size={80}
-            handleUpdate={refetch}
+            handleUpdate={() => refetch()}
           />
 
           {/* {avatar !== "" 

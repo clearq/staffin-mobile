@@ -38,3 +38,11 @@ export interface IProfessionArea {
     id: number;
     name: string;
 }
+
+export interface IMatchingJob {
+    jobId : number;
+    jobTitle: string;
+    jobDescription: string;
+    matchScore: number;
+    companyId: number; 
+}

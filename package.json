@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint"
@@ -14,11 +14,26 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "jwt-decode",
+          "react-native-toast-notifications",
+          "intl-pluralrules",
+          "lodash",
+          "yup",
+          "react-native-vector-icons"
+        ],
+        "listUnknownPackages": false
+      }
+    }
+  },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.3.0",
     "@expo/vector-icons": "^14.0.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
-    "@react-navigation/native": "^7.1.6",
+    "@react-navigation/native": "^7.0.14",
     "@react-navigation/stack": "^7.2.10",
     "@reduxjs/toolkit": "^2.6.1",
     "@rneui/themed": "^4.0.0-rc.8",
@@ -42,19 +57,20 @@
     "expo-status-bar": "~2.0.1",
     "expo-symbols": "~0.2.1",
     "expo-system-ui": "~4.0.7",
-    "expo-updates": "~0.26.16",
+    "expo-updates": "~0.27.4",
     "expo-web-browser": "~14.0.2",
     "formik": "^2.4.6",
     "intl-pluralrules": "^2.0.1",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
-    "lottie-react-native": "^7.2.2",
+    "lottie-react-native": "^7.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.56.1",
     "react-i18next": "^15.4.0",
-    "react-native": "0.76.6",
+    "react-native": "^0.76.9",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-pager-view": "6.5.1",
     "react-native-paper": "^5.13.1",
     "react-native-radio-buttons-group": "^3.1.0",
     "react-native-reanimated": "~3.16.1",
@@ -66,8 +82,7 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "react-redux": "^9.2.0",
-    "yup": "^1.6.1",
-    "react-native-pager-view": "6.5.1"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -82,3 +97,4 @@
   },
   "private": true
 }
+

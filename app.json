@@ -9,13 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jankenm.staffinmobileapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/image/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.jankenm.staffinmobileapp"
     },
     "web": {
       "bundler": "metro",
@@ -58,8 +63,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "1b43a338-3725-4c28-9a0d-e1739de44f00"
+        "projectId": "b4a5809c-f405-403d-8c62-04d0f9deb06f"
       }
-    }
+    },
+    "owner": "janken-m"
   }
 }

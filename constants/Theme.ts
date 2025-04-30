@@ -61,7 +61,7 @@ export const theme = createTheme({
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color
-    disabled: "rgb(183, 184, 192)"
+    disabled: "rgb(183, 184, 192)",
   },
   darkColors: {
     ...darkColors,

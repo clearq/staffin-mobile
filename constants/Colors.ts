@@ -17,7 +17,8 @@ export const Colors = {
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color
-    disabled: "rgb(183, 184, 192)"
+    disabled: "rgb(183, 184, 192)",
+    like: "rgb(255, 45, 85)",
   },
   dark: {
     background: "rgb(49, 50, 52)",
@@ -34,7 +35,8 @@ export const Colors = {
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color
-    disabled: "rgb(183, 184, 192)"
+    disabled: "rgb(183, 184, 192)",
+    like: "rgb(255, 45, 85)",
   },
 };
 

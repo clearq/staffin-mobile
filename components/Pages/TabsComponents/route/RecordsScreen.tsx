@@ -65,6 +65,13 @@ export default function RecordsScreen() {
       value: t("my-activity"),
       path: "/activity",
     },
+    {
+      id: 5,
+      icon: "account-settings-outline", // My Document
+      title: t("preferences"),
+      value: t("preferences"),
+      path: "/preferences",
+    },
   ];
 
   const adminRecordsList = [

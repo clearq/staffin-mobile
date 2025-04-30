@@ -1,60 +1,101 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import PostTemplate from '@/components/UI/PostTemplate'
 import MachingJobsTemplate from '@/components/UI/MachingJobsTemplate'
 import { useQuery } from '@tanstack/react-query'
-import { getMatchingJobs, getUserPreferences } from '@/api/backend'
+import { getAllPosts, getMatchingJobs, getUserById, getUserPreferences } from '@/api/backend'
 import Introduction from '@/components/Viewpager/Introduction'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/authContext'
+import { IPost } from '@/types'
+import { theme } from '@/constants/Theme'
 
 const StaffHome = () => {
-  const [openIntroduction, setOpenIntroduction] = useState(true)
+  const [openIntroduction, setOpenIntroduction] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { theme } = useTheme()
   const { t } = useTranslation();
   
-  const { authState:{ userData, userId } } = useAuth();
+  const { authState:{ userData, userId, token }, isLoading } = useAuth();
 
-  const {} = useQuery({
-    queryKey: ["user-prefere"],
+  const {data: matchJob = [], refetch: matchJobRefetch} = useQuery({
+    queryKey: ["matching-jobs"],
     queryFn: async () => {
-      const response = await getUserPreferences()
+      return await getMatchingJobs()
+    }
+  })
 
+  const {data: allPosts = [], isLoading: postsLoading, refetch: postsRefetch } = useQuery({
+    queryKey: ["all-posts"],
+    queryFn: async () => {
+      const response = await getAllPosts()
+      console.log('posts:', response.length);
       return response
     }
   })
 
-  const closeIntroduction = () => {
-    console.log('close introduction');
-    
-  }
-  
-  const {data: matchingJobs = [], refetch, isLoading } = useQuery({
-    queryKey: ["matching-job"],
-    queryFn: async () => {
-      const response = await getMatchingJobs()
-      
-      return response
-    }
-  })
 
   useEffect(() => {
-    
+    if(!userData) {
+      setLoading(true)
+    }
+
+    if(
+      userData?.firstName === "" ||
+      userData?.lastName === "" ||
+      matchJob?.length < 0
+    ) {
+      setOpenIntroduction(true)
+    }
+
   },[])
 
   return (
     <View>
-      <Introduction 
-        onClose={closeIntroduction}
-      />
+      {isLoading || loading &&  <ActivityIndicator color={theme.colors.primary} /> }     
+        <>
+        {openIntroduction && 
+          <Introduction 
+            onClose={() => setOpenIntroduction(!openIntroduction)}
+          />
+        }
 
-      <ScrollView>  
-        <PostTemplate />
-        <MachingJobsTemplate />
-      </ScrollView>
+          <ScrollView>  
+            <View
+            >
+              {postsLoading && <ActivityIndicator color={theme.colors.primary} /> }
+              {allPosts && !postsLoading && 
+                allPosts.map((post: IPost) => (
+                  <View key={post.postId}>
+                    <PostTemplate 
+                      postId={post.postId}
+                      authorId={post.userId}
+                      post={post}
+                      postsRefetch={postsRefetch}
+                      postIsLoading={postsLoading}
+                    />
+                  </View>
+                ))
+              } 
+            </View>
+           
+            <MachingJobsTemplate />
+          </ScrollView>
+        </>  
     </View>
   )
 }
 
 export default StaffHome
+
+const styles = StyleSheet.create({
+  col: {
+    flexDirection: 'column',
+    gap: theme.spacing?.md,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: theme.spacing?.md
+  }
+})

@@ -1,46 +1,37 @@
 import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput} from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { Fonts, Sizes, theme } from '@/constants/Theme'
 import { Avatar, CheckBox, Divider, ListItem, useTheme } from '@rneui/themed'
 
-
-import { ProfileAvatar } from '../UI/ProfileAvatar';
 import { ICity, IUser } from '@/types';
 import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
-import { deletePreferredCity, getPreferenceOptions, getPreferredCities, getUserPreferences } from '@/api/backend';
+import { deletePreferredCity, getPreferenceOptions, getPreferredCities, getProfessionAreas, getUserPreferences, setUserPreferences } from '@/api/backend';
 import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
-import Cities from '../Dropdown/Cities';
-import ProfessionArea from '../Dropdown/ProfessionArea';
+
 import { useAuth } from '@/contexts/authContext';
+import Cities from '@/components/Dropdown/Cities';
+import ProfessionArea from '@/components/Dropdown/ProfessionArea';
+import Button from '@/components/UI/Button';
 
-
-interface props {
-  visible: boolean
-  onClose: () => void
-  user: IUser
-  refetch: () => void
-}
-
-const UserPreferences = ({visible, onClose, user, refetch}: props) => {
-  const { theme } = useTheme();
+const index = () => {
+  const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
   const { isLoading, authState:{ userData, userId } } = useAuth();
 
-  const [openModal, setOpenModal] = useState(false)
-  const [selectedEmploymentId, setSelectedEmploymentId] = useState(0)
-  const [selectedJobId, setSelectedJobId] = useState(0)
-  const [selectedWorkPlaceId, setSelectedWorkPlaceId] = useState(0)
+  const [selectedEmploymentId, setSelectedEmploymentId] = useState<number[]>([])
+  const [selectedJobId, setSelectedJobId] = useState<number[]>([])
+  const [selectedWorkPlaceId, setSelectedWorkPlaceId] = useState<number[]>([])
 
-  const {data: preference, refetch: preferenceRefetch} = useQuery({
+  const {data: preference = [], refetch: preferenceRefetch} = useQuery({
     queryKey: ["user-preferences"],
     queryFn: async () => {
       const response = await getUserPreferences()
-      // console.log(response);
+      console.log('res', response);
       
       return response
     }
@@ -119,14 +110,18 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
     }
   ]),[])
 
-  // const {data: options, refetch: optionsRefetch} = useQuery({
-  //   queryKey: ["options"],
-  //   queryFn: async () => {
-  //     const response = await getPreferenceOptions()
+  const { data: allProfessions = [] } = useQuery({
+    queryKey: ["all-profession-areas"],
+    queryFn: getProfessionAreas,
+  });
 
-  //     return response
-  //   }
-  // }) 
+  const preferredProfessionAreas = useMemo(() => {
+    if (!preference.professionAreaId || !Array.isArray(allProfessions)) return [];
+  
+    return allProfessions.filter((area) =>
+      preference.professionAreaId.includes(area.id)
+    );
+  }, [preference, allProfessions]);
 
   const handleDeletePreferredCity = async (id: number) => {
     try {
@@ -138,60 +133,51 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
     }
   }
 
+  useEffect(() => {
+    console.log(preference);
+    
+    setSelectedEmploymentId(preference.employmentTypeId)
+    setSelectedJobId(preference.jobTypeId)
+    setSelectedWorkPlaceId(preference.workplaceTypeId)
+  }, [])
+
+  const handleSubmit = async () => {
+    try {
+       const response = await setUserPreferences({
+        jobTypeIds: selectedJobId,
+        employmentTypeIds: selectedEmploymentId,
+        workplaceTypeIds: selectedWorkPlaceId
+       })
+       
+       toast.show(`${t("success-update-message")}`, {
+        type: "success",
+      });
+      
+      preferenceRefetch()
+
+      return response
+    } catch (error) {
+      toast.show(`${t("failed-update-message")}`, {
+        type: "error",
+      });
+    }
+  }
 
   return (
-    <Modal
-      visible={visible}
-      transparent={true}
-    >
+    <View style={{padding: theme.spacing.md}}>
       <View
-        style={{
-          ...styles.dropdownContainer,
-          ...pageStyle.cardPrimaryColor,
-          ...pageStyle.cardShadow,
-          gap: theme.spacing.sm
-        }}
+        style={{...styles.col}}
       >
-
-        <TouchableOpacity
-            style={{
-            ...styles.closeButton,
-          }}
-          onPress={onClose}
-        >
-          <MaterialCommunityIcons name='close' size={20} color={theme.colors.grey0}/>
-        </TouchableOpacity>
-
-
-        <View style={{...styles.userInfoContainer}}>
-          <ProfileAvatar 
-            user={user}
-            size={40}
-            handleUpdate={refetch}
-          />
-
-          <Text style={{...pageStyle.headline02, color: theme.colors.grey0,}}>
-            {user.firstName ? (<Text>{user.firstName} </Text>) : (<Text>Firstname </Text>)}
-            {user.lastName ? (<Text>{user.lastName}</Text>) : (<Text>Lastname</Text>)}
-          </Text>
-
-          <TouchableOpacity onPress={() => setOpenModal(true)}>
-            <MaterialCommunityIcons name='pencil' size={20} color={theme.colors.primary} />
-          </TouchableOpacity>
-
-        </View>
-
-        <Divider style={{marginVertical: theme.spacing.xs}} />
         <View>
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
-           {`${t("area")}:`}
+            {`${t("area")}:`}
           </Text>
 
           <Cities 
             refetch={cityRefetch}
           />
 
-          <View>
+          <View style={{...styles.row, flexWrap: 'wrap', marginTop: theme.spacing.md}}>
             {cities.length > 0 && cities.map((city: ICity) => (
               <View 
                 key={city.cityId}
@@ -213,16 +199,30 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
             ))}
           </View>        
         </View>
-      
 
         <View>
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
             {`${t("profession-area")}:`}
           </Text> 
 
-          <ProfessionArea 
-            refetch={preferenceRefetch}
-          />         
+          <ProfessionArea refetch={preferenceRefetch} />
+            <View>
+              {preferredProfessionAreas.length > 0 && preferredProfessionAreas.map((item, index: number) => (
+                <View 
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    gap: theme.spacing.sm,
+                    alignItems: 'center'
+                  }}
+                >
+                <Text style={{...pageStyle.inputText, color: theme.colors.grey0}}>
+                  {item.name}
+                </Text>
+
+                </View>
+              ))}
+            </View>        
         </View>
 
         <View style={{...styles.radioComponent}}>
@@ -234,12 +234,16 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
             {employmentTypeRadio.map(item => (
               <View key={item.id} style={{...styles.radioButtonGroup}}>
                 <CheckBox 
-                  checked={selectedEmploymentId === item.id}
-                  onPress={() => 
-                    selectedEmploymentId === item.id
-                    ? setSelectedEmploymentId(0)
-                    : setSelectedEmploymentId(item.id)
-                  }
+                  checked={selectedEmploymentId?.includes(item.id)}
+                  onPress={() =>  {
+                    if (selectedEmploymentId?.includes(item.id)) {
+                      // Remove if already selected
+                      setSelectedEmploymentId(selectedEmploymentId.filter(id => id !== item.id));
+                    } else {
+                      // Add if not selected
+                      setSelectedEmploymentId([...selectedEmploymentId, item.id]);
+                    }
+                  }}
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                   size={16}
@@ -259,12 +263,14 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
             {jobTypeRadio.map(item => (
               <View key={item.id} style={{...styles.radioButtonGroup}}>
                 <CheckBox 
-                  checked={selectedJobId === item.id}
-                  onPress={() => 
-                    selectedJobId === item.id
-                    ? setSelectedJobId(0)
-                    : setSelectedJobId(item.id)
-                  }
+                  checked={selectedJobId?.includes(item.id)}
+                  onPress={() => {
+                    if(selectedJobId?.includes(item.id)) {
+                      setSelectedJobId(selectedJobId.filter(id => id !== item.id));
+                    } else {
+                      setSelectedJobId([...selectedJobId, item.id]);
+                    }
+                  }}
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                   size={16}
@@ -284,12 +290,14 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
             {workPlaceTypeRadio.map(item => (
               <View key={item.id} style={{...styles.radioButtonGroup}}>
                 <CheckBox 
-                  checked={selectedWorkPlaceId === item.id}
-                  onPress={() => 
-                    selectedWorkPlaceId === item.id
-                    ? setSelectedWorkPlaceId(0)
-                    : setSelectedWorkPlaceId(item.id)
-                  }
+                  checked={selectedWorkPlaceId?.includes(item.id)}
+                  onPress={() => {
+                    if (selectedWorkPlaceId?.includes(item.id)) {
+                      setSelectedWorkPlaceId(selectedWorkPlaceId.filter(id => id !== item.id));
+                    } else {
+                      setSelectedWorkPlaceId([...selectedWorkPlaceId, item.id])
+                    }
+                  }}
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                   size={16}
@@ -298,35 +306,27 @@ const UserPreferences = ({visible, onClose, user, refetch}: props) => {
               </View>
             ))}
           </View>
-        </View>
-
-      </View>
-    </Modal>
+        </View> 
+        
+        <Button 
+          title={t("submit")}
+          onPress={handleSubmit}
+        />
+      </View>  
+    </View>
   )
 }
 
-export default UserPreferences
+export default index
 
 const styles = StyleSheet.create({
-  dropdownContainer: {
-    marginHorizontal: theme.spacing?.md,
-    padding: theme.spacing?.md,
-    borderRadius: theme.spacing?.md,
-    borderTopRightRadius: 0,
-    position: 'relative',
-    bottom: -60,
+  col: {
+    flexDirection: 'column',
+    gap: theme.spacing?.md
   },
-  userInfoContainer: {
+  row: {
     flexDirection: 'row',
     gap: theme.spacing?.md,
-    alignItems: 'center'
-  },
-  closeButton: {
-    position: 'absolute',
-    top: theme.spacing?.sm,
-    right: theme.spacing?.sm,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   radioComponent: {
     flexDirection: 'column',

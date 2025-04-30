@@ -77,7 +77,9 @@ const pageStyle = StyleSheet.create({
     flex: 1,
     height: "100%",
     paddingHorizontal: 0,
-    //borderWidth: 2,
+  },
+  buttonBorder: {
+    borderWidth: 2
   },
   dropdown: {
     position: "absolute",
@@ -105,8 +107,10 @@ const pageStyle = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  likeColor: {
+    backgroundColor: "rgb(255, 45, 85)",
   }
-
 })
 
 export default pageStyle

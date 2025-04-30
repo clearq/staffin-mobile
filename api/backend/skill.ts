@@ -8,7 +8,7 @@ export const getSkillsList = async () => {
 
     return response.data
   } catch (error) {
-    console.log(error)
+    console.log('getSkillsList', error)
     return 
   }
 }

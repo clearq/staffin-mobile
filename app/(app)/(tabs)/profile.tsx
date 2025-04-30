@@ -59,6 +59,8 @@ const Page = () => {
     queryFn: async () => {
       if (userId) {
         const response = await getUserPostsAndShares(userId)
+        console.log('kör i profile: getUserPostnaShare');
+        
         return response
       }
       return []

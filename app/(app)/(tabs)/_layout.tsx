@@ -42,20 +42,6 @@ const _layout = () => {
     isLoading,
   } = useAuth();
 
-  const { 
-    data: user, 
-    refetch: userRefetch, 
-    isLoading: userIsLoading, 
-    isPending,    
-  } = useQuery({
-    queryKey: ["user-data"],
-    queryFn: async () => {
-      const response = await getUserById(userId!)      
-
-      return response;
-    },
-    enabled: !!userId,
-  }); 
 
   if (isLoading && !userData) {
     return <ActivityIndicator color={theme.colors.primary} />
@@ -221,6 +207,7 @@ const _layout = () => {
           }} 
         />
         
+        {/* Document Screen - Hidden from Tab Bar */}
         <Tabs.Screen 
           name="activity"
           options={{
@@ -233,8 +220,22 @@ const _layout = () => {
           }} 
         />
         
+        {/* Document Screen - Hidden from Tab Bar */}
         <Tabs.Screen 
           name="jobAnnounce"
+          options={{
+            href: null, // Hides from the tab bar
+            // tabBarStyle: { display: "none", height: 0, width: 0, },
+            // tabBarIcon: () => null,
+            headerShown: true,
+            // headerTitle: "My Document",
+            header: () => <PageHeader />,
+          }} 
+        />
+
+        {/* Document Screen - Hidden from Tab Bar */}
+        <Tabs.Screen 
+          name="preferences"
           options={{
             href: null, // Hides from the tab bar
             // tabBarStyle: { display: "none", height: 0, width: 0, },

@@ -6,13 +6,13 @@ import { IPreference } from "@/types/UserTypes";
 
 
 // Get user by id
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: any) => {
   try{
     const { data } = await api.get(`/User/GetUser-id?userId=${userId}`);
 
     return data;
   } catch (error) {
-    console.error(error);    
+    console.error('getUserById',error);    
   }
 }
 
@@ -73,10 +73,11 @@ export const addPreferredCity = async (id: number) => {
 export const getPreferredCities = async () => {
   try {
     const {data} = await api.get(`/User/GetPreferredCities`)
-
+    
     return data
   } catch (error) {
-    console.error(error)
+    console.error('getPreferredCities', error)
+    return []
   }
 }
 
@@ -86,7 +87,7 @@ export const deletePreferredCity = async (cityId: number) => {
 
     return response
   } catch (error) {
-    console.error(error)
+    console.error('deletePreferredCity:',error)
   }
 }
 
@@ -96,17 +97,19 @@ export const getAllCities = async () => {
   
     return data
   } catch (error) {
-    console.error(error)
+    console.error('getAllCities', error)
   }
 }
 
-export const updateProfessionArea = async (values: any) => {
+export const updateProfessionArea = async (id: number[]) => {
   try {
-    const response = await api.put(`/User/UpdateProfessionArea`, values)
+    const response = await api.put(`/User/UpdateProfessionArea`, {
+      professionAreaId: id
+    })
     
-    return response
+    return response.data
   } catch (error) {
-    console.error(error)
+    console.error('updateProfessionArea', error)
   }
 }
 
@@ -126,7 +129,7 @@ export const getUserPreferences = async () => {
 
     return data
   } catch (error) {
-    console.error(error)
+    console.error('getUserPreferences:', error)
   }
 }
 
@@ -136,6 +139,6 @@ export const getPreferenceOptions = async () => {
 
     return data
   } catch (error) {
-    console.error(error)
+    console.error('getPreferenceOptions', error)
   }
 }

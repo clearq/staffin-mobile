@@ -50,6 +50,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
     //   }
     // },[user?.profileImage])
 
+   
 
   return (
     <View
@@ -91,7 +92,8 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
                 ]}
               >
                 <ProfileAvatar 
-                  user={user}
+                  userId={user?.id}
+                  image={user?.profileImage}
                   size={60}
                   handleUpdate={userRefetch}
                 />

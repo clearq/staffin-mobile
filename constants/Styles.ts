@@ -4,7 +4,7 @@ import { Sizes, theme } from "./Theme"
 const pageStyle = StyleSheet.create({
   pageComponent:{
     flex:1,
-    padding:Sizes.fixPadding,
+    paddingHorizontal:Sizes.fixPadding,
   },
   headline01:{
     fontFamily: "Coolvetica",
@@ -77,6 +77,7 @@ const pageStyle = StyleSheet.create({
     flex: 1,
     height: "100%",
     paddingHorizontal: 0,
+    //borderWidth: 2
   },
   buttonBorder: {
     borderWidth: 2

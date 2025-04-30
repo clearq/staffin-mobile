@@ -10,7 +10,7 @@ export interface IUser {
   city?: string;
   postalCode?: string;
   country?: string;
-  profileImage?: string;
+  profileImage: string;
   phoneNumber?: string;
   about?: string;
   roleId: number;

@@ -5,6 +5,7 @@ import { getItem } from "./asyncStorage";
 import { CDN_TOKEN } from "@/constants/key";
 import * as ImageManipulator from 'expo-image-manipulator';
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+import { string } from "yup";
 
 export const baseURL = process.env.EXPO_PUBLIC_CDN_API_URL
 
@@ -27,10 +28,10 @@ export const getImageUrl = (key: string, userId: number, contentFolder: any) => 
 };
 
 
-export const fetchImageFromCDN = async (user: IUser) => {
-  const userId = user?.id;
-  const contentFolder = "profile";
-  const key = user?.profileImage;
+export const fetchImageFromCDN = async ({userId, contentFolder, key}:{userId: number, contentFolder:"profile"|"post", key: string }) => {
+  //const userId = user?.id;
+  //const contentFolder = "profile";
+  //const key = user?.profileImage;
 
   // console.log('fetch image', userId);
   

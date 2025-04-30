@@ -59,7 +59,7 @@ const Page = () => {
     queryFn: async () => {
       if (userId) {
         const response = await getUserPostsAndShares(userId)
-        console.log('kör i profile: getUserPostnaShare');
+        // console.log('kör i profile: getUserPostnaShare');
         
         return response
       }
@@ -69,8 +69,8 @@ const Page = () => {
   })
 
   useEffect(() => {
-    console.log('id:', userId);
-    console.log('user', userData?.id, userData?.roleId);    
+    // console.log('id:', userId);
+    // console.log('user', userData?.id, userData?.roleId);    
   }, [userId])
 
   const handleCreateCv = async () => {

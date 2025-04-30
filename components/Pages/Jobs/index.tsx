@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, Text, StyleSheet, View, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import { IJob } from '@/types';
-import { postNewApplication, updateStaff } from '@/api/backend';
+import { useQuery } from '@tanstack/react-query';
+import { postNewApplication, updateStaff, getMyApplications } from '@/api/backend';
 import { useToast } from 'react-native-toast-notifications';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/authContext';
@@ -23,9 +24,10 @@ axios.interceptors.response.use(
 
 interface Props {
   job: IJob[];
+  refetch: () => void
 }
 
-const Jobsindex = ({ job = [] }: Props) => {
+const Jobsindex = ({ job, refetch }: Props) => {
   const toast = useToast();
   const { t } = useTranslation();
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
@@ -33,7 +35,7 @@ const Jobsindex = ({ job = [] }: Props) => {
   const [isApplying, setIsApplying] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const { authState: { userData } } = useAuth();
-  const [appliedJobs, setAppliedJobs] = useState<Set<number>>(new Set());
+  const [appliedJobs, setAppliedJobs] = useState(new Map());
   const [formData, setFormData] = useState({
     firstName: userData?.firstName || '',
     lastName: userData?.lastName || '',
@@ -43,18 +45,35 @@ const Jobsindex = ({ job = [] }: Props) => {
 
   const isFormValid = Object.values(formData).every((value) => value.trim() !== '');
 
-  useEffect(() => {
-    const loadAppliedJobs = async () => {
-      try {
-        const response: number[] = await ();
-        setAppliedJobs(new Set<number>(response));
-      } catch (error) {
-        toast.show(`${t('failed-load-applied-jobs')}`, { type: 'error' });
-      }
-    };
+  // useEffect(() => {
+  //   const loadAppliedJobs = async () => {
+  //     try {
+  //       const response: number[] = await ();
+  //       setAppliedJobs(new Set<number>(response));
+  //     } catch (error) {
+  //       toast.show(`${t('failed-load-applied-jobs')}`, { type: 'error' });
+  //     }
+  //   };
 
-    loadAppliedJobs();
-  }, []);
+  //   loadAppliedJobs();
+  // }, []);
+
+  const { data: applications = [], isLoading: applicationIsLoading, refetch: applicationsRefetch } = useQuery({
+    queryKey: ["my-applications"],
+    queryFn: async () => {
+      const response = await getMyApplications();
+  
+      if (response.length > 0) {
+        const newMap = new Map();
+        response.forEach((item:any) => {
+          newMap.set(item.jobId, true);
+        });
+        setAppliedJobs(newMap);
+      }
+  
+      return response;
+    }
+  });
 
   const handleApply = async () => {
     if (!selectedJob) {
@@ -83,8 +102,9 @@ const Jobsindex = ({ job = [] }: Props) => {
       await updateStaff(updatedData);
 
       toast.show(`${t('success-update-message')}`, { type: 'success' });
-      setAppliedJobs((prev) => new Set(prev).add(selectedJob.id));
+      //setAppliedJobs((prev) => new Set(prev).add(selectedJob.id));
       closeModal();
+      refetch()
     } catch (error: any) {
       console.error('Error during application:', error.response?.data || error.message || error);
       toast.show(`${t('failed-update-message')}`, { type: 'error' });

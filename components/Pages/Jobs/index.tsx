@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
-import { ScrollView, Text, StyleSheet, View, Modal, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, Text, StyleSheet, View, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import { IJob } from '@/types';
-import { postNewApplication } from '@/api/backend';
+import { postNewApplication, updateStaff } from '@/api/backend';
 import { useToast } from 'react-native-toast-notifications';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/authContext';
+import axios from 'axios';
+
+// Log all Axios requests and responses
+axios.interceptors.request.use((config) => {
+  console.log('Axios Request:', config);
+  return config;
+});
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('Axios Error Response:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
 
 interface Props {
   job: IJob[];
@@ -18,8 +32,8 @@ const Jobsindex = ({ job = [] }: Props) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const {authState: {userData}} = useAuth()
-
+  const { authState: { userData } } = useAuth();
+  const [appliedJobs, setAppliedJobs] = useState<Set<number>>(new Set());
   const [formData, setFormData] = useState({
     firstName: userData?.firstName || '',
     lastName: userData?.lastName || '',
@@ -27,21 +41,52 @@ const Jobsindex = ({ job = [] }: Props) => {
     email: userData?.email || '',
   });
 
-  
   const isFormValid = Object.values(formData).every((value) => value.trim() !== '');
 
+  useEffect(() => {
+    const loadAppliedJobs = async () => {
+      try {
+        const response: number[] = await ();
+        setAppliedJobs(new Set<number>(response));
+      } catch (error) {
+        toast.show(`${t('failed-load-applied-jobs')}`, { type: 'error' });
+      }
+    };
+
+    loadAppliedJobs();
+  }, []);
+
   const handleApply = async () => {
-    if (!selectedJob) return;
+    if (!selectedJob) {
+      console.error('No selected job');
+      return;
+    }
 
     try {
       setIsApplying(true);
-      const response = await postNewApplication({
-        jobId: selectedJob.id,
-        ...formData,
-      });
+
+      const payload = { jobId: selectedJob.id };
+      console.log('Payload for postNewApplication:', JSON.stringify(payload, null, 2));
+
+      const response = await postNewApplication(payload);
+      console.log('postNewApplication Response:', response);
+
+      const updatedData = {
+        ...userData,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phoneNumber: formData.phoneNumber,
+        email: formData.email,
+      };
+      console.log('Updating staff with data:', JSON.stringify(updatedData, null, 2));
+
+      await updateStaff(updatedData);
+
       toast.show(`${t('success-update-message')}`, { type: 'success' });
+      setAppliedJobs((prev) => new Set(prev).add(selectedJob.id));
       closeModal();
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Error during application:', error.response?.data || error.message || error);
       toast.show(`${t('failed-update-message')}`, { type: 'error' });
     } finally {
       setIsApplying(false);
@@ -51,17 +96,17 @@ const Jobsindex = ({ job = [] }: Props) => {
   const handlePress = (item: IJob) => {
     setSelectedJob(item);
     setModalVisible(true);
-    setShowForm(false); 
+    setShowForm(false);
   };
 
   const closeModal = () => {
     setSelectedJob(null);
     setModalVisible(false);
     setFormData({
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      email: '',
+      firstName: userData?.firstName || '',
+      lastName: userData?.lastName || '',
+      phoneNumber: userData?.phoneNumber || '',
+      email: userData?.email || '',
     });
     setShowForm(false);
   };
@@ -99,9 +144,10 @@ const Jobsindex = ({ job = [] }: Props) => {
                 <Button
                   mode="contained"
                   onPress={() => setShowForm(true)}
-                  style={styles.applyButton}
+                  disabled={appliedJobs.has(selectedJob.id)}
+                  style={[styles.applyButton, appliedJobs.has(selectedJob.id) && styles.disabledButton]}
                 >
-                  Apply
+                  {appliedJobs.has(selectedJob.id) ? 'Already Applied' : 'Apply'}
                 </Button>
                 <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                   <Text style={styles.closeButtonText}>Close</Text>
@@ -132,7 +178,7 @@ const Jobsindex = ({ job = [] }: Props) => {
                   value={formData.phoneNumber}
                   onChangeText={(text) => setFormData({ ...formData, phoneNumber: text })}
                 />
-                 <Text style={styles.label}>Email</Text>
+                <Text style={styles.label}>Email</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Email"
@@ -205,12 +251,11 @@ const styles = StyleSheet.create({
   disabledButton: {
     backgroundColor: '#ccc',
   },
-
   label: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#333', 
+    color: '#333',
   },
 });
 

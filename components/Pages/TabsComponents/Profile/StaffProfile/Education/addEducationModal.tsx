@@ -345,7 +345,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                         setChecked(false)
                       }}
                       size='md'
-                      type='clear'
+                      type='outline'
                       titleStyle={{ ...pageStyle.button16 }}
                       radius={"sm"}
                       containerStyle={{

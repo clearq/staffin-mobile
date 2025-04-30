@@ -27,7 +27,7 @@ const Page = () => {
 
 
   return (
-    <View>   
+    <View style={{...pageStyle.pageComponent}}>   
       {userRole === 1 && <Text>{`Admin Home ${userId}`}</Text>}
       {userRole === 2 && <Text>{`Employre Home ${userId}`}</Text>}
       {userRole === 3 && 

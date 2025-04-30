@@ -459,7 +459,7 @@ const PageThree = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) 
         }
       />
       <Image 
-        source={require('@/assets/image/onboarding/Jack7.png')} 
+        source={require('@/assets/image/onboarding/Jack8.png')} 
         style={{...styles.imageStyle}}
       />
     </View>
@@ -856,11 +856,12 @@ const styles = StyleSheet.create({
     //backgroundColor: 'red'
   },
   imageStyle: {
-    position: 'absolute',
-    right: 0,
-    top: 350,
+    //position: 'absolute',
+    left: 0,
+    top: 50,
     bottom: 0,
-    height: 350,
+    //width: 180,
+    height: 300,
     resizeMode: 'contain',
     zIndex: 9999,
     //backgroundColor: "green",

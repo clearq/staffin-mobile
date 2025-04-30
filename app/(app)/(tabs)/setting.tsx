@@ -89,9 +89,7 @@ const setting = () => {
             radius={"sm"}
             containerStyle={{
               ...styles.buttonContainer,
-              borderColor: theme.colors.primary,                     
-              borderWidth: 2,
-              borderRadius:10
+              borderColor: theme.colors.primary,    
             }}
           />
         </View>

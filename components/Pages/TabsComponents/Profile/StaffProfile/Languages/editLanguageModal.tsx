@@ -166,12 +166,12 @@ const EditLanguageModal = ({visible, onClose, handleSuccess, id, data}: props) =
           title={`${t("cancel")}`}
           onPress={onClose}
           size='md'
-          type='clear'
+          type='outline'
           titleStyle={{ ...pageStyle.button16}}
           radius={"sm"}
           containerStyle={{
             ...styles.buttonContainer,
-            borderColor: theme.colors.divider,                     
+            borderColor: theme.colors.primary,                     
             borderWidth: 2,
             borderRadius:10,
           }}

@@ -262,7 +262,7 @@ const CompanyInfoModal = ({user, visible, onClose, handleSuccess}: props) => {
                       title={`${t("cancel")}`}
                       onPress={onClose}
                       size='md'
-                      type='clear'
+                      type='outline'
                       titleStyle={{...pageStyle.button16}}
                       radius={"sm"}
                       containerStyle={{

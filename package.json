@@ -1,3 +1,4 @@
+
 {
   "name": "staffin-mobile-app",
   "main": "expo-router/entry",
@@ -97,4 +98,3 @@
   },
   "private": true
 }
-

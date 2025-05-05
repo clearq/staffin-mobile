@@ -49,10 +49,11 @@ const Document = ({data}: props) => {
       }}
     >
       <View>
-        {/* <Image 
+        <Image 
           source={require('@/assets/image/CV-Download.png')}
-          width={100}
-        /> */}
+          height={80}
+          style={{resizeMode: 'contain'}}
+        />
       </View>
 
       <View

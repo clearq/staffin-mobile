@@ -27,7 +27,7 @@ const Page = () => {
 
 
   return (
-    <View style={{...pageStyle.pageComponent}}>   
+    <View style={{backgroundColor: theme.colors.background, flex:1}}>   
       {userRole === 1 && <Text>{`Admin Home ${userId}`}</Text>}
       {userRole === 2 && <Text>{`Employre Home ${userId}`}</Text>}
       {userRole === 3 && 

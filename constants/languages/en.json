@@ -27,6 +27,7 @@
   "comment": "Comment",
   "repost": "Repost",
   "share": "Share",
+  "apply": "Apply",
 
   "success-delete-message": "Successfully deleted",
   "failed-delete-message": "Delete failed", 
@@ -144,6 +145,9 @@
   "regular": "Regular job",
   "all": "All",
   "not-specified": "Not specified",
+
+  "job-picks-for-you": "Job pickes for you",
+  "match-score": "Match",
 
   "read-more": "Read more...",
   "see-more": "See more",

@@ -86,41 +86,6 @@ const page = () => {
     >
       {isLoading && <ActivityIndicator color={theme.colors.primary}/>}
 
-      <View
-        style={{
-          flexDirection:'column',
-          justifyContent: 'center',
-          gap: theme.spacing.xl *2
-        }}
-      >
-        <Image 
-          source={require('@/assets/image/CV-Download.png')}
-          width={100}
-        />
-
-        <View
-          style={{
-            flexDirection: 'row', 
-            alignItems: 'center', 
-            gap: theme.spacing.md,
-          }}
-        >
-          <Text
-            style={{
-              ...pageStyle.button16,
-              color: theme.colors.grey0,
-            }}
-          >
-            {data.name}
-          </Text> 
-          <Button  
-            title="Download" 
-            onPress={handleDownloadCv} 
-            size='sm'
-          />
-        </View>
-
-      </View>
 
       <Document data={data}/>
   

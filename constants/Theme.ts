@@ -47,7 +47,7 @@ export const theme = createTheme({
   mode: "light" as "light" | "dark",
   lightColors: {
     ...lightColors,
-    background: "rgb(246, 246, 249)",
+    background: "rgb(241, 241, 255)",
     primary: "rgb(116, 118, 180)",
     secondary: "rgb(49, 51, 122)",
     greyOutline: "rgb(131, 131, 137)",
@@ -67,7 +67,8 @@ export const theme = createTheme({
     ...darkColors,
     background: "rgb(49, 50, 52)",
     primary: "rgb(116, 118, 180)",
-    secondary: "rgb(64, 66, 103)",
+    //secondary: "rgb(64, 66, 103)",
+    secondary: "rgb(254, 119, 1)",
     greyOutline: "rgb(131, 131, 137)",
     divider: "rgb(131, 131, 137)",
     grey0: "rgb(253, 253, 253)",
@@ -75,7 +76,7 @@ export const theme = createTheme({
     grey5:"rgb(49, 50, 52)",
     searchBg: "rgba(131, 131, 137, 0.9)",
     white: "rgb(253, 253, 253)",
-    black: "rgb(49, 50, 52)",
+    black: "rgb(35, 36, 41)",
     success: "#00C851", // Define success color
     error: "#ff4444", // Define error color
     warning: "#FFBB33", // Define warning color

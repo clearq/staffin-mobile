@@ -12,6 +12,7 @@ import { ActivityIndicator } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '@/api/backend';
 import UserPreferences from './UserPreferences';
+import { ProfileAvatar } from '../UI/ProfileAvatar';
 
 
 
@@ -45,7 +46,7 @@ const PageHeader = () => {
     <View
       style={{
         width: "auto",
-        backgroundColor: theme.colors.primary,
+        backgroundColor: theme.colors.background,
         paddingHorizontal: Sizes.fixPadding * 1.5,
         paddingVertical: Sizes.fixPadding,
       }}
@@ -62,7 +63,19 @@ const PageHeader = () => {
             alignItems:'center',
           }}
         >
-          <Text>Search</Text>
+          <ProfileAvatar 
+            userId={user.id}
+            image={user.profileImage}
+            size={50}
+            handleUpdate={() => {}}
+          />
+
+          <TouchableOpacity
+            style={{...styles.searchContainer, backgroundColor: theme.colors.searchBg}}
+          >
+            <Text style={{color: theme.colors.grey0}}>Search</Text>
+            <MaterialCommunityIcons name='magnify' size={20} color={theme.colors.grey0} />
+          </TouchableOpacity>
 
           <View
             style={{
@@ -72,12 +85,12 @@ const PageHeader = () => {
             }}
           >
 
-            <TouchableOpacity>
-              <MaterialCommunityIcons name='bell-badge-outline' size={24} color={theme.colors.white}/>
-            </TouchableOpacity>
+            {/* <TouchableOpacity>
+              <MaterialCommunityIcons name='bell-badge-outline' size={24} color={theme.colors.grey0}/>
+            </TouchableOpacity> */}
 
             <TouchableOpacity>
-              <MaterialCommunityIcons name='chat-outline' size={24} color={theme.colors.white}/>
+              <MaterialCommunityIcons name='chat-outline' size={24} color={theme.colors.grey0}/>
             </TouchableOpacity>
 
           </View>
@@ -89,3 +102,13 @@ const PageHeader = () => {
 }
 
 export default PageHeader
+
+const styles = StyleSheet.create({
+  searchContainer: {
+    paddingVertical: theme.spacing?.xs,
+    paddingHorizontal: theme.spacing?.md,
+    borderRadius: 10,
+    flexDirection: 'row',
+    gap: theme.spacing?.xl,
+  }
+})

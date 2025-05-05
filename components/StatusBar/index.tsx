@@ -26,7 +26,7 @@ export default function MyStatusBar({ children, onPress, style, showBackIcon = f
         networkActivityIndicatorVisible={true}
         translucent={true}
         backgroundColor="transparent"
-        style={Platform.OS === "android" ? "light" : theme.mode === "light" ? "dark" : "light"}
+        style={Platform.OS === "android" ? "light" : theme.mode === "light" ? "light" : "dark"}
         hidden={heightStatusBar ? true : false}
         animated={true}
       />
@@ -41,7 +41,7 @@ export default function MyStatusBar({ children, onPress, style, showBackIcon = f
         {showBackIcon && (
           <View style={{ ...styles.topContainer, paddingTop: insets.top }}>
             <Pressable onPress={onPress} style={styles.linkStyle}>
-              <MaterialIcons name="arrow-back" size={isIOS ? 16 : 20} color={theme.mode === "dark" ? theme.colors.white : theme.colors.black} />
+              <MaterialIcons name="arrow-back" size={isIOS ? 16 : 20} color={theme.colors.grey0} />
             </Pressable>
             <View style={styles.rightText}>{children}</View>
           </View>

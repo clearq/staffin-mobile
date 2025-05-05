@@ -17,7 +17,7 @@ const index = ({title,}:props) => {
       style={{backgroundColor: theme.colors.background}}
     >
       <View
-        style={{...styles.container, backgroundColor:theme.colors.secondary}}
+        style={{...styles.container, backgroundColor:theme.colors.primary}}
       >
         <Text 
           style={{

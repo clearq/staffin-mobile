@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
 import { Sizes, theme } from "./Theme"
+import { darkColors } from "@rneui/themed"
 
 const pageStyle = StyleSheet.create({
   pageComponent:{
@@ -98,6 +99,12 @@ const pageStyle = StyleSheet.create({
   },
   cardPrimaryColor: {
     backgroundColor: "rgb(213, 213, 235)"
+  },
+  cardThemeColor: {
+    backgroundColor: theme.mode === "light" ? theme.lightColors?.white : theme.darkColors?.black
+  },
+  cardTextPrimaryColor: {
+    color: theme.mode === "light" ? theme.lightColors?.secondary : theme.darkColors?.secondary
   },
   cardShadow: {
     shadowColor: '#000',

@@ -4,7 +4,7 @@ export interface IPost {
   content: string;
   authorName: string;
   images: [];
-  createdAt: string; // ISO 8601 format
+  createdAt: Date; // ISO 8601 format
   likeCount?: number; // Option
   commentCount?: number; // Option
   sharedCount?: number; // Option

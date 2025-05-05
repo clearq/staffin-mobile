@@ -11,8 +11,9 @@ import { Colors } from '@/constants/Colors'
 import { useAuth } from '@/contexts/authContext'
 import { fetchImageFromCDN } from '@/utils/CDN-action'
 import { useQuery } from '@tanstack/react-query'
-import { getPostDetails, getUserById, likePost, unlikePost } from '@/api/backend'
+import { follow, getFollower, getPostDetails, getUserById, likePost, sharePost, unfollow, unlikePost } from '@/api/backend'
 import { CompanyAvatar, ProfileAvatar } from './ProfileAvatar'
+import { yearMonthDate } from '@/utils/dateFormat'
 
 
 interface Props {
@@ -26,7 +27,7 @@ interface Props {
 const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
-  const { isLoading, authState:{ userData, userId } } = useAuth();
+  const { isLoading, authState:{ userData, userId }} = useAuth();
   
   // Fetch user data for profile image
   const {data: user} = useQuery({
@@ -38,9 +39,18 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
     }
   })
 
+  const {data: following = []} = useQuery({
+    queryKey: ["follow", userId],
+    queryFn: async () => {
+      const id = Number(userId)
+      return await getFollower(id)
+    }
+  })
+
   const [authorImage, setAuthorImage] = useState('')
   const [postImages, setPostImages] = useState<string[]>([])
   const [liked, setLiked] = useState(false)
+  const [followed, setFollowed] = useState(false)
   const [openComments, setOpenComments] = useState(false)
 
 
@@ -68,7 +78,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
     };
 
     const isLiked = async () => {
-      post.likes?.find((item) => {
+      post.likes?.some((item) => {
         if (item.userId === Number(userId)){
           return setLiked(true)
         }
@@ -76,9 +86,14 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
       })
     }
 
+    // const isFollowed = async () => {
+      
+    // }
+ 
     fetchUrls()
     isLiked()
-  },[])
+    // isFollowed()
+  },[post.likes, userId])
 
 
   const handleLikeAction = async (id: number) => {
@@ -93,11 +108,38 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
     }
   }
 
+  const handleFollowAction = async (id: number) => {
+    if(followed === true) {
+      await unfollow(id)
+      setFollowed(false)
+      postsRefetch()
+    } else {
+      await follow(id)
+      setFollowed(true)
+      postsRefetch()
+    }
+  }
+
+  const handleSharePost = async (id: number) => {
+
+
+    // try {
+    //   const value = {
+    //     content: content || "",
+    //   }
+    //   const response = await sharePost(id, value)
+    //   return response
+
+    // } catch (error) {
+    //   console.error(error);     
+    // } 
+  }
+
   return (
     <View 
     style={{
       ...styles.postContainer,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black
     }}
     >
       {postIsLoading && <Text>Loading...</Text>}
@@ -130,7 +172,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
                 color: theme.colors.grey0,
               }}
             >
-              {post?.createdAt ? post?.createdAt : ""}
+              {post?.createdAt ? yearMonthDate(post?.createdAt) : ""}
             </Text>
           </View>
         </View>
@@ -140,21 +182,20 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
             style={{
               ...styles.followButton,
               borderColor: theme.colors.primary,
+              backgroundColor: followed ? theme.colors.primary : "transparent"
             }}
+            onPress={() => handleFollowAction(post.userId)}
           >
             <Text
               style={{
                 ...pageStyle.button16,
-                color: theme.colors.primary,
+                color: followed ? theme.colors.white : theme.colors.primary,
               }}
             >
-              Follow
+              {followed ? "Unfollow" : "Follow"}
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity>
-            <MaterialCommunityIcons name='dots-vertical' size={24} color={theme.colors.grey0} />
-          </TouchableOpacity>
         </View>
       </View>
 
@@ -166,14 +207,16 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
         <View style={{...styles.contentContainer}}>
           
           {/* Text content */}
-          <Text>
+          <Text
+            style={{color: theme.colors.grey0}}
+          >
             {post?.content ? post?.content : ""}
           </Text>
 
           {/* Image content */}
           {postImages.length > 0 && postImages.map((uri, index) => (
             <View key={index}>
-              <Image source={{ uri: uri }} style={{height: 250 ,resizeMode: 'contain'}} />
+              <Image source={{ uri: uri }} style={{height: 250, resizeMode: 'contain'}} />
             </View>
           ))}
           
@@ -215,15 +258,19 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
           <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("comment")}</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={{...styles.footerButtonItem}}>
+        {/* <TouchableOpacity style={{...styles.footerButtonItem}}>
           <MaterialCommunityIcons name='repeat' size={24} color={theme.colors.grey3} />
           <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("repost")}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity style={{...styles.footerButtonItem}}>
+        <TouchableOpacity 
+          style={{...styles.footerButtonItem}}
+          onPress={() => handleSharePost(post.postId)}
+        >
           <MaterialCommunityIcons name='share-outline' size={24} color={theme.colors.grey3} />
           <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("share")}</Text>
         </TouchableOpacity>
+        
       </View> 
     </View>
   )
@@ -234,7 +281,8 @@ export default PostTemplate
 const styles = StyleSheet.create({
   postContainer: {
     width: '100%',
-    //padding: theme.spacing?.md,
+    paddingHorizontal: theme.spacing?.xl,
+    paddingVertical: theme.spacing?.md,
     flexDirection: 'column',
   },
   headerContainer: {

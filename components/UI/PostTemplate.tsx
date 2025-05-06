@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import { follow, getFollower, getPostDetails, getUserById, likePost, sharePost, unfollow, unlikePost } from '@/api/backend'
 import { CompanyAvatar, ProfileAvatar } from './ProfileAvatar'
 import { yearMonthDate } from '@/utils/dateFormat'
+import SharePostDialog from '../Pages/Community/Dialogs/SharePostDialog'
 
 
 interface Props {
@@ -52,6 +53,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
   const [liked, setLiked] = useState(false)
   const [followed, setFollowed] = useState(false)
   const [openComments, setOpenComments] = useState(false)
+  const [openSharePostDialog, setOpenSharePostDialog] = useState(false)
 
 
   useEffect(() => {
@@ -121,7 +123,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
   }
 
   const handleSharePost = async (id: number) => {
-
+    
 
     // try {
     //   const value = {
@@ -220,7 +222,6 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
             </View>
           ))}
           
-
           {/* Reactions */}
           <View style={{...styles.reactionGroup}}>
             <View style={{...styles.countsGrop}}>
@@ -234,10 +235,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
             </Text>
           </View>
 
-        </View>
-
-
-             
+        </View>          
       </View>
 
       <Divider />
@@ -265,18 +263,28 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
 
         <TouchableOpacity 
           style={{...styles.footerButtonItem}}
-          onPress={() => handleSharePost(post.postId)}
+          onPress={() => setOpenSharePostDialog(true)}
         >
           <MaterialCommunityIcons name='share-outline' size={24} color={theme.colors.grey3} />
           <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("share")}</Text>
         </TouchableOpacity>
         
       </View> 
+
+      <SharePostDialog 
+        visible={openSharePostDialog}
+        setVisible={() => setOpenSharePostDialog(!openSharePostDialog)}
+        postId={postId}
+        post={post}
+        user={user}
+        postImages={postImages}
+      />
     </View>
   )
 }
 
 export default PostTemplate
+
 
 const styles = StyleSheet.create({
   postContainer: {

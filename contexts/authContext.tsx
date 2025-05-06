@@ -100,8 +100,9 @@ export function AuthProvider (props: any) {
   const initializeAuth = async () => {
     // console.log("✅start initializeAuth"); 
     setIsLoadingSession(true);
+    const token = await getItem(AUTH_TOKEN);
+
     try {
-      const token = await getItem(AUTH_TOKEN);
 
       if (token) {
         // console.log("✅initializeAuth-token", token); 
@@ -149,7 +150,9 @@ export function AuthProvider (props: any) {
   // }, [authState.token]); 
 
   useEffect(() => {
-    initializeAuth(); // Always check storage and rehydrate token
+    if (authState.token) {
+      initializeAuth(); 
+    }
   }, [authState.token]);
 
 
@@ -250,20 +253,29 @@ export function AuthProvider (props: any) {
  
 
   async function handleSignOut() {
-    setAuthState({
-      userData: null,
-      userId: null,
-      token: null,
-    });
-    setSession(null);
-    await removeItem(AUTH_TOKEN);
-    await removeItem(USER_ID);
-    await removeItem(CDN_TOKEN);
-    await removeItem(ONBOARDING)
-    router.replace("/signin")
-    
-    //console.log(AUTH_TOKEN);
-    console.log('--- log out ---');
+    setIsLoadingSession(true)
+    try {
+      setAuthState({
+        userData: null,
+        userId: null,
+        token: null,
+      });
+      await removeItem(AUTH_TOKEN);
+      await removeItem(USER_ID);
+      await removeItem(CDN_TOKEN);
+      await removeItem(ONBOARDING)
+      
+      setIsLoadingSession(false)
+      setSession(null);
+
+      console.log('waiting log out:', authState.userId);
+
+      console.log('--- log out ---');
+      router.replace("/signin") 
+
+    } catch (error) {
+      setIsLoadingSession(true)
+    } 
     
   }
 

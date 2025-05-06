@@ -87,7 +87,7 @@ const StaffHome = () => {
           
           <View style={{...styles.titleContainer}}>
             <Text style={{...pageStyle.headline02, color: theme.colors.grey0}}>
-              Title
+              {t("job-picks-for-you")}
             </Text>
 
             <TouchableOpacity>

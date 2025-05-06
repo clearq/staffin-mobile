@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import PostTemplate from '@/components/UI/PostTemplate'
 import MachingJobsTemplate from '@/components/UI/MachingJobsTemplate'
 import { useQuery } from '@tanstack/react-query'
-import { getAllPosts, getCompanyById, getMatchingJobs, getUserById, getUserPreferences } from '@/api/backend'
+import { follow, getAllPosts, getCompanyById, getFollower, getMatchingJobs, GetSuggestedUsers, getUserById, getUserPreferences, unfollow } from '@/api/backend'
 import Introduction from '@/components/Viewpager/Introduction'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
@@ -12,10 +12,21 @@ import { IPost } from '@/types'
 import { theme } from '@/constants/Theme'
 import { IMatchingJob } from '@/types/JobTypes'
 import pageStyle from '@/constants/Styles'
+import SuggestedUserTemplate from '@/components/UI/SuggestedUserTemplate'
+
+export interface ISuggestedUser {
+  userId: number;
+  fullName: string;
+  location: string;
+  title: string;
+  profileImage: string;
+}
 
 const StaffHome = () => {
   const [openIntroduction, setOpenIntroduction] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [followed, setFollowed] = useState(false)
+
   const { theme } = useTheme()
   const { t } = useTranslation();
   
@@ -36,6 +47,35 @@ const StaffHome = () => {
       return response
     }
   })
+
+  const {data: suggestedUsers = [], isLoading: suggestedUsersLoading, refetch:suggestedUsersRefetch} = useQuery({
+    queryKey: ["suggested-users"],
+    queryFn: async () => {
+      const response = await GetSuggestedUsers()
+      // console.log(response);
+      return response
+    }
+  })
+
+  const {data: following = []} = useQuery({
+    queryKey: ["follow", userId],
+    queryFn: async () => {
+      const id = Number(userId)
+      return await getFollower(id)
+    }
+  })
+
+  const handleFollowAction = async (id: number) => {
+    if(followed === true) {
+      await unfollow(id)
+      setFollowed(false)
+      postsRefetch()
+    } else {
+      await follow(id)
+      setFollowed(true)
+      postsRefetch()
+    }
+    }  
 
 
   useEffect(() => {
@@ -63,7 +103,8 @@ const StaffHome = () => {
           />
         }
 
-        <ScrollView>  
+        <ScrollView style={{marginBottom: theme.spacing.xl,}}> 
+           {/* Posts  */}
           <View style={{flexDirection: 'column', gap: theme.spacing.md}}>
             {postsLoading && <ActivityIndicator color={theme.colors.primary} /> }
             {allPosts && !postsLoading && 
@@ -79,47 +120,102 @@ const StaffHome = () => {
                     post={post}
                     postsRefetch={postsRefetch}
                     postIsLoading={postsLoading}
+                    followed={followed}
+                    handleFollowAction={() => handleFollowAction(post.userId)}
                   />
                 </View>
               ))
             } 
           </View>
-          
-          <View style={{...styles.titleContainer}}>
-            <Text style={{...pageStyle.headline02, color: theme.colors.grey0}}>
-              {t("job-picks-for-you")}
-            </Text>
 
-            <TouchableOpacity>
-              <Text
-                style={{...styles.linkText, color: theme.colors.secondary, textDecorationColor: theme.colors.secondary}}
-              >
-                {t("see-more")}
+          {/* Jobs */}
+          <View style={{marginVertical: theme.spacing.lg}}>
+            <View style={{...styles.titleContainer}}>
+              <Text style={{...pageStyle.headline02, color: theme.colors.grey0}}>
+                {t("job-picks-for-you")}
               </Text>
-            </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Text
+                  style={{...styles.linkText, color: theme.colors.secondary, textDecorationColor: theme.colors.secondary}}
+                >
+                  {t("see-more")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <ScrollView
+                style={{
+                  ...styles.row,
+                  paddingVertical: theme.spacing.md,
+                  paddingHorizontal: theme.spacing.md,
+                }}
+                horizontal={true}
+                snapToInterval={1}
+              >
+                {matchJob && 
+                  [...matchJob]
+                  .sort((a, b) => (b.matchScore) - (a.matchScore))
+                  .slice(0, 5)
+                  .map ((job: IMatchingJob) => (
+                    <View key={job.jobId}>
+                      <MachingJobsTemplate 
+                        job={job}
+                      />
+                    </View>
+                  ))
+                }
+                <View style={{width: 36,  backgroundColor: 'transparent'}} />
+              </ScrollView>
+            </View>
+          </View>
+          
+          {/* People */}
+          <View>
+            <View style={{...styles.titleContainer}}>
+              <Text style={{...pageStyle.headline02, color: theme.colors.grey0}}>
+                {t("suggest-network")}
+              </Text>
+
+              <TouchableOpacity>
+                <Text
+                  style={{...styles.linkText, color: theme.colors.secondary, textDecorationColor: theme.colors.secondary}}
+                >
+                  {t("see-more")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View>
+              <ScrollView
+                style={{
+                  ...styles.row,
+                  paddingVertical: theme.spacing.md,
+                  paddingHorizontal: theme.spacing.md,
+                }}
+                horizontal={true}
+                snapToInterval={1}
+              >
+                {suggestedUsers && 
+                  [...suggestedUsers]
+                  .slice(0, 5)
+                  .map ((user: ISuggestedUser) => (
+                    <View key={user.userId}>
+                      <SuggestedUserTemplate 
+                        user={user}
+                        followed={followed}
+                      />
+                    </View>
+                  ))
+                }
+                <View style={{width: 36,  backgroundColor: 'transparent'}} />
+              </ScrollView>
+            </View>
+            
+
           </View>
 
-          <ScrollView
-            style={{
-              ...styles.row,
-              paddingHorizontal: theme.spacing.md,
-              flex: 1,
-            }}
-            horizontal={true}
-          >
-            {matchJob && 
-              [...matchJob]
-              .sort((a, b) => (b.matchScore) - (a.matchScore))
-              .slice(0, 5)
-              .map ((job: IMatchingJob) => (
-                <View key={job.jobId}>
-                  <MachingJobsTemplate 
-                    job={job}
-                  />
-                </View>
-              ))
-            }
-          </ScrollView>
         </ScrollView>
       </>  
     </View>

@@ -28,6 +28,8 @@
   "repost": "Repost",
   "share": "Share",
   "apply": "Apply",
+  "follow": "Follow",
+  "unfollow": "Unfollow",
 
   "success-delete-message": "Successfully deleted",
   "failed-delete-message": "Delete failed", 
@@ -152,6 +154,8 @@
   "post-content-placeholder": "What do you want to talk about?",
   "post-with-content": "Repost with comment",
   "post-without-content": "Repost without comment",
+
+  "suggest-network": "People you may know",
 
   "read-more": "Read more...",
   "see-more": "See more",

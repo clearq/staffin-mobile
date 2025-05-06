@@ -150,9 +150,8 @@ export function AuthProvider (props: any) {
   // }, [authState.token]); 
 
   useEffect(() => {
-    if (authState.token) {
-      initializeAuth(); 
-    }
+
+    initializeAuth(); 
   }, [authState.token]);
 
 
@@ -275,6 +274,7 @@ export function AuthProvider (props: any) {
 
     } catch (error) {
       setIsLoadingSession(true)
+      console.log('The session has ended.', authState.userId)
     } 
     
   }

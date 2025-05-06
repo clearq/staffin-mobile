@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { theme } from '@/constants/Theme'
 import { useTheme } from '@rneui/themed'
@@ -6,26 +6,17 @@ import { useTranslation } from 'react-i18next'
 import pageStyle from '@/constants/Styles'
 import { IMatchingJob } from '@/types/JobTypes'
 import { useQuery } from '@tanstack/react-query'
-import { getCompanyById } from '@/api/backend'
-
+import { ISuggestedUser } from '../Pages/Home/StaffHome'
+import { ProfileAvatar } from './ProfileAvatar'
 
 interface props {
-  job: IMatchingJob
-}
+  user: ISuggestedUser
+  followed: boolean
+} 
 
-const MachingJobsTemplate = ({job,}: props) => {
+const SuggestedUserTemplate = ({user, followed}: props ) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
-
-  const {data:company} = useQuery({
-    queryKey: ["company", job.companyId],
-    queryFn: async () => {
-      return await getCompanyById(job.companyId)
-    },
-
-    enabled: !!job.companyId
-  })
-  
 
   return (
     <View
@@ -35,6 +26,12 @@ const MachingJobsTemplate = ({job,}: props) => {
         backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black
       }}
     >
+      <ProfileAvatar
+        userId={user.userId}
+        image={user.profileImage}
+        size={40}
+        handleUpdate={() => {}}
+      />
 
       <View
         style={{...styles.textGroup}}
@@ -45,11 +42,11 @@ const MachingJobsTemplate = ({job,}: props) => {
             color: theme.colors.grey0,
             flexWrap: 'wrap'
           }}>
-            {job.jobTitle}
+            {user.fullName}
         </Text>
 
         <Text style={{...pageStyle.xsText, color: theme.colors.grey0}}>
-          {company?.companyName ? company?.companyName : ""}
+          {user?.location ? user?.location : ""}
         </Text>
         
         <Text 
@@ -57,27 +54,17 @@ const MachingJobsTemplate = ({job,}: props) => {
           ellipsizeMode='clip'
           numberOfLines={2}
         >
-          {job.jobDescription}
+          {user?.title? user.title : ""}
         </Text>
         
-        
       </View>
-
-      <View style={{flexDirection: 'column', gap: theme.spacing.sm, marginTop: theme.spacing.sm}}>
-        <Text 
-          style={{
-            ...pageStyle.headline03, 
-            color: theme.colors.secondary,
-          }}  
-        >
-          {`${t("match-score")} : ${job.matchScore} / 100`}
-        </Text> 
-
+      
+      <View style={{flexDirection: 'column', gap: theme.spacing.sm, marginTop: theme.spacing.sm}}>  
         <TouchableOpacity
           style={{...styles.smButton, backgroundColor: theme.colors.secondary}}
         >
           <Text style={{...pageStyle.button16, color: theme.colors.white}}>
-            {t("apply")}
+            {followed ? t("unfollow") : t("follow")}
           </Text>
         </TouchableOpacity>
       </View>    
@@ -85,7 +72,7 @@ const MachingJobsTemplate = ({job,}: props) => {
   )
 }
 
-export default MachingJobsTemplate
+export default SuggestedUserTemplate
 
 const styles = StyleSheet.create({
   cardContainer: {

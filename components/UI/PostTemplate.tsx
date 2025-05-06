@@ -23,9 +23,11 @@ interface Props {
   post: IPost
   postsRefetch: () => void
   postIsLoading: boolean
+  followed: boolean
+  handleFollowAction: (id: number) => void
 }
 
-const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Props) => {
+const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, followed, handleFollowAction}: Props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId }} = useAuth();
@@ -40,18 +42,9 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
     }
   })
 
-  const {data: following = []} = useQuery({
-    queryKey: ["follow", userId],
-    queryFn: async () => {
-      const id = Number(userId)
-      return await getFollower(id)
-    }
-  })
-
   const [authorImage, setAuthorImage] = useState('')
   const [postImages, setPostImages] = useState<string[]>([])
   const [liked, setLiked] = useState(false)
-  const [followed, setFollowed] = useState(false)
   const [openComments, setOpenComments] = useState(false)
   const [openSharePostDialog, setOpenSharePostDialog] = useState(false)
 
@@ -106,18 +99,6 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
     } else {
       await likePost(id)
       setLiked(true)
-      postsRefetch()
-    }
-  }
-
-  const handleFollowAction = async (id: number) => {
-    if(followed === true) {
-      await unfollow(id)
-      setFollowed(false)
-      postsRefetch()
-    } else {
-      await follow(id)
-      setFollowed(true)
       postsRefetch()
     }
   }
@@ -194,7 +175,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading}: Pro
                 color: followed ? theme.colors.white : theme.colors.primary,
               }}
             >
-              {followed ? "Unfollow" : "Follow"}
+              {followed ? t("unfollow") : t("follow")}
             </Text>
           </TouchableOpacity>
 

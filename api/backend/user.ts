@@ -144,3 +144,14 @@ export const getPreferenceOptions = async () => {
     console.error('getPreferenceOptions', error)
   }
 }
+
+export const GetSuggestedUsers = async () => {
+  try {
+    const {data} = await api.get(`/User/GetSuggestedUsers`)
+
+    return data
+  } catch (error) {
+    console.error('get suggested users:', error);
+    
+  }
+}

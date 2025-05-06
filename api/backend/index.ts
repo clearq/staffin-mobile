@@ -41,6 +41,7 @@ export {
   setUserPreferences,
   getUserPreferences,
   getPreferenceOptions,
+  GetSuggestedUsers,
 } from "./user"
 
 export {

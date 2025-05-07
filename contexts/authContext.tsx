@@ -15,6 +15,7 @@ import { getItem } from "expo-secure-store";
 import { getUserById } from "@/api/backend";
 import { useTranslation } from "react-i18next";
 import { fetchImageFromCDN } from "@/utils/CDN-action";
+import { queryClient } from "@/app/_layout";
 
 
 export interface IAuthState {
@@ -253,30 +254,27 @@ export function AuthProvider (props: any) {
 
   async function handleSignOut() {
     setIsLoadingSession(true)
-    try {
-      setAuthState({
-        userData: null,
-        userId: null,
-        token: null,
-      });
-      await removeItem(AUTH_TOKEN);
-      await removeItem(USER_ID);
-      await removeItem(CDN_TOKEN);
-      await removeItem(ONBOARDING)
-      
-      setIsLoadingSession(false)
-      setSession(null);
-
-      console.log('waiting log out:', authState.userId);
-
-      console.log('--- log out ---');
-      router.replace("/signin") 
-
-    } catch (error) {
-      setIsLoadingSession(true)
-      console.log('The session has ended.', authState.userId)
-    } 
     
+    setAuthState({
+      userData: null,
+      userId: null,
+      token: null,
+    });
+    await removeItem(AUTH_TOKEN);
+    await removeItem(USER_ID);
+    await removeItem(CDN_TOKEN);
+    await removeItem(ONBOARDING)
+
+    queryClient.clear() // Clear React Query cache
+    
+    setIsLoadingSession(false)
+    setSession(null);
+
+    console.log('waiting log out:', authState.userId);
+
+    console.log('--- log out ---');
+    router.replace("/signin") 
+  
   }
 
   const values = {

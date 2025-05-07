@@ -10,7 +10,7 @@ import pageStyle from '@/constants/Styles';
 import { TextField } from '../UI/Input/TextField';
 import { round, values } from 'lodash';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { deletePreferredCity, getPreferredCities, getProfessionAreas, getUserById, getUserPreferences, setUserPreferences, updateStaff } from '@/api/backend';
+import { deletePreferredCity, getPreferredCities, getProfessionAreas, getUserPreferences, setUserPreferences, updateStaff } from '@/api/backend';
 import toast from 'react-native-toast-notifications/lib/typescript/toast';
 import { useToast } from 'react-native-toast-notifications';
 import { Formik } from 'formik';
@@ -19,6 +19,7 @@ import Button from '../UI/Button';
 import Cities from '../Dropdown/Cities';
 import ProfessionArea from '../Dropdown/ProfessionArea';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useUserData } from '@/hooks/useUserData';
 
 
 
@@ -98,20 +99,12 @@ const Introduction = ({onClose}: Props ) => {
   const { isLoading, authState:{ userData, userId } } = useAuth();
   const pagerRef = useRef<PagerView>(null);
 
-  const { 
-    data: user, 
-    refetch: userRefetch, 
-    isLoading: userIsLoading, 
-    isPending,    
-  } = useQuery({
-    queryKey: ["user-data"],
-    queryFn: async () => {
-      const response = await getUserById(userId!)      
-
-      return response; 
-    },
-    enabled: !!userId,
-  });
+  const {
+    data: user,
+    refetch: userRefetch,
+    isLoading: userIsLoading,
+    isPending,
+  } = useUserData(Number(userId));
 
   const goToNextPage = () => {
     const nextPage = currentPage + 1;

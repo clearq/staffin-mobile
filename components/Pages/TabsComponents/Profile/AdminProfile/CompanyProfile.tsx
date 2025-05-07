@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 import { CDN_TOKEN, CDN_USERNAME } from '@/constants/key';
 
-import { autoLoginToCDN, deleteStaffSkill, getAllBranches, getCompanyById, getUserById, updateCompanyInformation, updateUserProfileImage, uploadContentFile } from '@/api/backend';
+import { autoLoginToCDN, getAllBranches, updateUserProfileImage, uploadContentFile } from '@/api/backend';
 import CompanyInformation from './Company/information';
 import ProfileItemContainer from '../../ProfileListContainer';
 import { useAuth } from '@/contexts/authContext';

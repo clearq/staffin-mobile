@@ -83,11 +83,11 @@ export default RootLayout
 
 const development = process.env.NODE_ENV === "development";
 
+export const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 2 } },
+});
 
 function RootLayoutNav() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: 2 } },
-  });
   const { mode, setMode } = useThemeMode();
   const [themeMode, setThemeMode] = useState<ThemeMode>("light");
 

@@ -1,6 +1,7 @@
 import { values } from "lodash";
 import api from "./config";
 import { number } from "yup";
+import { IComment } from "@/types";
 
 // Get follower (List of users follower)
 export const getFollower = async (userId: number) => {
@@ -231,7 +232,91 @@ export const unlikePost = async (id: number) => {
   }
 }
 
-//likeSharePost
-//UnlikeSharePost
-//AddComment
-//AddCommentSharePost
+//🚧likeSharePost
+export const likeSharePost = async (id: number) => {
+  try {
+    const response = await api.post(`🚧`)
+
+    return response.data
+  } catch (error) {
+    console.error('[LikeSharePost]', error, id);
+  }
+}
+
+//🚧UnlikeSharePost
+export const unlikeSharePost = async (id: number) => {
+  try {
+    const response = await api.post(`🚧`)
+
+    return response.data
+  } catch (error) {
+    console.error('[UnlikeSharePost]', error, id);
+  }
+}
+
+//🚧AddComment
+export const addComment = async (id: number, values: IComment) => {
+  try {
+    const response = await api.post(`🚧`, values)
+    
+    return response.data
+  } catch (error) {
+    console.error('[AddComment]', error, id);
+  }
+}
+
+
+//🚧AddCommentSharePost
+export const addCommentSharePost = async (id: number, values: IComment) => {
+  try {
+    const response = await api.post(`🚧`, values)
+    
+    return response.data
+  } catch (error) {
+    console.error('[AddCommentSharePost]', error, id);
+  }
+}
+
+//🚧DeleteComment
+export const deleteComment = async (id: number) => {
+  try {
+    const response = await api.post(`🚧`, values)
+    
+    return response.data
+  } catch (error) {
+    console.error('[DeleteComment]', error, id);
+  }
+}
+
+//🚧GetComment-post
+export const getCommentPost = async (id: number) => {
+  try {
+    const {data} = await api.get(``)
+
+    return data
+  } catch (error) {
+    console.error('[GetCommentPost]', error, id);
+    
+  }
+}
+
+export const getFeed = async () => {
+  try {
+    const {data} = await api.get(``)
+
+    return data
+  } catch (error) {
+    console.error('[getFeed]', error)
+  }
+}
+
+export const getGroupFeed = async (id: number) => {
+  try {
+    const {data} = await api.get(``)
+
+    return data
+  } catch (error) {
+    console.error('[getGroupFeed]', error);
+    
+  }
+}

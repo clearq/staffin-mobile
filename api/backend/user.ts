@@ -145,13 +145,28 @@ export const getPreferenceOptions = async () => {
   }
 }
 
-export const GetSuggestedUsers = async () => {
+export const getWorkProfileOptions = async () => {
+
+}
+
+export const getSuggestedUsers = async () => {
   try {
     const {data} = await api.get(`/User/GetSuggestedUsers`)
 
     return data
   } catch (error) {
     console.error('get suggested users:', error);
+    
+  }
+}
+
+export const checkOnBoardingStatus = async (userId: number) => {
+  try {
+    const response = await api.post(``)
+
+    return response.data
+  } catch (error) {
+    console.error('[checkOnBoardingStatus]', error, userId);
     
   }
 }

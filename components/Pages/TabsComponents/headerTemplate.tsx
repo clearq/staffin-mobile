@@ -23,8 +23,6 @@ interface props {
 const HeaderTemplate = ({title, visible, onClose, children}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
-
-
   
   return (
     <Modal
@@ -42,7 +40,7 @@ const HeaderTemplate = ({title, visible, onClose, children}: props) => {
             flexDirection: 'row',
             justifyContent: 'flex-start',
             padding: Sizes.fixPadding,
-            backgroundColor: theme.colors.background,
+            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
             gap: theme.spacing.md,
             alignItems: 'center',
             borderBottomWidth:1,
@@ -72,7 +70,8 @@ const HeaderTemplate = ({title, visible, onClose, children}: props) => {
 
         <View
           style={{
-            ...pageStyle.pageComponent,
+            //...pageStyle.pageComponent,
+            flex: 1,
             justifyContent: 'center',
             backgroundColor: theme.colors.background
           }}

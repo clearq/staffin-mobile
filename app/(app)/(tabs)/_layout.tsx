@@ -9,13 +9,9 @@ import { useTranslation } from "react-i18next";
 
 import CustomTabBar from '@/components/Pages/TabsComponents/CustomTabs'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import MyStatusBar from '@/components/StatusBar';
 import { ActivityIndicator } from 'react-native';
-import { SkeletonImage } from '@/components/Skeleton/skeleton-image';
 import PageHeader from '@/components/Header';
-import { hexToRgba } from '@/utils/rgba-to-hex';
-import { useQuery } from '@tanstack/react-query';
-import { getUserById } from '@/api/backend';
+
 
 
 export const unstable_settings = {

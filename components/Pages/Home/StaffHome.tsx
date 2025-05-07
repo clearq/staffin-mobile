@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import PostTemplate from '@/components/UI/PostTemplate'
 import MachingJobsTemplate from '@/components/UI/MachingJobsTemplate'
 import { useQuery } from '@tanstack/react-query'
-import { follow, getAllPosts, getCompanyById, getFollower, getMatchingJobs, GetSuggestedUsers, getUserById, getUserPreferences, unfollow } from '@/api/backend'
+import { follow, getFeed, getFollower, getMatchingJobs, getSuggestedUsers, unfollow } from '@/api/backend'
 import Introduction from '@/components/Viewpager/Introduction'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +42,7 @@ const StaffHome = () => {
   const {data: allPosts = [], isLoading: postsLoading, refetch: postsRefetch } = useQuery({
     queryKey: ["all-posts"],
     queryFn: async () => {
-      const response = await getAllPosts()
+      const response = await getFeed()
       // console.log('posts:', response.length);
       return response
     }
@@ -51,7 +51,7 @@ const StaffHome = () => {
   const {data: suggestedUsers = [], isLoading: suggestedUsersLoading, refetch:suggestedUsersRefetch} = useQuery({
     queryKey: ["suggested-users"],
     queryFn: async () => {
-      const response = await GetSuggestedUsers()
+      const response = await getSuggestedUsers()
       // console.log(response);
       return response
     }
@@ -75,7 +75,7 @@ const StaffHome = () => {
       setFollowed(true)
       postsRefetch()
     }
-    }  
+  }  
 
 
   useEffect(() => {
@@ -213,7 +213,6 @@ const StaffHome = () => {
               </ScrollView>
             </View>
             
-
           </View>
 
         </ScrollView>

@@ -1,15 +1,13 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { View, TouchableOpacity, StyleSheet, Text, Platform } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import { Avatar, Divider, useTheme } from "@rneui/themed";
 import { Sizes, theme } from "@/constants/Theme";
 import { useAuth } from "@/contexts/authContext";
 
-import { fetchImageFromCDN } from "@/utils/CDN-action";
-import { useQuery } from "@tanstack/react-query";
-import { getUserById, getUserPostsAndShares } from "@/api/backend";
 import { ProfileAvatar } from "@/components/UI/ProfileAvatar";
+import { useUserData } from "@/hooks/useUserData";
 
 
 const isIOS = Platform.OS === "ios";
@@ -17,40 +15,15 @@ const isIOS = Platform.OS === "ios";
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
   const { theme } = useTheme();
   const { authState: { userData, userId }, isLoading, } = useAuth();
-  const [avatar, setAvatar] = useState("") // Profile image url
 
   // Get User Info
-    const { 
-      data: user, 
-      refetch: userRefetch, 
-      isLoading: userIsLoading, 
-      isPending,    
-    } = useQuery({
-      queryKey: ["user-data"],
-      queryFn: async () => {
-        if (!isLoading && userId) {
-          const response = await getUserById(userId!)      
-          return response;
-        }
-      },
-      enabled: !!userId,
-    });
+  const {
+    data: user,
+    refetch: userRefetch,
+    isLoading: userIsLoading,
+    isPending,
+  } = useUserData(Number(userId));  
  
-    // useEffect(() => {
-    //   const fetchUrl = async () =>{
-    //     // console.log('staff image:', user.profileImage, user.id);
-    //     const url = await fetchImageFromCDN(user)
-    //     setAvatar(url)
-    //   }
-    //   if(user?.profileImage) {
-    //     fetchUrl()
-    //   }
-    //   if(isLoading && !userId) {
-    //     setAvatar("")
-    //   }
-    // },[user?.profileImage])
-
-   
 
   return (
     <View

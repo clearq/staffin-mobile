@@ -1,7 +1,5 @@
 import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { getUserById, getUserPostsAndShares } from '@/api/backend';
 import { fetchImageFromCDN } from '@/utils/CDN-action';
 import { theme } from '@/constants/Theme';
 

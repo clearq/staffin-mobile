@@ -18,7 +18,7 @@ const BottomSheetCustom :React.FC<Props> = ({ children, visible, setVisible }) =
     <Dialog
       animationType="slide"
       overlayStyle={{
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
         width: "90%",
         //height: "82%",
         marginHorizontal: 5,
@@ -31,7 +31,9 @@ const BottomSheetCustom :React.FC<Props> = ({ children, visible, setVisible }) =
       backdropStyle={{ backgroundColor: theme.colors.background, opacity: 0.8 }}
       isVisible={visible}
       onBackdropPress={setVisible}
-      style={styles.container}
+      style={{
+        ...styles.container, 
+      }}
     >
       <TouchableOpacity
         style={{...styles.closeButton,}}

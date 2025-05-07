@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   textGroup : {
     flexDirection: 'column',
-    gap: theme.spacing?.sm
+    // gap: theme.spacing?.sm
   },
   smButton: {
     paddingVertical: theme.spacing?.xs,

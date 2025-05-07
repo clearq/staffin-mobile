@@ -56,7 +56,7 @@ const SuggestedUserTemplate = ({user, followed}: props ) => {
         >
           {user?.title? user.title : ""}
         </Text>
-        
+
       </View>
       
       <View style={{flexDirection: 'column', gap: theme.spacing.sm, marginTop: theme.spacing.sm}}>  
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   textGroup : {
     flexDirection: 'column',
-    gap: theme.spacing?.sm
+    // gap: theme.spacing?.sm
   },
   smButton: {
     paddingVertical: theme.spacing?.xs,

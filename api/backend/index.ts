@@ -41,7 +41,8 @@ export {
   setUserPreferences,
   getUserPreferences,
   getPreferenceOptions,
-  GetSuggestedUsers,
+  getWorkProfileOptions,
+  getSuggestedUsers,
 } from "./user"
 
 export {
@@ -84,6 +85,14 @@ export {
   // Delete group post
   likePost,
   unlikePost,
+  likeSharePost,
+  unlikeSharePost,
+  addComment,
+  addCommentSharePost,
+  deleteComment,
+  getCommentPost,
+  getFeed,
+  getGroupFeed
 } from "./community"
 
 export {

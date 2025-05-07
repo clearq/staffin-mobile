@@ -17,12 +17,11 @@ interface Props {
   setVisible: () => void;
   postId: number;
   post: IPost;
-  user: IUser;
   postImages: string[]
 }
 
 
-const SharePostDialog :React.FC<Props> = ({ visible, setVisible, postId, post, user, postImages }) => {
+const SharePostDialog: React.FC<Props> = ({ visible, setVisible, postId, post, postImages }) => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const [content, setContent] = useState("")
@@ -111,8 +110,8 @@ const SharePostDialog :React.FC<Props> = ({ visible, setVisible, postId, post, u
 
                   <View style={{...styles.userContainer}}>                
                     <ProfileAvatar
-                      userId={user?.id}
-                      image={user?.profileImage}
+                      userId={post.userId}
+                      image={""} // 🚧
                       size={40}
                       handleUpdate={() => {}}
                     />

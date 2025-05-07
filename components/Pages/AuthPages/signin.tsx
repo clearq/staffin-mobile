@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from '@rneui/themed'
 import { useAuth } from '@/contexts/authContext';
 
-import { getUserById } from '@/api/backend'
 import { Text } from '@rneui/themed'
 import { Fonts, Sizes, theme } from '@/constants/Theme'
 

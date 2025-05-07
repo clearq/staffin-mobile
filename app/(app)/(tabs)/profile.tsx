@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import pageStyle from '@/constants/Styles';
 import { theme } from '@/constants/Theme';
-import { generateCv, getUserById, getUserPostsAndShares } from '@/api/backend';
+import { generateCv, getUserPostsAndShares } from '@/api/backend';
 import { fetchImageFromCDN } from '@/utils/CDN-action';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { hexToRgba } from '@/utils/rgba-to-hex';
@@ -17,6 +17,7 @@ import { MessageModal } from '@/components/Modal/MessageModal';
 import { useToast } from 'react-native-toast-notifications';
 import StaffProfileIndex from '@/components/Pages/TabsComponents/Profile/StaffProfile';
 import AdminProfileIndex from '@/components/Pages/TabsComponents/Profile/AdminProfile';
+import { useUserData } from '@/hooks/useUserData';
 
 
 const Page = () => {
@@ -34,20 +35,12 @@ const Page = () => {
   } = useAuth();
 
   // Get User Info
-  const { 
-    data: user, 
-    refetch: userRefetch, 
-    isLoading: userIsLoading, 
-    isPending,    
-  } = useQuery({
-    queryKey: ["user-data"],
-    queryFn: async () => {
-      const response = await getUserById(userId!)      
-
-      return response;
-    },
-    enabled: !!userId,
-  });
+  const {
+    data: user,
+    refetch: userRefetch,
+    isLoading: userIsLoading,
+    isPending,
+  } = useUserData(Number(userId));
 
   // Get Users Posts
   const {

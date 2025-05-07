@@ -5,16 +5,16 @@ import { theme } from '@/constants/Theme'
 import { Divider, useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import page from '@/app/(app)/(tabs)/application'
 import { IPost, IUser } from '@/types'
 import { Colors } from '@/constants/Colors'
 import { useAuth } from '@/contexts/authContext'
 import { fetchImageFromCDN } from '@/utils/CDN-action'
 import { useQuery } from '@tanstack/react-query'
-import { follow, getFollower, getPostDetails, getUserById, likePost, sharePost, unfollow, unlikePost } from '@/api/backend'
+import { likePost, unlikePost } from '@/api/backend'
 import { CompanyAvatar, ProfileAvatar } from './ProfileAvatar'
 import { yearMonthDate } from '@/utils/dateFormat'
 import SharePostDialog from '../Pages/Community/Dialogs/SharePostDialog'
+import CommentsDialog from '../Pages/Community/Dialogs/CommentsDialog'
 
 
 interface Props {
@@ -32,21 +32,15 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId }} = useAuth();
   
-  // Fetch user data for profile image
-  const {data: user} = useQuery({
-    queryKey: ['author', authorId],
-    queryFn: async () => {
-      const response = await getUserById(authorId)
 
-      return response
-    }
-  })
 
   const [authorImage, setAuthorImage] = useState('')
   const [postImages, setPostImages] = useState<string[]>([])
   const [liked, setLiked] = useState(false)
   const [openComments, setOpenComments] = useState(false)
+  const [openComment, setOpenComment] = useState(false)
   const [openSharePostDialog, setOpenSharePostDialog] = useState(false)
+
 
 
   useEffect(() => {
@@ -133,8 +127,8 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
         <View style={{...styles.userContainer}}>
          
           <ProfileAvatar
-            userId={user?.id}
-            image={user?.profileImage}
+            userId={authorId}
+            image={""}
             size={40}
             handleUpdate={() => {}}
           />
@@ -210,10 +204,23 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
               <MaterialCommunityIcons name='heart' size={16} color={"rgb(255, 45, 85)"} />
             </View>
             
-            <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>
-              <Text>{`${post?.commentCount ? post?.commentCount : 0 } comments • `}</Text>
-              <Text>{`${post?.sharedCount ? post?.sharedCount : 0 } shares`}</Text>
-            </Text>
+            <View style={{flexDirection: 'row', gap: theme.spacing.xs, alignItems: 'center'}}>
+              <TouchableOpacity
+                onPress={() => setOpenComments(true)}
+              >
+                <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>
+                  {`${post?.commentCount ? post?.commentCount : 0 } comments`}
+                </Text>
+              </TouchableOpacity>
+
+              <Text>{` • `}</Text>
+
+              <TouchableOpacity>
+                <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>
+                  {`${post?.sharedCount ? post?.sharedCount : 0 } shares`}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
         </View>          
@@ -232,15 +239,16 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
           <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("like")}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{...styles.footerButtonItem}}>
+        <TouchableOpacity 
+          style={{...styles.footerButtonItem}}
+          onPress={() => {
+            setOpenComment(true)
+            setOpenComments(true)
+          }}
+        >
           <MaterialCommunityIcons name='comment-text-outline' size={24} color={theme.colors.grey3} />
           <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("comment")}</Text>
         </TouchableOpacity>
-        
-        {/* <TouchableOpacity style={{...styles.footerButtonItem}}>
-          <MaterialCommunityIcons name='repeat' size={24} color={theme.colors.grey3} />
-          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("repost")}</Text>
-        </TouchableOpacity> */}
 
         <TouchableOpacity 
           style={{...styles.footerButtonItem}}
@@ -257,9 +265,22 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
         setVisible={() => setOpenSharePostDialog(!openSharePostDialog)}
         postId={postId}
         post={post}
-        user={user}
         postImages={postImages}
       />
+
+      <CommentsDialog
+        visible={openComments}
+        setVisible={() => setOpenComments(!openComments)}
+        postId={postId}
+        post={post}
+        followed={followed}
+        refetch={postsRefetch}
+        isLoading={postIsLoading}
+        postImages={postImages}
+        showInput={openComment}
+        setShowInput={() => setOpenComment(!openComment)}
+      /> 
+
     </View>
   )
 }

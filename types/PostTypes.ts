@@ -5,11 +5,11 @@ export interface IPost {
   authorName: string;
   images: [];
   createdAt: Date; // ISO 8601 format
-  likeCount?: number; // Option
-  commentCount?: number; // Option
-  sharedCount?: number; // Option
-  likes?: ILike[];
-  comments?: IComment[];
+  likeCount: number; // Option
+  commentCount: number; // Option
+  sharedCount: number; // Option
+  likes: ILike[];
+  comments: IComment[];
   grpupId?: number
 }
 
@@ -23,6 +23,6 @@ export interface IComment {
   userId: number;
   authorName: string;
   content: string;
-  createdAt: string; // ISO 8601 format
+  createdAt: Date; // ISO 8601 format
 }
 

@@ -8,6 +8,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/authContext';
 import axios from 'axios';
+import JobDetail from './jobDetail';
 
 // Log all Axios requests and responses
 axios.interceptors.request.use((config) => {
@@ -63,13 +64,13 @@ const Jobsindex = ({ job, refetch }: Props) => {
     queryFn: async () => {
       const response = await getMyApplications();
   
-      if (response.length > 0) {
-        const newMap = new Map();
-        response.forEach((item:any) => {
-          newMap.set(item.jobId, true);
-        });
-        setAppliedJobs(newMap);
-      }
+      // if (response.length > 0) {
+      //   const newMap = new Map();
+      //   response.forEach((item:any) => {
+      //     newMap.set(item.jobId, true);
+      //   });
+      //   setAppliedJobs(newMap);
+      // }
   
       return response;
     }
@@ -97,13 +98,14 @@ const Jobsindex = ({ job, refetch }: Props) => {
         phoneNumber: formData.phoneNumber,
         email: formData.email,
       };
-      console.log('Updating staff with data:', JSON.stringify(updatedData, null, 2));
+      // console.log('Updating staff with data:', JSON.stringify(updatedData, null, 2));
 
       await updateStaff(updatedData);
 
       toast.show(`${t('success-update-message')}`, { type: 'success' });
       //setAppliedJobs((prev) => new Set(prev).add(selectedJob.id));
       closeModal();
+      applicationsRefetch()
       refetch()
     } catch (error: any) {
       console.error('Error during application:', error.response?.data || error.message || error);
@@ -131,6 +133,18 @@ const Jobsindex = ({ job, refetch }: Props) => {
     setShowForm(false);
   };
 
+  useEffect(() => {
+    console.log('apply job');
+    if (applications.length > 0) {
+      const newMap = new Map();
+      applications.forEach((item:any) => {
+        newMap.set(item.jobId, true);
+      });
+      setAppliedJobs(newMap);
+    }
+    
+  },[applications])
+
   return (
     <ScrollView style={{ padding: 14 }}>
       {job?.length > 0 &&
@@ -147,84 +161,23 @@ const Jobsindex = ({ job, refetch }: Props) => {
           </Card>
         ))}
 
-      <Modal
-        visible={isModalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {selectedJob && !showForm ? (
-              <>
-                <Text style={styles.modalTitle}>{selectedJob.title}</Text>
-                <Text>Beskrivning: {selectedJob.description}</Text>
-                <Text>Plats: {selectedJob.location}</Text>
-                <Text>Lön: {selectedJob.salary}</Text>
-                <Button
-                  mode="contained"
-                  onPress={() => setShowForm(true)}
-                  disabled={appliedJobs.has(selectedJob.id)}
-                  style={[styles.applyButton, appliedJobs.has(selectedJob.id) && styles.disabledButton]}
-                >
-                  {appliedJobs.has(selectedJob.id) ? 'Already Applied' : 'Apply'}
-                </Button>
-                <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </TouchableOpacity>
-              </>
-            ) : selectedJob && showForm ? (
-              <>
-                <Text style={styles.modalTitle}>Apply for {selectedJob.title}</Text>
-                <Text style={styles.label}>First Name</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="First Name"
-                  value={formData.firstName}
-                  onChangeText={(text) => setFormData({ ...formData, firstName: text })}
-                />
-                <Text style={styles.label}>Last Name</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Last Name"
-                  value={formData.lastName}
-                  onChangeText={(text) => setFormData({ ...formData, lastName: text })}
-                />
-                <Text style={styles.label}>Phone Number</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Phone Number"
-                  keyboardType="numeric"
-                  value={formData.phoneNumber}
-                  onChangeText={(text) => setFormData({ ...formData, phoneNumber: text })}
-                />
-                <Text style={styles.label}>Email</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  value={formData.email}
-                  onChangeText={(text) => setFormData({ ...formData, email: text })}
-                />
-                <Button
-                  mode="contained"
-                  onPress={handleApply}
-                  loading={isApplying}
-                  disabled={!isFormValid || isApplying}
-                  style={[styles.applyButton, !isFormValid && styles.disabledButton]}
-                >
-                  Apply
-                </Button>
-                <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <Text>No job selected.</Text>
-            )}
-          </View>
-        </View>
-      </Modal>
+        {selectedJob !== null &&
+          <JobDetail 
+            isModalVisible={isModalVisible}
+            closeModal={() => closeModal()}
+            selectedJob={selectedJob}
+            showForm={showForm}
+            setShowForm={() => setShowForm(!showForm)}
+            appliedJobs={appliedJobs}
+            formData={formData}
+            setFormData={setFormData}
+            isApplying={isApplying}
+            isFormValid={isFormValid}
+            handleApply={handleApply}
+            
+          />
+        }
+         
     </ScrollView>
   );
 };
@@ -280,3 +233,5 @@ const styles = StyleSheet.create({
 });
 
 export default Jobsindex;
+
+

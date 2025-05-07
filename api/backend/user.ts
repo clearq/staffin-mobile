@@ -162,7 +162,7 @@ export const getSuggestedUsers = async () => {
 
 export const checkOnBoardingStatus = async (userId: number) => {
   try {
-    const response = await api.post(``)
+    const response = await api.post(`/User/CheckOnBoardingStatus?userId=${userId}`)
 
     return response.data
   } catch (error) {

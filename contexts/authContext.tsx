@@ -15,7 +15,7 @@ import { getItem } from "expo-secure-store";
 import { getUserById } from "@/api/backend";
 import { useTranslation } from "react-i18next";
 import { fetchImageFromCDN } from "@/utils/CDN-action";
-import { queryClient } from "@/app/_layout";
+//import { queryClient } from "@/app/_layout";
 
 
 export interface IAuthState {
@@ -265,7 +265,7 @@ export function AuthProvider (props: any) {
     await removeItem(CDN_TOKEN);
     await removeItem(ONBOARDING)
 
-    queryClient.clear() // Clear React Query cache
+    // queryClient.clear() // Clear React Query cache
     
     setIsLoadingSession(false)
     setSession(null);

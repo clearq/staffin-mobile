@@ -19,8 +19,8 @@ import { useAuth } from "@/contexts/authContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import pageStyle from "@/constants/Styles";
 import ModalHeader from "../ModalHeader";
-import { IActiveUser, useUserType } from "@/contexts/userTypeContext";
 import { values } from "lodash";
+import { useUserType } from "@/hooks/useUserType";
 
 
 const screenWidth = Dimensions.get("window").width
@@ -32,7 +32,7 @@ export default function RecordsScreen() {
     authState: { userData, userId},
   } = useAuth();
 
-  const {setActiveUserState, userType} = useUserType()
+  const userType = useUserType();
 
   // const userData = null;
 
@@ -98,15 +98,6 @@ export default function RecordsScreen() {
     },
     
   ]
-
-  useEffect(() => {
-    if(!userId) {
-      setActiveUserState({ userType: null })
-      }      
-      setActiveUserState({ userType:"admin" })   
-      console.log(userId);
-         
-  },[userId])
 
 
   return (

@@ -19,7 +19,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ToastProvider } from "react-native-toast-notifications";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthProvider } from "@/contexts/authContext";
-import { UserTypeProvider } from "@/contexts/userTypeContext";
 
 export const unstable_settings = {
   initialRouteName: "/",
@@ -34,9 +33,6 @@ const RootLayout = () => {
     InterRegular: require("@/assets/fonts/InterRegular.ttf"),
     InterMedium: require("@/assets/fonts/InterMedium.ttf"),
     InterSemibold: require("@/assets/fonts/InterSemibold.ttf"),
-    // Poppins: require("@/assets/fonts/Poppins-Regular.ttf"),
-    // PoppinsBold: require("@/assets/fonts/Poppins-Bold.ttf"),
-    // PoppinsMedium: require("@/assets/fonts/Poppins-Medium.ttf"),
     ...FontAwesome.font,
   });
 
@@ -70,10 +66,8 @@ const RootLayout = () => {
       normalColor="#a3a3a3"
       successIcon={<MaterialIcons name="check-circle" color={"white"} size={25} />}
     >
-      <AuthProvider>               
-        <UserTypeProvider>
-          <RootLayoutNav />
-        </UserTypeProvider>
+      <AuthProvider>      
+        <RootLayoutNav />
       </AuthProvider>   
     </ToastProvider> 
   );

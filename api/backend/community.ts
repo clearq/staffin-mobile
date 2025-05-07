@@ -302,11 +302,12 @@ export const getCommentPost = async (id: number) => {
 
 export const getFeed = async () => {
   try {
-    const {data} = await api.get(``)
+    const {data} = await api.get(`/Community/Feed`)
 
     return data
   } catch (error) {
     console.error('[getFeed]', error)
+    return []
   }
 }
 

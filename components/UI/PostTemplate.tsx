@@ -15,39 +15,30 @@ import { CompanyAvatar, ProfileAvatar } from './ProfileAvatar'
 import { yearMonthDate } from '@/utils/dateFormat'
 import SharePostDialog from '../Pages/Community/Dialogs/SharePostDialog'
 import CommentsDialog from '../Pages/Community/Dialogs/CommentsDialog'
+import { usePostLike } from '@/hooks/usePostLike'
+import { useFollow } from '@/hooks/useFollow'
 
 
 interface Props {
-  postId: number
-  authorId: number
   post: IPost
   postsRefetch: () => void
   postIsLoading: boolean
-  followed: boolean
   handleFollowAction: (id: number) => void
+  following: []
 }
 
-const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, followed, handleFollowAction}: Props) => {
+const PostTemplate = ({post, postsRefetch, postIsLoading, handleFollowAction}: Props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId }} = useAuth();
-  
-
-
-  const [authorImage, setAuthorImage] = useState('')
+  const { liked, toggleLike } = usePostLike(post.likes, post.postId, (Number(userId)), postsRefetch);
+  const { followed, toggleFollow } = useFollow()
   const [postImages, setPostImages] = useState<string[]>([])
-  const [liked, setLiked] = useState(false)
+
+  
   const [openComments, setOpenComments] = useState(false)
   const [openComment, setOpenComment] = useState(false)
   const [openSharePostDialog, setOpenSharePostDialog] = useState(false)
-
-
-
-  useEffect(() => {
-    const likedByUser = post.likes?.some(item => item.userId === Number(userId)) || false;
-    setLiked(likedByUser);
-    
-  }, [post.likes, userId]);
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -65,51 +56,15 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
         setPostImages(urls); // assumes fetchImageFromCDN returns a string (URL)
       }
     };
-
-    const isLiked = async () => {
-      post.likes?.some((item) => {
-        if (item.userId === Number(userId)){
-          return setLiked(true)
-        }
-        return setLiked(false)
-      })
-    }
-
-    // const isFollowed = async () => {
-      
-    // }
  
     fetchUrls()
-    isLiked()
-    // isFollowed()
+   
   },[post.likes, userId])
 
 
-  const handleLikeAction = async (id: number) => {
-    if (liked === true) {
-      await unlikePost(id)
-      setLiked(false)
-      postsRefetch()
-    } else {
-      await likePost(id)
-      setLiked(true)
-      postsRefetch()
-    }
-  }
 
   const handleSharePost = async (id: number) => {
-    
 
-    // try {
-    //   const value = {
-    //     content: content || "",
-    //   }
-    //   const response = await sharePost(id, value)
-    //   return response
-
-    // } catch (error) {
-    //   console.error(error);     
-    // } 
   }
 
   return (
@@ -127,7 +82,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
         <View style={{...styles.userContainer}}>
          
           <ProfileAvatar
-            userId={authorId}
+            userId={post.userId}
             image={""}
             size={40}
             handleUpdate={() => {}}
@@ -233,7 +188,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
         {/* Like */}
         <TouchableOpacity 
           style={{...styles.footerButtonItem}}
-          onPress={() => handleLikeAction(post.postId)}
+          onPress={toggleLike}
         >
           <MaterialCommunityIcons name={liked ? 'heart' : 'heart-outline'} size={24} color={liked ? "rgb(255, 45, 85)" : theme.colors.grey3} />
           <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("like")}</Text>
@@ -260,10 +215,10 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
         
       </View> 
 
-      <SharePostDialog 
+      {/* <SharePostDialog 
         visible={openSharePostDialog}
         setVisible={() => setOpenSharePostDialog(!openSharePostDialog)}
-        postId={postId}
+        postId={post.postId}
         post={post}
         postImages={postImages}
       />
@@ -271,7 +226,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
       <CommentsDialog
         visible={openComments}
         setVisible={() => setOpenComments(!openComments)}
-        postId={postId}
+        postId={post.postId}
         post={post}
         followed={followed}
         refetch={postsRefetch}
@@ -279,7 +234,7 @@ const PostTemplate = ({postId, authorId, post, postsRefetch, postIsLoading, foll
         postImages={postImages}
         showInput={openComment}
         setShowInput={() => setOpenComment(!openComment)}
-      /> 
+      />  */}
 
     </View>
   )

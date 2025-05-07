@@ -563,7 +563,7 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
   const [selectedJobId, setSelectedJobId] = useState<number[]>([])
   const [selectedWorkPlaceId, setSelectedWorkPlaceId] = useState<number[]>([])
 
-  const {data: preference = [], refetch: preferenceRefetch} = useQuery({
+  const {data: preference = {}, refetch: preferenceRefetch} = useQuery({
     queryKey: ["user-preferences"],
     queryFn: async () => {
       const response = await getUserPreferences()
@@ -574,10 +574,12 @@ const PageFive = ({user, handleSuccess, onClose, goToNext, goBack}: pageProps) =
   })
 
   useEffect(() => {
-    setSelectedEmploymentId(preference.employmentTypeId)
-    setSelectedJobId(preference.jobTypeId)
-    setSelectedWorkPlaceId(preference.workplaceTypeId)
-  }, [])
+    if (preference) {
+      setSelectedEmploymentId(preference.employmentTypeId ?? []);
+      setSelectedJobId(preference.jobTypeId ?? []);
+      setSelectedWorkPlaceId(preference.workplaceTypeId ?? []);
+    }
+  }, [preference])
 
   const employmentTypeRadio = useMemo(() => ([
     {
@@ -849,9 +851,9 @@ const styles = StyleSheet.create({
     //backgroundColor: 'red'
   },
   imageStyle: {
-    //position: 'absolute',
+    position: 'absolute',
     left: 0,
-    top: 50,
+    //top: 50,
     bottom: 0,
     //width: 180,
     height: 300,

@@ -11,10 +11,10 @@ import { ProfileAvatar } from './ProfileAvatar'
 
 interface props {
   user: ISuggestedUser
-  followed: boolean
+  following: boolean
 } 
 
-const SuggestedUserTemplate = ({user, followed}: props ) => {
+const SuggestedUserTemplate = ({user, following}: props ) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -64,7 +64,7 @@ const SuggestedUserTemplate = ({user, followed}: props ) => {
           style={{...styles.smButton, backgroundColor: theme.colors.secondary}}
         >
           <Text style={{...pageStyle.button16, color: theme.colors.white}}>
-            {followed ? t("unfollow") : t("follow")}
+            {following ? t("unfollow") : t("follow")}
           </Text>
         </TouchableOpacity>
       </View>    

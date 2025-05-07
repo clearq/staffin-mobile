@@ -27,7 +27,7 @@ const index = () => {
   const [selectedJobId, setSelectedJobId] = useState<number[]>([])
   const [selectedWorkPlaceId, setSelectedWorkPlaceId] = useState<number[]>([])
 
-  const {data: preference = [], refetch: preferenceRefetch} = useQuery({
+  const {data: preference = {}, refetch: preferenceRefetch} = useQuery({
     queryKey: ["user-preferences"],
     queryFn: async () => {
       const response = await getUserPreferences()
@@ -134,12 +134,12 @@ const index = () => {
   }
 
   useEffect(() => {
-    console.log(preference);
-    
-    setSelectedEmploymentId(preference.employmentTypeId)
-    setSelectedJobId(preference.jobTypeId)
-    setSelectedWorkPlaceId(preference.workplaceTypeId)
-  }, [])
+    if (preference) {
+      setSelectedEmploymentId(preference.employmentTypeId ?? []);
+      setSelectedJobId(preference.jobTypeId ?? []);
+      setSelectedWorkPlaceId(preference.workplaceTypeId ?? []);
+    }
+  }, [preference])
 
   const handleSubmit = async () => {
     try {
@@ -164,11 +164,16 @@ const index = () => {
   }
 
   return (
-    <View style={{padding: theme.spacing.md}}>
+    <View style={{}}>
       <View
         style={{...styles.col}}
       >
-        <View>
+        <View 
+          style={{
+            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
+            padding: theme.spacing.md,
+          }}
+        >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
             {`${t("area")}:`}
           </Text>
@@ -200,7 +205,12 @@ const index = () => {
           </View>        
         </View>
 
-        <View>
+        <View
+          style={{
+            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
+            padding: theme.spacing.md,
+          }}
+        >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
             {`${t("profession-area")}:`}
           </Text> 
@@ -225,7 +235,13 @@ const index = () => {
             </View>        
         </View>
 
-        <View style={{...styles.radioComponent}}>
+        <View 
+          style={{
+            ...styles.radioComponent,
+            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
+            padding: theme.spacing.md,
+          }}
+        >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
             {`${t("employment-type")}:`}
           </Text>
@@ -254,7 +270,13 @@ const index = () => {
           </View>
         </View>
 
-        <View style={{...styles.radioComponent}}>
+        <View 
+          style={{
+            ...styles.radioComponent,
+            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
+            padding: theme.spacing.md,
+          }}
+        >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
             {`${t("job-type")}:`}
           </Text>
@@ -281,7 +303,13 @@ const index = () => {
           </View>
         </View>
 
-        <View style={{...styles.radioComponent}}>
+        <View
+          style={{
+            ...styles.radioComponent,
+            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
+            padding: theme.spacing.md,
+          }}
+        >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
             {`${t("work-place-type")}:`}
           </Text>
@@ -341,5 +369,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center'
+  },
+  sectionContainer: {
+    
   }
 })

@@ -3,6 +3,7 @@ export interface IPost {
   userId: number;
   content: string;
   authorName: string;
+  profileImage: string | null
   images: [];
   createdAt: Date; // ISO 8601 format
   likeCount: number; // Option

@@ -9,6 +9,7 @@ import Button from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from "@/constants/Theme";
 import { Avatar, Overlay, Switch, useTheme, useThemeMode } from "@rneui/themed";
 import pageStyle from '@/constants/Styles'
+import { queryClient } from '@/app/_layout';
 
 
 const setting = () => {
@@ -82,7 +83,10 @@ const setting = () => {
           </Text>
           <Button
             title={`${t("log-out")}`}
-            onPress={SignOut}
+            onPress={() => {
+              SignOut() 
+              queryClient.clear() // Clear React Query cache
+            }}
             size='md'
             color='primary'
             titleStyle={{ ...pageStyle.button16 }}

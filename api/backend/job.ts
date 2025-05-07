@@ -73,5 +73,3 @@ export const getProfessionAreas = async () => {
     console.error('getProfessionAreas',error)
   }
 }
-
- 

@@ -31,7 +31,7 @@ const Page = () => {
   return (
     <View>
       {userData?.roleId === 3 && 
-        <Jobsindex job={data}/>
+        <Jobsindex job={data} refetch={jobRefetch}/>
       }
       {userData?.roleId === 1 &&
         <Text>Job Application Management</Text>

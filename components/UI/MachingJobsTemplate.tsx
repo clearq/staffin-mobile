@@ -75,6 +75,7 @@ const MachingJobsTemplate = ({job,}: props) => {
 
         <TouchableOpacity
           style={{...styles.smButton, backgroundColor: theme.colors.secondary}}
+          onPress={() => {}}
         >
           <Text style={{...pageStyle.button16, color: theme.colors.white}}>
             {t("apply")}

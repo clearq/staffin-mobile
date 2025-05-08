@@ -37,8 +37,6 @@ const PageHeader = () => {
       style={{
         width: "auto",
         backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
-        //paddingHorizontal: Sizes.fixPadding * 1.5,
-        paddingVertical: Sizes.fixPadding,
       }}
     >
       <MyStatusBar />
@@ -53,8 +51,6 @@ const PageHeader = () => {
             alignItems:'center',
             paddingHorizontal: Sizes.fixPadding,
             paddingVertical: theme.spacing.md,
-            borderColor: theme.colors.divider,
-            borderBottomWidth: 0.5,
           }}
         >
           <View
@@ -95,7 +91,7 @@ const PageHeader = () => {
           </View>
         </View>
       }
-
+      <Divider />
     </View>
   )
 }
@@ -104,7 +100,7 @@ export default PageHeader
 
 const styles = StyleSheet.create({
   searchContainer: {
-    paddingVertical: theme.spacing?.xs,
+    //paddingVertical: theme.spacing?.xs,
     paddingHorizontal: theme.spacing?.md,
     borderRadius: 10,
     flexDirection: 'row',

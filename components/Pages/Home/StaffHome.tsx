@@ -15,6 +15,7 @@ import pageStyle from '@/constants/Styles'
 import SuggestedUserTemplate from '@/components/UI/SuggestedUserTemplate'
 import { useRefreshControl } from '@/hooks/useRefreshControl'
 import { checkOnBoardingStatus } from '@/api/backend/user'
+import { useRouter } from 'expo-router'
 
 export interface ISuggestedUser {
   userId: number;
@@ -32,6 +33,8 @@ const StaffHome = () => {
 
   const { theme } = useTheme()
   const { t } = useTranslation();
+  const router = useRouter()
+  
   
   const { authState:{ userData, userId, token }, isLoading } = useAuth();
 
@@ -109,7 +112,6 @@ const StaffHome = () => {
   return (
     <View>
       {isLoading || loading &&  <ActivityIndicator color={theme.colors.primary} /> }     
-        <>
         {openIntroduction && 
           <View style={{backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black}}>
             <Introduction 
@@ -119,7 +121,6 @@ const StaffHome = () => {
         }
         {!openIntroduction && 
           <ScrollView 
-            style={{marginBottom: theme.spacing.xl,}}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -153,7 +154,9 @@ const StaffHome = () => {
                   {t("job-picks-for-you")}
                 </Text>
 
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => router.replace('/jobs')}
+                >
                   <Text
                     style={{...styles.linkText, color: theme.colors.secondary, textDecorationColor: theme.colors.secondary}}
                   >
@@ -235,7 +238,6 @@ const StaffHome = () => {
 
           </ScrollView>
         }
-      </>  
     </View>
   )
 }

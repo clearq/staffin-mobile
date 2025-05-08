@@ -183,6 +183,7 @@ const StaffHome = () => {
                       <View key={job.jobId}>
                         <MachingJobsTemplate 
                           job={job}
+                          refetch={matchJobRefetch}
                         />
                       </View>
                     ))

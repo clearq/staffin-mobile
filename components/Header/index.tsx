@@ -100,7 +100,7 @@ export default PageHeader
 
 const styles = StyleSheet.create({
   searchContainer: {
-    //paddingVertical: theme.spacing?.xs,
+    paddingVertical: theme.spacing?.xs,
     paddingHorizontal: theme.spacing?.md,
     borderRadius: 10,
     flexDirection: 'row',

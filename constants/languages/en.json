@@ -54,6 +54,7 @@
   "skill-required-message": "Select a skill",
   "language-required-message": "Select a language",
   "rating-required-message": "Rating is required",
+  "enter-form-message": "Please enter your information",
 
   "first-name": "First name",
   "last-name": "Last name",

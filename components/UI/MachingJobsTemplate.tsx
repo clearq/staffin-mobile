@@ -1,19 +1,24 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { theme } from '@/constants/Theme'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import pageStyle from '@/constants/Styles'
-import { IMatchingJob } from '@/types/JobTypes'
+import { IJob, IMatchingJob } from '@/types/JobTypes'
 import { useQuery } from '@tanstack/react-query'
-import { getCompanyById } from '@/api/backend'
+import { getCompanyById, getJobById } from '@/api/backend'
+import { boolean } from 'yup'
+import JobDetail from '../Pages/Jobs/jobDetail'
 
 
 interface props {
   job: IMatchingJob
+  refetch: () => void 
 }
 
-const MachingJobsTemplate = ({job,}: props) => {
+const MachingJobsTemplate = ({job, refetch}: props) => {
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedJob, setSelectedJob] = useState (job);
   const { theme } = useTheme()
   const { t } = useTranslation();
 
@@ -24,6 +29,13 @@ const MachingJobsTemplate = ({job,}: props) => {
     },
 
     enabled: !!job.companyId
+  })
+
+  const {data: jobDetail} = useQuery({
+    queryKey: ["job-detail", job.jobId],
+    queryFn: async () => {
+      return getJobById(job.jobId)
+    }
   })
   
 
@@ -75,13 +87,21 @@ const MachingJobsTemplate = ({job,}: props) => {
 
         <TouchableOpacity
           style={{...styles.smButton, backgroundColor: theme.colors.secondary}}
-          onPress={() => {}}
+          onPress={() => setOpenModal(true)}
         >
           <Text style={{...pageStyle.button16, color: theme.colors.white}}>
             {t("apply")}
           </Text>
         </TouchableOpacity>
-      </View>    
+      </View>   
+
+      <JobDetail 
+        isModalVisible={openModal}
+        closeModal={() => setOpenModal(!openModal)}
+        selectedJob={jobDetail} 
+        refetch={refetch}        
+      />
+        
     </View>
   )
 }

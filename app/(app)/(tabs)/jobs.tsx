@@ -31,7 +31,13 @@ const Page = () => {
   return (
     <View>
       {userData?.roleId === 3 && 
-        <Jobsindex job={data} refetch={jobRefetch}/>
+        <View 
+          style={{
+            backgroundColor: theme.colors.background,
+          }}
+        >
+          <Jobsindex job={data} refetch={jobRefetch}/>
+        </View>
       }
       {userData?.roleId === 1 &&
         <Text>Job Application Management</Text>

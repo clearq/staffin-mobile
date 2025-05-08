@@ -4,7 +4,6 @@ import PostTemplate from '@/components/UI/PostTemplate'
 import MachingJobsTemplate from '@/components/UI/MachingJobsTemplate'
 import { useQuery } from '@tanstack/react-query'
 import { follow, getFeed, getFollower, getFollowing, getMatchingJobs, getSuggestedUsers, unfollow } from '@/api/backend'
-import Introduction from '@/components/Viewpager/Introduction'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/authContext'
@@ -16,6 +15,8 @@ import SuggestedUserTemplate from '@/components/UI/SuggestedUserTemplate'
 import { useRefreshControl } from '@/hooks/useRefreshControl'
 import { checkOnBoardingStatus } from '@/api/backend/user'
 import { useRouter } from 'expo-router'
+import Onboarding from './Onboarding'
+import { useUserData } from '@/hooks/useUserData'
 
 export interface ISuggestedUser {
   userId: number;
@@ -38,6 +39,13 @@ const StaffHome = () => {
   
   const { authState:{ userData, userId, token }, isLoading } = useAuth();
 
+  const {
+      data: user,
+      refetch: userRefetch,
+      isLoading: userIsLoading,
+      isPending,
+    } = useUserData(Number(userId));
+
   const { data: onBoarding } = useQuery({
     queryKey: ['check-onboarding', userId],
     queryFn: async () => {
@@ -53,7 +61,6 @@ const StaffHome = () => {
       return await getMatchingJobs()
     }
   })
-
 
   const {data: feed = [], isLoading: postsLoading, refetch: postsRefetch } = useQuery({
     queryKey: ["all-posts"],
@@ -114,9 +121,14 @@ const StaffHome = () => {
       {isLoading || loading &&  <ActivityIndicator color={theme.colors.primary} /> }     
         {openIntroduction && 
           <View style={{backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black}}>
-            <Introduction 
+
+            <Onboarding
+              user={user}
+              refetch= {userRefetch}
+              visible={openIntroduction}
               onClose={() => setOpenIntroduction(!openIntroduction)}
             />
+            
           </View>
         }
         {!openIntroduction && 

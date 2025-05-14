@@ -65,7 +65,7 @@ const JobDetail = ({
     }
   });
 
-  const handleApply = async () => {
+  const handleApply = async (id: number) => {
     if (!selectedJob) {
       console.error('No selected job');
       return;
@@ -74,7 +74,7 @@ const JobDetail = ({
     try {
       setIsApplying(true);
 
-      const payload = { jobId: selectedJob.id };
+      const payload = { jobId: id };
       console.log('Payload for postNewApplication:', JSON.stringify(payload, null, 2));
 
       const response = await postNewApplication(payload);
@@ -190,7 +190,7 @@ const JobDetail = ({
 
               <Button
                 mode="contained"
-                onPress={handleApply}
+                onPress={()=> handleApply(selectedJob.id)}
                 loading={isApplying}
                 disabled={appliedJobs.includes(selectedJob.id) || !isFormValid}
                 style={[

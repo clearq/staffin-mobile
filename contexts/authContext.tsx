@@ -197,6 +197,8 @@ export function AuthProvider (props: any) {
       } else {
         throw new Error("Invalid login response");
       }
+      console.log('--- log in ---');
+      
   
     } catch (error: unknown) {
       const err = error as AxiosError

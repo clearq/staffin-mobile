@@ -16,11 +16,11 @@ interface userProps {
   handleUpdate: () => void
 }
 
-interface companyProps {
-  company: ICompany,
-  size: number
-  handleUpdate: () => void
-}
+// interface companyProps {
+//   company: ICompany,
+//   size: number
+//   handleUpdate: () => void
+// }
 
 export const ProfileAvatar = ({userId, image, size, handleUpdate}:userProps) => {
   const { theme } = useTheme();
@@ -54,18 +54,18 @@ export const ProfileAvatar = ({userId, image, size, handleUpdate}:userProps) => 
   )
 }
 
-export const CompanyAvatar = ({company, size, handleUpdate}: companyProps) => {
-  const { theme } = useTheme();
-  const { authState, setAuthState } = useAuth()
-  const [avatar, setAvatar] = useState("")
+// export const CompanyAvatar = ({company, size, handleUpdate}: companyProps) => {
+//   const { theme } = useTheme();
+//   const { authState, setAuthState } = useAuth()
+//   const [avatar, setAvatar] = useState("")
 
 
-  return (
-    <>
-      {avatar !== ""
-        ? <Avatar size={size} rounded source={{uri: avatar}} />      
-        :<Avatar size={size} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-      }
-    </>
-  )
-}
+//   return (
+//     <>
+//       {avatar !== ""
+//         ? <Avatar size={size} rounded source={{uri: avatar}} />      
+//         :<Avatar size={size} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
+//       }
+//     </>
+//   )
+// }

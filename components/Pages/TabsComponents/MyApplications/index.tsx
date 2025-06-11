@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import { useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Card } from 'react-native-paper';
 import { useAuth } from '@/contexts/authContext';
 import { useQuery } from '@tanstack/react-query';
@@ -10,7 +11,6 @@ import { getMyApplications } from '@/api/backend';
 import { IJob } from '@/types';
 import { yearMonthDate } from '@/utils/dateFormat';
 import pageStyle from '@/constants/Styles';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export interface IApplication {
   applicationDate: Date;
@@ -28,6 +28,9 @@ const ApplicationIndex = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const { isLoading, authState: { userData, userId } } = useAuth();
+
+  const [selectedStatus, setSelectedStatus] = useState<'Pending' | 'Accepted' | 'Rejected' | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { data: applications = [], isLoading: applicationIsLoading, refetch: applicationsRefetch } = useQuery({
     queryKey: ['my-applications'],
@@ -50,40 +53,77 @@ const ApplicationIndex = () => {
     }
   };
 
+  const filteredApplications = selectedStatus
+    ? applications.filter((app: IApplication) => app.applicationStatus === selectedStatus)
+    : applications;
+
   return (
-    <ScrollView style={{ padding: theme.spacing.md}}>
-      <View style={{...styles.col,}}>
-        {applications.length > 0 && applications.map((application: IApplication) => 
-          <Card
-            key={application.id}
-            style={{
-              ...styles.itemContainer,
-              padding: theme.spacing?.md,
-            }}
-          >
-            <Card.Content style={{ gap: theme.spacing?.md}}>
-              <View style={styles.row}>
-                <Text>{application.jobTitle}</Text>
-                <View
-                  style={{
-                    ...styles.statusContainer,
-                    borderColor: statusColor(application.applicationStatus),
-                  }}
-                >
-                  <Text
+    <ScrollView style={{ padding: theme.spacing.md }}>
+      {/* Filter button */}
+      <View style={styles.filterIconContainer}>
+        <TouchableOpacity onPress={() => setIsFilterOpen(!isFilterOpen)}>
+          <MaterialCommunityIcons name="filter-variant" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Filter options */}
+      {isFilterOpen && (
+        <View style={styles.filterContainer}>
+          {['Pending', 'Accepted', 'Rejected'].map((status) => (
+            <TouchableOpacity
+              key={status}
+              onPress={() => {
+                setSelectedStatus(selectedStatus === status ? null : status as 'Pending' | 'Accepted' | 'Rejected');
+                setIsFilterOpen(false); // Close filter after selection
+              }}
+              style={{
+                ...styles.filterButton,
+                backgroundColor: selectedStatus === status ? statusColor(status as 'Pending' | 'Accepted' | 'Rejected') : 'lightgray',
+              }}
+            >
+              <Text style={styles.filterText}>{t(status)}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
+      {/* Application list */}
+      <View style={styles.col}>
+        {filteredApplications.length > 0 ? (
+          filteredApplications.map((application: IApplication) => (
+            <Card
+              key={application.id}
+              style={{
+                ...styles.itemContainer,
+                padding: theme.spacing?.md,
+              }}
+            >
+              <Card.Content style={{ gap: theme.spacing?.md }}>
+                <View style={styles.row}>
+                  <Text>{application.jobTitle}</Text>
+                  <View
                     style={{
-                      color: statusColor(application.applicationStatus),
-                      paddingHorizontal: theme.spacing?.md,
+                      ...styles.statusContainer,
+                      borderColor: statusColor(application.applicationStatus),
                     }}
                   >
-                    {application.applicationStatus}
-                  </Text>
+                    <Text
+                      style={{
+                        color: statusColor(application.applicationStatus),
+                        paddingHorizontal: theme.spacing?.md,
+                      }}
+                    >
+                      {application.applicationStatus}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-              <Text>{application.matchingPercentage}% Match</Text>
-              <Text>Application Date: {yearMonthDate(application.applicationDate)}</Text>
-            </Card.Content>
-          </Card>
+                <Text>{application.matchingPercentage}% Match</Text>
+                <Text>{t('applied')}: {yearMonthDate(application.applicationDate)}</Text>
+              </Card.Content>
+            </Card>
+          ))
+        ) : (
+          <Text style={styles.noApplicationsText}>{t('No applications found')}</Text>
         )}
       </View>
     </ScrollView>
@@ -109,5 +149,27 @@ const styles = StyleSheet.create({
   statusContainer: {
     borderWidth: 1,
     borderRadius: 5,
+  },
+  filterIconContainer: {
+    alignItems: 'flex-end',
+    marginBottom: 10,
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 10,
+  },
+  filterButton: {
+    padding: 10,
+    borderRadius: 5,
+  },
+  filterText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  noApplicationsText: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: 'gray',
   },
 });

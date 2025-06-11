@@ -102,6 +102,9 @@ export {
   getMatchingJobs,
   getJobById,
   getProfessionAreas,
+  jobbToFavorite,
+  getFavoriteJobs,
+  deleteFavoriteJob
 } from "./job"
 
 export {
@@ -166,3 +169,4 @@ export {
   getWorkProfileOptions,
   getSuggestedUsers,
 } from "./user"
+

@@ -273,13 +273,13 @@ export const downloadCv = async () => {
   }
 }
 
-export const postNewApplication = async (values: {jobId: number}) => {
+export const postNewApplication = async (values: any) => {
   try {
     const response = await api.post(`/Staff/New-Application`, values)
 
     return response
   } catch (error) {
-    console.error(error)
+    console.error('post new application:', error)
   }
 }
 
@@ -293,3 +293,5 @@ export const getMyApplications = async () => {
     return []
   }
 }
+
+

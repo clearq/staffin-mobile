@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 
 export interface IJob {
+    jobTitle: ReactNode;
+    jobId: number;
     salary: ReactNode;
     id: number;
     title: string;
@@ -10,9 +12,12 @@ export interface IJob {
     location: string;
     applicationDeadline: Date;
     jobSkills: IJobSkills[]
-    jobType: number; // InstantJob: 1 | RegularJob:2  
-    onSiteOrRemote: number; // Onsite: 1 | Remote: 2 | Hybrid: 3
-    occupationType: number; // FullTime: 1 | PartTime: 2 | Internship: 3
+    jobTypeId: number;
+    // jobType: number; // InstantJob: 1 | RegularJob:2  
+    // onSiteOrRemote: number; // Onsite: 1 | Remote: 2 | Hybrid: 3
+    // occupationType: number; // FullTime: 1 | PartTime: 2 | Internship: 3
+    workplaceTypeId: number;
+    employmentTypeId: number;
     numberofPosition: number;
     companyName: string;
     companyId: number;
@@ -45,4 +50,10 @@ export interface IMatchingJob {
     jobDescription: string;
     matchScore: number;
     companyId: number; 
+}
+
+export interface IMyJobApplication {
+    jobId : number;
+    contant : string;
+ 
 }

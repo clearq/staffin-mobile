@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, Modal, StyleSheet} from 'react-native'
 import React, { useState } from 'react'
+import { Drawer } from 'expo-router/drawer';
 
 import { IAuthInfo, IAuthState, useAuth } from "@/contexts/authContext";
 import { Fonts, Sizes, theme } from '@/constants/Theme'
@@ -9,14 +10,15 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import MyStatusBar from '@/components/StatusBar';
 import { ActivityIndicator } from 'react-native';
 
-import { ProfileAvatar } from '../UI/ProfileAvatar';
+import { ProfileAvatar } from '@/components/UI/ProfileAvatar';
 import { useUserData } from '@/hooks/useUserData';
 
 
 
 const PageHeader = () => {
   const { theme } = useTheme();
-  const [showDropdown, setShowDropdown] = useState(false)
+  const [openRouterMenu, setOpenRouterMenu] = useState(false)
+  const [openSearch, setOpenSearch] = useState(false)
 
   const {
     authState: { userData, userId },
@@ -64,12 +66,16 @@ const PageHeader = () => {
                 gap: theme.spacing.lg,
               }}
             >
-              <ProfileAvatar 
-                userId={user.id}
-                image={user.profileImage}
-                size={50}
-                handleUpdate={() => {}}
-              />
+              <TouchableOpacity
+                onPress={() => setOpenRouterMenu(true)}
+              >
+                <ProfileAvatar 
+                  userId={user.id}
+                  image={user.profileImage}
+                  size={50}
+                  handleUpdate={() => {}}
+                />
+              </TouchableOpacity>
   
               <TouchableOpacity
                 style={{...styles.searchContainer, backgroundColor: theme.colors.searchBg}}

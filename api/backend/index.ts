@@ -3,47 +3,30 @@ export {
 } from "./admin"
 
 export {
-  updateStaff,
-  getExperience,
-  addExperience,
-  updateExperience,
-  deleteExperience,
-  getEducation,
-  addEducation,
-  updateEducation,
-  deleteEducation,
-  getStaffSkills,
-  addStaffSkill,
-  deleteStaffSkill,
-  getStaffAllLanguages,
-  getStaffLanguages,
-  updateStaffLanguage,
-  addStaffLanguage,
-  deleteStaffLanguage,
-  generateCv,
-  getCv,
-  downloadCv,
-  postNewApplication,
-  getMyApplications,
-} from "./staff"
+  // add actions
+} from "./assignment"
 
 export {
-  getUserById,
-  updateUserProfileImage,
-  changePassword,
-  getUserLocation,
-  deleteMyLocation,
-  addPreferredCity,
-  getPreferredCities,
-  deletePreferredCity,
-  getAllCities,
-  updateProfessionArea,
-  setUserPreferences,
-  getUserPreferences,
-  getPreferenceOptions,
-  getWorkProfileOptions,
-  getSuggestedUsers,
-} from "./user"
+  sendVerificationCode,
+  verifyEmailWithCode,
+  resendVerificationCode,
+  requestPasswordReset,
+  resetPassword,
+} from "./auth"
+
+export {
+  // add actions
+} from "./availability"
+
+export {
+  autoLoginToCDN,
+  getContentFile,
+  getPublicFile,
+  updateProfileImage,
+  uploadContentFile,
+  deleteContentFile,
+  // invalidateCache
+} from "./cdn"
 
 export {
   getFollower,
@@ -96,21 +79,6 @@ export {
 } from "./community"
 
 export {
-  getSkillsList,
-} from "./skill"
-
-
-export {
-  autoLoginToCDN,
-  getContentFile,
-  getPublicFile,
-  updateProfileImage,
-  uploadContentFile,
-  deleteContentFile,
-  // invalidateCache
-} from "./cdn"
-
-export {
   getAllCompanies,
   getCompanyProfileUserId,
   getCompanyById,
@@ -123,6 +91,10 @@ export {
 } from "./company"
 
 export {
+  // add actions
+} from "./contract"
+
+export {
   getAllJobs,
   getArchivedJobs,
   getAllJobsPublic,
@@ -131,3 +103,66 @@ export {
   getJobById,
   getProfessionAreas,
 } from "./job"
+
+export {
+  // add actions
+} from "./linkedin"
+
+export {
+  // add actions
+} from "./message"
+
+export {
+  // add actions
+} from "./news"
+
+export {
+  // add actions
+} from "./notifications"
+
+export {
+  getSkillsList,
+} from "./skill"
+
+export {
+  updateStaff,
+  getExperience,
+  addExperience,
+  updateExperience,
+  deleteExperience,
+  getEducation,
+  addEducation,
+  updateEducation,
+  deleteEducation,
+  getStaffSkills,
+  addStaffSkill,
+  deleteStaffSkill,
+  getStaffAllLanguages,
+  getStaffLanguages,
+  updateStaffLanguage,
+  addStaffLanguage,
+  deleteStaffLanguage,
+  generateCv,
+  getCv,
+  downloadCv,
+  postNewApplication,
+  getMyApplications,
+} from "./staff"
+
+export {
+  getUserById,
+  updateUserProfileImage,
+  changePassword,
+  getUserLocation,
+  deleteMyLocation,
+  addPreferredCity,
+  getPreferredCities,
+  deletePreferredCity,
+  getAllCities,
+  updateProfessionArea,
+  setUserPreferences,
+  getUserPreferences,
+  getPreferenceOptions,
+  getWorkProfileOptions,
+  getSuggestedUsers,
+} from "./user"

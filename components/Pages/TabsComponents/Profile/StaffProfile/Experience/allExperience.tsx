@@ -11,7 +11,7 @@ import { getEducation, getExperience } from '@/api/backend';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/authContext';
 import { IExperience, IUser } from '@/types/UserTypes';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 import EditExperienceModal from './editExperienceModal';
 import AddExperienceModal from './addExperience';
 import HeaderTemplate from '../../../headerTemplate';
@@ -156,24 +156,14 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
             style={{...styles.footerContainer}}
           >
             <Button
-              containerStyle={{width:'100%'}}
-              buttonStyle={{...styles.buttonStyle,}}
               title={`${t("add")} ${t("experience")}`}
-              titleStyle={{...pageStyle.button20, color: theme.colors.primary}}
-              iconPosition='right'
-              icon={
-                <MaterialCommunityIcons 
-                  name='playlist-plus' 
-                  color={theme.colors.primary} 
-                  size={24}
-                  style={{paddingLeft:24}}
-                />
-              }
-              size='sm'
               onPress={() => {
                 setOpenAddModal(true)
               }} 
-              type='clear'
+              size={'md'}
+              type={'outline'}
+              color={'primary'}
+              titleColor={theme.colors.primary}
             />
           </View>
 

@@ -15,7 +15,7 @@ import { IExperience, IUser } from '@/types/UserTypes';
 
 import { CheckBox, useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { MultiTextField, TextField } from '@/components/UI/Input/TextField';
 import pageStyle from '@/constants/Styles';
@@ -152,26 +152,17 @@ const CreatePostModal = ({visible, onClose}: props) => {
                         onClose()
                       }}
                       size='md'
-                      type='clear'
-                      titleStyle={{ ...pageStyle.button16 }}
-                      radius={"sm"}
-                      containerStyle={{
-                        ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,
-                      }}
+                      type={'outline'}
+                      color={'primary'}
+                      titleColor={theme.colors.primary}                 
                     />                      
 
                     <Button
                       title={`${t("post")}`}
                       onPress={() => {}}
                       size='md'
-                      color='primary'
-                      titleStyle={{ ...pageStyle.button16 }}
-                      radius={"sm"}
-                      containerStyle={{
-                        ...pageStyle.buttonContainer,
-                        borderColor: isDisabled ? theme.colors.disabled : theme.colors.primary,      
-                      }}
+                      color={'primary'}
+                      titleColor={theme.colors.white}
                       disabled= {isDisabled}
                     />
                   </View>

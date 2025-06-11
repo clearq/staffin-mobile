@@ -7,8 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { DateType } from 'react-native-ui-datepicker';
 import { useRouter } from 'expo-router';
 import DateTimePicker from 'react-native-ui-datepicker'
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import dayjs from 'dayjs';
+import pageStyle from '@/constants/Styles';
 
 
 
@@ -61,19 +62,31 @@ const DateCalendar = ({onClose, setDate, onSubmit, date}: props) => {
             onChange={({date}) => setDate(date)}
           />    
 
-          {/* Button Group */}
-          <View
-            style={{...styles.buttonGroup}}
-          >
-            <Button 
-              title={`${t("cancel")}`}
-              onPress={onClose}
-            />
-            <Button
-              title={`${"submit"}`}
-              onPress={onSubmit}
-            />
-          </View>
+           {/* Button Group */}
+            <View
+              style={{
+                ...pageStyle.buttonGroup
+              }}
+            >            
+              <Button
+                title={`${t("cancel")}`}
+                onPress={() => {
+                  onClose()
+                }}
+                size='md'
+                type={'outline'}
+                color={'primary'}
+                titleColor={theme.colors.primary}
+              />                      
+
+              <Button
+                title={`${t("save")}`}
+                onPress={onSubmit}
+                size={'md'}
+                color={'primary'}
+                titleColor={theme.colors.white}
+              />
+            </View>
         </View>
       </View>            
     </Modal>  
@@ -87,6 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: Sizes.fixPadding,
   },
   calendar:{
     padding: Sizes.fixPadding,

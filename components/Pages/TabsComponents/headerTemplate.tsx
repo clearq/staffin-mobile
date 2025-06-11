@@ -11,7 +11,7 @@ import { getEducation, getExperience } from '@/api/backend';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/authContext';
 import { IEducation, IExperience, IUser } from '@/types/UserTypes';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 
 interface props {
   title: string;

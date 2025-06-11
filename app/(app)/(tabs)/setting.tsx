@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useTranslation } from "react-i18next";
 import { useAuth } from '@/contexts/authContext';
 import { setItem } from "@/utils/asyncStorage";
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 
 import { Fonts, Sizes, theme } from "@/constants/Theme";
 import { Avatar, Overlay, Switch, useTheme, useThemeMode } from "@rneui/themed";
@@ -81,21 +81,19 @@ const setting = () => {
           >
             {`${t("log-out")}:`}
           </Text>
-          <Button
-            title={`${t("log-out")}`}
-            onPress={() => {
-              SignOut() 
-              queryClient.clear() // Clear React Query cache
-            }}
-            size='md'
-            color='primary'
-            titleStyle={{ ...pageStyle.button16 }}
-            radius={"sm"}
-            containerStyle={{
-              ...styles.buttonContainer,
-              borderColor: theme.colors.primary,    
-            }}
-          />
+
+          <View>
+            <Button
+              title={`${t("log-out")}`}
+              onPress={() => {
+                SignOut() 
+                queryClient.clear() // Clear React Query cache
+              }}
+              size={'md'}
+              color={'primary'}
+              titleColor={theme.colors.white}
+            />
+          </View>
         </View>
       </View>
     </View>

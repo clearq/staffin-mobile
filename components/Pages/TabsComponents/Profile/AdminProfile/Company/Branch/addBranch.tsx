@@ -8,7 +8,7 @@ import pageStyle from '@/constants/Styles';
 import { useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 import { useMutation } from '@tanstack/react-query';
 import { values } from 'lodash';
 import { TextField } from '@/components/UI/Input/TextField';
@@ -278,27 +278,18 @@ const AddBranchModal = ({visible, onClose, handleSuccess,}: props) => {
                     onPress={() => {
                       onClose()
                     }}
-                    size='md'
-                    type='outline'
-                    titleStyle={{ ...pageStyle.button16 }}
-                    radius={"sm"}
-                    containerStyle={{
-                      ...pageStyle.buttonContainer,
-                      borderColor: theme.colors.primary,
-                    }}
+                    size={'md'}
+                    type={'outline'}
+                    color={'primary'}
+                    titleColor={theme.colors.primary}
                   />          
 
                   <Button
                     title={`${t("save")}`}
                     onPress={handleSubmit}
-                    size='md'
-                    color='primary'
-                    titleStyle={{ ...pageStyle.button16}}
-                    radius={"sm"}
-                    containerStyle={{
-                      ...pageStyle.buttonContainer,
-                      borderColor: theme.colors.primary,  
-                    }}
+                    size={'md'}
+                    color={'primary'}
+                    titleColor={theme.colors.white}
                   />
                 </View>
               </>

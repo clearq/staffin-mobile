@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, View, StyleSheet, TouchableOpacity, Text } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter, Link } from 'expo-router'
 
 import { useTranslation } from "react-i18next";
 
-import { CheckBox, Text } from '@rneui/themed'
+import { CheckBox } from '@rneui/themed'
 import { useTheme } from '@rneui/themed'
 import { Fonts, Sizes, theme } from '@/constants/Theme'
 
 import { IconTextField, TextField } from '@/components/UI/Input/TextField'
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import Animated, {
   FadeInDown,
   FadeInRight,
@@ -26,8 +26,6 @@ const SignUpPage = () => {
   const { SignUp, isLoading, authState } = useAuth();
   const { theme } = useTheme()
   const { t } = useTranslation();
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const [role, setRole] = useState<"staff"|"admin">('staff')
   const [checked, setChecked] = useState<boolean>(false)
@@ -203,10 +201,9 @@ const SignUpPage = () => {
                         }}
                         loading={isLoading}
                         disabled={isLoading}                      
-                        size="md"
+                        size="lg"
                         color="primary"
-                        titleStyle={{ fontSize: 16 }}
-                        radius={"sm"}
+                        titleColor={theme.colors.white}
                       />  
                     </Animated.View>
                   </View>                            
@@ -355,10 +352,9 @@ const SignUpPage = () => {
                         onPress={handleSubmit}
                         loading={isLoading}
                         disabled={isLoading}                      
-                        size="md"
+                        size="lg"
                         color="primary"
-                        titleStyle={{ ...pageStyle.button20, color: theme.colors.white, }}
-                        radius={"sm"}
+                        titleColor={theme.colors.white}
                       />  
                     </Animated.View>
                   </View>                            

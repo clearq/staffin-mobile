@@ -11,7 +11,7 @@ import { ILanguage, ISkill } from '@/types/UserTypes';
 
 import { Divider, useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -165,16 +165,10 @@ const EditLanguageModal = ({visible, onClose, handleSuccess, id, data}: props) =
         <Button
           title={`${t("cancel")}`}
           onPress={onClose}
-          size='md'
-          type='outline'
-          titleStyle={{ ...pageStyle.button16}}
-          radius={"sm"}
-          containerStyle={{
-            ...styles.buttonContainer,
-            borderColor: theme.colors.primary,                     
-            borderWidth: 2,
-            borderRadius:10,
-          }}
+          size={'md'}
+          type={'outline'}
+          color={'primary'}
+          titleColor={theme.colors.primary}
         />
        </View>
 

@@ -4,7 +4,7 @@ import { Switch, useTheme, useThemeMode, Text, Image } from '@rneui/themed'
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from "react-i18next";
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 import { colors, commonStyles, Fonts, screenHeight, Sizes, theme } from '@/constants/Theme';
 import {MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
@@ -96,20 +96,10 @@ const App = () => {
           title={`${t("start-button-text")}`}
           onPress={handleOnPress}
           loading={loading}
-          containerStyle={{width:'100%'}}
-          size='md'
-          color='primary'
-          titleStyle={{ ...pageStyle.button20, color: theme.colors.white, }}
-          radius="sm"
-          iconPosition='right'
-          icon={
-            <MaterialCommunityIcons 
-              name='arrow-right' 
-              color={theme.colors.white} 
-              size={24}
-              style={{paddingLeft:24}}
-            />
-          }
+          size={'lg'}
+          color={'primary'}
+          titleColor={theme.colors.white}
+          iconRight={'arrow-right'}
         />
 
       </SafeAreaView>
@@ -121,9 +111,4 @@ export default App
 
 
 const styles = StyleSheet.create({
-  buttonStyle:{
-    width:'100%',
-    alignSelf: "center",
-    justifyContent:'center'
-  },
 })

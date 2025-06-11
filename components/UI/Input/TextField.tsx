@@ -113,7 +113,7 @@ export const MultiTextField: React.FC<Props> = (props) => {
 
 export const IconTextField: React.FC<Props> = (props) => {
   const { theme } = useTheme();
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(true)
 
   return (
     <View style={{ ...styles.container, borderColor: theme.colors.divider }}>

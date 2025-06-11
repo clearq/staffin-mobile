@@ -12,11 +12,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setProfileImage: (state, action: PayloadAction<string>) => {
-      state.profileImage = action.payload;
-    },
+  //  add action for bookmark, 
   },
 });
 
-export const { setProfileImage } = userSlice.actions;
+export const {  } = userSlice.actions;
 export default userSlice.reducer;

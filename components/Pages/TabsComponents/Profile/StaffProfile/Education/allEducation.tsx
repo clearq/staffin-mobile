@@ -11,7 +11,7 @@ import { getEducation, getExperience } from '@/api/backend';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/authContext';
 import { IEducation, IExperience, IUser } from '@/types/UserTypes';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 import EditEducationModal from './editEducationModal';
 import AddEducationModal from './addEducationModal';
 import HeaderTemplate from '../../../headerTemplate';
@@ -139,24 +139,15 @@ const AllEducation = ({visible, id, onClose, handleSuccess}: props) => {
             style={{...styles.footerContainer}}
           >
             <Button
-              containerStyle={{width:'100%'}}
-              buttonStyle={{...styles.buttonStyle, }}
               title={`${t("add")} ${t("education")}`}
-              titleStyle={{...pageStyle.button20, color: theme.colors.primary}}
-              iconPosition='right'
-              icon={
-                <MaterialCommunityIcons 
-                  name='playlist-plus' 
-                  color={theme.colors.primary} 
-                  size={24}
-                  style={{paddingLeft:24}}
-                />
-              }
+              color={'primary'}
+              titleColor={theme.colors.primary}
+              iconRight={'playlist-plus'}
               size='sm'
               onPress={() => {
                 setOpenAddModal(true)
               }} 
-              type='clear'
+              type={'outline'}
             />
           </View>
 

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useToast } from 'react-native-toast-notifications'
 import { theme } from '@/constants/Theme'
 import { useTheme } from '@rneui/themed'
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import pageStyle from '@/constants/Styles'
 import { useRouter } from 'expo-router'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -75,10 +75,9 @@ const Document = ({data}: props) => {
             title={`${t("download")}`}
             size='sm'
             onPress={handleDownloadCv}
-            icon={(
-              <MaterialCommunityIcons name='download' size={20} color={theme.colors.white} />
-            )}    
-            iconPosition='right'      
+            iconRight={'download'}   
+            color={'primary'}    
+            titleColor={theme.colors.white}
           />
         </View>
 

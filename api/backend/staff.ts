@@ -2,10 +2,7 @@ import { IEducation, IExperience, IRating, ISkill, IUser } from "@/types";
 import api from "./config";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
-import { Linking } from "react-native";
-import { useToast } from "react-native-toast-notifications";
-import { useTranslation } from "react-i18next";
-import { values } from "lodash";
+
 
 // Update Staff
 export const updateStaff = async (values: Partial<IUser>) => {

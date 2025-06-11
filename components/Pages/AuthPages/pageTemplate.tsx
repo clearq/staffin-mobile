@@ -13,7 +13,7 @@ import { Fonts, Sizes, theme } from '@/constants/Theme'
 import { TextField } from '@/components/UI/Input/TextField'
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import Animated, {
   FadeInDown,
   FadeInRight,

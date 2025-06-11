@@ -15,7 +15,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { useAuth } from '@/contexts/authContext';
 import Cities from '@/components/Dropdown/Cities';
 import ProfessionArea from '@/components/Dropdown/ProfessionArea';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 
 const index = () => {
   const { theme } = useTheme()
@@ -335,11 +335,19 @@ const index = () => {
             ))}
           </View>
         </View> 
+
+        <View style={{
+          padding:theme.spacing.lg
+        }}>
+          <Button 
+            title={t("submit")}
+            onPress={handleSubmit}
+            color={'primary'}
+            titleColor={theme.colors.white}
+            size={'lg'}
+          />
+        </View>
         
-        <Button 
-          title={t("submit")}
-          onPress={handleSubmit}
-        />
       </View>  
     </View>
   )
@@ -370,7 +378,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
-  sectionContainer: {
-    
-  }
 })

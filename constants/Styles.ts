@@ -29,7 +29,7 @@ const pageStyle = StyleSheet.create({
   },
   smText:{
     fontFamily: "InterRegular",
-    fontSize: 14,
+    fontSize: 12,
   },
   xsText: {
     fontFamily: "InterRegular",
@@ -38,6 +38,10 @@ const pageStyle = StyleSheet.create({
   inputText: {
     fontFamily: "InterRegular",
     fontSize: 16,
+  },
+  paraText: {
+    fontFamily: "InterRegular",
+    fontSize: 14
   },
   inputLabel: {
     fontFamily: "InterSemibold",
@@ -74,15 +78,15 @@ const pageStyle = StyleSheet.create({
     marginTop: theme.spacing?.xl,
     marginBottom: theme.spacing?.lg,
   },
-  buttonContainer: {
-    flex: 1,
-    height: "100%",
-    paddingHorizontal: 0,
-    //borderWidth: 2
-  },
-  buttonBorder: {
-    borderWidth: 2
-  },
+  // buttonContainer: {
+  //   flex: 1,
+  //   height: "100%",
+  //   paddingHorizontal: 0,
+  //   //borderWidth: 2
+  // },
+  // buttonBorder: {
+  //   borderWidth: 2
+  // },
   dropdown: {
     position: "absolute",
     top: '100%',

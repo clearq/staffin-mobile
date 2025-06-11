@@ -15,7 +15,7 @@ import { IEducation, IExperience, IUser } from '@/types/UserTypes';
 
 import { CheckBox, useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { MultiTextField, TextField } from '@/components/UI/Input/TextField';
 import pageStyle from '@/constants/Styles';
@@ -388,28 +388,19 @@ const EditEducationModal = ({data, visible, onClose, handleSuccess}: props) => {
                         onClose()
                         setChecked(false)
                       }}
-                      size='md'
-                      type='outline'
-                      titleStyle={{ ...pageStyle.button16 }}
-                      radius={"sm"}
-                      containerStyle={{
-                        ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,
-                      }}
+                      size={'md'}
+                      type={'outline'}
+                      color={'primary'}
+                      titleColor={theme.colors.primary}
                     />
                       
 
                     <Button
                       title={`${t("save")}`}
                       onPress={handleSubmit}
-                      size='md'
-                      color='primary'
-                      titleStyle={{ ...pageStyle.button16}}
-                      radius={"sm"}
-                      containerStyle={{
-                        ...pageStyle.buttonContainer,
-                        borderColor: theme.colors.primary,  
-                      }}
+                      size={'md'}
+                      color={'primary'}
+                      titleColor={theme.colors.white}
                     />
                   </View>
                 </>
@@ -419,14 +410,9 @@ const EditEducationModal = ({data, visible, onClose, handleSuccess}: props) => {
             <Button
               title={`${t("delete")}`}
               onPress={showAlert}
-              size='md'
-              color='error'
-              titleStyle={{ ...pageStyle.button16}}
-              radius={"sm"}
-              containerStyle={{
-                ...pageStyle.buttonContainer,
-                borderColor: theme.colors.error,        
-              }}
+              size={'md'}
+              color={'error'}
+              titleColor={theme.colors.white}
             />
           </ScrollView>
         </View>

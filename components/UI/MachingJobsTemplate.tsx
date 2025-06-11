@@ -35,7 +35,8 @@ const MachingJobsTemplate = ({job, refetch}: props) => {
     queryKey: ["job-detail", job.jobId],
     queryFn: async () => {
       return getJobById(job.jobId)
-    }
+    },
+    enabled: !!job.jobId
   })
   
 

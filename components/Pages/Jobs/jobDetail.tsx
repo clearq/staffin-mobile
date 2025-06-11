@@ -7,7 +7,7 @@ import { postNewApplication, updateStaff, getMyApplications } from '@/api/backen
 import { useToast } from 'react-native-toast-notifications';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/authContext';
-import axios from 'axios'; 
+import axios from 'axios';
 import { useTheme } from '@rneui/themed';
 import pageStyle from '@/constants/Styles';
 
@@ -20,23 +20,19 @@ type Application = {
   matchingPercentage: number;
   userId: number;
 };
-      
+
 interface props {
   isModalVisible: boolean;
   closeModal: () => void;
   selectedJob:IJob;
-  // showForm: boolean;
-  // setShowForm: () => void;
   refetch: () => void
 }
-      
+
 const JobDetail = ({
-  isModalVisible, 
-  closeModal, 
-  selectedJob, 
-  // showForm, 
-  // setShowForm, 
-  refetch 
+  isModalVisible,
+  closeModal,
+  selectedJob,
+  refetch
 }: props) => {
   const toast = useToast();
   const { theme } = useTheme()
@@ -59,8 +55,6 @@ const JobDetail = ({
     queryKey: ["my-applications"],
     queryFn: async () => {
       const response = await getMyApplications();
-      //console.log(response);
-      
       return response;
     }
   });
@@ -88,7 +82,7 @@ const JobDetail = ({
         email: formData.email,
       };
 
-      if( 
+      if(
         userData?.firstName !== formData.firstName ||
         userData.lastName !== formData.lastName ||
         userData.phoneNumber !== formData.phoneNumber ||
@@ -111,12 +105,12 @@ const JobDetail = ({
     }
   };
 
-  useEffect(() => {  
+  useEffect(() => {
     if (applications && applications.length > 0) {
       const jobIds = applications
         .filter((app: Application) => app.jobId != null) // Ensure jobId exists
         .map((app: Application) => app.jobId);
-  
+
       setAppliedJobs(jobIds);
     }
   },[applications, userData])
@@ -134,7 +128,13 @@ const JobDetail = ({
           {selectedJob && !showForm ? (
             <>
               <Text style={styles.modalTitle}>{selectedJob.title}</Text>
-              <Text>Beskrivning: {selectedJob.description}</Text>
+
+              {/* Här är ändringen! Omsluter beskrivningen med en ScrollView */}
+              <ScrollView style={styles.descriptionScrollView}>
+                <Text>Beskrivning: {selectedJob.description}</Text>
+              </ScrollView>
+              {/* Slut på ändringen */}
+
               <Text>Plats: {selectedJob.location}</Text>
               <Text>Lön: {selectedJob.salary}</Text>
               <Button
@@ -219,57 +219,66 @@ const JobDetail = ({
     </Modal>
   )
 }
-export default JobDetail  
+export default JobDetail
 
 const styles = StyleSheet.create({
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      modalContent: {
-        width: '90%',
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 10,
-      },
-      modalTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-      },
-      input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-      },
-      closeButton: {
-        marginTop: 10,
-        alignSelf: 'center',
-        backgroundColor: '#6200ee',
-        padding: 10,
-        borderRadius: 5,
-      },
-      closeButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-      },
-      applyButton: {
-        marginTop: 10,
-      },
-      disabledButton: {
-        backgroundColor: '#ccc',
-      },
-      label: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 5,
-        color: '#333',
-      },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    // Om du har en lång beskrivning och många andra element,
+    // kan det vara bra att ge modalContent en maxhöjd
+    // för att se till att hela modalen inte blir för stor.
+    // Då kan du behöva en scrollbar på modalContent själv.
+    // Men för enkelhetens skull, lägg den på beskrivningen först.
+    maxHeight: '80%', // Exempel: Begränsa modalens höjd till 80% av skärmen
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  // NY STIL FÖR SCROLLVIEW
+  descriptionScrollView: {
+    maxHeight: 200, // Justera denna höjd efter behov. T.ex. 200 pixlar.
+    marginBottom: 10, // Lite utrymme under scrollvyn
+    paddingRight: 5, // Lägg till lite padding så scrollbaren inte krockar med texten
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  closeButton: {
+    marginTop: 10,
+    alignSelf: 'center',
+    backgroundColor: '#6200ee',
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  applyButton: {
+    marginTop: 10,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#333',
+  },
 })
-      
-      
-      

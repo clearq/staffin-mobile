@@ -130,4 +130,7 @@ export {
   getMatchingJobs,
   getJobById,
   getProfessionAreas,
+  jobbToFavorite,
+  getFavoriteJobs,
+  deleteFavoriteJob
 } from "./job"

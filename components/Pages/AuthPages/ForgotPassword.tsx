@@ -39,145 +39,148 @@ const ForgotPassword = () => {
       title={`${t("forgot-password-title")}`}
       children= {(
         <View style={styles.formContiner}>
-            <Formik
-              initialValues={{
-                email: "",
-              }}
-              validationSchema={ResetPasswordSchema}
-              onSubmit={async (values) => {
-                try {
-                  await requestPasswordReset(values.email)
-                  toast.show(`${t("success-send-recovery")}`, {
-                    type: "success",
-                    placement: "top",
-                    duration: 3000,
-                  })
-                } catch (error) {
-                  toast.show(`${t("failed-send-recovery")}`, {
-                    type: "error",
-                    placement: "top",
-                    duration: 3000,
-                  })
-                }
-              }}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                values,
-                errors,
-                setFieldValue,
-              }) => (
-                <>
-                  <View
+          <Formik
+            initialValues={{
+              email: "",
+            }}
+            validationSchema={ResetPasswordSchema}
+            onSubmit={async (values) => {
+              try {
+                await requestPasswordReset(values.email)
+                
+                router.replace(`/reset-password?email=${encodeURIComponent(values.email)}`)
+
+                toast.show(`${t("success-send-recovery")}`, {
+                  type: "success",
+                  placement: "top",
+                  duration: 3000,
+                })
+              } catch (error) {
+                toast.show(`${t("failed-send-recovery")}`, {
+                  type: "error",
+                  placement: "top",
+                  duration: 3000,
+                })
+              }
+            }}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              setFieldValue,
+            }) => (
+              <>
+                <View
+                  style={{
+                    width: "100%",
+                    flexDirection: "column",
+                    gap: theme.spacing.xl,
+                  }}
+                >
+                  <Text
                     style={{
-                      width: "100%",
-                      flexDirection: "column",
-                      gap: theme.spacing.xl,
+                      ...pageStyle.paraText,
+                      color: theme.colors.grey0,
                     }}
                   >
-                    <Text
-                      style={{
-                        ...pageStyle.paraText,
-                        color: theme.colors.grey0,
-                      }}
-                    >
-                      {t("forgot-password-text")}
+                    {t("forgot-password-text")}
+                  </Text>
+
+                  {/* Email */}
+                  <Animated.View
+                    entering={FadeInDown.delay(400)
+                      .duration(1000)
+                      .springify()}
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <Text style={styles.inputLabel}>                    
+                      {t("e-mail")}
                     </Text>
 
-                    {/* Email */}
-                    <Animated.View
-                      entering={FadeInDown.delay(400)
-                        .duration(1000)
-                        .springify()}
-                      style={{
-                        width: "100%",
-                      }}
-                    >
-                      <Text style={styles.inputLabel}>
-                      
-                        {t("e-mail")}
-                      </Text>
-                      <TextField
-                        placeholder={t("e-mail")}
-                        onChangeText={handleChange("email")}
-                        onBlur={handleBlur("email")}
-                        value={values.email}
-                        name={"email"}
-                        type={"email"}
-                        errorMessage={typeof errors.email === 'string' ? errors.email : undefined}
-                        keyboardType='email-address'
-                      />
-                    </Animated.View>
+                    <TextField
+                      placeholder={t("e-mail")}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      value={values.email}
+                      name={"email"}
+                      type={"email"}
+                      errorMessage={typeof errors.email === 'string' ? errors.email : undefined}
+                      keyboardType='email-address'
+                    />
+                  </Animated.View>
 
-                    {/* Submit Button */}
-                    <Animated.View
-                      entering={FadeInDown.delay(600)
-                        .duration(1000)
-                        .springify()
-                      }
-                      style={{ width:'100%'}}
-                    >
-                      <Button 
-                        title={`${t("send")}`}
-                        onPress={handleSubmit}
-                        loading={isLoading}
-                        disabled={isLoading}                      
-                        size="lg"
-                        color="primary"
-                        titleColor={theme.colors.white}
-                      />  
-                    </Animated.View>
-                  </View>                            
-                </>
-              )}
-            </Formik>  
-                          
-            <Animated.View
-              entering={FadeInDown.delay(400)
-                .duration(1000)
-                .springify()}
-              style={{
-                width: "100%",
-                flexDirection:'column',
-                gap:theme.spacing.md,
-                marginTop: theme.spacing.xl,
-                alignItems: 'center'
-              }}
+                  {/* Submit Button */}
+                  <Animated.View
+                    entering={FadeInDown.delay(600)
+                      .duration(1000)
+                      .springify()
+                    }
+                    style={{ width:'100%'}}
+                  >
+                    <Button 
+                      title={`${t("send")}`}
+                      onPress={handleSubmit}
+                      loading={isLoading}
+                      disabled={isLoading}                      
+                      size="lg"
+                      color="primary"
+                      titleColor={theme.colors.white}
+                    />  
+                  </Animated.View>
+                </View>                            
+              </>
+            )}
+          </Formik>  
+                        
+          <Animated.View
+            entering={FadeInDown.delay(400)
+              .duration(1000)
+              .springify()}
+            style={{
+              width: "100%",
+              flexDirection:'column',
+              gap:theme.spacing.md,
+              marginTop: theme.spacing.xl,
+              alignItems: 'center'
+            }}
+          >
+      
+            <Link
+              href={"/signin"}
             >
-        
-              <Link
-                href={"./signin"}
+              <Text
+                style={{
+                  ...pageStyle.paraText, 
+                  color:theme.colors.secondary,
+                  textDecorationLine: "underline",
+                  textDecorationColor: theme.colors.secondary,
+                }}
               >
-                <Text
-                  style={{
-                    ...pageStyle.paraText, 
-                    color:theme.colors.secondary,
-                    textDecorationLine: "underline",
-                    textDecorationColor: theme.colors.secondary,
-                  }}
-                >
-                  {`${t("sign-in")}`}
-                </Text>
-              </Link>
+                {`${t("sign-in")}`}
+              </Text>
+            </Link>
 
-              <Link
-                href={"./signup"}
+            <Link
+              href={"/signup"}
+            >
+              <Text
+                style={{
+                  ...pageStyle.paraText, 
+                  color:theme.colors.secondary,
+                  textDecorationLine: "underline",
+                  textDecorationColor: theme.colors.secondary,
+                }}
               >
-                <Text
-                  style={{
-                    ...pageStyle.paraText, 
-                    color:theme.colors.secondary,
-                    textDecorationLine: "underline",
-                    textDecorationColor: theme.colors.secondary,
-                  }}
-                >
-                  {`${t("sign-up")}`}
-                </Text>
-              </Link>
-            </Animated.View>          
-          </View>   
+                {`${t("sign-up")}`}
+              </Text>
+            </Link>
+          </Animated.View>          
+        </View>   
       )}
     />
   )

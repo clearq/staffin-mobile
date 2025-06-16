@@ -15,29 +15,21 @@ const api = axios.create({
 api.interceptors.request.use(
   async function (config) {
 
-    if (
-      config.url === "/Auth/login" ||
-      config.url?.startsWith("/Auth/register")
-    ) {
-      return config;
-    }
-
     const token = await getItem(AUTH_TOKEN);
-    //console.log('token:',token);
-    
-
-    if (!token) {
-      // Handle redirection to the login page using your navigation library
-      console.error("No token found, redirecting to login.");
-      return Promise.reject("No token found, redirecting to login.");
+     if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-
-    config.headers["Authorization"] = `Bearer ${token}`;
-
     return config;
   },
-  function (error) {
-    console.error("Request error:", error);
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API Error:", error);
     return Promise.reject(error);
   }
 );

@@ -30,6 +30,7 @@ export interface IAuthInfo {
   userName?: string;
   companyName?: string;
   organisationNumber?: string;
+  acceptedPolicy?:boolean
 }
 
 export interface TokenPayload {
@@ -43,11 +44,12 @@ export interface TokenPayload {
 
 interface IAuthContext {
   SignIn: ({email, password}: IAuthInfo) => Promise<void>;
-  SignUp: (role: "staff" | "admin", data: IAuthInfo) => Promise<void>;
+  // SignUp: (role: "staff" | "admin", data: IAuthInfo) => Promise<void>;
   SignOut: () => Promise<void>;
   authState: IAuthState;
   setAuthState: React.Dispatch<React.SetStateAction<IAuthState>>;
   session?: string | null;
+  setSession: (value: string | null) => void;
   isLoading: boolean;
   loadingLocation: boolean;
   setLoadingLocation: React.Dispatch<React.SetStateAction<boolean>>;
@@ -57,9 +59,9 @@ const AuthContext = React.createContext<IAuthContext>({
   SignIn: async () => {
     return Promise.resolve();
   },
-  SignUp: async () => {
-    return Promise.resolve();
-  },
+  // SignUp: async () => {
+  //   return Promise.resolve();
+  // },
   SignOut: async () => {
     return Promise.resolve();
   },
@@ -68,8 +70,9 @@ const AuthContext = React.createContext<IAuthContext>({
     userId: null,
     token: null,
   },
-  setAuthState: () => { },
+  setAuthState: () => {},
   session: null,
+  setSession: () => null,
   isLoading: false,
   loadingLocation: false,
   setLoadingLocation: () => null,
@@ -212,46 +215,46 @@ export function AuthProvider (props: any) {
     }
   };
 
-  const SignUp = async (role: "staff" | "admin", data: IAuthInfo) => {
-    setIsLoadingSession(true);
-    try {
+  // const SignUp = async (role: "staff" | "admin", data: IAuthInfo) => {
+  //   setIsLoadingSession(true);
+  //   try {
 
-      const response = await api.post(`/Auth/register/${role}`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
+  //     const response = await api.post(`/Auth/register/${role}`, data, {
+  //       headers: { "Content-Type": "application/json" },
+  //     });
   
-      // console.log("SignUp response:", response.data);
+  //     // console.log("SignUp response:", response.data);
   
-      const { token, id } = response.data;
-      if (token) {
-        setAuthState({
-          userData: null,
-          userId: id,
-          token,
-        });
-        setSession(token);
+  //     const { token, id } = response.data;
+  //     if (token) {
+  //       setAuthState({
+  //         userData: null,
+  //         userId: id,
+  //         token,
+  //       });
+  //       setSession(token);
   
-        toast.show(`${t("sign-up-successful-message")}`, {
-          type: "success",
-          placement: "top",
-          duration: 3000,
-        });
+  //       toast.show(`${t("sign-up-successful-message")}`, {
+  //         type: "success",
+  //         placement: "top",
+  //         duration: 3000,
+  //       });
   
-        router.replace("/");
-      } else {
-        throw new Error("Invalid sign-up response");
-      }
-    } catch (error: unknown) {
-      const err = error as AxiosError;
-      //console.log("SignUp error response:", err.response?.data); // ✅
-      toast.show(
-        `${err as AxiosError}.response?.data?.title`,
-        {type: 'error'}
-      );
-    } finally {
-      setIsLoadingSession(false);
-    }
-  };
+  //       // router.replace("/");
+  //     } else {
+  //       throw new Error("Invalid sign-up response");
+  //     }
+  //   } catch (error: unknown) {
+  //     const err = error as AxiosError;
+  //     //console.log("SignUp error response:", err.response?.data); // ✅
+  //     toast.show(
+  //       `${err as AxiosError}.response?.data?.title`,
+  //       {type: 'error'}
+  //     );
+  //   } finally {
+  //     setIsLoadingSession(false);
+  //   }
+  // };
  
 
   async function handleSignOut() {
@@ -272,8 +275,6 @@ export function AuthProvider (props: any) {
     setIsLoadingSession(false)
     setSession(null);
 
-    console.log('waiting log out:', authState.userId);
-
     console.log('--- log out ---');
     router.replace("/signin") 
   
@@ -281,11 +282,12 @@ export function AuthProvider (props: any) {
 
   const values = {
     SignIn,
-    SignUp,
+    // SignUp,
     SignOut: handleSignOut,
     authState,
     setAuthState,
     session,
+    setSession,
     isLoading: isLoadingSession,
     loadingLocation,
     setLoadingLocation,

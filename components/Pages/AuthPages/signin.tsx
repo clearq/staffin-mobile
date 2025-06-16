@@ -23,6 +23,7 @@ import pageStyle from '@/constants/Styles';
 import PageTemplate from './pageTemplate';
 
 
+
 const SignInPage = () => {
   const { SignIn, isLoading, authState } = useAuth();
   const { theme } = useTheme()
@@ -81,6 +82,7 @@ const SignInPage = () => {
                 handleSubmit,
                 values,
                 errors,
+                touched,
                 setFieldValue,
               }) => (
                 <>
@@ -100,8 +102,7 @@ const SignInPage = () => {
                         width: "100%",
                       }}
                     >
-                      <Text style={styles.inputLabel}>
-                      
+                      <Text style={styles.inputLabel}>                      
                         {t("e-mail")}
                       </Text>
                       <TextField
@@ -111,7 +112,7 @@ const SignInPage = () => {
                         value={values.email}
                         name={"email"}
                         type={"email"}
-                        errorMessage={typeof errors.email === 'string' ? errors.email : undefined}
+                        errorMessage={touched.email &&  typeof errors.email === 'string' ? errors.email : undefined}
                         keyboardType='email-address'
                       />
                     </Animated.View>
@@ -135,7 +136,7 @@ const SignInPage = () => {
                         value={values.password}
                         name={"password"}
                         type={"password"}
-                        errorMessage={typeof errors.email === 'string' ? errors.email : undefined}
+                        errorMessage={touched.password &&  typeof errors.email === 'string' ? errors.email : undefined}
                       />
                     </Animated.View>
 
@@ -192,7 +193,9 @@ const SignInPage = () => {
                       <Button 
                         title={`${t("sign-in")}`}
                         onPress={handleSubmit}
-                        loading={isLoading}
+                        loading={
+                          isLoading 
+                        }
                         disabled={isLoading}                      
                         size="lg"
                         color="primary"
@@ -232,7 +235,7 @@ const SignInPage = () => {
                 </Text>
 
                 <Link
-                  href={"./signup"}
+                  href={"/signup"}
                 >
                   <Text
                     style={{

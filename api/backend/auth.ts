@@ -1,16 +1,30 @@
 import axios from "axios";
 import api from "./config";
+import { IAuthInfo, useAuth } from "@/contexts/authContext";
+
+
+const appURL = process.env.EXPO_PUBLIC_APP_URL // 'https://app.staffin.pro';
 
 
 export const sendVerificationCode = async (email: string) => {
   try {
     const response = await api.get(`/Auth/verification-code/${email}`);
     const { code } = response.data;
+    console.log('code:', code);
 
-    const emailResponse = await axios.post("/api/send-otp", { email, otp: code });
+     // Send email via frontend route
+    const emailResponse = await fetch(`${appURL}/api/send-reset-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, otp: code }),
+    });
 
-    if (emailResponse.status !== 200) {
-      throw new Error(emailResponse.data?.error || "Failed to send verification email");
+    const emailResult = await emailResponse.json();
+
+    if (!emailResponse.ok) {
+      throw new Error(emailResult.error || "Failed to send verification email");
     }
 
     return {
@@ -43,12 +57,23 @@ export const resendVerificationCode = async (email: string) => {
     // First get a new code from the backend
     const response = await api.post("/Auth/ResendVerificationCode", email);
     const { code } = response.data;
+    console.log('code:', code);
 
     // Then send the email
-    const emailResponse = await axios.post("/api/send-otp", { email, otp: code });
+    const emailResponse = await fetch(`${appURL}/api/send-reset-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, otp: code }),
+    });
 
-    if (emailResponse.status !== 200) {
-      throw new Error(emailResponse.data?.error || "Failed to resend verification email");
+    const emailResult = await emailResponse.json();
+
+    if (!emailResponse.ok) {
+      throw new Error(
+        emailResult.error || "Failed to resend verification email"
+      );
     }
 
     return {
@@ -62,35 +87,42 @@ export const resendVerificationCode = async (email: string) => {
 };
 
 
-const appURL = process.env.EXPO_PUBLIC_APP_URL
+
 
 export const requestPasswordReset = async (email: string) => {
+  
   try {
-    if (!appURL) {
-      throw new Error("App URL not configured.");
-    }
-
     // Send request to backend to get the reset code
-    const response = await api.post("/Auth/request-password-reset", { email });
-    const { code } = response.data;
+    const response = await api.post(
+      `/Auth/request-password-reset?email=${encodeURIComponent(email)}`);
 
+    const { code } = response.data;
+    console.log('code is ', code);
+    
     // Construct reset link
-    const resetLink = `${appURL}/reset-password?email=${encodeURIComponent(email)}&code=${code}`;
+    const resetLink = `${appURL}/reset-password?email=${encodeURIComponent(
+      email
+    )}&code=${code}`
 
     // Send the reset email
-    const emailResponse = await axios.post("/api/send-reset-otp", {
-      email,
-      otp: code,
-      resetLink,
+    const emailResponse = await fetch(`${appURL}/api/send-reset-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, otp: code, resetLink }),
     });
 
-    if (emailResponse.status !== 200) {
+    const emailResult = await emailResponse.json();
+
+    if (!emailResponse.ok) {
       throw new Error(
-        emailResponse.data?.error || "Failed to send password reset email"
+        emailResult.error || "Failed to send password reset email"
       );
     }
 
     return {
+      ...response.data,
       emailSent: true,
     };
   } catch (error) {

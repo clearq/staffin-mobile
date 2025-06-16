@@ -20,7 +20,8 @@ const Layout = () => {
         <Stack.Screen name='signin' options={{headerShown:false}} />
         <Stack.Screen name='signup' options={{headerShown:false}} />
         <Stack.Screen name='forgotPassword' options={{headerShown:false}} />
-        <Stack.Screen name='verify' options={{headerShown:false}} />
+        <Stack.Screen name='reset-password' options={{headerShown:false}} />
+        <Stack.Screen name='register' options={{headerShown:false}} />
       </Stack>
     </View>
   )

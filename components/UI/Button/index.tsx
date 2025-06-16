@@ -31,13 +31,14 @@ export const Button: React.FC<Props> = (Props) => {
     Props.size === 'lg' ? 40 :
     24; //
 
-  const bgColor = 
+  const bgColor =
+    Props.disabled ? theme.colors.disabled :
     Props.color === 'primary' ? theme.colors.primary :
     Props.color === 'secondary' ? theme.colors.secondary :
     Props.color === 'success' ? theme.colors.success :
     Props.color === 'warning' ? theme.colors.warning :
     Props.color === 'error' ? theme.colors.error :
-    theme.colors.primary
+    theme.colors.primary;
       
   
   return(

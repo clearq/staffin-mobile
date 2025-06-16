@@ -141,7 +141,10 @@ export const IconTextField: React.FC<Props> = (props) => {
           placeholderTextColor={theme.colors.divider}
           cursorColor={theme.colors.primary}
           selectionColor={theme.colors.primary}
-          onChangeText={props.onChangeText}
+          onChangeText={(text) => {
+            const noSpaces = text.replace(/\s/g, '');
+            props.onChangeText?.(noSpaces);
+          }}
           onBlur={props.onBlur}
           autoCapitalize="none"
         />

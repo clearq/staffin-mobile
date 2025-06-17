@@ -117,7 +117,6 @@ const SignUpPage = () => {
                   })
                   
                   const { token, id } = response.data;
-                  console.log('token:', token, 'id:', id);
                   
                   await sendVerificationCode(values.email);
 
@@ -323,7 +322,6 @@ const SignUpPage = () => {
                   })
 
                   const { token, id } = response.data;
-                  console.log('token:', token, 'id:', id);
 
                   await sendVerificationCode(values.email);
                   // Pass role and form data to /verify screen

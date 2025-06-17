@@ -41,7 +41,7 @@ const StaffHome = () => {
   const router = useRouter()
   
   
-  const { authState:{ userData, userId, token }, isLoading } = useAuth();
+  const { authState:{ userData, userId, token }, isLoading, session } = useAuth();
 
   const {
       data: user,
@@ -100,7 +100,7 @@ const StaffHome = () => {
       setOpenIntroduction(!onBoarding.isCompleted)
     }
         
-  },[onBoarding])
+  },[session])
 
   return (
     <View>

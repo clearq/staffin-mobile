@@ -21,6 +21,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { rgbaToHex } from '@/utils/rgba-to-hex';
 import DateCalendar from '@/components/UI/Calendar';
 import ModalHeader from '../../../ModalHeader';
+import EducationLevel from '@/components/Dropdown/EducationLevel';
 
 
 interface props {
@@ -96,7 +97,8 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
               initialValues={{
                 id: 0,
                 staffId: 0,
-                name: "",
+                fieldOfStudy: "",
+                educationLevelId: 0, 
                 institution: "",
                 startDate: dayjs().locale('sv').format('YYYY-MM-DD'),
                 endDate: dayjs().locale('sv').format('YYYY-MM-DD') || null, 
@@ -123,7 +125,7 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                       marginBottom: theme.spacing.xl,
                     }}
                   >
-                    {/* Name */}
+                    {/* Field Of Study */}
                     <View
                       style={{
                         width: "100%",
@@ -135,17 +137,17 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                           color: theme.colors.grey0
                         }}
                       >
-                        {t("name")}
+                        {t("field-of-study")}
                       </Text>
                       <TextField
-                        placeholder={t("name")}
-                        onChangeText={handleChange("name")}
-                        onBlur={handleBlur("name")}
-                        value={values.name as string}
+                        placeholder={t("field-of-study")}
+                        onChangeText={handleChange("fieldOfStudy")}
+                        onBlur={handleBlur("fieldOfStudy")}
+                        value={values.fieldOfStudy as string}
                         name={"name"}
                         type={"text"}
                         styles={{color: theme.colors.grey0}}
-                        errorMessage={errors.name}
+                        errorMessage={errors.fieldOfStudy}
                       />
                     </View>
 
@@ -175,188 +177,230 @@ const AddEducationModal = ({visible, onClose, handleSuccess, id}: props) => {
                       />
                     </View>
 
+                    {/* Education Level */}
+                    <View
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      <Text 
+                        style={{
+                          ...pageStyle.inputLabel,
+                          color: theme.colors.grey0
+                        }}
+                      >
+                        {t("education-level")}
+                      </Text>
+                      <EducationLevel 
+                        value={values.educationLevelId}
+                        setFieldValue={setFieldValue}
+                      />
+                    </View>
 
                     {/* Start-/ End Date */}
                     <View
                       style={{
-                        flexDirection:'row',
-                        alignItems:'center'
-                      }}
-                    >
-                      <CheckBox 
-                        checked={checked}
-                        onPress={() => {
-                          setChecked(!checked)
-                          if (checked === true) {
-                            setFieldValue('endDate', null)
-                          }
-                        }}
-                      />
-                      <Text
-                        style={{ 
-                          ...pageStyle.inputLabel, 
-                          color: theme.colors.grey0
-                        }}
-                      >
-                        {`${t("present")}`}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        gap: theme.spacing.md,
-                        width: '100%'
+                        flexDirection: 'column',
                       }}
                     >
                       <View
                         style={{
-                          flex: 1,
+                          flexDirection: 'row',
+                          gap: theme.spacing.md,
+                          width: '100%'
                         }}
                       >
-                        <Text 
+                        <View
                           style={{
-                            ...pageStyle.inputLabel,
-                            color: theme.colors.grey0
+                            flex: 1,
                           }}
                         >
-                          {t("start-date")}
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() => setShowStartTimePicker(true)}
-                          style={{
-                            ...pageStyle.inputBox,
-                            borderColor: theme.colors.divider,
-                            backgroundColor: theme.colors.searchBg,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between'
-                          }}
-                        >                       
-                        
-                          <Text
+                          <Text 
                             style={{
-                              ...pageStyle.inputText,
-                              color: theme.colors.grey0 
+                              ...pageStyle.inputLabel,
+                              color: theme.colors.grey0
                             }}
                           >
-                            {dayjs(values.startDate).format('YYYY-MM-DD')}                           
-                          </Text>                            
-                     
+                            {t("start-date")}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => setShowStartTimePicker(true)}
+                            style={{
+                              ...pageStyle.inputBox,
+                              borderColor: theme.colors.divider,
+                              backgroundColor: theme.colors.searchBg,
+                              flexDirection: 'row',
+                              justifyContent: 'space-between'
+                            }}
+                          >                       
                           
-                          <MaterialCommunityIcons 
-                            name='calendar-month' 
-                            size={20}
-                            color={theme.colors.grey3}
-                          />
-                        </TouchableOpacity>
+                            <Text
+                              style={{
+                                ...pageStyle.inputText,
+                                color: theme.colors.grey0 
+                              }}
+                            >
+                              {dayjs(values.startDate).format('YYYY-MM-DD')}                           
+                            </Text>                            
+                      
+                            
+                            <MaterialCommunityIcons 
+                              name='calendar-month' 
+                              size={20}
+                              color={theme.colors.grey3}
+                            />
+                          </TouchableOpacity>
 
-                        <Text
+                          <Text
+                            style={{
+                              ...pageStyle.smText,
+                              color: theme.colors.error,
+                              marginHorizontal: theme.spacing.xs,
+                            }}
+                          >
+                            {errors.startDate}
+                          </Text>
+                          
+                          {showStartTimePicker && (    
+                            <DateCalendar 
+                              date={values.startDate}
+                              onClose={() => setShowStartTimePicker(false)}
+                              setDate={(date) => {
+                                const formatDate = dayjs(date).format('YYYY-MM-DD')
+                                setFieldValue('startDate', formatDate)
+                              }}
+                              onSubmit={() => setShowStartTimePicker(false)}
+                            />         
+                          )}
+
+                        </View>
+
+                        <View
                           style={{
-                            ...pageStyle.smText,
-                            color: theme.colors.error,
-                            marginHorizontal: theme.spacing.xs,
+                            flex: 1,
                           }}
                         >
-                          {errors.startDate}
-                        </Text>
-                        
-                        {showStartTimePicker && (    
-                          <DateCalendar 
-                            date={values.startDate}
-                            onClose={() => setShowStartTimePicker(false)}
+                          <Text 
+                            style={{
+                              ...pageStyle.inputLabel,
+                              color: checked ? theme.colors.disabled : theme.colors.grey0
+                            }}
+                          >
+                            {t("end-date")}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => setShowEndTimePicker(true)}
+                            style={{
+                              ...pageStyle.inputBox,
+                              borderColor: checked ? theme.colors.disabled : theme.colors.divider,
+                              backgroundColor: theme.colors.searchBg,
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                            }}
+                            disabled={checked}
+                          >
+                          
+                            <Text
+                              style={{
+                                ...pageStyle.inputText,
+                                color: checked ? theme.colors.disabled : theme.colors.grey0 
+                              }}
+                            >
+                              {values.endDate ? dayjs(values.endDate).format('YYYY-MM-DD') : t("ongoing")}                       
+                            </Text>
+
+                            <MaterialCommunityIcons 
+                              name='calendar-month' 
+                              size={20}
+                              color={checked ? theme.colors.disabled : theme.colors.grey3}
+                            />
+                          </TouchableOpacity>                     
+                          {showEndTimePicker && (
+                            <DateCalendar 
+                            date={
+                              values.endDate !== null && values.endDate !== undefined
+                                ? values.endDate
+                                : dayjs().format("YYYY-MM-DD")
+                            }
+                            onClose={() => setShowEndTimePicker(false)}
                             setDate={(date) => {
                               const formatDate = dayjs(date).format('YYYY-MM-DD')
-                              setFieldValue('startDate', formatDate)
-                            }}
-                            onSubmit={() => setShowStartTimePicker(false)}
-                          />         
-                        )}
-
+                              setFieldValue('endDate', formatDate) 
+                            }} 
+                            onSubmit={() => setShowEndTimePicker(false)}
+                          />   
+                          )}
+                        </View>                   
                       </View>
 
                       <View
                         style={{
-                          flex: 1,
+                          flexDirection:'row',
+                          alignItems:'center',
+                          justifyContent: 'flex-end',
                         }}
                       >
-                        <Text 
-                          style={{
-                            ...pageStyle.inputLabel,
-                            color: checked ? theme.colors.disabled : theme.colors.grey0
+                        <CheckBox 
+                          title={t("present")}
+                          checked={checked}
+                          onPress={() => {
+                            setChecked(!checked)
+                            if (checked === true) {
+                              setFieldValue('endDate', null)
+                            }
                           }}
-                        >
-                          {t("end-date")}
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() => setShowEndTimePicker(true)}
-                          style={{
-                            ...pageStyle.inputBox,
-                            borderColor: checked ? theme.colors.disabled : theme.colors.divider,
-                            backgroundColor: theme.colors.searchBg,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
+                          containerStyle={{ 
+                            backgroundColor: 'transparent', 
+                            borderWidth: 0,
+                            margin: 0,
                           }}
-                          disabled={checked}
-                        >
-                         
-                          <Text
-                            style={{
-                              ...pageStyle.inputText,
-                              color: checked ? theme.colors.disabled : theme.colors.grey0 
-                            }}
-                          >
-                            {values.endDate ? dayjs(values.endDate).format('YYYY-MM-DD') : t("ongoing")}                       
-                          </Text>
+                          textStyle={{...pageStyle.paraText, fontWeight: 'normal'}}
+                          checkedColor={theme.colors.primary} 
+                        />
+                      </View>
 
-                          <MaterialCommunityIcons 
-                            name='calendar-month' 
-                            size={20}
-                            color={checked ? theme.colors.disabled : theme.colors.grey3}
-                          />
-                        </TouchableOpacity>                     
-                        {showEndTimePicker && (
-                          <DateCalendar 
-                          date={
-                            values.endDate !== null && values.endDate !== undefined
-                              ? values.endDate
-                              : dayjs().format("YYYY-MM-DD")
-                          }
-                          onClose={() => setShowEndTimePicker(false)}
-                          setDate={(date) => {
-                            const formatDate = dayjs(date).format('YYYY-MM-DD')
-                            setFieldValue('endDate', formatDate) 
-                          }} 
-                          onSubmit={() => setShowEndTimePicker(false)}
-                        />   
-                        )}
-                      </View>                   
                     </View>
                   </View>
 
                   {/* Button Group */}
                   <View
                     style={{
-                      ...pageStyle.buttonGroup
+                      ...pageStyle.buttonGroup,
+                      flex: 1,
+                      marginTop: Sizes.fixPadding * 2,
                     }}
-                  >            
-                    <Button
-                      title={`${t("cancel")}`}
-                      onPress={() => {
-                        onClose()
-                        setChecked(false)
+                  >
+                    <View
+                      style={{
+                        ...styles.btnContainer
                       }}
-                      size={'md'}
-                      type={'outline'}
-                      color={'primary'}
-                      titleColor={theme.colors.primary}
-                    />                      
-
-                    <Button
-                      title={`${t("save")}`}
-                      onPress={handleSubmit}
-                      size={'md'}
-                      color={'primary'}
-                      titleColor={theme.colors.white}
-                    />
+                    >
+                      <Button
+                        title={`${t("cancel")}`}
+                        onPress={() => {
+                          onClose()
+                          setChecked(false)
+                        }}
+                        size={'lg'}
+                        type={'outline'}
+                        color={'primary'}
+                        titleColor={theme.colors.primary}
+                      />                      
+                    </View>            
+                    
+                    <View
+                      style={{
+                        ...styles.btnContainer
+                      }}
+                    >    
+                      <Button
+                        title={`${t("save")}`}
+                        onPress={handleSubmit}
+                        size={'lg'}
+                        color={'primary'}
+                        titleColor={theme.colors.white}
+                      />
+                    </View>
                   </View>
                 </>
               )}
@@ -374,4 +418,7 @@ const styles = StyleSheet.create({
   formContiner: {
     width: "100%",
   },
+  btnContainer: {
+    flexShrink: 2,
+  }
 })

@@ -150,6 +150,7 @@ export {
   downloadCv,
   postNewApplication,
   getMyApplications,
+  getEducationLevels,
 } from "./staff"
 
 export {

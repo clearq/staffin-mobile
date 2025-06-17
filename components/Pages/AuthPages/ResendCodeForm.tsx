@@ -59,7 +59,6 @@ const ResendCodeForm = ({visible, onClose, email, role}:props) => {
               style={{ 
                 width: '100%', 
                 maxHeight: Dimensions.get('window').height * 0.7 
-
               }}
             >     
               <View>

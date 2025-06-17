@@ -344,32 +344,44 @@ const InfoModal = ({user, visible, onClose, handleSuccess}: props) => {
 
                   </View>
 
-              
+    
                   <View
                     style={{
                       ...pageStyle.buttonGroup,
-                      marginTop: theme.spacing.xl * 2,
+                      flex: 1,
+                      marginTop: Sizes.fixPadding * 2,
                     }}
-                  >            
-                    <Button
-                      title={`${t("cancel")}`}
-                      onPress={onClose}
-                      size={'md'}
-                      type={'outline'}
-                      color={'primary'}
-                      titleColor={theme.colors.primary}
-                    />
+                  >   
+                    <View
+                      style={{
+                        ...styles.btnContainer
+                      }}
+                    >
+                      <Button
+                        title={`${t("cancel")}`}
+                        onPress={onClose}
+                        size={'lg'}
+                        type={'outline'}
+                        color={'primary'}
+                        titleColor={theme.colors.primary}
+                      />
+                    </View>         
                       
-
-                    <Button
-                      title={`${t("save")}`}
-                      onPress={() => handleSubmit()}
-                      size={'md'}
-                      color={'primary'}
-                      titleColor={theme.colors.white}
-                    />
+                    <View
+                      style={{
+                        ...styles.btnContainer
+                      }}
+                    >
+                      <Button
+                        title={`${t("save")}`}
+                        onPress={() => handleSubmit()}
+                        size={'lg'}
+                        color={'primary'}
+                        titleColor={theme.colors.white}
+                      />
+                    </View>
                   </View>
-                  </>
+                </>
               )}
             </Formik>
           </ScrollView>
@@ -385,5 +397,7 @@ const styles = StyleSheet.create({
   formContiner: {
     width: "100%",
   },
-  
+  btnContainer: {
+    flexShrink: 2,
+  }
 })

@@ -1,4 +1,4 @@
-import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Modal, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useState } from 'react'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { useTheme } from '@rneui/themed';
@@ -6,7 +6,7 @@ import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from 'react-i18next';
 import { DateType } from 'react-native-ui-datepicker';
 import { useRouter } from 'expo-router';
-import DateTimePicker from 'react-native-ui-datepicker'
+import DateTimePicker, { useDefaultStyles } from 'react-native-ui-datepicker'
 import { Button } from '@/components/UI/Button'
 import dayjs from 'dayjs';
 import pageStyle from '@/constants/Styles';
@@ -23,79 +23,133 @@ const DateCalendar = ({onClose, setDate, onSubmit, date}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
   const toast = useToast();
-  const router = useRouter()
+  const router = useRouter();
+
+  const defaultStyles = useDefaultStyles();
 
   
   return (
-    <Modal
-      transparent={true}
-      animationType='slide'
-      onRequestClose={onClose}
-      style={{flex: 1,}}
-    >    
-      <View
-        style={{
-          ...styles.calendarContainer,
-          backgroundColor: theme.colors.background
-        }}
-      >
+    <SafeAreaView style={{...styles.centeredView}}>
+      <Modal
+        transparent={true}
+        animationType='slide'
+        onRequestClose={onClose}
+      >    
         <View
-          style={{
-            ...styles.calendar,
-            backgroundColor: theme.colors.background
-          }}
+          style={{...styles.centeredView }}
         >
-          <DateTimePicker
-            styles={{
-              today: { 
-                color: theme.colors.secondary, 
-                borderWidth: 1 
-              }, // Add a border to today's date
-              selected: { 
-                backgroundColor: theme.colors.primary 
-              }, // Highlight the selected day
-              selected_label: { color: 'white' }, // Highlight the selected day label
+          <View
+            style={{
+              ...styles.modalView,
+              backgroundColor: theme.colors.background
             }}
-            startDate={1}
-            date={date}
-            mode="single"
-            onChange={({date}) => setDate(date)}
-          />    
-
-           {/* Button Group */}
-            <View
-              style={{
-                ...pageStyle.buttonGroup
+          >
+            <DateTimePicker
+              styles={{
+                ...defaultStyles,
+                today: {
+                  ...defaultStyles.today,
+                  borderWidth: 2,
+                  borderColor: theme.colors.primary,
+                  borderRadius: 10,
+                  backgroundColor: theme.colors.background,
+                },
+                today_label:{
+                  fontWeight: '700',
+                  color: theme.colors.primary,
+                },
+                selected: { 
+                  borderRadius: 10,
+                  backgroundColor: theme.colors.primary, 
+                },
+                selected_label: { 
+                  color: 'white' 
+                },
+                day_label:{
+                  color: theme.colors.grey0
+                }
+                
               }}
-            >            
-              <Button
-                title={`${t("cancel")}`}
-                onPress={() => {
-                  onClose()
-                }}
-                size='md'
-                type={'outline'}
-                color={'primary'}
-                titleColor={theme.colors.primary}
-              />                      
+              startDate={1}
+              date={date}
+              mode="single"
+              onChange={({date}) => setDate(date)}
+            />    
 
-              <Button
-                title={`${t("save")}`}
-                onPress={onSubmit}
-                size={'md'}
-                color={'primary'}
-                titleColor={theme.colors.white}
-              />
-            </View>
-        </View>
-      </View>            
-    </Modal>  
+            {/* Button Group */}
+              <View
+                style={{
+                  ...pageStyle.buttonGroup,
+                  marginTop: Sizes.fixPadding * 2,
+                }}
+              >
+                <View
+                  style={{
+                    ...styles.btnContainer
+                  }}
+                >
+                  <Button
+                    title={`${t("cancel")}`}
+                    onPress={() => {
+                      onClose()
+                    }}
+                    size='lg'
+                    type={'outline'}
+                    color={'primary'}
+                    titleColor={theme.colors.primary}
+                  />                      
+                </View>  
+
+                <View
+                  style={{
+                    ...styles.btnContainer
+                  }}
+                >
+                  <Button
+                    title={`${t("save")}`}
+                    onPress={onSubmit}
+                    size={'lg'}
+                    color={'primary'}
+                    titleColor={theme.colors.white}
+                  />
+                </View>          
+
+              </View>
+          </View>
+        </View>            
+      </Modal>  
+    </SafeAreaView>
   )
 }
 
 export default DateCalendar
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    borderRadius: theme.spacing?.md,
+    padding: theme.spacing?.md,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  inputLabel: {
+    ... pageStyle.smText,
+    marginBottom: theme.spacing?.xs,
+    fontWeight: "bold",
+    paddingHorizontal: theme.spacing?.xs,
+  },
   calendarContainer:{
     flex: 1,
     alignItems: 'center',
@@ -111,4 +165,7 @@ const styles = StyleSheet.create({
     justifyContent:'flex-end',
     gap: theme.spacing?.md,
   },
+  btnContainer: {
+    flexShrink: 2,
+  }
 })

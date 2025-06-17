@@ -7,7 +7,7 @@ import * as Sharing from "expo-sharing";
 // Update Staff
 export const updateStaff = async (values: Partial<IUser>) => {
   try {
-    const data = await api.put("/Staff/UpdateStaff", values );
+    const { data } = await api.put("/Staff/UpdateStaff", values );
 
     return data;
 
@@ -32,7 +32,7 @@ export const getExperience = async () => {
 // Add Staff Experience
 export const addExperience = async (values:Partial<IExperience>) => {
   try {
-    const data = await api.post("/Staff/StaffExperience-Add", values);
+    const { data } = await api.post("/Staff/StaffExperience-Add", values);
 
     return data;
 
@@ -45,7 +45,7 @@ export const addExperience = async (values:Partial<IExperience>) => {
 // Update Staff Experience
 export const updateExperience = async (id: number, values:Partial<IExperience>) => {
   try {
-    const data = await api.put(`/Staff/StaffExperience-Update?experienceId=${id}`, values);
+    const { data } = await api.put(`/Staff/StaffExperience-Update?experienceId=${id}`, values);
 
     return data;
 
@@ -83,7 +83,7 @@ export const getEducation = async () => {
 // Add Staff Education
 export const addEducation = async (values:Partial<IEducation>) => {
   try {
-    const data = await api.post("/Staff/StaffEducation-Add", values)
+    const { data } = await api.post("/Staff/StaffEducation-Add", values)
 
     return data;
 
@@ -94,8 +94,14 @@ export const addEducation = async (values:Partial<IEducation>) => {
 
 
 // Update Staff Education
-export const updateEducation = async () => {
-  
+export const updateEducation = async (educationId: number, values: Partial<IEducation>) => {
+  try {
+    const { data } = await api.put(`/Staff/StaffEducation-Update?educationId=${educationId}`, values)
+
+    return data
+  } catch (error) {
+    console.error('Failed update staff education:', error )
+  }
 };
 
 
@@ -113,7 +119,7 @@ export const deleteEducation = async (id: number) => {
 // Get Staff Skills
 export const getStaffSkills = async (id: number) => {
   try {
-    const data = await api.get(`/Staff/GetStaff-Skills?staffId=${id}`);
+    const { data } = await api.get(`/Staff/GetStaff-Skills?staffId=${id}`);
 
     return data
 
@@ -126,7 +132,7 @@ export const getStaffSkills = async (id: number) => {
 // Add Staff Skill
 export const addStaffSkill = async (values: ISkill) => {
   try {
-    const data = await api.post('/Staff/StaffSkills-Add', values);
+    const { data } = await api.post('/Staff/StaffSkills-Add', values);
 
     return data
 
@@ -177,7 +183,7 @@ export const getStaffLanguages = async (userId: number) => {
 // Rating (Update) Staff Language
 export const updateStaffLanguage = async (values:IRating) => {
   try {
-    const data = await api.put('/Staff/StaffLanguage-Rating', values);
+    const { data } = await api.put('/Staff/StaffLanguage-Rating', values);
 
     return data;
 
@@ -190,7 +196,7 @@ export const updateStaffLanguage = async (values:IRating) => {
 // Add Staff Language
 export const addStaffLanguage = async (values: any) => {
   try {
-    const data = await api.post('/Staff/AddStaff-Language', values);
+    const { data } = await api.post('/Staff/AddStaff-Language', values);
 
     return data;
 
@@ -294,4 +300,14 @@ export const getMyApplications = async () => {
   }
 }
 
+
+export const getEducationLevels = async () => {
+  try {
+    const { data } = await api.get(`/Staff/GetEducationLevels`)
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
 

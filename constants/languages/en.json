@@ -105,7 +105,9 @@
   "add-post": "Add your post",
   
   "name": "Name",
+  "field-of-study": "Field of study",
   "institution": "Institution",
+  "education-level": "Education level",
 
   "position": "Position",
   "description": "Description",

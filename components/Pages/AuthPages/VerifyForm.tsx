@@ -99,7 +99,7 @@ const VerifyForm = ({role, authInfo}: props) => {
                     email: values.email, // should match the passed email
                     code: values.code
                   });
-                  console.log('email:', values.email, 'code:', values.code, 'role:', role);                  
+               
                   if (authInfo.token) {
                     setAuthState({
                       userData: null,

@@ -10,8 +10,7 @@ export const sendVerificationCode = async (email: string) => {
   try {
     const response = await api.get(`/Auth/verification-code/${email}`);
     const { code } = response.data;
-    console.log('code:', code);
-
+   
      // Send email via frontend route
     const emailResponse = await fetch(`${appURL}/api/send-reset-otp`, {
       method: "POST",
@@ -97,7 +96,7 @@ export const requestPasswordReset = async (email: string) => {
       `/Auth/request-password-reset?email=${encodeURIComponent(email)}`);
 
     const { code } = response.data;
-    console.log('code is ', code);
+   
     
     // Construct reset link
     const resetLink = `${appURL}/reset-password?email=${encodeURIComponent(

@@ -51,9 +51,9 @@ const pageStyle = StyleSheet.create({
   },
   inputBox: {
     paddingHorizontal: Sizes.fixPadding,
-    //paddingVertical: Sizes.fixPadding,
+    // paddingVertical: Sizes.fixPadding,
     borderRadius: theme.spacing?.sm,
-    marginBottom: theme.spacing?.xs,
+    // marginBottom: theme.spacing?.xs,
     borderWidth: 1,
     overflow: "hidden",
     width: "100%", 

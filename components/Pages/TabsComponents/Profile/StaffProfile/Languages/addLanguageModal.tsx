@@ -230,25 +230,38 @@ const AddLanguageModal = ({visible, onClose, handleSuccess, id}: props) => {
               <View
                 style={{
                   ...pageStyle.buttonGroup,
-                  marginTop: theme.spacing.xl *2
+                  flex: 1,
+                  marginTop: Sizes.fixPadding * 2,
                 }}
-              >            
-                <Button
-                  title={`${t("cancel")}`}
-                  onPress={onClose}
-                  size={'md'}
-                  type={'outline'}
-                  color={'primary'}
-                  titleColor={theme.colors.primary}
-                />                      
-
-                <Button
-                  title={`${t("save")}`}
-                  onPress={handleSubmit}
-                  size={'md'}
-                  color={'primary'}
-                  titleColor={theme.colors.white}
-                />
+              > 
+                <View
+                  style={{
+                    ...styles.btnContainer
+                  }}
+                >
+                  <Button
+                    title={`${t("cancel")}`}
+                    onPress={onClose}
+                    size={'lg'}
+                    type={'outline'}
+                    color={'primary'}
+                    titleColor={theme.colors.primary}
+                  />   
+                </View>
+                                     
+                <View
+                  style={{
+                    ...styles.btnContainer
+                  }}
+                >
+                  <Button
+                    title={`${t("save")}`}
+                    onPress={handleSubmit}
+                    size={'lg'}
+                    color={'primary'}
+                    titleColor={theme.colors.white}
+                  />
+                </View>         
               </View>
             </View>
           </>
@@ -276,4 +289,7 @@ const styles = StyleSheet.create({
     top: "50%",
     transform: [{ translateY: -10 }],
   },
+  btnContainer: {
+    flexShrink: 2,
+  }
 })

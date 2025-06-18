@@ -48,6 +48,7 @@
   "apply": "Apply",
   "follow": "Follow",
   "unfollow": "Unfollow",
+  "create-cv": "Create CV",
 
   "success-delete-message": "Successfully deleted",
   "failed-delete-message": "Delete failed", 
@@ -82,6 +83,7 @@
   "language-required-message": "Select a language",
   "rating-required-message": "Rating is required",
   "enter-form-message": "Please enter your information",
+  "alert-deletion-confirmation-message":"Are you sure you want to delete this item?",
 
   "first-name": "First name",
   "last-name": "Last name",
@@ -149,6 +151,7 @@
   "create-post-placeholder": "What do you want to talk about?",
   "no-document-message": "You haven't created your CV yet",
   "create-cv-message": "Complete your profile and create your CV",
+  "link-to-profile-message": "Have you completed your profile yet?",
 
   "information": "Information",
   "activity": "Activity",

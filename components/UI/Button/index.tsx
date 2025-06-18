@@ -19,6 +19,8 @@ interface Props {
   type?: "default" | "outline";
   loading?: boolean;
   disabled?: boolean;
+  hasIconRight?: boolean
+  hasIconLeft?: boolean
 }
 
 export const Button: React.FC<Props> = (Props) => {
@@ -56,34 +58,54 @@ export const Button: React.FC<Props> = (Props) => {
       {Props.loading && 
         <ActivityIndicator  size={'small'} color={Props.titleColor} />
       }
+
       {!Props.loading &&
-        <>
-          {Props.iconLeft && 
-            <MaterialCommunityIcons 
-              name={Props.iconLeft} 
-              size={20} 
-              color={Props.titleColor} 
-            />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.spacing.xl,
+          }}
+        >
+          {Props.hasIconLeft && 
+            <View
+              style={{alignSelf: 'flex-start'}}
+            >
+              <MaterialCommunityIcons 
+                name={Props.iconLeft} 
+                size={20} 
+                color={Props.titleColor} 
+              />
+            </View>  
           }
 
-          <Text
-            style={{
-              ...pageStyle.button16,
-              color: Props.titleColor,
-              textAlign: 'center'
-            }}
+          <View
+            style={{alignSelf: 'center'}}
           >
-            {Props.title}
-          </Text>
+            <Text
+              style={{
+                ...pageStyle.button16,
+                color: Props.titleColor,
+                textAlign: 'center',
+                alignSelf: 'center',
+              }}
+            >
+              {Props.title}
+            </Text>
+          </View>
 
-          {Props.iconRight && 
-            <MaterialCommunityIcons 
-              name={Props.iconLeft} 
-              size={20} 
-              color={Props.titleColor} 
-            />
+          {Props.hasIconRight && 
+            <View
+              style={{alignSelf: 'flex-end'}}
+            >
+              <MaterialCommunityIcons 
+                name={Props.iconRight} 
+                size={20} 
+                color={Props.titleColor}
+              />
+            </View>
           }
-        </>
+        </View>
       }
     </TouchableOpacity>
   )

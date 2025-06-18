@@ -40,7 +40,6 @@ const Cities  = ({refetch}: props) => {
   }
 
  
-
   return (
 
     <View style={{ ...styles.container, borderColor: theme.colors.divider }}>

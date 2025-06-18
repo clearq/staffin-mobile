@@ -37,36 +37,41 @@ const HeaderTemplate = ({title, visible, onClose, children}: props) => {
         {/* Header */}
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            padding: Sizes.fixPadding,
-            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
-            gap: theme.spacing.md,
-            alignItems: 'center',
-            borderBottomWidth:1,
-            borderBottomColor: theme.colors.greyOutline
+            flexDirection: 'column',
+            paddingBottom: 0
           }}
         >
-          <TouchableOpacity
-            onPress={onClose}
-          >
-            <MaterialCommunityIcons 
-              name='chevron-left' 
-              size={32} 
-              color={theme.colors.grey0}
-            />
-          </TouchableOpacity>
-          <Text
+          <View
             style={{
-              ...pageStyle.headline01,
-              color: theme.colors.grey0,
-              alignItems: 'center'
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              padding: Sizes.fixPadding,
+              backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
+              gap: theme.spacing.xl,
+              // alignItems: 'center',
+              alignContent: 'center',
             }}
           >
-            {title}
-          </Text>
+            <TouchableOpacity
+              onPress={onClose}
+            >
+              <MaterialCommunityIcons 
+                name='chevron-left' 
+                size={24} 
+                color={theme.colors.grey0}
+              />
+            </TouchableOpacity>
+            <Text
+              style={{
+                ...pageStyle.headline02,
+                color: theme.colors.grey0,
+              }}
+            >
+              {title}
+            </Text>
+          </View>
+          <Divider />
         </View>
-
 
         <View
           style={{

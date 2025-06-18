@@ -44,9 +44,10 @@ const pageStyle = StyleSheet.create({
     fontSize: 14
   },
   inputLabel: {
-    fontFamily: "InterSemibold",
+    fontFamily: "InterRegular",
+    fontSize: 12,
     marginBottom: theme.spacing?.xs,
-    fontWeight: 600,
+    fontWeight: "bold",
     paddingHorizontal: theme.spacing?.xs,
   },
   inputBox: {

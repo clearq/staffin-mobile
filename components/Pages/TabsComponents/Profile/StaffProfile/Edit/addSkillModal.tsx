@@ -232,7 +232,6 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                       titleColor={theme.colors.white}
                     />
                   </View>                   
-
                 </View>
               </View>
             </>

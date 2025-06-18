@@ -133,9 +133,7 @@ const StaffHome = () => {
                 .map((post: IPost, index) => (
 
                   <View key={`${post.postId}${index}`}>
-                    <PostCpmponent 
-                      post={post}
-                    />
+                    
                   </View>
                 ))
               } 

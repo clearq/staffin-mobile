@@ -8,7 +8,7 @@ import { ICity, IUser } from '@/types';
 import pageStyle from '@/constants/Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
-import { deletePreferredCity, getPreferenceOptions, getPreferredCities, getProfessionAreas, getUserPreferences, setUserPreferences } from '@/api/backend';
+import { deletePreferredCity, getPreferenceOptions, getPreferredCities, getProfessionAreas, getUserPreferences, setUserPreferences, updateProfessionArea } from '@/api/backend';
 import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
 
@@ -16,6 +16,7 @@ import { useAuth } from '@/contexts/authContext';
 import Cities from '@/components/Dropdown/Cities';
 import ProfessionArea from '@/components/Dropdown/ProfessionArea';
 import { Button } from '@/components/UI/Button';
+import { number } from 'yup';
 
 const index = () => {
   const { theme } = useTheme()
@@ -31,7 +32,7 @@ const index = () => {
     queryKey: ["user-preferences"],
     queryFn: async () => {
       const response = await getUserPreferences()
-      console.log('res', response);
+      // console.log('res', response);
       
       return response
     }
@@ -123,6 +124,7 @@ const index = () => {
     );
   }, [preference, allProfessions]);
 
+
   const handleDeletePreferredCity = async (id: number) => {
     try {
       await deletePreferredCity(id)
@@ -130,6 +132,20 @@ const index = () => {
 
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const handleDeleteProfessionArea = async (id: number) => {
+    const currentIds = preference?.professionAreaId || [];
+
+    const updatedIds = currentIds.filter((itemId: number) => itemId !== id);
+
+    try {
+      await updateProfessionArea(updatedIds); 
+
+      preferenceRefetch(); // refresh
+    } catch (error) {
+      console.error("Failed to delete profession area:", error);
     }
   }
 
@@ -170,8 +186,7 @@ const index = () => {
       >
         <View 
           style={{
-            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
-            padding: theme.spacing.md,
+            ...styles.sectionContainer,
           }}
         >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
@@ -188,7 +203,7 @@ const index = () => {
                 key={city.cityId}
                 style={{
                   flexDirection: 'row',
-                  gap: theme.spacing.sm,
+                  gap: theme.spacing.xs,
                   alignItems: 'center'
                 }}
               >
@@ -207,8 +222,7 @@ const index = () => {
 
         <View
           style={{
-            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
-            padding: theme.spacing.md,
+            ...styles.sectionContainer,
           }}
         >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
@@ -216,19 +230,25 @@ const index = () => {
           </Text> 
 
           <ProfessionArea refetch={preferenceRefetch} />
-            <View>
+            <View style={{...styles.row, flexWrap: 'wrap', marginTop: theme.spacing.md}}>
               {preferredProfessionAreas.length > 0 && preferredProfessionAreas.map((item, index: number) => (
                 <View 
                   key={index}
                   style={{
                     flexDirection: 'row',
-                    gap: theme.spacing.sm,
+                    gap: theme.spacing.xs,
                     alignItems: 'center'
                   }}
                 >
                 <Text style={{...pageStyle.inputText, color: theme.colors.grey0}}>
                   {item.name}
                 </Text>
+
+                <TouchableOpacity
+                  onPress={() => handleDeleteProfessionArea(item.id)}
+                >
+                  <MaterialCommunityIcons name='close-circle' color={theme.colors.primary} size={18} />
+                </TouchableOpacity>
 
                 </View>
               ))}
@@ -238,8 +258,7 @@ const index = () => {
         <View 
           style={{
             ...styles.radioComponent,
-            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
-            padding: theme.spacing.md,
+            ...styles.sectionContainer,
           }}
         >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
@@ -273,8 +292,7 @@ const index = () => {
         <View 
           style={{
             ...styles.radioComponent,
-            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
-            padding: theme.spacing.md,
+            ...styles.sectionContainer,
           }}
         >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
@@ -306,8 +324,7 @@ const index = () => {
         <View
           style={{
             ...styles.radioComponent,
-            backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black,
-            padding: theme.spacing.md,
+            ...styles.sectionContainer,
           }}
         >
           <Text style={{...pageStyle.inputLabel, color: theme.colors.grey0}}>
@@ -337,8 +354,9 @@ const index = () => {
         </View> 
 
         <View style={{
-          padding:theme.spacing.lg
+          ...styles.sectionContainer,
         }}>
+          
           <Button 
             title={t("submit")}
             onPress={handleSubmit}
@@ -358,7 +376,7 @@ export default index
 const styles = StyleSheet.create({
   col: {
     flexDirection: 'column',
-    gap: theme.spacing?.md
+    // gap: theme.spacing?.md
   },
   row: {
     flexDirection: 'row',
@@ -378,4 +396,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
+  sectionContainer: {
+    backgroundColor: theme.mode === "light" ? theme.lightColors?.white : theme.darkColors?.black,        
+    padding: Sizes.fixPadding
+  }
 })

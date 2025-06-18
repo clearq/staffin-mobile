@@ -27,12 +27,7 @@ const Page = () => {
   const { t } = useTranslation();
   const toast = useToast();
   
-  const { 
-    authState:{ 
-      userData, 
-      userId,
-    } ,
-  } = useAuth();
+  const {authState:{userData, userId}} = useAuth();
 
   // Get User Info
   const {
@@ -66,33 +61,38 @@ const Page = () => {
     // console.log('user', userData?.id, userData?.roleId);    
   }, [userId])
 
-  const handleCreateCv = async () => {
-    if(user.firstName === "" && user.lastName === '' && user.phoneNumber === '') {
-      setUserInfoMessage(true)
-    }
 
-    try {
-      setPending(true)
-      const response = await generateCv();
+  // const handleCreateCv = async () => {
+    
+  //   try {
+  //     setPending(true)
       
-      if (response?.url) {
-        // Open the URL in browser to download the CV
-        // Linking.openURL(response.url);      
-        toast.show(`${t("success-generate-cv-message")}`, {
-          type: "success"
-        });
+  //     if(user.firstName === "" && user.lastName === '' && user.phoneNumber === '') {
+  //       return setUserInfoMessage(true)
+  //     } else {
+  //       const response = await generateCv();
+        
+  //       if (response?.url) {
+  //         // Open the URL in browser to download the CV
+  //         // Linking.openURL(response.url);      
+  //         toast.show(`${t("success-generate-cv-message")}`, {
+  //           type: "success"
+  //         });
 
-        setPending(false)
-      } else {
-        throw new Error(`${t("no-url-message")}`);
-      }
-    } catch (error) {
-      toast.show(`${"failed-generate-cv-message"}`, {
-        type: "error"
-      });
-      setPending(false)
-    }
-  }
+  //         setPending(false)
+  //       } else {
+  //         throw new Error(`${t("no-url-message")}`);
+  //         setPending(false)
+  //       }
+  //     }
+
+  //   } catch (error) {
+  //     toast.show(`${"failed-generate-cv-message"}`, {
+  //       type: "error"
+  //     });
+  //   }
+  //   setPending(false)
+  // }
     
     // console.log('user', user);
     
@@ -133,7 +133,7 @@ const Page = () => {
         </ScrollView>
       }
 
-      {user?.roleId === 3 &&       
+      {/* {user?.roleId === 3 &&       
         <CreateCvButton 
           pending= {pending}
           onPress={handleCreateCv}
@@ -145,7 +145,7 @@ const Page = () => {
           visible={userInfoMessage} 
           onClose={() => setUserInfoMessage(false)}
         />
-      }
+      } */}
     </View>
   )
 }
@@ -157,32 +157,33 @@ interface props {
   pending: boolean
 }
 
-const CreateCvButton = ({onPress, pending}:props) => {
-  const { theme } = useTheme()
-  const { t } = useTranslation();
+// const CreateCvButton = ({onPress, pending}:props) => {
+//   const { theme } = useTheme()
+//   const { t } = useTranslation();
 
-  return(
-    <TouchableOpacity
-      style={{
-        ...styles.cvButton,
-        backgroundColor:(theme.colors.secondary),
-      }}
-      onPress={onPress}
-    >
-      {pending 
-        ? (
-          <ActivityIndicator color={theme.colors.white}/>
-        ) : (
-          <View style={{...styles.buttonItem}}>
-            <MaterialCommunityIcons name='file-download-outline' size={36} color={theme.colors.white} />
-            <Text style={{...pageStyle.button16, color: theme.colors.white}}>CV</Text>
-          </View>
-        )
-      }
-    </TouchableOpacity>
+//   return(
+//     <TouchableOpacity
+//       style={{
+//         ...styles.cvButton,
+//         backgroundColor:(theme.colors.secondary),
+//       }}
+//       onPress={onPress}
+//     >
+//       {pending 
+//         ? (
+//           <ActivityIndicator color={theme.colors.white}/>
+//         ) : (
+//           <View style={{...styles.buttonItem}}>
+//             <MaterialCommunityIcons name='file-download-outline' size={36} color={theme.colors.white} />
+//             <Text style={{...pageStyle.button16, color: theme.colors.white}}>CV</Text>
+//           </View>
+//         )
+//       }
+//     </TouchableOpacity>
 
-  )
-}
+//   )
+// }
+
 const styles = StyleSheet.create({
   cvButton: {
     width: 70,

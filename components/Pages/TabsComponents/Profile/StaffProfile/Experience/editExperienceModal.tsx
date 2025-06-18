@@ -74,7 +74,7 @@ const EditExperienceModal = ({data, visible, onClose, handleSuccess}: props) => 
   });
 
   const showAlert = () =>
-    Alert.alert('Alert Title', 'My Alert Msg', [
+    Alert.alert(`${t("delete")}`, `${t("alert-deletion-confirmation-message")}`, [
       {
         text: `${t("cancel")}`,
         onPress: () => console.log('Cancel Pressed'),

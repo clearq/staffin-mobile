@@ -74,7 +74,7 @@ const EditEducationModal = ({data, visible, onClose, handleSuccess}: props) => {
   });
 
   const showAlert = () =>
-    Alert.alert('Alert Title', 'My Alert Msg', [
+    Alert.alert(`${t("delete")}`, `${t("alert-deletion-confirmation-message")}`, [
       {
         text: `${t("cancel")}`,
         onPress: () => console.log('Cancel Pressed'),
@@ -93,7 +93,7 @@ const EditEducationModal = ({data, visible, onClose, handleSuccess}: props) => {
         console.error("Error: Experience ID is missing");
         return;
       }
-      await deleteExperience(data.id)
+      await deleteEducation(data.id)
       onClose()
       handleSuccess()
       

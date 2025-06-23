@@ -78,7 +78,7 @@ const CompanyActivity = ({post}: props) => {
                 </View>
 
 
-                {p.image 
+                {/* {p.image 
                   ? <Image
                       source={{uri: p.image}} 
                       containerStyle={{ 
@@ -94,7 +94,7 @@ const CompanyActivity = ({post}: props) => {
                         justifyContent: 'center'
                       }} 
                     />
-                }
+                } */}
         
               </View>
             </TouchableOpacity>

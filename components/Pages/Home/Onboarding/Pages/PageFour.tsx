@@ -54,7 +54,7 @@ const PageFour = () => {
       <View>
         <Cities refetch={cityRefetch} />
 
-        <View>
+        <View style={{...styles.col, flexWrap: 'wrap', marginTop: theme.spacing.md}}>
           {cities.length > 0 && cities.map((city: ICity) => (
             <View 
               key={city.cityId}

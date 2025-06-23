@@ -254,28 +254,40 @@ const CompanyInfoModal = ({user, visible, onClose, handleSuccess}: props) => {
               
                   {/* Button Group */}
                   <View
-                  style={{
-                    ...pageStyle.buttonGroup
-                  }}
-                  >            
-                    <Button
-                      title={`${t("cancel")}`}
-                      onPress={() => {
-                        onClose()
+                    style={{
+                      ...pageStyle.buttonGroup,
+                      flex: 1,
+                      marginTop: Sizes.fixPadding * 2,
+                    }}
+                  >   
+                    <View
+                      style={{
+                        ...styles.btnContainer
                       }}
-                      size={'md'}
-                      type={'outline'}
-                      color={'primary'}
-                      titleColor={theme.colors.primary}
-                    />                      
+                    >           
+                      <Button
+                        title={`${t("cancel")}`}
+                        onPress={onClose}
+                        size={'lg'}
+                        type={'outline'}
+                        color={'primary'}
+                        titleColor={theme.colors.primary}
+                      />    
+                    </View>                  
 
-                    <Button
-                      title={`${t("save")}`}
-                      onPress={() => {}}
-                      size={'md'}
-                      color={'primary'}
-                      titleColor={theme.colors.white}
-                    />
+                    <View
+                      style={{
+                        ...styles.btnContainer
+                      }}
+                    > 
+                      <Button
+                        title={`${t("save")}`}
+                        onPress={() => handleSubmit()}
+                        size={'lg'}
+                        color={'primary'}
+                        titleColor={theme.colors.white}
+                      />
+                    </View>
                   </View>
                 </>
               )}
@@ -288,3 +300,12 @@ const CompanyInfoModal = ({user, visible, onClose, handleSuccess}: props) => {
 }
 
 export default CompanyInfoModal
+
+const styles = StyleSheet.create({
+  formContiner: {
+    width: "100%",
+  },
+  btnContainer: {
+    flexShrink: 2,
+  }
+})

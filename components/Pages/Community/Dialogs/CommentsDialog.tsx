@@ -10,7 +10,6 @@ import { IComment, IPost, IUser } from '@/types';
 import { yearMonthDate } from '@/utils/dateFormat';
 import { ProfileAvatar } from '@/components/UI/ProfileAvatar';
 import { useTranslation } from 'react-i18next';
-import PostTemplate from '@/components/UI/PostTemplate';
 import { useQuery } from '@tanstack/react-query';
 import { ref } from 'yup';
 import ModalHeader from '../../TabsComponents/ModalHeader';

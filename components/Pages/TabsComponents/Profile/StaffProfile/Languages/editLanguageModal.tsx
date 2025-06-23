@@ -165,7 +165,7 @@ const EditLanguageModal = ({visible, onClose, handleSuccess, id, data}: props) =
         <Button
           title={`${t("cancel")}`}
           onPress={onClose}
-          size={'md'}
+          size={'lg'}
           type={'outline'}
           color={'primary'}
           titleColor={theme.colors.primary}

@@ -1,15 +1,13 @@
 import { View, Text, ScrollView, ActivityIndicator, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import PostTemplate from '@/components/UI/PostTemplate'
 import MachingJobsTemplate from '@/components/UI/MachingJobsTemplate'
 import { useQuery } from '@tanstack/react-query'
 import { follow, getFeed, getFollower, getFollowing, getMatchingJobs, getSuggestedUsers, unfollow } from '@/api/backend'
 import { useTheme } from '@rneui/themed'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/authContext'
-import { IPost } from '@/types'
+import { IMatchingJob, IPost, IUser } from '@/types'
 import { theme } from '@/constants/Theme'
-import { IMatchingJob } from '@/types/JobTypes'
 import pageStyle from '@/constants/Styles'
 import SuggestedUserTemplate from '@/components/UI/SuggestedUserTemplate'
 import { useRefreshControl } from '@/hooks/useRefreshControl'
@@ -19,7 +17,7 @@ import Onboarding from './Onboarding'
 import { useUserData } from '@/hooks/useUserData'
 import { usePostLike } from '@/hooks/usePostLike'
 import { useFollow } from '@/hooks/useFollow'
-import PostCpmponent from '../PostCpmponent'
+import PostCard from '@/components/PostComponent/PostCard'
 
 export interface ISuggestedUser {
   userId: number;
@@ -29,35 +27,32 @@ export interface ISuggestedUser {
   profileImage: string;
 }
 
-const StaffHome = () => {
-  const [openIntroduction, setOpenIntroduction] = useState(false)
+interface props {
+  currentUser: IUser;
+  currentUserId: number;
+  token: string;
+  isLoading: boolean;
+}
+
+const StaffHome = ({currentUser, currentUserId, token, isLoading}: props) => {
+  // const [openIntroduction, setOpenIntroduction] = useState(false)
   const [loading, setLoading] = useState(false)
   const { refreshing, onRefresh } = useRefreshControl();
   const [openPostDetail, setOpenPostDetail] = useState(false)
   
-
   const { theme } = useTheme()
   const { t } = useTranslation();
   const router = useRouter()
   
-  
-  const { authState:{ userData, userId, token }, isLoading, session } = useAuth();
 
-  const {
-      data: user,
-      refetch: userRefetch,
-      isLoading: userIsLoading,
-      isPending,
-    } = useUserData(Number(userId));
-
-  const { data: onBoarding } = useQuery({
-    queryKey: ['check-onboarding', userId],
-    queryFn: async () => {
-      const response = await checkOnBoardingStatus(Number(userId))
-      return response
-    },
-    enabled: !! userId,
-  })
+  // const { data: onBoarding } = useQuery({
+  //   queryKey: ['check-onboarding', currentUserId],
+  //   queryFn: async () => {
+  //     const response = await checkOnBoardingStatus(currentUserId)
+  //     return response
+  //   },
+  //   enabled: !! currentUserId,
+  // })
 
   const {data: matchJob = [], refetch: matchJobRefetch} = useQuery({
     queryKey: ["matching-jobs"],
@@ -75,8 +70,8 @@ const StaffHome = () => {
         )
       }
 
-      if(!isLoading && userId) {
-        const response = await getFeed()
+      if(!isLoading && currentUserId) {
+        const response = await getFeed({page:1, pageSize: 5})
         return response
       }
     }
@@ -94,50 +89,24 @@ const StaffHome = () => {
   })
 
 
-  useEffect(() => {
-    if (onBoarding) {
-      //console.log('Onboarding complete?', onBoarding.isCompleted);
-      setOpenIntroduction(!onBoarding.isCompleted)
-    }
-        
-  },[session])
+  // useEffect(() => {
+  //   if (onBoarding) {
+  //     //console.log('Onboarding complete?', onBoarding.isCompleted);
+  //     setOpenIntroduction(!onBoarding.isCompleted)
+  //   }
+  // },[token])
 
   return (
     <View>
       {isLoading || loading &&  <ActivityIndicator color={theme.colors.primary} /> }     
-        {openIntroduction && 
-          <View style={{backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black}}>
+        
 
-            <Onboarding
-              user={user}
-              refetch= {userRefetch}
-              visible={openIntroduction}
-              onClose={() => setOpenIntroduction(!openIntroduction)}
-            />
-            
-          </View>
-        }
-        {!openIntroduction && 
+        
           <ScrollView 
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           > 
-            {/* Posts  */}
-            <View style={{flexDirection: 'column', gap: theme.spacing.md}}>
-              {postsLoading && <ActivityIndicator color={theme.colors.primary} /> }
-              {feed && !postsLoading && 
-                [...feed]
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // sort newest first
-                .slice(0, 10) // take only the first 10
-                .map((post: IPost, index) => (
-
-                  <View key={`${post.postId}${index}`}>
-                    
-                  </View>
-                ))
-              } 
-            </View>
 
             {/* Jobs */}
             <View style={{marginVertical: theme.spacing.lg}}>
@@ -167,19 +136,15 @@ const StaffHome = () => {
                   horizontal={true}
                   snapToInterval={1}
                 >
-                  {matchJob && 
-                    [...matchJob]
-                    .sort((a, b) => (b.matchScore) - (a.matchScore))
-                    .slice(0, 5)
-                    .map ((job: IMatchingJob) => (
-                      <View key={job.jobId}>
-                        <MachingJobsTemplate 
-                          job={job}
-                          refetch={matchJobRefetch}
-                        />
-                      </View>
-                    ))
-                  }
+                  {matchJob &&
+                    matchJob
+                      .sort((a: IMatchingJob, b: IMatchingJob) => b.matchScore - a.matchScore)
+                      .slice(0, 5)
+                      .map((job: IMatchingJob) => (
+                        <View key={job.jobId}>
+                          <MachingJobsTemplate job={job} refetch={matchJobRefetch} />
+                        </View>
+                    ))}
                   <View style={{width: 36,  backgroundColor: 'transparent'}} />
                 </ScrollView>
               </View>
@@ -211,25 +176,44 @@ const StaffHome = () => {
                   horizontal={true}
                   snapToInterval={1}
                 >
-                  {suggestedUsers && 
-                    [...suggestedUsers]
+                  {suggestedUsers &&
+                    suggestedUsers
                     .slice(0, 5)
-                    .map ((user: ISuggestedUser) => (
+                    .map((user: ISuggestedUser) => (
                       <View key={user.userId}>
-                        <SuggestedUserTemplate 
-                          user={user}
-                        />
+                        <SuggestedUserTemplate user={user} />
                       </View>
-                    ))
-                  }
+                    ))}
                   <View style={{width: 36,  backgroundColor: 'transparent'}} />
                 </ScrollView>
               </View>
               
             </View>
 
+             {/* Posts */}
+              <View style={{ flexDirection: "column", gap: theme.spacing.md }}>
+                {postsLoading && (
+                  <ActivityIndicator color={theme.colors.primary} />
+                )}
+                {feed &&
+                  !postsLoading &&
+                  feed
+                    .sort(
+                      (a: IPost, b: IPost) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )
+                    .map((post: IPost) => (
+                      <View key={post.postId}>
+                        <PostCard
+                          post={post}
+                          isCurrentUser={post.userId === currentUserId}
+                        />
+                      </View>
+                    ))}
+              </View>
+
           </ScrollView>
-        }
     </View>
   )
 }

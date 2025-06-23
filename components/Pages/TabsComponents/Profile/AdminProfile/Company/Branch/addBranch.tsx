@@ -3,7 +3,7 @@ import React from 'react'
 import { IBranch } from '@/types';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import { theme } from '@/constants/Theme';
+import { Sizes, theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
 import { useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
@@ -270,27 +270,40 @@ const AddBranchModal = ({visible, onClose, handleSuccess,}: props) => {
                 {/* Button Group */}
                 <View
                   style={{
-                    ...pageStyle.buttonGroup
+                    ...pageStyle.buttonGroup,
+                    flex: 1,
+                    marginTop: Sizes.fixPadding * 2,
                   }}
-                >            
-                  <Button
-                    title={`${t("cancel")}`}
-                    onPress={() => {
-                      onClose()
+                >  
+                  <View
+                    style={{
+                      ...styles.btnContainer
                     }}
-                    size={'md'}
-                    type={'outline'}
-                    color={'primary'}
-                    titleColor={theme.colors.primary}
-                  />          
+                  >
+                    <Button
+                      title={`${t("cancel")}`}
+                      onPress={onClose}
+                      size={'lg'}
+                      type={'outline'}
+                      color={'primary'}
+                      titleColor={theme.colors.primary}
+                    />   
+                  </View>   
 
-                  <Button
-                    title={`${t("save")}`}
-                    onPress={handleSubmit}
-                    size={'md'}
-                    color={'primary'}
-                    titleColor={theme.colors.white}
-                  />
+                  <View
+                    style={{
+                      ...styles.btnContainer
+                    }}
+                  >
+                    <Button
+                      title={`${t("save")}`}
+                      onPress={() => handleSubmit()}
+                      size={'lg'}
+                      color={'primary'}
+                      titleColor={theme.colors.white}
+                    />
+                  </View>       
+
                 </View>
               </>
             )}
@@ -311,5 +324,8 @@ const styles = StyleSheet.create({
   rows: {
     flex: 2,
     //width: 'auto'
+  },
+  btnContainer: {
+    flexShrink: 2,
   }
 })

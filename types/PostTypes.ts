@@ -9,8 +9,10 @@ export interface IPost {
   likeCount: number; // Option
   commentCount: number; // Option
   sharedCount: number; // Option
+  isShared: boolean;
   likes: ILike[];
   comments: IComment[];
+  isDeleted: boolean;
   grpupId?: number
 }
 

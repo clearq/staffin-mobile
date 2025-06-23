@@ -34,7 +34,7 @@ export const fetchImageFromCDN = async ({
   key,
 }: {
   userId: number;
-  contentFolder: "profile" | "posts_images";
+  contentFolder: "profile";
   key: string;
 }) => {
   if (!userId || !key) {
@@ -73,4 +73,54 @@ export const fetchImageFromCDN = async ({
     return "";
   }
 };
+
+
+
+export const fetchPostImageFromCDN = async ({
+  userId,
+  contentFolder,
+  key,
+}: {
+  userId: number;
+  contentFolder: "posts_images";
+  key: any;
+}) => {
+  if (!userId || !key) {
+    console.error("Missing required parameters for fetching file.");
+    return "";
+  }
+
+  try {
+    let token = await getItem(CDN_TOKEN);
+    if (!token) {
+      token = await autoLoginToCDN();
+    }
+
+    const file = await getContentFile(key, token, userId, contentFolder);
+
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    const localUri = await new Promise<string>((resolve, reject) => {
+      fileReader.onloadend = () => resolve(fileReader.result as string);
+      fileReader.onerror = reject;
+    });
+
+    const manipResult = await ImageManipulator.manipulateAsync(
+      localUri,
+      [{ resize: { width: 300 } }],
+      {
+        compress: 1,
+        format: ImageManipulator.SaveFormat.JPEG,
+      }
+    );
+
+    return manipResult.uri;
+  } catch (error) {
+    console.error("Error fetching file from CDN:", error, 'user:', userId, 'key:', key);
+    return "";
+  }
+};
+
+
 

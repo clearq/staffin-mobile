@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import pageStyle from '@/constants/Styles';
 import EmptyItemMessage from '../../EmptyItemMessage';
-import CreatePostModal from '../../Activity/CreatePostModal';
+import CreatePostModal from '@/components/PostComponent/CreatePostModal';
 
 interface props {
   post: IPost[];
@@ -80,7 +80,7 @@ const Activity = ({post}: props) => {
                 </View>
 
 
-                {p.image !== ""
+                {/* {p.image !== ""
                   ? <Image
                       source={{uri: p.image}} 
                       containerStyle={{ 
@@ -92,7 +92,7 @@ const Activity = ({post}: props) => {
                         ...styles.imageSize,
                       }} 
                     />
-                }
+                } */}
         
               </View>
             </TouchableOpacity>

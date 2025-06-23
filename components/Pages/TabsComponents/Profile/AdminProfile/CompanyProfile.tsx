@@ -25,11 +25,11 @@ import { partial, values } from 'lodash';
 import CompanyInfoModal from './Company/Edit/CompanyInfoModal';
 import CompanyAboutModal from './Company/Edit/aboutModal';
 import { useRouter } from 'expo-router';
-import CreatePostModal from '../../Activity/CreatePostModal';
+import CreatePostModal from '@/components/PostComponent/CreatePostModal';
 import BranchList from './Company/Branch/branches';
 import AddBranchModal from './Company/Branch/addBranch';
 import { useQuery } from '@tanstack/react-query';
-import { CompanyAvatar, ProfileAvatar } from '@/components/UI/ProfileAvatar';
+import { ProfileAvatar } from '@/components/UI/ProfileAvatar';
 
 
 
@@ -338,7 +338,7 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
         }
       />
 
-      <ProfileItemContainer 
+      {/* <ProfileItemContainer 
         title={t("jobs")}
         children={ <></>}
         showFooter={false}
@@ -363,7 +363,7 @@ const CompanyProfile = ({company, showEditButton, post, refetch, companyId }: pr
             </Text>
           </TouchableOpacity>
         }
-      />
+      /> */}
 
 
       {/* Dialog */}

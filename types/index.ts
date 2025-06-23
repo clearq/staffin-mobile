@@ -1,7 +1,18 @@
 export {
+  IAdmin,
+} from './AdminTypes'
+
+export {
+  ICompany,
+  IBranch,
+} from './companyTypes'
+
+export {
   IJob,
   IJobSkills,
   IProfessionArea,
+  IMatchingJob,
+  IMyJobApplication,
 } from './JobTypes'
 
 export {
@@ -18,13 +29,7 @@ export {
   IRating,
   ISkill,
   ICity,
+  IPreference
 } from './UserTypes'
 
-export {
-  ICompany,
-  IBranch,
-} from './companyTypes'
 
-export {
-  IAdmin,
-} from './AdminTypes'

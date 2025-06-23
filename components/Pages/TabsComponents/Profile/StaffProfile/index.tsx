@@ -36,7 +36,7 @@ import EditLanguageModal from './Languages/editLanguageModal';
 import ProfileHeader from '../../ProfileHeader';
 import ProfileItemContainer from '../../ProfileListContainer';
 import EmptyItemMessage from '../../EmptyItemMessage';
-import CreatePostModal from '../../Activity/CreatePostModal';
+import CreatePostModal from '@/components/PostComponent/CreatePostModal';
 
 
 interface props {

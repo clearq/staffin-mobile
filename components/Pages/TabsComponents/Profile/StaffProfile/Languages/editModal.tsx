@@ -154,27 +154,41 @@ const EditModal = ({visible, onModalClose, handleSuccess, data}: props) => {
               {/* Button Group */}
               <View
                 style={{
-                  ...styles.buttonGroup
+                  ...pageStyle.buttonGroup,
+                  flex: 1,
+                  marginTop: Sizes.fixPadding * 2,
                 }}
-              >            
-                <Button
-                  title={`${t("cancel")}`}
-                  onPress={() => {
-                    onModalClose()
+              >
+                <View
+                  style={{
+                    ...styles.btnContainer
                   }}
-                  size='md'
-                  type={'outline'}
-                  color={'primary'}
-                  titleColor={theme.colors.primary}
-                />                      
-
-                <Button
-                  title={`${t("save")}`}
-                  onPress={handleSubmit}
-                  size={'md'}
-                  color={'primary'}
-                  titleColor={theme.colors.white} 
-                />
+                >
+                  <Button
+                    title={`${t("cancel")}`}
+                    onPress={() => {
+                      onModalClose()
+                    }}
+                    size={'lg'}
+                    type={'outline'}
+                    color={'primary'}
+                    titleColor={theme.colors.primary}
+                  />                      
+                </View>        
+                
+                <View
+                  style={{
+                    ...styles.btnContainer
+                  }}
+                >
+                  <Button
+                    title={`${t("save")}`}
+                    onPress={handleSubmit}
+                    size={'lg'}
+                    color={'primary'}
+                    titleColor={theme.colors.white}
+                  />
+                </View>
               </View>
             </View>
           </>
@@ -259,4 +273,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
+  btnContainer: {
+    flexShrink: 2,
+  }
 })

@@ -8,7 +8,6 @@ import { useQuery } from '@tanstack/react-query'
 import { getUserPostsAndShares } from '@/api/backend'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import pageStyle from '@/constants/Styles'
-import PostTemplate from '@/components/UI/PostTemplate'
 
 const Page = () => {
   const [userInfoMessage, setUserInfoMessage] = useState(false)
@@ -44,7 +43,7 @@ const Page = () => {
 
   
   return (
-    <View>
+    <View style={{backgroundColor: theme.colors.background, flex:1}}> 
       <View>
         <TouchableOpacity>
           <Text>All</Text>
@@ -78,7 +77,6 @@ const Page = () => {
       }
 
       {/* 🚧 Insert post list */}
-      <PostTemplate post={posts}/>
     </View>
   )
 }

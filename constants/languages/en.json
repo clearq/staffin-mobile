@@ -152,6 +152,8 @@
   "no-document-message": "You haven't created your CV yet",
   "create-cv-message": "Complete your profile and create your CV",
   "link-to-profile-message": "Have you completed your profile yet?",
+  "complete-your-name-Title": "Please enter your full name.",
+  "complete-your-name-message": "Complete your first and last name on your profile page first.",
 
   "information": "Information",
   "activity": "Activity",

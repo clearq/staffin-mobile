@@ -300,9 +300,9 @@ export const getCommentPost = async (id: number) => {
   }
 }
 
-export const getFeed = async () => {
+export const getFeed = async ({page, pageSize}: {page: number, pageSize: number}) => {
   try {
-    const {data} = await api.get(`/Community/Feed`)
+    const {data} = await api.get(`/Community/Feed?page=${page}&pageSize=${pageSize}`)
 
     return data
   } catch (error) {

@@ -13,7 +13,7 @@ interface userProps {
   userId: number;
   image: string
   size: number
-  handleUpdate: () => void
+  handleUpdate?: () => void
 }
 
 // interface companyProps {

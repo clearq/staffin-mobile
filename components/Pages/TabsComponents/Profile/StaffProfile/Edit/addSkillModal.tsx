@@ -11,7 +11,7 @@ import { ISkill } from '@/types/UserTypes';
 
 import { useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
-import Button from '@/components/UI/Button'
+import { Button } from '@/components/UI/Button'
 import { Fonts, Sizes, theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
 import ModalHeader from '../../../ModalHeader';
@@ -200,37 +200,38 @@ const AddSkillModal = ({visible, onClose, handleSuccess, id}: props) => {
                 <View
                   style={{
                     ...pageStyle.buttonGroup,
-                    marginTop: theme.spacing.xl * 2,
+                    flex: 1,
+                    marginTop: Sizes.fixPadding * 2,
                   }}
-                >            
-                  <Button
-                    title={`${t("cancel")}`}
-                    onPress={() => {
-                      onClose()
+                > 
+                  <View
+                    style={{
+                      ...styles.btnContainer
                     }}
-                    size='md'
-                    type='outline'
-                    titleStyle={{ ...pageStyle.button16 }}
-                    radius={"sm"}
-                    containerStyle={{
-                      ...pageStyle.buttonContainer,
-                      borderColor: theme.colors.primary,
-                      borderWidth: 2
-                    }}
-                  />                      
+                  >
+                    <Button
+                      title={`${t("cancel")}`}
+                      onPress={onClose}
+                      size={'lg'}
+                      type={'outline'}
+                      color={'primary'}
+                      titleColor={theme.colors.primary}
+                    />   
+                  </View>  
 
-                  <Button
-                    title={`${t("save")}`}
-                    onPress={handleSubmit}
-                    size='md'
-                    color='primary'
-                    titleStyle={{ ...pageStyle.button16 }}
-                    radius={"sm"}
-                    containerStyle={{
-                      ...pageStyle.buttonContainer,
-                      borderColor: theme.colors.primary, 
+                  <View
+                    style={{
+                      ...styles.btnContainer
                     }}
-                  />
+                  >
+                    <Button
+                      title={`${t("save")}`}
+                      onPress={handleSubmit}
+                      size={'lg'}
+                      color={'primary'}
+                      titleColor={theme.colors.white}
+                    />
+                  </View>                   
                 </View>
               </View>
             </>
@@ -252,4 +253,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
   },
+  btnContainer: {
+    flexShrink: 2,
+  }
 })

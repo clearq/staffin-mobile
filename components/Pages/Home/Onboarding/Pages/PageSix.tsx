@@ -32,6 +32,23 @@ const PageFive = ({onClose}: {onClose: () => void}) => {
             <Text style={{...pageStyle.headline01, color: theme.colors.grey0}}>
               {t("intro-last-message")}
             </Text>
+      
+            <TouchableOpacity
+              onPress={onClose}
+              style={{
+                ...styles.button,
+                backgroundColor: theme.colors.primary,
+              }}
+            >
+              <Text
+                style={{
+                  color: theme.colors.white,
+                  ...pageStyle.button16,
+                }}
+              >
+                {t("get-started")}
+              </Text>
+            </TouchableOpacity> 
 
           </View>
         }
@@ -41,22 +58,6 @@ const PageFive = ({onClose}: {onClose: () => void}) => {
           source={require('@/assets/image/onboarding/Jack6.png')} 
           style={{...styles.imageStyle}}
         />
-      <TouchableOpacity
-        onPress={onClose}
-        style={{
-          ...styles.button,
-          backgroundColor: theme.colors.primary,
-        }}
-      >
-        <Text
-          style={{
-            color: theme.colors.white,
-            ...pageStyle.button16,
-          }}
-        >
-          {t("get-started")}
-        </Text>
-      </TouchableOpacity> 
     </View>
   )
 }

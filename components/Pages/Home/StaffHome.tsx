@@ -17,6 +17,9 @@ import { checkOnBoardingStatus } from '@/api/backend/user'
 import { useRouter } from 'expo-router'
 import Onboarding from './Onboarding'
 import { useUserData } from '@/hooks/useUserData'
+import { usePostLike } from '@/hooks/usePostLike'
+import { useFollow } from '@/hooks/useFollow'
+import PostCpmponent from '../PostCpmponent'
 
 export interface ISuggestedUser {
   userId: number;
@@ -29,15 +32,16 @@ export interface ISuggestedUser {
 const StaffHome = () => {
   const [openIntroduction, setOpenIntroduction] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [followed, setFollowed] = useState(false)
   const { refreshing, onRefresh } = useRefreshControl();
+  const [openPostDetail, setOpenPostDetail] = useState(false)
+  
 
   const { theme } = useTheme()
   const { t } = useTranslation();
   const router = useRouter()
   
   
-  const { authState:{ userData, userId, token }, isLoading } = useAuth();
+  const { authState:{ userData, userId, token }, isLoading, session } = useAuth();
 
   const {
       data: user,
@@ -78,6 +82,8 @@ const StaffHome = () => {
     }
   })
 
+  
+
   const {data: suggestedUsers = [], isLoading: suggestedUsersLoading, refetch:suggestedUsersRefetch} = useQuery({
     queryKey: ["suggested-users"],
     queryFn: async () => {
@@ -87,26 +93,6 @@ const StaffHome = () => {
     }
   })
 
-  const {data: following = []} = useQuery({
-    queryKey: ["follow", userId],
-    queryFn: async () => {
-      const id = Number(userId)
-      return await getFollowing(id)
-    }
-  })
-
-  const handleFollowAction = async (id: number) => {
-    if(followed === true) {
-      await unfollow(id)
-      setFollowed(false)
-      postsRefetch()
-    } else {
-      await follow(id)
-      setFollowed(true)
-      postsRefetch()
-    }
-  }  
-
 
   useEffect(() => {
     if (onBoarding) {
@@ -114,7 +100,7 @@ const StaffHome = () => {
       setOpenIntroduction(!onBoarding.isCompleted)
     }
         
-  },[onBoarding])
+  },[session])
 
   return (
     <View>
@@ -147,13 +133,7 @@ const StaffHome = () => {
                 .map((post: IPost, index) => (
 
                   <View key={`${post.postId}${index}`}>
-                    <PostTemplate 
-                      post={post}
-                      postsRefetch={postsRefetch}
-                      postIsLoading={postsLoading}
-                      handleFollowAction={() => handleFollowAction(post.userId)}
-                      following={following}
-                    />
+                    
                   </View>
                 ))
               } 
@@ -238,7 +218,6 @@ const StaffHome = () => {
                       <View key={user.userId}>
                         <SuggestedUserTemplate 
                           user={user}
-                          following={following}
                         />
                       </View>
                     ))

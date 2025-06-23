@@ -1,47 +1,57 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native'
-import { useQuery } from '@tanstack/react-query'
-import { useRouter, Link } from 'expo-router'
-
-import { useTranslation } from "react-i18next";
-
-import { CheckBox, Text } from '@rneui/themed'
-import { useTheme } from '@rneui/themed'
-import { Fonts, Sizes, theme } from '@/constants/Theme'
-
-import { IconTextField, TextField } from '@/components/UI/Input/TextField'
-import { Formik } from "formik";
-import * as Yup from "yup";
-import Button from '@/components/UI/Button'
+import { ScrollView, View, StyleSheet, TouchableOpacity, Text } from 'react-native'
 import Animated, {
   FadeInDown,
   FadeInRight,
   FadeInUp,
 } from "react-native-reanimated";
+import { useQuery } from '@tanstack/react-query'
+import { useRouter, Link } from 'expo-router'
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { useToast } from 'react-native-toast-notifications';
 import { useAuth } from '@/contexts/authContext';
-import PageTemplate from './pageTemplate';
+
+import { useTranslation } from "react-i18next";
+import { useTheme } from '@rneui/themed'
+import { CheckBox } from '@rneui/themed'
+
+import { Fonts, Sizes, theme } from '@/constants/Theme'
 import pageStyle from '@/constants/Styles';
 
+import { IconTextField, TextField } from '@/components/UI/Input/TextField'
+import { Button } from '@/components/UI/Button'
+import PageTemplate from './pageTemplate';
+import { sendVerificationCode } from '@/api/backend';
+import PrivacyPolicyDialog from './PrivacyPolicyDialog';
+import api from '@/api/backend/config';
+
+
 const SignUpPage = () => {
-  const { SignUp, isLoading, authState } = useAuth();
+  const { isLoading, authState, setAuthState, setSession } = useAuth();
   const { theme } = useTheme()
   const { t } = useTranslation();
+  const toast = useToast();
   const router = useRouter()
-  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const [role, setRole] = useState<"staff"|"admin">('staff')
   const [checked, setChecked] = useState<boolean>(false)
+  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState(false)
 
   const StaffSignUpSchema = Yup.object().shape({
     email: Yup.string().required(t("email-required-message")),
-    password: Yup.string().required(t("password-required-message")),
+    password: Yup.string()
+      .min(8, t("password-too-short-message")) // at least 8 characters
+      .required(t("password-required-message")),
     userName: Yup.string().required(t("user-name-required-message")),
     rememberMe: Yup.boolean(),
   });
   
   const AdminSignUpSchema = Yup.object().shape({
     email: Yup.string().required(t("email-required-message")),
-    password: Yup.string().required(t("password-required-message")),
+    password: Yup.string()
+      .min(8, t("password-too-short-message")) // at least 8 characters
+      .required(t("password-required-message")),
     companyName: Yup.string().required(t("company-name-required-message")),
     organisationNumber: Yup.string().required(t("org-no-required-message")),
     rememberMe: Yup.boolean(),
@@ -92,11 +102,35 @@ const SignUpPage = () => {
                 email: "",
                 password: "",
                 userName: "",
+                acceptedPolicy: true
               }}
               validationSchema={StaffSignUpSchema}
               onSubmit={async (values) => {
-                console.log("Submitting SignUp with:", values, role); // Submitting SignUp with: {"companyName": "", "email": "new@mail.com", "organisationNumber": "", "password": "string", "userName": "new"} staff
-                await SignUp(role, values);
+                try {
+                  const response = await api.post(`/Auth/register/staff`, {
+                    userName: values.userName,
+                    email: values.email,
+                    password: values.password,
+                    acceptedPolicy: values.acceptedPolicy
+                  }, {
+                    headers: { "Content-Type": "application/json" },
+                  })
+                  
+                  const { token, id } = response.data;
+                  
+                  await sendVerificationCode(values.email);
+
+                  router.replace({
+                    pathname: '/register/staff',
+                    params: { role, email: values.email, password: values.password, userName: values.userName, token: token, id: id }
+                  });
+
+                  toast.show(t("success-send-register"), { type: "success", });
+                  return response.data
+
+                } catch (error) {
+                  toast.show(t("failed-send-register"), { type: "error" });
+                }
               }}
             >
               {({
@@ -187,6 +221,51 @@ const SignUpPage = () => {
                       />
                     </Animated.View>
 
+                    <Animated.View
+                      entering={FadeInDown.delay(400)
+                        .duration(1000)
+                        .springify()}
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {/*  privacy policy */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <CheckBox
+                          title={t("accept-policy")}
+                          checked={values.acceptedPolicy}
+                          onPress={() => setFieldValue('acceptedPolicy', !values.acceptedPolicy)}
+                          containerStyle={{ 
+                            backgroundColor: 'transparent', 
+                            borderWidth: 0,
+                            marginRight: 0
+                          }}
+                          textStyle={{...pageStyle.paraText, fontWeight: 'normal'}}
+                          checkedColor={theme.colors.primary}
+                        />  
+                        <TouchableOpacity
+                          onPress={() => setOpenPrivacyPolicy(true)}
+                        >
+                          <Text
+                            style={{
+                              ...pageStyle.paraText,
+                              color: theme.colors.primary,
+                              textDecorationColor: theme.colors.primary,
+                              textDecorationLine: 'underline',
+                            }}
+                          >
+                            {t("privacy-policy")}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </Animated.View>
+
 
                     {/* Submit Button */}
                     <Animated.View
@@ -202,11 +281,16 @@ const SignUpPage = () => {
                           handleSubmit()
                         }}
                         loading={isLoading}
-                        disabled={isLoading}                      
-                        size="md"
+                        disabled={
+                          isLoading ||
+                          !values.acceptedPolicy || 
+                          !!errors.email || 
+                          !!errors.password || 
+                          !!errors.userName 
+                        }             
+                        size="lg"
                         color="primary"
-                        titleStyle={{ fontSize: 16 }}
-                        radius={"sm"}
+                        titleColor={theme.colors.white}
                       />  
                     </Animated.View>
                   </View>                            
@@ -222,11 +306,35 @@ const SignUpPage = () => {
                 password: "",
                 companyName: "",
                 organisationNumber: "",
+                acceptedPolicy: true
               }}
               validationSchema={AdminSignUpSchema}
               onSubmit={async (values) => {
-                console.log("Submitting SignUp with:", values, role);
-                await SignUp(role, values);
+                try {
+                  const response = await api.post(`/Auth/register/admin`,{
+                    companyName: values.companyName,
+                    organisationNumber: values.organisationNumber,
+                    email: values.email,
+                    password: values.password,
+                    acceptedPolicy: values.acceptedPolicy
+                  }, {
+                    headers: { "Content-Type": "application/json" },
+                  })
+
+                  const { token, id } = response.data;
+
+                  await sendVerificationCode(values.email);
+                  // Pass role and form data to /verify screen
+                  router.replace({
+                    pathname: '/register/admin',
+                    params: { role, email: values.email, password: values.password, companyName: values.companyName, organisationNumber: values.organisationNumber, token: token, id: id }
+                  });
+
+                  toast.show(t("success-send-register"), { type: "success", });
+                  
+                } catch (error) {
+                  toast.show(t("failed-send-register"), { type: "error" });
+                }
               }}
             >
               {({
@@ -341,6 +449,51 @@ const SignUpPage = () => {
                       />
                     </Animated.View>
 
+                    <Animated.View
+                      entering={FadeInDown.delay(400)
+                        .duration(1000)
+                        .springify()}
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {/*  privacy policy */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <CheckBox
+                          title={t("accept-policy")}
+                          checked={values.acceptedPolicy}
+                          onPress={() => setFieldValue('acceptedPolicy', !values.acceptedPolicy)}
+                          containerStyle={{ 
+                            backgroundColor: 'transparent', 
+                            borderWidth: 0,
+                            marginRight: 0
+                          }}
+                          textStyle={{...pageStyle.paraText, fontWeight: 'normal'}}
+                          checkedColor={theme.colors.primary}
+                        />  
+                        <TouchableOpacity
+                          onPress={() => setOpenPrivacyPolicy(true)}
+                        >
+                          <Text
+                            style={{
+                              ...pageStyle.paraText,
+                              color: theme.colors.primary,
+                              textDecorationColor: theme.colors.primary,
+                              textDecorationLine: 'underline',
+                            }}
+                          >
+                            {t("privacy-policy")}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </Animated.View>
+
 
                     {/* Submit Button */}
                     <Animated.View
@@ -353,12 +506,17 @@ const SignUpPage = () => {
                       <Button 
                         title={`${t("sign-up")}`}
                         onPress={handleSubmit}
-                        loading={isLoading}
+                        loading={
+                          isLoading ||
+                          !!errors.companyName ||
+                          !!errors.organisationNumber ||
+                          !!errors.email ||
+                          !!errors.password
+                        }
                         disabled={isLoading}                      
-                        size="md"
+                        size="lg"
                         color="primary"
-                        titleStyle={{ ...pageStyle.button20, color: theme.colors.white, }}
-                        radius={"sm"}
+                        titleColor={theme.colors.white}
                       />  
                     </Animated.View>
                   </View>                            
@@ -375,24 +533,25 @@ const SignUpPage = () => {
                 width: "100%",
                 flexDirection:'row',
                 gap:theme.spacing.md,
-                marginTop: theme.spacing.md,
+                marginTop: theme.spacing.xl,
                 alignItems: 'center'
               }}
             >
               <Text
                 style={{
-                  ...pageStyle.headline03,
+                  ...pageStyle.paraText,
+                  color: theme.colors.grey0,
                 }}
               >
                 {`${t("having-an-account-message")}`}
               </Text>
 
               <Link
-                href={"./signin"}
+                href={"/signin"}
               >
                 <Text
                   style={{
-                    ...pageStyle.headline02, 
+                    ...pageStyle.paraText, 
                     color:theme.colors.secondary,
                     textDecorationLine: "underline",
                     textDecorationColor: theme.colors.secondary,
@@ -402,7 +561,11 @@ const SignUpPage = () => {
                 </Text>
               </Link>
             </Animated.View>          
-          </View>   
+          </View>  
+          <PrivacyPolicyDialog 
+            visible={openPrivacyPolicy}
+            onClose={() => setOpenPrivacyPolicy(!openPrivacyPolicy)}
+          /> 
         </>
       )}
     />

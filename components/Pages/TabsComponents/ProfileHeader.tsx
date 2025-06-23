@@ -83,74 +83,74 @@ const ProfileHeader = ({user, showEditButton, refetch}: props) => {
 
   return (
     <View
+      style={{
+        ...styles.headerContainer,
+        backgroundColor: theme.colors.primary
+      }}
+    >
+
+      <View
         style={{
-          ...styles.headerContainer,
-          backgroundColor: theme.colors.primary
+          ...styles.headerTextContainer,
+          backgroundColor: theme.colors.searchBg,
         }}
       >
-
-        <View
+        <Text
           style={{
-            ...styles.headerTextContainer,
-            backgroundColor: theme.colors.searchBg,
+            ...styles.headerText,
+            ...pageStyle.headline01,
+            color: theme.colors.grey0
           }}
         >
-          <Text
-            style={{
-              ...styles.headerText,
-              ...pageStyle.headline01,
-              color: theme.colors.grey0
-            }}
-          >
-            {`${user?.firstName} ${user?.lastName}`}
-          </Text>
+          {`${user?.firstName} ${user?.lastName}`}
+        </Text>
 
-          <Text
-            style={{
-              ...styles.headerText,
-              ...pageStyle.headline03,
-              color: theme.colors.grey0
-            }}
-          >
-            {`${user?.title}`}
-          </Text>
-
-        </View>
-      
-        <View
+        <Text
           style={{
-            ...styles.avatarContainer,
-            backgroundColor: theme.colors.background
+            ...styles.headerText,
+            ...pageStyle.headline03,
+            color: theme.colors.grey0
           }}
         >
-          <ProfileAvatar 
-            userId={user.id}
-            image={user.profileImage}
-            size={80}
-            handleUpdate={() => refetch()}
-          />
+          {`${user?.title}`}
+        </Text>
 
-          {/* {avatar !== "" 
-            ? <Avatar size={80} rounded source={{uri: avatar }} />      
-            :<Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
-          } */}
-
-          {showEditButton && (
-            <TouchableOpacity
-              style={{
-                ...styles.imageEditButton,
-                backgroundColor: theme.colors.searchBg
-              }}
-              onPress={handleImageUpdate}
-            >
-              <MaterialCommunityIcons 
-                name='pencil' 
-                size={24}
-                color={theme.colors.grey3}
-              />
-            </TouchableOpacity>)}
-        </View>
       </View>
+    
+      <View
+        style={{
+          ...styles.avatarContainer,
+          backgroundColor: theme.colors.background
+        }}
+      >
+        <ProfileAvatar 
+          userId={user.id}
+          image={user.profileImage}
+          size={80}
+          handleUpdate={() => refetch()}
+        />
+
+        {/* {avatar !== "" 
+          ? <Avatar size={80} rounded source={{uri: avatar }} />      
+          :<Avatar size={80} rounded icon={{name: "account", type: "material-community"}} containerStyle={{ backgroundColor: theme.colors.grey3 }}  />
+        } */}
+
+        {showEditButton && (
+          <TouchableOpacity
+            style={{
+              ...styles.imageEditButton,
+              backgroundColor: theme.colors.searchBg
+            }}
+            onPress={handleImageUpdate}
+          >
+            <MaterialCommunityIcons 
+              name='pencil' 
+              size={24}
+              color={theme.colors.grey3}
+            />
+          </TouchableOpacity>)}
+      </View>
+    </View>
   )
 }
 

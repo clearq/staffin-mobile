@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/authContext';
 import { hexToRgba } from '@/utils/rgba-to-hex';
 import { theme } from '@/constants/Theme';
 import pageStyle from '@/constants/Styles';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 
 
 interface props {
@@ -55,28 +55,18 @@ export const MessageModal = ({visible, onClose}:props) => {
               <Button  
                 title={`${t("cancel")}`}
                 onPress={onClose}
-                size='md'
-                type='clear'
-                titleStyle={{ ...pageStyle.button16 }}
-                radius={"sm"}
-                containerStyle={{
-                  ...pageStyle.button16,
-                  ...pageStyle.buttonContainer,
-                  borderColor: theme.colors.primary,
-                }}
+                size={'md'}
+                type={'outline'}
+                color={'primary'}
+                titleColor={theme.colors.primary}
               />
 
               <Button  
                 title={`${t("create")}`}
                 onPress={handleProfile}
-                size='md'
-                titleStyle={{ ...pageStyle.button16 }}
-                radius={"sm"}
-                containerStyle={{
-                  ...pageStyle.button16,
-                  ...pageStyle.buttonContainer,
-                  borderColor: theme.colors.primary,    
-                }}
+                size={'md'}
+                color={'primary'}
+                titleColor={theme.colors.white}
               />
             </View>
           </View>

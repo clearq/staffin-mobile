@@ -281,7 +281,8 @@ const StaffProfileIndex = ({user, showEditButton, post, refetch}: props) => {
         children={
           <Education 
             user={user} 
-            showEditButton={showEditButton} 
+            showEditButton={showEditButton}
+            refetch= {refetch} 
           />
         }
         btnChildren={

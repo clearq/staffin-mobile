@@ -1,20 +1,21 @@
 import { View, Text, Modal, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import pageStyle from '@/constants/Styles';
-import { Divider, useTheme } from '@rneui/themed';
+import { Card, Divider, useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
 import { commonStyles, Fonts, Sizes, theme } from '@/constants/Theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
-import { getEducation, getExperience } from '@/api/backend';
+import { deleteExperience, getEducation, getExperience } from '@/api/backend';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/authContext';
 import { IExperience, IUser } from '@/types/UserTypes';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/UI/Button';
 import EditExperienceModal from './editExperienceModal';
 import AddExperienceModal from './addExperience';
 import HeaderTemplate from '../../../headerTemplate';
+import { Alert } from 'react-native';
 
 interface props {
   visible: boolean;
@@ -49,18 +50,52 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
     },
   })
 
+  const showAlert = () =>
+    Alert.alert(`${t("delete")}`, `${t("alert-deletion-confirmation-message")}`, [
+      {
+        text: `${t("cancel")}`,
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: `${t("delete")}`, 
+        onPress: () => handleDelete()
+      },
+    ]
+  );
+
+  const handleDelete = async () => {
+    try {
+      if (!data?.id) {
+        console.error("Error: Experience ID is missing");
+        return;
+      }
+      await deleteExperience(data.id)
+      onClose()
+      handleSuccess()
+      
+      toast.show(`${t("success-delete-message")}`, {
+        type: "success",
+      });
+    } catch (error) {
+      toast.show(`${t("failed-delete-message")}`, {
+        type: "error",
+      })              
+    }
+  }
+
   return (
     <HeaderTemplate 
       title={`${t("experience")}`}
       visible={visible}
       onClose={onClose}
       children={(
-        <>
+        <View style={{flex:1 }}>
           {/* Experience Edit Form */}
           {data && data.length !== 0 && data
             .sort((a:any, b:any) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
             .map((exp:IExperience,) => (
-              <View key={exp.id}>
+              <Card key={exp.id}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -121,33 +156,52 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
                   
                   <View>
                     { id === userId &&
-                      <TouchableOpacity
+                      <View
                         style={{
-                          ...styles.itemEditButton,
-                          backgroundColor: theme.colors.background
+                          flexDirection: 'row',
+                          gap: theme.spacing.sm
                         }}
-                        onPress={()=> {
-                          setExpData(exp)
-                          setOpenEditModal(true)
-                        }} 
                       >
-                        <MaterialCommunityIcons 
-                          name='pencil' 
-                          size={24} 
-                          color={ theme.mode === 'light'
-                            ? theme.colors.grey3
-                            : theme.colors.white
-                          }
-                        />
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{
+                            ...styles.itemEditButton,
+                            borderColor:theme.mode === 'light' ? theme.colors.grey3 : theme.colors.white
+                          }}
+                          onPress={()=> {
+                            setExpData(exp)
+                            setOpenEditModal(true)
+                          }} 
+                        >
+                          <MaterialCommunityIcons 
+                            name='pencil' 
+                            size={24} 
+                            color={ theme.mode === 'light'
+                              ? theme.colors.grey3
+                              : theme.colors.white
+                            }
+                          />
+                        </TouchableOpacity>
+                      
+                        <TouchableOpacity
+                          style={{
+                            ...styles.itemEditButton,
+                            borderColor:theme.colors.error
+                          }}
+                          onPress={showAlert} 
+                        >
+                          <MaterialCommunityIcons 
+                            name='delete-outline' 
+                            size={24} 
+                            color={ theme.colors.error}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     }
                   </View>
               
                 </View>
-      
-                <Divider color={theme.colors.greyOutline} />
                 
-              </View>
+              </Card>
             ))
           }
 
@@ -156,25 +210,17 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
             style={{...styles.footerContainer}}
           >
             <Button
-              containerStyle={{width:'100%'}}
-              buttonStyle={{...styles.buttonStyle,}}
               title={`${t("add")} ${t("experience")}`}
-              titleStyle={{...pageStyle.button20, color: theme.colors.primary}}
-              iconPosition='right'
-              icon={
-                <MaterialCommunityIcons 
-                  name='playlist-plus' 
-                  color={theme.colors.primary} 
-                  size={24}
-                  style={{paddingLeft:24}}
-                />
-              }
-              size='sm'
               onPress={() => {
                 setOpenAddModal(true)
               }} 
-              type='clear'
-            />
+              size={'lg'}
+              type={'outline'}
+              color={'primary'}
+              titleColor={theme.colors.primary}
+              iconRight={'playlist-plus'}
+              hasIconRight={true}
+            />          
           </View>
 
           {/* Modal */}
@@ -203,7 +249,7 @@ const AllExperience = ({visible, id, onClose, handleSuccess}: props) => {
               refetch
             }}
           />
-        </>
+        </View >
       )}
     />
   
@@ -221,14 +267,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
+    borderWidth:2
   },
   footerContainer: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: theme.spacing?.md,
     gap: theme.spacing?.md,
+    margin: Sizes.fixPadding
   },
   buttonStyle:{
     borderRadius: 100,

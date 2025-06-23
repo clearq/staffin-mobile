@@ -13,6 +13,7 @@ interface props {
   refetch: () => void
 }
 
+
 const ProfessionArea  = ({refetch}: props) => {
   const { theme } = useTheme()
   const { t } = useTranslation();
@@ -40,20 +41,19 @@ const ProfessionArea  = ({refetch}: props) => {
   })
 
   const handleAddPreferences = async (id: number) => {
-    // If already selected, ignore
-    if (selectedProfessionAreas.includes(id)) return;
+    const currentIds = preference?.professionAreaId || [];
 
-    const updated = [...preference?.professionAreaId, ...selectedProfessionAreas, id];
-    setSelectedProfessionAreas(updated);
+    if (currentIds.includes(id)) return;
 
-    console.log('updated:', updated);
-    
+    const updatedIds = [...currentIds, id];
+
     try {
-      await updateProfessionArea(updated);
-      refetch();
-      preferenceRefetch()
+      await updateProfessionArea(updatedIds);
+
+      setSelectedProfessionAreas(updatedIds); // Optional: keep local state in sync
+      preferenceRefetch();
     } catch (error) {
-      console.error(error);
+      console.error("Failed to update profession areas:", error);
     }
   }
 

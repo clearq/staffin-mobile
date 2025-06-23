@@ -18,9 +18,10 @@ import EmptyItemMessage from '../../../EmptyItemMessage';
 interface props {
   user: IUser;
   showEditButton: boolean;
+  refetch: () => void
 }
 
-const Education = ({user, showEditButton}: props) => {
+const Education = ({user, showEditButton, refetch}: props) => {
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openAddModal, setOpenAddModal] = useState(false)
   const [eduData, setEduData] = useState<IEducation>()
@@ -29,6 +30,7 @@ const Education = ({user, showEditButton}: props) => {
   const { t } = useTranslation();
   const router = useRouter()
 
+  
   return (
     <View 
       style={{
@@ -67,7 +69,7 @@ const Education = ({user, showEditButton}: props) => {
                     color: theme.colors.grey0,
                   }}
                 >
-                  {edu.name}
+                  {edu.fieldOfStudy} 
                 </Text>
 
                 <Text 
@@ -128,9 +130,7 @@ const Education = ({user, showEditButton}: props) => {
         data={eduData!}
         visible={openEditModal}
         onClose={() => setOpenEditModal(!openEditModal)}
-        handleSuccess={() => {
-          // 🚧 Add function after successful data update (refetch userData)
-        }}
+        handleSuccess={refetch}
       />
     </View>
   )

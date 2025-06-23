@@ -11,7 +11,7 @@ import { useAuth } from '@/contexts/authContext'
 import { fetchImageFromCDN } from '@/utils/CDN-action'
 import { useQuery } from '@tanstack/react-query'
 import { likePost, unlikePost } from '@/api/backend'
-import { CompanyAvatar, ProfileAvatar } from './ProfileAvatar'
+import { ProfileAvatar } from './ProfileAvatar'
 import { yearMonthDate } from '@/utils/dateFormat'
 import SharePostDialog from '../Pages/Community/Dialogs/SharePostDialog'
 import CommentsDialog from '../Pages/Community/Dialogs/CommentsDialog'
@@ -20,25 +20,20 @@ import { useFollow } from '@/hooks/useFollow'
 
 
 interface Props {
-  post: IPost
-  postsRefetch: () => void
-  postIsLoading: boolean
-  handleFollowAction: (id: number) => void
-  following: []
+  post: IPost;
 }
 
-const PostTemplate = ({post, postsRefetch, postIsLoading, handleFollowAction}: Props) => {
+const PostTemplate = ({
+  post, 
+}: Props) => {
+
   const { theme } = useTheme()
   const { t } = useTranslation();
   const { isLoading, authState:{ userData, userId }} = useAuth();
-  const { liked, toggleLike } = usePostLike(post.likes, post.postId, (Number(userId)), postsRefetch);
-  const { followed, toggleFollow } = useFollow()
+  
   const [postImages, setPostImages] = useState<string[]>([])
 
   
-  const [openComments, setOpenComments] = useState(false)
-  const [openComment, setOpenComment] = useState(false)
-  const [openSharePostDialog, setOpenSharePostDialog] = useState(false)
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -74,167 +69,16 @@ const PostTemplate = ({post, postsRefetch, postIsLoading, handleFollowAction}: P
       backgroundColor: theme.mode === "light" ? theme.colors.white : theme.colors.black
     }}
     >
-      {postIsLoading && <Text>Loading...</Text>}
-      
-      {/* Header */}
       <View style={{...styles.headerContainer}}>
+        <ProfileAvatar 
+          userId={post.userId}
+          image={post.profileImage}
+          size={40}
+          handleUpdate={() => {}}
+        />
 
-        <View style={{...styles.userContainer}}>
-         
-          <ProfileAvatar
-            userId={post.userId}
-            image={""}
-            size={40}
-            handleUpdate={() => {}}
-          />
-          
-          <View style={{...styles.headerTextGroup}}>
-            <Text 
-              style={{
-                ...pageStyle.headline03, 
-                color: theme.colors.grey0
-              }}
-            >
-              {post?.authorName ?  post?.authorName : ""}
-            </Text>
-
-            <Text
-              style={{
-                ...pageStyle.xsText, 
-                color: theme.colors.grey0,
-              }}
-            >
-              {post?.createdAt ? yearMonthDate(post?.createdAt) : ""}
-            </Text>
-          </View>
-        </View>
-
-        <View style={{...styles.headerButtonGroup}}>
-          <TouchableOpacity
-            style={{
-              ...styles.followButton,
-              borderColor: theme.colors.primary,
-              backgroundColor: followed ? theme.colors.primary : "transparent"
-            }}
-            onPress={() => handleFollowAction(post.userId)}
-          >
-            <Text
-              style={{
-                ...pageStyle.button16,
-                color: followed ? theme.colors.white : theme.colors.primary,
-              }}
-            >
-              {followed ? t("unfollow") : t("follow")}
-            </Text>
-          </TouchableOpacity>
-
-        </View>
       </View>
-
-      <Divider />
-
-      {/* Body */}
-      <View style={{...styles.bodyContainer}}>  
-
-        <View style={{...styles.contentContainer}}>
-          
-          {/* Text content */}
-          <Text
-            style={{color: theme.colors.grey0}}
-          >
-            {post?.content ? post?.content : ""}
-          </Text>
-
-          {/* Image content */}
-          {postImages.length > 0 && postImages.map((uri, index) => (
-            <View key={index}>
-              <Image source={{ uri: uri }} style={{height: 250, resizeMode: 'contain'}} />
-            </View>
-          ))}
-          
-          {/* Reactions */}
-          <View style={{...styles.reactionGroup}}>
-            <View style={{...styles.countsGrop}}>
-              <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>{post?.likeCount ? post?.likeCount : 0}</Text>
-              <MaterialCommunityIcons name='heart' size={16} color={"rgb(255, 45, 85)"} />
-            </View>
-            
-            <View style={{flexDirection: 'row', gap: theme.spacing.xs, alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={() => setOpenComments(true)}
-              >
-                <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>
-                  {`${post?.commentCount ? post?.commentCount : 0 } comments`}
-                </Text>
-              </TouchableOpacity>
-
-              <Text>{` • `}</Text>
-
-              <TouchableOpacity>
-                <Text style={{...pageStyle.smText, color: theme.colors.grey0}}>
-                  {`${post?.sharedCount ? post?.sharedCount : 0 } shares`}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-        </View>          
-      </View>
-
-      <Divider />
-
-      {/* Footer */}
-      <View style={{...styles.footerContainer}}>
-        {/* Like */}
-        <TouchableOpacity 
-          style={{...styles.footerButtonItem}}
-          onPress={toggleLike}
-        >
-          <MaterialCommunityIcons name={liked ? 'heart' : 'heart-outline'} size={24} color={liked ? "rgb(255, 45, 85)" : theme.colors.grey3} />
-          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("like")}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={{...styles.footerButtonItem}}
-          onPress={() => {
-            setOpenComment(true)
-            setOpenComments(true)
-          }}
-        >
-          <MaterialCommunityIcons name='comment-text-outline' size={24} color={theme.colors.grey3} />
-          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("comment")}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={{...styles.footerButtonItem}}
-          onPress={() => setOpenSharePostDialog(true)}
-        >
-          <MaterialCommunityIcons name='share-outline' size={24} color={theme.colors.grey3} />
-          <Text style={{...styles.footerText, color: theme.colors.grey3}}>{t("share")}</Text>
-        </TouchableOpacity>
-        
-      </View> 
-
-      {/* <SharePostDialog 
-        visible={openSharePostDialog}
-        setVisible={() => setOpenSharePostDialog(!openSharePostDialog)}
-        postId={post.postId}
-        post={post}
-        postImages={postImages}
-      />
-
-      <CommentsDialog
-        visible={openComments}
-        setVisible={() => setOpenComments(!openComments)}
-        postId={post.postId}
-        post={post}
-        followed={followed}
-        refetch={postsRefetch}
-        isLoading={postIsLoading}
-        postImages={postImages}
-        showInput={openComment}
-        setShowInput={() => setOpenComment(!openComment)}
-      />  */}
+      
 
     </View>
   )

@@ -41,8 +41,9 @@ export interface ILanguage {
 
 export interface IEducation {
   id: number;
-  name: string;
+  educationLevelId: number;
   institution: string;
+  fieldOfStudy: string;
   startDate: string;
   endDate?: string | null; // ISO 8601 format
   staffId: number // ISO 8601 format

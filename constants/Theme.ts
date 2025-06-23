@@ -153,8 +153,16 @@ export const theme = createTheme({
         borderColor: theme.colors.divider,
         borderWidth: 0,
         borderRadius: 5,
-        backgroundColor: theme.colors.searchBg,
-        boxShadow: "0px 0px 5px 0px rgb(60, 64, 85)",
+        backgroundColor: theme.colors.grey5,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        // boxShadow: "0px 0px 5px 0px rgb(131, 131, 137)",
       },
     }),
     Chip: (props, theme) => ({

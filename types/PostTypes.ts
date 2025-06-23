@@ -3,7 +3,7 @@ export interface IPost {
   userId: number;
   content: string;
   authorName: string;
-  profileImage: string | null
+  profileImage: string;
   images: [];
   createdAt: Date; // ISO 8601 format
   likeCount: number; // Option
@@ -15,13 +15,15 @@ export interface IPost {
 }
 
 export interface ILike {
-  userId: number,
-  authorName: string
+  userId: number;
+  profileImage: string;
+  authorName: string;
 }
 
 export interface IComment {
   commentId: number;
   userId: number;
+  profileImage: string;
   authorName: string;
   content: string;
   createdAt: Date; // ISO 8601 format

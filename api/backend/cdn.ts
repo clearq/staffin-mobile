@@ -55,6 +55,7 @@ export const updateProfileImage = async (userId: number, profileImage: string) =
   }
 };
 
+
 export const uploadContentFile = async (key: string, file: any, token: any, userId: number, contentFolder: any) => {
   const formData = new FormData();
   const fileUri = file.uri;
@@ -92,6 +93,7 @@ export const uploadContentFile = async (key: string, file: any, token: any, user
   }
 };
 
+
 export const getContentFile = async (key: string, token: any, userId: number, contentFolder: any) => {
   try {
     const response = await cdn_api.get(
@@ -123,6 +125,7 @@ export const getPublicFile = async (key: string, userId: number, contentFolder: 
     throw error;
   }
 };
+
 
 export const deleteContentFile = async (
   key: string, 

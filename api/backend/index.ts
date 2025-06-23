@@ -104,7 +104,7 @@ export {
   getProfessionAreas,
   jobbToFavorite,
   getFavoriteJobs,
-  deleteFavoriteJob
+  deleteFavoriteJob,
 } from "./job"
 
 export {
@@ -151,6 +151,7 @@ export {
   postNewApplication,
   getMyApplications,
   getEducationLevels,
+  deleteStaffApplication
 } from "./staff"
 
 export {
@@ -170,4 +171,3 @@ export {
   getWorkProfileOptions,
   getSuggestedUsers,
 } from "./user"
-

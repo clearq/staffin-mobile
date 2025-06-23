@@ -5,7 +5,7 @@ import * as Sharing from "expo-sharing";
 
 
 // Update Staff
-export const updateStaff = async (values: Partial<IUser>) => {
+export const updateStaff = async (values: any) => {
   try {
     const { data } = await api.put("/Staff/UpdateStaff", values );
 
@@ -301,6 +301,14 @@ export const getMyApplications = async () => {
 }
 
 
+export const deleteStaffApplication = async (id: number) => {
+  try {
+    await api.delete(`/Staff/DeleteApplication?applicationId=${id}`)
+
+  } catch (error) {
+    console.error(error);   
+  }
+}
 export const getEducationLevels = async () => {
   try {
     const { data } = await api.get(`/Staff/GetEducationLevels`)

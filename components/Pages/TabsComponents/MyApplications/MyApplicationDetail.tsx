@@ -28,7 +28,7 @@ interface props {
   refetch: () => void
 }
 
-const JobDetail = ({
+const MyApplicationDetail = ({
   isModalVisible,
   closeModal,
   selectedJob,
@@ -245,7 +245,7 @@ const JobDetail = ({
     </Modal>
   )
 }
-export default JobDetail
+export default MyApplicationDetail
 
 const styles = StyleSheet.create({
   modalOverlay: {

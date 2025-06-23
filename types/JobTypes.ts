@@ -54,6 +54,6 @@ export interface IMatchingJob {
 
 export interface IMyJobApplication {
     jobId : number;
-    contant : string;
+    content : string;
  
 }

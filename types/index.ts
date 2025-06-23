@@ -2,6 +2,7 @@ export {
   IJob,
   IJobSkills,
   IProfessionArea,
+  IMyJobApplication,
 } from './JobTypes'
 
 export {

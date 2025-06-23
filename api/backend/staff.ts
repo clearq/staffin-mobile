@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { values } from "lodash";
 
 // Update Staff
-export const updateStaff = async (values: Partial<IUser>) => {
+export const updateStaff = async (values: any) => {
   try {
     const data = await api.put("/Staff/UpdateStaff", values );
 
@@ -298,3 +298,11 @@ export const getMyApplications = async () => {
 }
 
 
+export const deleteStaffApplication = async (id: number) => {
+  try {
+    await api.delete(`/Staff/DeleteApplication?applicationId=${id}`)
+
+  } catch (error) {
+    console.error(error);   
+  }
+}

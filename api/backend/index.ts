@@ -25,6 +25,7 @@ export {
   downloadCv,
   postNewApplication,
   getMyApplications,
+  deleteStaffApplication
 } from "./staff"
 
 export {

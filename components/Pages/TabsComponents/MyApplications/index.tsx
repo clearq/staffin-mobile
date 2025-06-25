@@ -4,19 +4,21 @@ import { useTheme } from '@rneui/themed';
 import { useTranslation } from 'react-i18next';
 import { useToast } from 'react-native-toast-notifications';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Card, Button } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 import { useAuth } from '@/contexts/authContext';
-import { Fonts, Sizes, theme } from '@/constants/Theme';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { getMyApplications, deleteStaffApplication } from '@/api/backend';
+import { getMyApplications, deleteStaffApplication, getJobById } from '@/api/backend';
 import { IJob } from '@/types';
 import { yearMonthDate } from '@/utils/dateFormat';
 import pageStyle from '@/constants/Styles';
-import { grey500 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { useNavigation } from '@react-navigation/native';
+import MyApplicationDetail from './MyApplicationDetail';
+
+
 
 export interface IApplication {
   applicationDate: Date;
-  applicationStatus: 'Pending' | 'Accepted' | 'Rejected';
+  applicationStatus: 'Behandlas' | 'Accepterade' | 'Avslagna';
   id: number;
   job: IJob | null;
   jobId: number;
@@ -30,9 +32,36 @@ const ApplicationIndex = () => {
   const { t } = useTranslation();
   const toast = useToast();
   const { isLoading, authState: { userData, userId } } = useAuth();
-
-  const [selectedStatus, setSelectedStatus] = useState<'Pending' | 'Accepted' | 'Rejected' | null>(null);
+  const navigation = useNavigation();
+  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<'Behandlas' | 'Accepterade' | 'Avslagna' | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+
+  const applicationStatusOptions = [
+    {
+      id: 1,
+      label: t("pending"),
+      value: 'Behandlas',
+    },
+    {
+      id: 2,
+      label: t("accepted"),
+      value: 'Accepterade',
+    },
+    {
+      id: 3,
+      label: t("rejected"),
+      value: 'Avslagna',
+    }
+  ] as const;
+
+  
+  const getTranslatedStatusLabel = (statusValue: 'Behandlas' | 'Accepterade' | 'Avslagna'): string => {
+    const option = applicationStatusOptions.find(opt => opt.value === statusValue);
+    return option ? option.label : statusValue;
+  };
 
   const { data: applications = [], isLoading: applicationIsLoading, refetch: applicationsRefetch } = useQuery({
     queryKey: ['my-applications'],
@@ -42,32 +71,30 @@ const ApplicationIndex = () => {
     },
   });
 
- const deleteMutation = useMutation<void, Error, number>({
-  mutationFn: async (applicationId: number) => {
-    await deleteStaffApplication(applicationId);
-  },
-  onSuccess: () => {
-    toast.show(t('Application deleted successfully'), { type: 'success' });
-    applicationsRefetch(); // Uppdatera listan efter radering
-  },
-  onError: () => {
-    toast.show(t('Failed to delete application'), { type: 'danger' });
-  },
-});
+  const deleteMutation = useMutation<void, Error, number>({
+    mutationFn: async (applicationId: number) => {
+      await deleteStaffApplication(applicationId);
+    },
+    onSuccess: () => {
+      toast.show(t('Application deleted successfully'), { type: 'success' });
+      applicationsRefetch();
+    },
+    onError: () => {
+      toast.show(t('Failed to delete application'), { type: 'danger' });
+    },
+  });
 
+  const handleDelete = (id: number) => {
+    deleteMutation.mutate(id);
+  };
 
-const handleDelete = (id: number) => {
-  deleteMutation.mutate(id);
-};
-
-
-  const statusColor = (status: 'Pending' | 'Accepted' | 'Rejected') => {
+  const statusColor = (status: 'Behandlas' | 'Accepterade' | 'Avslagna') => {
     switch (status) {
-      case 'Pending':
+      case 'Behandlas':
         return theme.colors.warning;
-      case 'Accepted':
+      case 'Accepterade':
         return theme.colors.success;
-      case 'Rejected':
+      case 'Avslagna':
         return theme.colors.error;
       default:
         return 'gray';
@@ -78,85 +105,104 @@ const handleDelete = (id: number) => {
     ? applications.filter((app: IApplication) => app.applicationStatus === selectedStatus)
     : applications;
 
+  const handlePress = async (item: IApplication) => {
+    try {
+      const res = await getJobById(item.jobId)
+      setSelectedJob(res);
+      setModalVisible(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <ScrollView style={{ padding: theme.spacing.md }}>
-      {/* Filter button */}
+   
       <View style={styles.filterIconContainer}>
         <TouchableOpacity onPress={() => setIsFilterOpen(!isFilterOpen)}>
           <MaterialCommunityIcons name="filter-variant" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
-      {/* Filter options */}
+
       {isFilterOpen && (
         <View style={styles.filterContainer}>
-          {['Pending', 'Accepted', 'Rejected'].map((status) => (
+          {applicationStatusOptions.map((option) => (
             <TouchableOpacity
-              key={status}
+              key={option.id} 
               onPress={() => {
-                setSelectedStatus(selectedStatus === status ? null : status as 'Pending' | 'Accepted' | 'Rejected');
+               
+                setSelectedStatus(selectedStatus === option.value ? null : (option.value as 'Behandlas' | 'Accepterade' | 'Avslagna'));
                 setIsFilterOpen(false); 
               }}
               style={{
                 ...styles.filterButton,
-                backgroundColor: selectedStatus === status ? statusColor(status as 'Pending' | 'Accepted' | 'Rejected') : 'lightgray',
+                
+                backgroundColor: selectedStatus === option.value ? statusColor(option.value as 'Behandlas' | 'Accepterade' | 'Avslagna') : 'lightgray',
               }}
             >
-              <Text style={styles.filterText}>{t(status)}</Text>
+              <Text style={styles.filterText}>{option.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
       )}
 
-      {/* Application list */}
+    
       <View style={styles.col}>
         {filteredApplications.length > 0 ? (
           filteredApplications.map((application: IApplication) => (
-            <Card
+            <TouchableOpacity
               key={application.id}
-              style={{
-                ...styles.itemContainer,
-                padding: theme.spacing?.md,
-              }}
+              onPress={() => handlePress(application)}
+              activeOpacity={0.7}
             >
-              <Card.Content style={{ gap: theme.spacing?.md }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <View style={{ flexShrink: 1, marginRight: theme.spacing.md }}>
-                  <Text>{application.jobTitle}</Text>
-                  </View>
-                  <TouchableOpacity onPress={() => handleDelete(application.id)}>
+              <Card
+                style={{
+                  ...styles.itemContainer,
+                  padding: theme.spacing?.md,
+                }}
+              >
+                <Card.Content style={{ gap: theme.spacing?.md }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <View style={{ flexShrink: 1, marginRight: theme.spacing.md }}>
+                      <Text>{application.jobTitle}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => handleDelete(application.id)}>
                       <View style={styles.iconContainer}>
                         <MaterialCommunityIcons name="delete-outline" size={26} color="white" />
                       </View>
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                  </View>
+                  <Text>{application.matchingPercentage}% Match</Text>
+                  <Text>{t('applied')}: {yearMonthDate(application.applicationDate)}</Text>
 
-                </View>
-                <Text>{application.matchingPercentage}% Match</Text>
-                <Text>{t('applied')}: {yearMonthDate(application.applicationDate)}</Text>
-
-                <View
-                  style={{
-                    ...styles.statusContainer,
-                    borderColor: statusColor(application.applicationStatus),
-                  }}
-                >
-                  <Text
+                  <View
                     style={{
-                      color: statusColor(application.applicationStatus), padding: 4,textAlign: 'center', fontSize: 15,
-                      // paddingHorizontal: theme.spacing?.xl, 
+                      ...styles.statusContainer,
+                      borderColor: statusColor(application.applicationStatus),
                     }}
                   >
-                    {application.applicationStatus}
-                  </Text>
-                </View>
-                
-
-              </Card.Content>
-            </Card>
+                    <Text
+                      style={{
+                        color: statusColor(application.applicationStatus), padding: 4, textAlign: 'center', fontSize: 15,
+                      }}
+                    >
+                      {getTranslatedStatusLabel(application.applicationStatus)}
+                    </Text>
+                  </View>
+                </Card.Content>
+              </Card>
+            </TouchableOpacity>
           ))
         ) : (
           <Text style={styles.noApplicationsText}>{t('No applications found')}</Text>
         )}
+        <MyApplicationDetail
+          isModalVisible={isModalVisible}
+          closeModal={() => setModalVisible(!isModalVisible)}
+          selectedJob={selectedJob!}
+       
+        />
       </View>
     </ScrollView>
   );
@@ -199,7 +245,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  
+
   noApplicationsText: {
     textAlign: 'center',
     marginTop: 20,
@@ -207,11 +253,10 @@ const styles = StyleSheet.create({
   },
 
   iconContainer: {
-  backgroundColor: 'rgb(255, 0, 0)',
-  borderColor: 'darkgray',
-  borderWidth: 2,
-  borderRadius: 10,
-  padding: 5,
+    backgroundColor: 'rgb(255, 0, 0)', 
+    borderColor: 'darkgray',
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 5,
   },
-
 });

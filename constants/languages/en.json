@@ -209,5 +209,26 @@
   "intro-step-three-message-2": " we’d love to know which type of work you're most interested in.",
   "intro-step-four-message": "Which city or area would you like to work in? You can choose more than one.",
   "intro-step-five-message": "Select your preferred work situation.",
-  "intro-last-message": "Feel free to change your preferences anytime!"
+  "intro-last-message": "Feel free to change your preferences anytime!",
+
+
+
+  "pending": "Pending",
+  "accepted": "Accepted",
+  "rejected" : "Rejected",
+
+
+
+  "favorites": "Favorites",
+  "match": "Match",
+
+
+
+  "filter Results": "Filter Results"
+
+
+
+
+
 }
+

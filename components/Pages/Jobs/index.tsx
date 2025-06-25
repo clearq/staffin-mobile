@@ -147,7 +147,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
               color: filter === 'all' ? theme.colors.white : theme.colors.black,
             }}
           >
-            {t('All')}
+            {t('all')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setFilter('favorite')}>
@@ -159,7 +159,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
               color: filter === 'favorite' ? theme.colors.white : theme.colors.black,
             }}
           >
-            {t('Favorites')}
+            {t('favorites')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setFilter('match')}>
@@ -171,7 +171,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
               color: filter === 'match' ? theme.colors.white : theme.colors.black,
             }}
           >
-            {t('Match')}
+            {t('match')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -179,10 +179,10 @@ const Jobsindex = ({ job, refetch }: Props) => {
 
     <View style={styles.filterSectionContainer}>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: theme.spacing.md }}>
-      <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{t('Filtrera resultat')}</Text>
+      <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{t('filter Results')}</Text>
       <TouchableOpacity onPress={clearFilters}>
         <Text style={{ padding: 6, borderRadius: 8, backgroundColor: theme.colors.primary, color: theme.colors.white }}>
-          {t('Rensa Filter')} 
+          {t('Clear Filter')} 
         </Text>
       </TouchableOpacity>
     </View>
@@ -198,7 +198,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
           size={24}
           color={theme.colors.black}
         />
-        <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>{t('Job Type')}</Text>
+        <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>{t('job-type')}</Text>
       </TouchableOpacity>
       {isJobTypeFilterVisible && (
         // Ändrad: Använd flexWrap och justera justifyContent för att hantera rader
@@ -211,7 +211,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
                 color: jobTypeFilter === 1 ? theme.colors.white : theme.colors.black,
               }}
             >
-              {t('Akutbemanning')}
+              {t('instant')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setJobTypeFilter(jobTypeFilter === 2 ? null : 2)} style={styles.jobTypeButton}>
@@ -222,7 +222,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
                 color: jobTypeFilter === 2 ? theme.colors.white : theme.colors.black,
               }}
             >
-              {t('Förhandsbemanning')}
+              {t('regular')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setJobTypeFilter(jobTypeFilter === 3 ? null : 3)} style={styles.jobTypeButton}>
@@ -233,7 +233,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
                 color: jobTypeFilter === 3 ? theme.colors.white : theme.colors.black,
               }}
             >
-              {t('Ospecifierat')}
+              {t('not-specified')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -249,16 +249,16 @@ const Jobsindex = ({ job, refetch }: Props) => {
           size={24}
           color={theme.colors.black}
         />
-        <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>{t('Omfattning')}</Text>
+        <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>{t('employment-type')}</Text>
       </TouchableOpacity>
       {isEmploymentTypeFilterVisible && ( 
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', marginBottom: theme.spacing.md, gap: theme.spacing.sm }}>
         {[
-          { id: 1, name: 'Heltid' },
-          { id: 2, name: 'Deltid' },
-          { id: 3, name: 'Extraarbete' },
-          { id: 4, name: 'Praktik' },
-          { id: 5, name: 'Ospecifierat' },
+          { id: 1, name: 'full-time' },
+          { id: 2, name: 'part-time' },
+          { id: 3, name: 'extra-job' },
+          { id: 4, name: 'internship' },
+          { id: 5, name: 'not-specified' },
         ].map((type) => (
           <TouchableOpacity key={type.id} onPress={() => setEmploymentTypeFilter(employmentTypeFilter === type.id ? null : type.id)} style={styles.jobTypeButton}>
             <Text
@@ -295,7 +295,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
 
         />
 
-        <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>{t('Arbetsplats')}</Text>
+        <Text style={{ marginLeft: 8, fontWeight: 'bold' }}>{t('work-place-type')}</Text>
 
       </TouchableOpacity>
 
@@ -305,13 +305,13 @@ const Jobsindex = ({ job, refetch }: Props) => {
 
           {[
 
-            { id: 1, name: 'På plats' },
+            { id: 1, name: 'on-site' },
 
-            { id: 2, name: 'Distans' },
+            { id: 2, name: 'remote' },
 
-            { id: 3, name: 'Hybrid' },
+            { id: 3, name: 'hybrid' },
 
-            { id: 4, name: 'Ospecifierat' },
+            { id: 4, name: 'not-specified' },
 
           ].map((type) => (
 
@@ -389,7 +389,7 @@ const Jobsindex = ({ job, refetch }: Props) => {
             {item.description.length > 150 && (
               <TouchableOpacity onPress={() => handlePress(item)}>
                 <Text style={{ color: theme.colors.primary, marginTop: -theme.spacing.sm }}>
-                  {t('Visa mer...')}
+                  {t('read-more')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -406,7 +406,6 @@ const Jobsindex = ({ job, refetch }: Props) => {
           <Card.Actions>
             <TouchableOpacity
               style={{
-                ...pageStyle.buttonBorder,
                 borderColor: theme.colors.primary,
                 borderRadius: 100,
                 paddingHorizontal: theme.spacing.xl,
